@@ -1,0 +1,8 @@
+*.suo
+storage.ide
+*.refsignored
+.vs
+bin
+obj
+StyleCop.Cache
+packages

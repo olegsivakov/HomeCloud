@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8FABA1B4-263E-42C7-A4E3-AEF6118DFCF2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HomeCloud.DataAccess.Services</RootNamespace>
+    <AssemblyName>HomeCloud.DataAccess.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\DataAccessAssemblyInfo.cs">
+      <Link>Properties\DataAccessAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="IDbCommandHandler.cs" />
+    <Compile Include="Factories\ICommandHandlerFactory.cs" />
+    <Compile Include="Factories\IDbCommandHandlerFactory.cs" />
+    <Compile Include="Factories\IDbQueryHandlerFactory.cs" />
+    <Compile Include="Factories\IQueryHandlerFactory.cs" />
+    <Compile Include="IDbContextScope.cs" />
+    <Compile Include="Factories\IDataContextScopeFactory.cs" />
+    <Compile Include="IDbQueryHandler.cs" />
+    <Compile Include="Factories\IRepositoryFactory.cs" />
+    <Compile Include="IDbRepository.cs" />
+    <Compile Include="Factories\IDbRepositoryFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HomeCloud.DataAccess.Contracts\HomeCloud.DataAccess.Contracts.csproj">
+      <Project>{C6F23B8B-02E0-4DE8-B754-DA6694E485B2}</Project>
+      <Name>Analyticli.DataAccess.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
