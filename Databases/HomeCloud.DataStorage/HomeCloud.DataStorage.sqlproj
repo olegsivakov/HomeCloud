@@ -67,5 +67,35 @@
     <None Include="Tables\File.sql" />
     <None Include="Tables\Directory.sql" />
     <None Include="Tables\Storage.sql" />
+    <None Include="Constraints\Directory.sql" />
+    <None Include="Constraints\File.sql" />
+    <None Include="StoredProcedures\GetStorage.sql" />
+    <None Include="StoredProcedures\GetStorageByID.sql" />
+    <None Include="StoredProcedures\InsertStorage.sql" />
+    <None Include="StoredProcedures\UpdateStorage.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetDirectoryByID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\InsertDirectory.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\UpdateDirectory.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetDirectoryByParentID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetFileByID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetFileByDirectoryID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\InsertFile.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\UpdateFile.sql" />
   </ItemGroup>
 </Project>

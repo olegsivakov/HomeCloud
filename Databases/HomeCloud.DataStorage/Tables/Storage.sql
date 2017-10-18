@@ -8,7 +8,7 @@ BEGIN
 		[CreationDate] DATETIME NOT NULL,
 		[UpdatedDate] DATETIME NOT NULL,
 
-		PRIMARY KEY (ID)
+		CONSTRAINT [PK_Storage] PRIMARY KEY ([ID])
 	)
 END
 GO
