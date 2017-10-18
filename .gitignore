@@ -6,3 +6,4 @@ bin
 obj
 StyleCop.Cache
 packages
+*.user

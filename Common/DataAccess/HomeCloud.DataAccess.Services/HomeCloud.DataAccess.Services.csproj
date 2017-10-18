@@ -50,7 +50,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HomeCloud.DataAccess.Contracts\HomeCloud.DataAccess.Contracts.csproj">
       <Project>{C6F23B8B-02E0-4DE8-B754-DA6694E485B2}</Project>
-      <Name>Analyticli.DataAccess.Contracts</Name>
+      <Name>HomeCloud.DataAccess.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -49,11 +49,11 @@
   <ItemGroup>
     <ProjectReference Include="..\HomeCloud.DataAccess.Contracts\HomeCloud.DataAccess.Contracts.csproj">
       <Project>{c6f23b8b-02e0-4de8-b754-da6694e485b2}</Project>
-      <Name>Analyticli.DataAccess.Contracts</Name>
+      <Name>HomeCloud.DataAccess.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataAccess.Services\HomeCloud.DataAccess.Services.csproj">
       <Project>{8faba1b4-263e-42c7-a4e3-aef6118dfcf2}</Project>
-      <Name>Analyticli.DataAccess.Services</Name>
+      <Name>HomeCloud.DataAccess.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
