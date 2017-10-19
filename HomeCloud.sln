@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94CE84EF-4806-4CB5-BF11-8AAFAD41C413}"
 	ProjectSection(SolutionItems) = preProject
 		DataAccessAssemblyInfo.cs = DataAccessAssemblyInfo.cs
+		DataStorageAssemblyInfo.cs = DataStorageAssemblyInfo.cs
 		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection
 EndProject
@@ -53,7 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api.DependencyInjection", "DataStorage\HomeCloud.DataStorage.Api.DependencyInjection\HomeCloud.DataStorage.Api.DependencyInjection.csproj", "{AE623CE1-63D1-4DF9-B9BB-9A53A3C296EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api", "DataStorage\HomeCloud.DataStorage.Api\HomeCloud.DataStorage.Api.csproj", "{A269DAF5-0124-481B-A86C-3E41C9DD6203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Api", "DataStorage\HomeCloud.DataStorage.Api\HomeCloud.DataStorage.Api.csproj", "{A269DAF5-0124-481B-A86C-3E41C9DD6203}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
