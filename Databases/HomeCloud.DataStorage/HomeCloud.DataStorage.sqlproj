@@ -98,4 +98,19 @@
   <ItemGroup>
     <None Include="StoredProcedures\UpdateFile.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\DeleteFileByID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\DeleteDirectoryByID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\DeleteDirectoryByParentID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\DeleteFileByDirectoryID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\DeleteStorageByID.sql" />
+  </ItemGroup>
 </Project>
