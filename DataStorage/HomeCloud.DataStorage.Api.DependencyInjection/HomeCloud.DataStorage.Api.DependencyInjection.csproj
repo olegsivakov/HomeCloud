@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE623CE1-63D1-4DF9-B9BB-9A53A3C296EE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HomeCloud.DataStorage.Api.DependencyInjection</RootNamespace>
+    <AssemblyName>HomeCloud.DataStorage.Api.DependencyInjection</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Components\HomeCloud.DataStorage.Business.Components.csproj">
+      <Project>{8d3fdec3-8565-4f4e-ae01-08c69fc851f2}</Project>
+      <Name>HomeCloud.DataStorage.Business.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Services\HomeCloud.DataStorage.Business.Services.csproj">
+      <Project>{5d3e601c-979e-43f1-b3c6-ec6a780112bd}</Project>
+      <Name>HomeCloud.DataStorage.Business.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Components\HomeCloud.DataStorage.DataAccess.Components.csproj">
+      <Project>{d571c54b-1a23-46e3-9d42-c52d596deff7}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Services\HomeCloud.DataStorage.DataAccess.Services.csproj">
+      <Project>{0735155e-018b-45da-8b1a-c9c7aaaca0d9}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
