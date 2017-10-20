@@ -15,51 +15,62 @@
 
 	public class StorageController : Controller
 	{
-		[HttpGet]
-		[Route("[controller]s")]
+		[HttpGet("v1/[controller]s")]
+		[MapToApiVersion("0.5")]
 		public async Task<IActionResult> Get(int offset = 0, int limit = 20)
 		{
-			return this.Ok(new { offset = offset, limit = limit });
+			return this.Ok(System.Linq.Enumerable.Empty<Model>());
 		}
 
-		[HttpGet("{id:int}")]
-		[Route("[controller]s/{id}")]
+		[HttpGet("v1/[controller]s/{id:int}")]
 		public async Task<IActionResult> Get(int id)
 		{
-			return this.Ok(id);
-		}
-
-		[HttpPost]
-		[Route("[controller]s")]
-		public async Task<IActionResult> Post(Model model)
-		{
-			return this.Ok(model);
-		}
-
-		[HttpPut("{id:int}")]
-		[Route("[controller]s/{id}")]
-		public async Task<IActionResult> Put(int id, [FromBody] Model model)
-		{
-			if (id != model.ID)
+			Model model = null;
+			if (model == null)
 			{
-				return this.StatusCode(409);
+				return this.NotFound();
 			}
 
 			return this.Ok(id);
 		}
 
-		[HttpDelete]
-		[Route("[controller]s")]
-		public async Task<IActionResult> Delete()
+		[HttpPost("v1/[controller]s")]
+		public async Task<IActionResult> Post(Model model)
 		{
-			return this.Ok();
+			if (model == null)
+			{
+				return this.BadRequest();
+			}
+
+			return this.Ok(model);
 		}
 
-		[HttpDelete("{id:int}")]
-		[Route("[controller]s/{id}")]
+		[HttpPut("v1/[controller]s/{id:int}")]
+		public async Task<IActionResult> Put(int id, [FromBody] Model model)
+		{
+			if (model == null || model.ID != id)
+			{
+				return BadRequest();
+			}
+
+			if (model == null)
+			{
+				return this.NotFound();
+			}
+
+			return this.NoContent();
+		}
+
+		[HttpDelete("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
-			return this.Ok(id);
+			Model model = null;
+			if (model == null)
+			{
+				return this.NotFound();
+			}
+
+			return this.NoContent();
 		}
 	}
 }

@@ -53,13 +53,6 @@
 			services.AddDependencies();
 			services.Configure(this.Configuration);
 
-			services.AddApiVersioning(options =>
-			{
-				options.AssumeDefaultVersionWhenUnspecified = true;
-				options.DefaultApiVersion = new ApiVersion(1, 0);
-				options.ApiVersionReader = new HeaderApiVersionReader("api-version");
-		});
-
 			services.AddMvc();
 		}
 
