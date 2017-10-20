@@ -1,44 +1,83 @@
 ﻿namespace HomeCloud.DataStorage.Api
 {
+	using HomeCloud.DataStorage.Api.DependencyInjection;
 	#region Usings
 
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Mvc.Versioning;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
-	using Microsoft.Extensions.Logging;
-	using Microsoft.Extensions.Options;
 
 	#endregion
 
+	/// <summary>
+	/// Represents an instance the application starts up.
+	/// </summary>
 	public class Startup
 	{
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Startup"/> class.
+		/// </summary>
+		/// <param name="configuration">The configuration.</param>
 		public Startup(IConfiguration configuration)
 		{
-			Configuration = configuration;
+			this.Configuration = configuration;
 		}
 
+		#endregion
+
+		#region Public Properties
+
+		/// <summary>
+		/// Gets the configuration.
+		/// </summary>
+		/// <value>
+		/// The configuration.
+		/// </value>
 		public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
+		#endregion
+
+		#region Public Methods
+
+		/// <summary>
+		/// Configures and adds services to the container. This method gets called by the runtime.
+		/// </summary>
+		/// <param name="services">The service collection of <see cref="IServiceCollection"/> type.</param>
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDependencies();
+			services.Configure(this.Configuration);
+
+			services.AddApiVersioning(options =>
+			{
+				options.AssumeDefaultVersionWhenUnspecified = true;
+				options.DefaultApiVersion = new ApiVersion(1, 0);
+				options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+		});
+
 			services.AddMvc();
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		/// <summary>
+		/// Configures the HTTP request pipeline. This method gets called by the runtime.
+		/// </summary>
+		/// <param name="application">The application.</param>
+		/// <param name="environment">The environment.</param>
+		public void Configure(IApplicationBuilder application, IHostingEnvironment environment)
 		{
-			if (env.IsDevelopment())
+			if (environment.IsDevelopment())
 			{
-				app.UseDeveloperExceptionPage();
+				application.UseDeveloperExceptionPage();
 			}
 
-			app.UseMvc();
+			application.UseMvcWithDefaultRoute();
 		}
+
+		#endregion
 	}
 }

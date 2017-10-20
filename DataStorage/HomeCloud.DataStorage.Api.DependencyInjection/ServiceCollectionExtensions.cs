@@ -19,7 +19,7 @@
 	public static partial class ServiceCollectionExtensions
 	{
 		/// <summary>
-		/// Adds the dependencies to <see cref="IServiceCollection"/>.
+		/// Adds the dependencies to container.
 		/// </summary>
 		/// <param name="services">The collection of services.</param>
 		public static void AddDependencies(this IServiceCollection services)
@@ -31,11 +31,11 @@
 		}
 
 		/// <summary>
-		/// Sets application configuration settings to <see cref="IServiceCollection"/>.
+		/// Adds application configuration settings to container.
 		/// </summary>
 		/// <param name="services">The collection of services.</param>
-		/// <param name="configuration">The configuration.</param>
-		public static void Configure(this IServiceCollection services, IConfigurationRoot configuration)
+		/// <param name="configuration">A set of configuration properties.</param>
+		public static void Configure(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.Configure<ConnectionStrings>(configuration.GetSection(nameof(ConnectionStrings)));
 
