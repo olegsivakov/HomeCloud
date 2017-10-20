@@ -14,6 +14,10 @@ BEGIN
 
 	INSERT INTO [dbo].[Storage] ([Name], [Quota], [CreationDate], [UpdatedDate])
 	VALUES (@local_Name, @local_Quota, GETDATE(), GETDATE())
+
+	DECLARE @ID INT = SCOPE_IDENTITY()
+
+	EXEC [dbo].[GetStorageByID] @ID
 END
 GO
 

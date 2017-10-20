@@ -16,6 +16,10 @@ BEGIN
 
 	INSERT INTO [dbo].[File] ([ID], [DirectoryID], [Name], [Extension], [CreationDate], [UpdatedDate])
 	VALUES (@local_DirectoryID, @local_Name, @local_Extension, GETDATE(), GETDATE())
+
+	DECLARE @ID INT = SCOPE_IDENTITY()
+
+	EXEC [dbo].[GetFileByID] @ID
 END
 GO
 

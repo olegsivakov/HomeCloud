@@ -16,6 +16,10 @@ BEGIN
 
 	INSERT INTO [dbo].[Directory] ([ParentID], [StorageID], [Name], [CreationDate], [UpdatedDate])
 	VALUES (@local_ParentID, @local_StorageID, @local_Name, GETDATE(), GETDATE())
+
+	DECLARE @ID INT = SCOPE_IDENTITY()
+
+	EXEC [dbo].[GetDirectoryByID] @ID
 END
 GO
 

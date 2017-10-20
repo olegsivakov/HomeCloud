@@ -25,7 +25,7 @@
 		/// <value>
 		/// The directory identifier.
 		/// </value>
-		public Guid DirectoryID {get;set;}
+		public Guid DirectoryID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name.

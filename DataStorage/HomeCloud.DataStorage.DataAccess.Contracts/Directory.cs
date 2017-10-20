@@ -25,7 +25,7 @@
 		/// <value>
 		/// The parent identifier.
 		/// </value>
-		public Guid ParentID { get; set; }
+		public Guid? ParentID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the storage identifier.

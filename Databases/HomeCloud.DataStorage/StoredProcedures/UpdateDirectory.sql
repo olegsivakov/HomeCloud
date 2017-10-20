@@ -24,6 +24,8 @@ BEGIN
 		[UpdatedDate] = GETDATE()
 	WHERE
 		[ID] = @local_ID
+
+	EXEC [dbo].[GetDirectoryByID] @local_ID
 END
 GO
 
