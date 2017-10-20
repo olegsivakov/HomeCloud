@@ -3,73 +3,83 @@
 	#region Usings
 
 	using System;
-	using Microsoft.AspNetCore.Mvc;
 	using System.Threading.Tasks;
+
+	using Microsoft.AspNetCore.Mvc;
+
+	using HomeCloud.DataStorage.Api.Models;
 
 	#endregion
 
-	public class Model
+	/// <summary>
+	/// Provides <see cref="RESTful API"/> with <see cref="StorageViewModel"/> support.
+	/// </summary>
+	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.ControllerBase" />
+	public class StorageController : ControllerBase
 	{
-		public int ID { get; set; }
-	}
-
-	public class StorageController : Controller
-	{
+		/// <summary>
+		/// Gets the list of storage models.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="limit">The limit.</param>
+		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the list of instances of <see cref="StorageViewModel"/>.</returns>
 		[HttpGet("v1/[controller]s")]
-		[MapToApiVersion("0.5")]
 		public async Task<IActionResult> Get(int offset = 0, int limit = 20)
 		{
-			return this.Ok(System.Linq.Enumerable.Empty<Model>());
+			return this.Ok(System.Linq.Enumerable.Empty<StorageViewModel>());
 		}
 
-		[HttpGet("v1/[controller]s/{id:int}")]
-		public async Task<IActionResult> Get(int id)
+		/// <summary>
+		/// Gets the storage model specified identifier.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
+		[HttpGet("v1/[controller]s/{id}")]
+		public async Task<IActionResult> Get(Guid id)
 		{
-			Model model = null;
-			if (model == null)
+			return await base.HttpGet(id, async () =>
 			{
-				return this.NotFound();
-			}
-
-			return this.Ok(id);
+				return new StorageViewModel() { ID = id };
+			});
 		}
 
+		/// <summary>
+		/// Creates the specified storage model.
+		/// </summary>
+		/// <param name="model">The model of <see cref="StorageViewModel"/>.</param>
+		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
 		[HttpPost("v1/[controller]s")]
-		public async Task<IActionResult> Post(Model model)
+		public async Task<IActionResult> Post(StorageViewModel model)
 		{
-			if (model == null)
+			return await base.HttpPost(model, async () =>
 			{
-				return this.BadRequest();
-			}
-
-			return this.Ok(model);
+				return model;
+			});
 		}
 
+		/// <summary>
+		/// Updates the existing storage model with the specified identifier.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <param name="model">The model of <see cref="StorageViewModel"/>.</param>
+		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
 		[HttpPut("v1/[controller]s/{id:int}")]
-		public async Task<IActionResult> Put(int id, [FromBody] Model model)
+		public async Task<IActionResult> Put(Guid id, [FromBody] StorageViewModel model)
 		{
-			if (model == null || model.ID != id)
+			return await base.HttpPut(id, model, async () =>
 			{
-				return BadRequest();
-			}
-
-			if (model == null)
-			{
-				return this.NotFound();
-			}
-
-			return this.NoContent();
+				return model;
+			});
 		}
 
+		/// <summary>
+		/// Deletes the existing storage model ин specified identifier.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <returns>The asynchronous result of <see cref="IActionResult"/>.</returns>
 		[HttpDelete("v1/[controller]s/{id}")]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<IActionResult> Delete(Guid id)
 		{
-			Model model = null;
-			if (model == null)
-			{
-				return this.NotFound();
-			}
-
 			return this.NoContent();
 		}
 	}
