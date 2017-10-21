@@ -37,7 +37,7 @@
 		[HttpGet("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			return await base.HttpGet(id, async () =>
+			return await this.HttpGet(id, async () =>
 			{
 				return new StorageViewModel() { ID = id };
 			});
@@ -51,7 +51,7 @@
 		[HttpPost("v1/[controller]s")]
 		public async Task<IActionResult> Post(StorageViewModel model)
 		{
-			return await base.HttpPost(model, async () =>
+			return await this.HttpPost(model, async () =>
 			{
 				return model;
 			});
@@ -63,10 +63,10 @@
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="model">The model of <see cref="StorageViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
-		[HttpPut("v1/[controller]s/{id:int}")]
+		[HttpPut("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Put(Guid id, [FromBody] StorageViewModel model)
 		{
-			return await base.HttpPut(id, model, async () =>
+			return await this.HttpPut(id, model, async () =>
 			{
 				return model;
 			});
