@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 #endregion
 
 [assembly: AssemblyCompany("olegsivakov")]
-[assembly: AssemblyProduct("Home Data Storage Application")]
+[assembly: AssemblyProduct("Home Cloud Data Storage Application")]
 [assembly: AssemblyCopyright("Copyright © olegsivakov 2017")]
 [assembly: AssemblyTrademark("Home Cloud Data Storage")]
 [assembly: AssemblyCulture("")]

@@ -1,12 +1,13 @@
 ﻿namespace HomeCloud.DataStorage.Api
 {
-	using HomeCloud.DataStorage.Api.DependencyInjection;
 	#region Usings
+
+	using HomeCloud.DataStorage.Api.DependencyInjection;
+	using HomeCloud.Exceptions;
 
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Mvc.Versioning;
+
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
@@ -68,7 +69,8 @@
 				application.UseDeveloperExceptionPage();
 			}
 
-			application.UseMvcWithDefaultRoute();
+			application.UseExceptionHandlerMiddleware();
+			application.UseMvc();
 		}
 
 		#endregion
