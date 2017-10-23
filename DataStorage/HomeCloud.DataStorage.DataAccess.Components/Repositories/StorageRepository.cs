@@ -104,21 +104,21 @@
 		}
 
 		/// <summary>
-		/// Gets the list of entities.
+		/// Looks for all records of <see cref="T" /> type.
 		/// </summary>
-		/// <param name="startIndex">The index of the first record that should appear in the list.</param>
-		/// <param name="chunkSize">The number of records to select.</param>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
-		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" />.
+		/// The list of instances of <see cref="T" /> type.
 		/// </returns>
-		public IEnumerable<Storage> Get(int startIndex, int chunkSize)
+		public IEnumerable<Storage> Find(int offset = 0, int limit = 20)
 		{
 			return this.context.Query<Storage>(
 				GetStorageStoredProcedure,
 				new
 				{
-					@StartIndex = startIndex,
-					@ChunkSize = chunkSize
+					@StartIndex = offset,
+					@ChunkSize = limit
 				});
 		}
 

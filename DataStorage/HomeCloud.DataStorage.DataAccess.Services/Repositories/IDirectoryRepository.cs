@@ -5,28 +5,17 @@
 	using System;
 	using System.Collections.Generic;
 
+	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataStorage.DataAccess.Contracts;
 
 	#endregion
 
 	/// <summary>
-	/// Defines methods to handle <see cref="Directory"/> data.
+	/// Defines methods to handle <see cref="Directory" /> data.
 	/// </summary>
-	public interface IDirectoryRepository
+	/// <seealso cref="HomeCloud.DataAccess.Services.IDbRepository{HomeCloud.DataStorage.DataAccess.Contracts.Directory}" />
+	public interface IDirectoryRepository : IDbRepository<Directory>
 	{
-		/// <summary>
-		/// Saves the specified entity.
-		/// </summary>
-		/// <param name="entity">The entity of type <see cref="Directory" />.</param>
-		/// <returns>The instance of <see cref="Directory" />.</returns>
-		Directory Save(Directory entity);
-
-		/// <summary>
-		/// Deletes the entity by specified identifier.
-		/// </summary>
-		/// <param name="id">The unique identifier.</param>
-		void Delete(Guid id);
-
 		/// <summary>
 		/// Deletes the list of entities by specified identifier of parent entity the list belongs to.
 		/// </summary>
@@ -34,19 +23,12 @@
 		void DeleteByParentID(Guid? id);
 
 		/// <summary>
-		/// Gets the entity by specified identifier.
-		/// </summary>
-		/// <param name="id">The unique identifier.</param>
-		/// <returns>The instance of <see cref="Directory"/>.</returns>
-		Directory Get(Guid id);
-
-		/// <summary>
 		/// Gets the list of entities by specified identifier of parent entity the list belongs to.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="startIndex">The index of the first record that should appear in the list.</param>
-		/// <param name="chunkSize">The number of records to select.</param>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
 		/// <returns>The list of instances of <see cref="Directory"/>.</returns>
-		IEnumerable<Directory> GetByParentID(Guid? id, int startIndex, int chunkSize);
+		IEnumerable<Directory> GetByParentID(Guid? id, int offset = 0, int limit = 20);
 	}
 }

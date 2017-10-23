@@ -5,28 +5,17 @@
 	using System;
 	using System.Collections.Generic;
 
+	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataStorage.DataAccess.Contracts;
 
 	#endregion
 
 	/// <summary>
-	/// Defines methods to handle <see cref="File"/> data.
+	/// Defines combination of methods against <see cref="File"/> entity.
 	/// </summary>
-	public interface IFileRepository
+	/// <seealso cref="HomeCloud.DataAccess.Services.IDbRepository{HomeCloud.DataStorage.DataAccess.Contracts.File}" />
+	public interface IFileRepository : IDbRepository<File>
 	{
-		/// <summary>
-		/// Saves the specified entity.
-		/// </summary>
-		/// <param name="entity">The entity of type <see cref="File" />.</param>
-		/// <returns>The instance of <see cref="File"/>.</returns>
-		File Save(File entity);
-
-		/// <summary>
-		/// Deletes the entity by specified identifier.
-		/// </summary>
-		/// <param name="id">The unique identifier.</param>
-		void Delete(Guid id);
-
 		/// <summary>
 		/// Deletes the list of entities by specified identifier of entity of <see cref="Directory"/> type the list belongs to.
 		/// </summary>
@@ -34,19 +23,12 @@
 		void DeleteByDirectoryID(Guid id);
 
 		/// <summary>
-		/// Gets the entity by specified identifier.
-		/// </summary>
-		/// <param name="id">The unique identifier.</param>
-		/// <returns>The instance of <see cref="File"/>.</returns>
-		File Get(Guid id);
-
-		/// <summary>
 		/// Gets the list of entities by specified identifier of entity of <see cref="Directory"/> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="startIndex">The index of the first record that should appear in the list.</param>
-		/// <param name="chunkSize">The number of records to select.</param>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
 		/// <returns>The list of instances of <see cref="File"/>.</returns>
-		IEnumerable<File> GetByDirectoryID(Guid id, int startIndex, int chunkSize);
+		IEnumerable<File> GetByDirectoryID(Guid id, int offset = 0, int limit = 20);
 	}
 }

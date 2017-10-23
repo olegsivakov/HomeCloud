@@ -30,8 +30,8 @@
 		/// <summary>
 		/// Looks for all records of <see cref="T" /> type.
 		/// </summary>
-		/// <param name="offset">The offset.</param>
-		/// <param name="limit">The number of records to return.</param>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
 		/// The list of instances of <see cref="T" /> type.
 		/// </returns>
@@ -41,7 +41,8 @@
 		/// Saves the specified entity.
 		/// </summary>
 		/// <param name="entity">The entity.</param>
-		void Save(T entity);
+		/// <returns>The updated entity.</returns>
+		T Save(T entity);
 
 		/// <summary>
 		/// Deletes the entity by specified unique identifier.

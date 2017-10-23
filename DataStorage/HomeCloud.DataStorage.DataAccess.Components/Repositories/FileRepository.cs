@@ -106,6 +106,20 @@
 		}
 
 		/// <summary>
+		/// Looks for all records of <see cref="!:T" /> type.
+		/// </summary>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
+		/// <returns>
+		/// The list of instances of <see cref="!:T" /> type.
+		/// </returns>
+		/// <exception cref="NotSupportedException">Not supported as data requires the relationship for <see cref="Directory"/>.</exception>
+		public IEnumerable<File> Find(int offset = 0, int limit = 20)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
 		/// Gets the entity by specified identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
@@ -126,20 +140,20 @@
 		/// Gets the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Directory" /> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="startIndex">The index of the first record that should appear in the list.</param>
-		/// <param name="chunkSize">The number of records to select.</param>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.File" />.
 		/// </returns>
-		public IEnumerable<File> GetByDirectoryID(Guid id, int startIndex, int chunkSize)
+		public IEnumerable<File> GetByDirectoryID(Guid id, int offset = 0, int limit = 20)
 		{
 			return this.context.Query<File>(
 				GetFileByDirectoryIDStoredProcedure,
 				new
 				{
 					@ParentID = id,
-					@StartIndex = startIndex,
-					@ChunkSize = chunkSize
+					@StartIndex = offset,
+					@ChunkSize = limit
 				});
 		}
 
