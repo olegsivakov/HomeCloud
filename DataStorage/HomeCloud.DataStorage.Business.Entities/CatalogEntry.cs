@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Represents file entity.
 	/// </summary>
-	public class File
+	public class CatalogEntry
 	{
 		/// <summary>
 		/// Gets or sets the identifier.

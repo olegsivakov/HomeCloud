@@ -43,6 +43,11 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DataAggregationProcessor.cs" />
+    <Compile Include="DataProcessingContext.cs" />
+    <Compile Include="DataProcessor.cs" />
+    <Compile Include="DataStorageProcessor.cs" />
+    <Compile Include="FileSystemProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

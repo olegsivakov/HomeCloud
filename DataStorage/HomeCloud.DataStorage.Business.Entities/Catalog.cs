@@ -20,22 +20,6 @@
 		public Guid ID { get; set; }
 
 		/// <summary>
-		/// Gets or sets the parent identifier.
-		/// </summary>
-		/// <value>
-		/// The parent identifier.
-		/// </value>
-		public Guid? ParentID { get; set; }
-
-		/// <summary>
-		/// Gets or sets the storage identifier.
-		/// </summary>
-		/// <value>
-		/// The storage identifier.
-		/// </value>
-		public Guid StorageID { get; set; }
-
-		/// <summary>
 		/// Gets or sets the name.
 		/// </summary>
 		/// <value>
@@ -44,10 +28,10 @@
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the file path.
+		/// Gets or sets the catalog path.
 		/// </summary>
 		/// <value>
-		/// The path.
+		/// The catalog path.
 		/// </value>
 		public string Path { get; set; }
 

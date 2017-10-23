@@ -1,5 +1,7 @@
 ﻿namespace HomeCloud.DataStorage.DataAccess.Components.Repositories
 {
+	#region Usings
+
 	using System;
 	using System.Collections.Generic;
 
@@ -7,8 +9,6 @@
 
 	using HomeCloud.DataStorage.DataAccess.Contracts;
 	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
-
-	#region Usings
 
 	#endregion
 
