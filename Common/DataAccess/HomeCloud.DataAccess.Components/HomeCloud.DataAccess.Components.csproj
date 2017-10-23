@@ -36,9 +36,11 @@
     <Compile Include="..\..\..\DataAccessAssemblyInfo.cs">
       <Link>Properties\DataAccessAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DocumentContextScope.cs" />
     <Compile Include="Factories\CommandHandlerFactory.cs" />
     <Compile Include="Factories\DbCommandHandlerFactory.cs" />
     <Compile Include="Factories\DbQueryHandlerFactory.cs" />
+    <Compile Include="Factories\DocumentRepositoryFactory.cs" />
     <Compile Include="Factories\QueryHandlerFactory.cs" />
     <Compile Include="Factories\RepositoryFactory.cs" />
     <Compile Include="DbContextScope.cs" />

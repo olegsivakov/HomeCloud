@@ -30,11 +30,17 @@
 		/// Initializes a new instance of the <see cref="RepositoryFactory" /> class.
 		/// </summary>
 		/// <param name="databaseRepositoryFactory">The <see cref="IDbRepositoryFactory" /> factory.</param>
-		public RepositoryFactory(IDbRepositoryFactory databaseRepositoryFactory = null)
+		/// <param name="documentRepositoryFactory">>The <see cref="IDocumentRepositoryFactory" /> factory.</param>
+		public RepositoryFactory(IDbRepositoryFactory databaseRepositoryFactory = null, IDocumentRepositoryFactory documentRepositoryFactory = null)
 		{
 			if (databaseRepositoryFactory != null)
 			{
 				this.container.Add(typeof(IDbRepositoryFactory), databaseRepositoryFactory);
+			}
+
+			if (documentRepositoryFactory != null)
+			{
+				this.container.Add(typeof(IDocumentRepositoryFactory), documentRepositoryFactory);
 			}
 		}
 

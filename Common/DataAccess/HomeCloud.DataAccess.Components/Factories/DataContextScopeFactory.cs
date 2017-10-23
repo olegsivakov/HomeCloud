@@ -2,7 +2,6 @@
 {
 	#region Usings
 
-	using HomeCloud.DataAccess.Contracts;
 	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataAccess.Services.Factories;
 
@@ -81,19 +80,17 @@
 		}
 
 		/// <summary>
-		/// Creates the database context scope.
+		/// Creates document context scope.
 		/// </summary>
-		/// <param name="context">The database context.</param>
+		/// <param name="databaseName">The database name.</param>
 		/// <returns>
-		/// The instance of <see cref="IDbContextScope" />.
+		/// The instance of <see cref="T:IDataContextScope" />.
 		/// </returns>
-		public IDbContextScope CreateDbContextScope(ITransactionalDbContext context)
+		public IDocumentContextScope CreateDocumentContextScope(string databaseName)
 		{
-			IDbRepositoryFactory repositoryFactory = this.repositoryFactory?.GetFactory<IDbRepositoryFactory>();
-			IDbQueryHandlerFactory queryHandlerFactory = this.queryHandlerFactory?.GetFactory<IDbQueryHandlerFactory>();
-			IDbCommandHandlerFactory commandHandlerFactory = this.commandHandlerFactory?.GetFactory<IDbCommandHandlerFactory>();
+			IDocumentRepositoryFactory repositoryFactory = this.repositoryFactory?.GetFactory<IDocumentRepositoryFactory>();
 
-			return new DbContextScope(context, repositoryFactory, queryHandlerFactory, commandHandlerFactory);
+			return new DocumentContextScope(databaseName, repositoryFactory);
 		}
 
 		#endregion

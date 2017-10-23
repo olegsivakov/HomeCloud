@@ -22,12 +22,12 @@
 		IDbContextScope CreateDbContextScope(string connectionString, bool isTransactional = false);
 
 		/// <summary>
-		/// Creates the database context scope.
+		/// Creates document context scope.
 		/// </summary>
-		/// <param name="context">The database context.</param>
+		/// <param name="connectionString">The connection string.</param>
 		/// <returns>
 		/// The instance of <see cref="T:IDataContextScope" />.
 		/// </returns>
-		IDbContextScope CreateDbContextScope(ITransactionalDbContext context);
+		IDocumentContextScope CreateDocumentContextScope(string connectionString);
 	}
 }

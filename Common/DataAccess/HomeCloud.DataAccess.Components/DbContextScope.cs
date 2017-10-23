@@ -58,22 +58,6 @@
 			this.context = new DbContext(connectionString, isTransactional);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DbContextScope" /> class.
-		/// </summary>
-		/// <param name="context">The database context.</param>
-		/// <param name="repositoryFactory">The repository factory.</param>
-		/// <param name="queryHandlerFactory">The query handler factory.</param>
-		/// <param name="commandHandlerFactory">The command handler factory.</param>
-		public DbContextScope(ITransactionalDbContext context, IDbRepositoryFactory repositoryFactory = null, IDbQueryHandlerFactory queryHandlerFactory = null, IDbCommandHandlerFactory commandHandlerFactory = null)
-		{
-			DbContextScope.repositoryFactory = repositoryFactory;
-			DbContextScope.queryHandlerFactory = queryHandlerFactory;
-			DbContextScope.commandHandlerFactory = commandHandlerFactory;
-
-			this.context = context;
-		}
-
 		#endregion
 
 		#region IDataContextScope Implementations

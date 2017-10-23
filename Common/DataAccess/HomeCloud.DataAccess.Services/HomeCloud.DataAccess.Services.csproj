@@ -34,6 +34,7 @@
     <Compile Include="..\..\..\DataAccessAssemblyInfo.cs">
       <Link>Properties\DataAccessAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Factories\IDocumentRepositoryFactory.cs" />
     <Compile Include="IDbCommandHandler.cs" />
     <Compile Include="Factories\ICommandHandlerFactory.cs" />
     <Compile Include="Factories\IDbCommandHandlerFactory.cs" />
@@ -45,6 +46,8 @@
     <Compile Include="Factories\IRepositoryFactory.cs" />
     <Compile Include="IDbRepository.cs" />
     <Compile Include="Factories\IDbRepositoryFactory.cs" />
+    <Compile Include="IDocumentContextScope.cs" />
+    <Compile Include="IDocumentRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
