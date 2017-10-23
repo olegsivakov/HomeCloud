@@ -13,7 +13,7 @@
 	/// Provides the factory methods for repositories.
 	/// </summary>
 	/// <seealso cref="HomeCloud.DataAccess.Components.Factories.DbRepositoryFactory" />
-	public class DataStorageRepositoryFactory : DbRepositoryFactory
+	public sealed class DataStorageRepositoryFactory : DbRepositoryFactory
 	{
 		#region Constructors
 
