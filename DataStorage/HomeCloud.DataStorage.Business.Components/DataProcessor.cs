@@ -10,22 +10,18 @@
 
 	public abstract class DataProcessor
 	{
-		#region Private Members
-
-		private Storage storage = null;
-
-		#endregion
-
 		#region Constructors
 
 		public DataProcessor(Storage storage)
 		{
-			this.storage = storage;
+			this.Storage = storage;
 		}
 
 		#endregion
 
 		#region Protected Properties
+
+		protected Storage Storage { get; private set; }
 
 		protected DataProcessor Next { get; private set; }
 
@@ -43,55 +39,6 @@
 		public void CreateStorage()
 		{
 			this.MoveNext(next => next.CreateStorage());
-		}
-
-		public void UpdateStorage()
-		{
-			this.MoveNext(next => next.UpdateStorage());
-		}
-
-		public virtual void DeleteStorage()
-		{
-		}
-
-		public virtual void GetStorages()
-		{
-		}
-
-		public virtual void CreateCatalog()
-		{
-		}
-
-		public virtual void UpdateCatalog()
-		{
-		}
-
-		public virtual void DeleteCatalog()
-		{
-		}
-
-		public virtual void GetCatalogs()
-		{
-		}
-
-		public virtual void CreateCatalogEntry()
-		{
-		}
-
-		public virtual void UpdateCatalogEntry()
-		{
-		}
-
-		public virtual void DeleteCatalogEntry()
-		{
-		}
-
-		public virtual void GetCatalogEntry()
-		{
-		}
-
-		public virtual void GetCatalogEntries()
-		{
 		}
 
 		#endregion
