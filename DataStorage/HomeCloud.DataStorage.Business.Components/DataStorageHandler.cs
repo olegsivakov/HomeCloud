@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace HomeCloud.DataStorage.Business.Components
 {
-	public class DataStorageProcessor : DataProcessor
+	public class DataStorageHandler : DataProcessor
 	{
 		#region Private Members
 
@@ -18,7 +18,7 @@ namespace HomeCloud.DataStorage.Business.Components
 
 		#region Constructors
 
-		public DataStorageProcessor(IDataContextScopeFactory dataContextScopeFactory, IOptionsSnapshot<ConnectionStrings> connectionStrings)
+		public DataStorageHandler(IDataContextScopeFactory dataContextScopeFactory, IOptionsSnapshot<ConnectionStrings> connectionStrings)
 			: base(null)
 		{
 			this.dataContextScopeFactory = dataContextScopeFactory;

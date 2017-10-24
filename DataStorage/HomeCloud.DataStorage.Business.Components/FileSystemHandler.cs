@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeCloud.DataStorage.Business.Components
 {
-	class DataAggregationProcessor
+	class FileSystemHandler
 	{
 	}
 }

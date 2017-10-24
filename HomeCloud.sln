@@ -63,6 +63,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{96
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Business.Services", "Common\Business\HomeCloud.Business.Services\HomeCloud.Business.Services.csproj", "{BF400D88-B8CB-47AC-83B6-A51608133804}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Business.Contracts", "Common\Business\HomeCloud.Business.Contracts\HomeCloud.Business.Contracts.csproj", "{5750DB65-83F0-4B63-8AB3-B6FCE1606DE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{BF400D88-B8CB-47AC-83B6-A51608133804}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF400D88-B8CB-47AC-83B6-A51608133804}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF400D88-B8CB-47AC-83B6-A51608133804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5750DB65-83F0-4B63-8AB3-B6FCE1606DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5750DB65-83F0-4B63-8AB3-B6FCE1606DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5750DB65-83F0-4B63-8AB3-B6FCE1606DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5750DB65-83F0-4B63-8AB3-B6FCE1606DE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +163,7 @@ Global
 		{85F9BA9C-3D04-4D92-A743-AFE91EF05060} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 		{96D23C9D-0D29-4D48-9517-31F564CD43EC} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 		{BF400D88-B8CB-47AC-83B6-A51608133804} = {96D23C9D-0D29-4D48-9517-31F564CD43EC}
+		{5750DB65-83F0-4B63-8AB3-B6FCE1606DE9} = {96D23C9D-0D29-4D48-9517-31F564CD43EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA97106E-A9E5-423B-9B9E-36E657021CB8}
