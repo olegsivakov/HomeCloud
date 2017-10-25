@@ -1,11 +1,5 @@
 ﻿namespace HomeCloud.Business.Services
 {
-	#region Usings
-
-	using HomeCloud.Business.Contracts;
-
-	#endregion
-
 	/// <summary>
 	/// Defines methods to handle command of <see cref="ICommand"/>.
 	/// </summary>

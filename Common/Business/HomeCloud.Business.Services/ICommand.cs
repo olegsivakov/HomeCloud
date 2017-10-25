@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Business.Contracts
+﻿namespace HomeCloud.Business.Services
 {
 	/// <summary>
 	/// Defines the command.

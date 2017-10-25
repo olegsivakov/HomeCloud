@@ -43,15 +43,24 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Facades\IDataAggregationFacade.cs" />
-    <Compile Include="Facades\IDataFacade.cs" />
-    <Compile Include="Facades\IDataStorageFacade.cs" />
-    <Compile Include="Facades\IFileSystemFacade.cs" />
-    <Compile Include="Handlers\ICommandHandler.cs" />
-    <Compile Include="Handlers\ICommandHandlerProcessor.cs" />
+    <Compile Include="Commands\IDataCommandFactory.cs" />
+    <Compile Include="Handlers\IDataCommandHandler.cs" />
+    <Compile Include="Handlers\IDataCommandHandlerFactory.cs" />
+    <Compile Include="Handlers\IDataStoreCommandHandler.cs" />
+    <Compile Include="IStorageService.cs" />
+    <Compile Include="Processors\ICommandHandlerProcessor.cs" />
+    <Compile Include="Providers\IAggregationDataProvider.cs" />
+    <Compile Include="Providers\IDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\IDataProviderFactory.cs" />
+    <Compile Include="Providers\IDataStoreProvider.cs" />
+    <Compile Include="Providers\IFileSystemProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Business\HomeCloud.Business.Services\HomeCloud.Business.Services.csproj">
+      <Project>{BF400D88-B8CB-47AC-83B6-A51608133804}</Project>
+      <Name>HomeCloud.Business.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
       <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>
       <Name>HomeCloud.DataStorage.Business.Entities</Name>
@@ -61,8 +70,6 @@
       <Name>HomeCloud.DataStorage.DataAccess.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
