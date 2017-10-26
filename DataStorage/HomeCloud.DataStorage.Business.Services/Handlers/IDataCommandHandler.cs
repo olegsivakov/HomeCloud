@@ -4,7 +4,7 @@
 
 	using System;
 
-	using HomeCloud.Business.Services;
+	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Services.Providers;
 
 	#endregion

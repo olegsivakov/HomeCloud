@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Business.Services
+﻿namespace HomeCloud.Core
 {
 	/// <summary>
 	/// Defines methods to handle command of <see cref="ICommand"/>.

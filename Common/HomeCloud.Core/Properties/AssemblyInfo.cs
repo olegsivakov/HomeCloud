@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HomeCloud.Business.Services")]
+[assembly: AssemblyTitle("HomeCloud.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HomeCloud.Business.Services")]
+[assembly: AssemblyProduct("HomeCloud.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bf400d88-b8cb-47ac-83b6-a51608133804")]
+[assembly: Guid("c1174732-d61a-4543-9477-52278023fd78")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -2,8 +2,8 @@
 {
 	#region Usings
 
+	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Services.Handlers;
-	using HomeCloud.Business.Services;
 
 	#endregion
 

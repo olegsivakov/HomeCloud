@@ -57,9 +57,9 @@
     <Compile Include="Providers\IFileSystemProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Business\HomeCloud.Business.Services\HomeCloud.Business.Services.csproj">
-      <Project>{BF400D88-B8CB-47AC-83B6-A51608133804}</Project>
-      <Name>HomeCloud.Business.Services</Name>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
+      <Project>{c1174732-d61a-4543-9477-52278023fd78}</Project>
+      <Name>HomeCloud.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
       <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>

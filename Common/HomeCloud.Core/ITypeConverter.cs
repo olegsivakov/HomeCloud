@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Business.Services
+﻿namespace HomeCloud.Core
 {
 	#region Usings
 

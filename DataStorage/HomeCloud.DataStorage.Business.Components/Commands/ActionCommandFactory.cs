@@ -4,10 +4,10 @@
 
 	using System;
 
+	using HomeCloud.Core;
+
 	using HomeCloud.DataStorage.Business.Services.Commands;
 	using HomeCloud.DataStorage.Business.Services.Providers;
-
-	using HomeCloud.Business.Services;
 
 	#endregion
 

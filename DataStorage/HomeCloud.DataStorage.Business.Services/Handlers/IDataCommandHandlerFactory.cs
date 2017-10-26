@@ -2,7 +2,7 @@
 {
 	#region Usings
 
-	using HomeCloud.Business.Services;
+	using HomeCloud.Core;
 
 	#endregion
 

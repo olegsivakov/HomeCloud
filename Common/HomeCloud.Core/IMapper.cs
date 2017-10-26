@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Business.Services
+﻿namespace HomeCloud.Core
 {
 	/// <summary>
 	/// Defines common interface to convert instance of one type to the instance of another type.
