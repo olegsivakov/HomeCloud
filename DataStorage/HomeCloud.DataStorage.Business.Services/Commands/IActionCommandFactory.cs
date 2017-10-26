@@ -9,8 +9,12 @@
 
 	#endregion
 
-	public interface IDataCommandFactory
+	public interface IActionCommandFactory
 	{
+		ICommand CreateCommand(Action executeAction, Action undoAction);
+
+		ICommand CreateCommand(IDataProvider provider, Action<IDataProvider> executeAction, Action<IDataProvider> undoAction);
+
 		ICommand CreateCommand<TProvider>(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
 			where TProvider : IDataProvider;
 	}

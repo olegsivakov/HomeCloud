@@ -6,20 +6,18 @@
 	public interface ICommandHandler
 	{
 		/// <summary>
-		/// Gets the command to handle.
+		/// Sets the command to execute.
 		/// </summary>
-		/// <value>
-		/// The <see cref="ICommand"/> command.
-		/// </value>
-		ICommand Command { get; }
+		/// <param name="command">The command.</param>
+		void SetCommand(ICommand command);
 
 		/// <summary>
-		/// Handles the execution of specified command.
+		/// Executes of specified command.
 		/// </summary>
-		void Handle();
+		void Execute();
 
 		/// <summary>
-		/// Reverts changes made by command.
+		/// Reverts the result of command execution.
 		/// </summary>
 		void Undo();
 	}

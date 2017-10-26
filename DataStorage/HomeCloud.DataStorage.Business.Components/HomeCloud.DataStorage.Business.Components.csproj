@@ -55,8 +55,9 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\ActionCommand.cs" />
     <Compile Include="Commands\DataCommand.cs" />
-    <Compile Include="Commands\DataCommandFactory.cs" />
+    <Compile Include="Commands\ActionCommandFactory.cs" />
     <Compile Include="Handlers\DataCommandHandlerFactory.cs" />
     <Compile Include="Handlers\DataStoreCommandHandler.cs" />
     <Compile Include="Processors\CommandHandlerProcessor.cs" />

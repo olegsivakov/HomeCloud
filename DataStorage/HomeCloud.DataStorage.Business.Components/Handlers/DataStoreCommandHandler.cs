@@ -2,47 +2,63 @@
 {
 	#region Usings
 
+	using System;
+
+	using HomeCloud.DataStorage.Business.Services.Commands;
 	using HomeCloud.DataStorage.Business.Services.Handlers;
 	using HomeCloud.DataStorage.Business.Services.Providers;
-	using HomeCloud.DataStorage.Business.Components.Commands;
 
 	using HomeCloud.Business.Services;
-	using System;
 
 	#endregion
 
-	public class DataStoreCommandHandler : DataCommandFactory, IDataStoreCommandHandler
+	public class DataStoreCommandHandler : IDataStoreCommandHandler
 	{
-		#region IDataStoreCommandHandler Implementations
+		#region Private Members
 
-		#region Public Properties
+		private ICommand command = null;
 
-		public ICommand Command { get; private set; }
+		private readonly IActionCommandFactory commandFactory = null;
 
 		#endregion
 
 		#region Constructors
 
-		public DataStoreCommandHandler(IDataProviderFactory providerFactory)
-			: base(providerFactory)
+		public DataStoreCommandHandler(IActionCommandFactory commandFactory, IDataProviderFactory providerFactory)
 		{
+			this.commandFactory = commandFactory;
+			this.Provider = providerFactory.GetProvider<IDataStoreProvider>();
 		}
 
 		#endregion
 
-		#region Public Methods
+		#region IDataStoreCommandHandler Implementations
 
-		public void Handle()
+		public IDataProvider Provider { get; }
+
+		public void SetCommand(ICommand command)
 		{
-			this.Command.Execute();
+			this.command = command;
+		}
+
+		public ICommand CreateCommand(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
+		{
+			ICommand command = this.commandFactory.CreateCommand(this.Provider, executeAction, undoAction);
+
+			this.SetCommand(command);
+
+			return command;
+		}
+
+		public void Execute()
+		{
+			this.command.Execute();
 		}
 
 		public void Undo()
 		{
-			this.Command.Undo();
+			this.command.Undo();
 		}
-
-		#endregion
 
 		#endregion
 	}

@@ -36,7 +36,7 @@
 
 		public void CreateStorage()
 		{
-			var command = this.commandHandlerFactory.CreateHandler<IDataStoreCommandHandler>().CreateCommand<Services.Providers.IDataStoreProvider>(provider => provider.CreateStorage(null), provider => provider.CreateStorage(null));
+			this.processor.CreateHandler<IDataStoreCommandHandler>().CreateCommand(provider => provider.CreateStorage(null), provider => provider.CreateStorage(null));
 		}
 
 		#endregion

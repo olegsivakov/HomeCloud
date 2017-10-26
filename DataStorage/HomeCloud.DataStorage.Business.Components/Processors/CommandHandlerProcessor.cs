@@ -6,10 +6,13 @@
 	using System.Collections.Generic;
 
 	using HomeCloud.DataStorage.Business.Components.Handlers;
+
+	using HomeCloud.DataStorage.Business.Services.Commands;
 	using HomeCloud.DataStorage.Business.Services.Processors;
 	using HomeCloud.DataStorage.Business.Services.Providers;
 
 	using HomeCloud.Business.Services;
+	using HomeCloud.DataStorage.Business.Services.Handlers;
 
 	#endregion
 
@@ -23,8 +26,8 @@
 
 		#region Constructors
 
-		public CommandHandlerProcessor(IDataProviderFactory providerFactory)
-			: base(providerFactory)
+		public CommandHandlerProcessor(IActionCommandFactory commandFactory, IDataProviderFactory providerFactory)
+			: base(commandFactory, providerFactory)
 		{
 		}
 
@@ -37,6 +40,15 @@
 			this.handlers.Add(handler);
 		}
 
+		public override IDataCommandHandler CreateHandler<T>()
+		{
+			IDataCommandHandler handler = base.CreateHandler<T>();
+
+			this.AddHandler(handler);
+
+			return handler;
+		}
+
 		public void Process()
 		{
 			ICommandHandler current = null;
@@ -47,7 +59,7 @@
 				{
 					current = handler;
 
-					handler.Handle();
+					handler.Execute();
 				}
 			}
 			catch (Exception exception)

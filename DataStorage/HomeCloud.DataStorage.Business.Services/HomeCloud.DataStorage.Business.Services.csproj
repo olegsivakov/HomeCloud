@@ -43,7 +43,7 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Commands\IDataCommandFactory.cs" />
+    <Compile Include="Commands\IActionCommandFactory.cs" />
     <Compile Include="Handlers\IDataCommandHandler.cs" />
     <Compile Include="Handlers\IDataCommandHandlerFactory.cs" />
     <Compile Include="Handlers\IDataStoreCommandHandler.cs" />

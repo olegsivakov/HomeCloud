@@ -8,7 +8,7 @@
 	using HomeCloud.DataStorage.Business.Services.Handlers;
 	using HomeCloud.DataStorage.Business.Services.Providers;
 
-	using HomeCloud.Business.Services;
+	using HomeCloud.DataStorage.Business.Services.Commands;
 
 	#endregion
 
@@ -18,14 +18,17 @@
 
 		private readonly IDataProviderFactory providerFactory = null;
 
+		private readonly IActionCommandFactory commandFactory = null;
+
 		private readonly IDictionary<Type, Type> container = new Dictionary<Type, Type>();
 
 		#endregion
 
 		#region Constructors
 
-		public DataCommandHandlerFactory(IDataProviderFactory providerFactory)
+		public DataCommandHandlerFactory(IActionCommandFactory commandFactory, IDataProviderFactory providerFactory)
 		{
+			this.commandFactory = commandFactory;
 			this.providerFactory = providerFactory;
 
 			container.Add(typeof(IDataStoreCommandHandler), typeof(DataStoreCommandHandler));
@@ -35,7 +38,7 @@
 
 		#region IDataCommandHandlerFactory Implementations
 
-		public IDataCommandHandler CreateHandler<T>() where T : IDataCommandHandler
+		public virtual IDataCommandHandler CreateHandler<T>() where T : IDataCommandHandler
 		{
 			Type type = typeof(T);
 
@@ -44,7 +47,7 @@
 				return default(T);
 			}
 
-			return (T)Activator.CreateInstance(this.container[type], this.providerFactory);
+			return (T)Activator.CreateInstance(this.container[type], this.commandFactory, this.providerFactory);
 		}
 
 		#endregion

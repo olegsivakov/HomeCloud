@@ -2,12 +2,17 @@
 {
 	#region Usings
 
-	using HomeCloud.DataStorage.Business.Services.Commands;
+	using System;
+
 	using HomeCloud.Business.Services;
+	using HomeCloud.DataStorage.Business.Services.Providers;
 
 	#endregion
 
-	public interface IDataCommandHandler : ICommandHandler, IDataCommandFactory
+	public interface IDataCommandHandler : ICommandHandler
 	{
+		IDataProvider Provider { get; }
+
+		ICommand CreateCommand(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction);
 	}
 }
