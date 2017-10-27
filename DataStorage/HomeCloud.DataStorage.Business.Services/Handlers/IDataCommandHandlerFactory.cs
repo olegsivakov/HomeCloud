@@ -9,7 +9,7 @@
 		/// Creates the instance of <see cref="IDataCommandHandler"/> type to execute data command.
 		/// </summary>
 		/// <typeparam name="T">The type of the handler derived from <see cref="IDataCommandHandler"/>.</typeparam>
-		/// <returns></returns>
+		/// <returns>The instance of <see cref="IDataCommandHandler"/>.</returns>
 		IDataCommandHandler CreateHandler<T>() where T : IDataCommandHandler;
 	}
 }

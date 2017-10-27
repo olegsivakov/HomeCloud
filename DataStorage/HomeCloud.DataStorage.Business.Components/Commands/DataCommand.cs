@@ -46,7 +46,7 @@
 		/// <summary>
 		/// Executes the command.
 		/// </summary>
-		public  override void Execute()
+		public override void Execute()
 		{
 			if (this.provider != null)
 			{

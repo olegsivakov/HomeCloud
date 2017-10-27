@@ -32,7 +32,7 @@
 		/// <param name="dataStoreProvider">The <see cref="IDataStoreProvider"/> provider.</param>
 		public DataProviderFactory(IDataStoreProvider dataStoreProvider)
 		{
-			container.Add(typeof(IDataStoreProvider), dataStoreProvider);
+			this.container.Add(typeof(IDataStoreProvider), dataStoreProvider);
 		}
 
 		#endregion
@@ -46,7 +46,7 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.Business.Services.Providers.IDataProvider" />.
 		/// </returns>
-		public IDataProvider GetProvider<T>() where T : IDataProvider
+		public virtual IDataProvider GetProvider<T>() where T : IDataProvider
 		{
 			Type type = typeof(T);
 

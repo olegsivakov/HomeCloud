@@ -12,7 +12,7 @@
 		void SetCommand(ICommand command);
 
 		/// <summary>
-		/// Executes of specified command.
+		/// Executes the command.
 		/// </summary>
 		void Execute();
 

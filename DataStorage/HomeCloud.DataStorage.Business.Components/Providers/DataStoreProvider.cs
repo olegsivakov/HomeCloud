@@ -2,12 +2,12 @@
 {
 	#region Usings
 
+	using HomeCloud.DataAccess.Services.Factories;
+
 	using HomeCloud.DataStorage.Api.Configuration;
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Services.Providers;
-
-	using HomeCloud.DataAccess.Services.Factories;
 
 	using Microsoft.Extensions.Options;
 
