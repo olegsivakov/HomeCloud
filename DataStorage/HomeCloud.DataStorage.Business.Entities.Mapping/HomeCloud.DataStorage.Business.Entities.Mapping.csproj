@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C1174732-D61A-4543-9477-52278023FD78}</ProjectGuid>
+    <ProjectGuid>{966A2B4D-E905-4FB8-B470-8E34A014BD0A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HomeCloud.Core</RootNamespace>
-    <AssemblyName>HomeCloud.Core</AssemblyName>
+    <RootNamespace>HomeCloud.DataStorage.Business.Entities.Mapping</RootNamespace>
+    <AssemblyName>HomeCloud.DataStorage.Business.Entities.Mapping</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,22 +30,34 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandHandler.cs" />
-    <Compile Include="IMapper.cs" />
-    <Compile Include="IMapperFactory.cs" />
-    <Compile Include="ITypeConverter.cs" />
-    <Compile Include="Mapper.cs" />
+    <Compile Include="Extensions\MapperExtensions.cs" />
+    <Compile Include="Mappers\EntityMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
+      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
+      <Name>HomeCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
+      <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>
+      <Name>HomeCloud.DataStorage.Business.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Contracts\HomeCloud.DataStorage.DataAccess.Contracts.csproj">
+      <Project>{77df87c3-0b2b-4a14-9b4f-c86b2761fcf2}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

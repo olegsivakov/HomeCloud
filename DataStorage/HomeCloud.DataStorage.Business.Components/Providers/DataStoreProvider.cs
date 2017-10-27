@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using HomeCloud.Core;
+
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
@@ -31,19 +33,29 @@
 		/// </summary>
 		private readonly ConnectionStrings connectionStrings = null;
 
+		/// <summary>
+		/// The object mapper.
+		/// </summary>
+		private readonly IMapper mapper = null;
+
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DataStoreProvider"/> class.
+		/// Initializes a new instance of the <see cref="DataStoreProvider" /> class.
 		/// </summary>
 		/// <param name="dataContextScopeFactory">The data context scope factory.</param>
 		/// <param name="connectionStrings">The connection strings.</param>
-		public DataStoreProvider(IDataContextScopeFactory dataContextScopeFactory, IOptionsSnapshot<ConnectionStrings> connectionStrings)
+		/// <param name="mapper">The mapper.</param>
+		public DataStoreProvider(
+			IDataContextScopeFactory dataContextScopeFactory,
+			IOptionsSnapshot<ConnectionStrings> connectionStrings,
+			IMapper mapper)
 		{
 			this.dataContextScopeFactory = dataContextScopeFactory;
 			this.connectionStrings = connectionStrings?.Value;
+			this.mapper = mapper;
 		}
 
 		#endregion

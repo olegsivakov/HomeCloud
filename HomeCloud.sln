@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Exceptions", "Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Core", "Common\HomeCloud.Core\HomeCloud.Core.csproj", "{C1174732-D61A-4543-9477-52278023FD78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Entities.Mapping", "DataStorage\HomeCloud.DataStorage.Business.Entities.Mapping\HomeCloud.DataStorage.Business.Entities.Mapping.csproj", "{966A2B4D-E905-4FB8-B470-8E34A014BD0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{C1174732-D61A-4543-9477-52278023FD78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1174732-D61A-4543-9477-52278023FD78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1174732-D61A-4543-9477-52278023FD78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966A2B4D-E905-4FB8-B470-8E34A014BD0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966A2B4D-E905-4FB8-B470-8E34A014BD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966A2B4D-E905-4FB8-B470-8E34A014BD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966A2B4D-E905-4FB8-B470-8E34A014BD0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +160,7 @@ Global
 		{A269DAF5-0124-481B-A86C-3E41C9DD6203} = {384C98CA-3A90-4359-A4A7-1AA241228BB3}
 		{85F9BA9C-3D04-4D92-A743-AFE91EF05060} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 		{C1174732-D61A-4543-9477-52278023FD78} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
+		{966A2B4D-E905-4FB8-B470-8E34A014BD0A} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA97106E-A9E5-423B-9B9E-36E657021CB8}

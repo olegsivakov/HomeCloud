@@ -79,6 +79,10 @@
       <Project>{8FABA1B4-263E-42C7-A4E3-AEF6118DFCF2}</Project>
       <Name>HomeCloud.DataAccess.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
+      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
+      <Name>HomeCloud.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.Configuration\HomeCloud.DataStorage.Api.Configuration.csproj">
       <Project>{7ADC327A-5475-4D3F-A8A9-8066292DA44C}</Project>
       <Name>HomeCloud.DataStorage.Api.Configuration</Name>
@@ -87,6 +91,14 @@
       <Project>{8d3fdec3-8565-4f4e-ae01-08c69fc851f2}</Project>
       <Name>HomeCloud.DataStorage.Business.Components</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities.Mapping\HomeCloud.DataStorage.Business.Entities.Mapping.csproj">
+      <Project>{966A2B4D-E905-4FB8-B470-8E34A014BD0A}</Project>
+      <Name>HomeCloud.DataStorage.Business.Entities.Mapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
+      <Project>{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}</Project>
+      <Name>HomeCloud.DataStorage.Business.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Services\HomeCloud.DataStorage.Business.Services.csproj">
       <Project>{5d3e601c-979e-43f1-b3c6-ec6a780112bd}</Project>
       <Name>HomeCloud.DataStorage.Business.Services</Name>
@@ -94,6 +106,10 @@
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Components\HomeCloud.DataStorage.DataAccess.Components.csproj">
       <Project>{d571c54b-1a23-46e3-9d42-c52d596deff7}</Project>
       <Name>HomeCloud.DataStorage.DataAccess.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Contracts\HomeCloud.DataStorage.DataAccess.Contracts.csproj">
+      <Project>{77DF87C3-0B2B-4A14-9B4F-C86B2761FCF2}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Services\HomeCloud.DataStorage.DataAccess.Services.csproj">
       <Project>{0735155e-018b-45da-8b1a-c9c7aaaca0d9}</Project>

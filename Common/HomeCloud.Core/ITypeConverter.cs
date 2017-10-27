@@ -7,18 +7,27 @@
 	#endregion
 
 	/// <summary>
-	/// Defines delegate to convert instance of type <see cref="TSource"/> to the instance of type <see cref="TTarget"/>
+	/// Marks the instance to be a type converter.
+	/// </summary>
+	public interface ITypeConverter
+	{
+	}
+
+	/// <summary>
+	/// Defines methods to convert instance of type <see cref="TSource"/> to the instance of type <see cref="TTarget"/>
 	/// </summary>
 	/// <typeparam name="TSource">The type of the source.</typeparam>
 	/// <typeparam name="TTarget">The type of the target.</typeparam>
-	public interface ITypeConverter<TSource, TTarget>
+	public interface ITypeConverter<TSource, TTarget> : ITypeConverter
 	{
 		/// <summary>
-		/// Gets the type converter delegate.
+		/// Converts the instance of <see cref="TSource" /> type to the instance of <see cref="TTarget" />.
 		/// </summary>
-		/// <value>
-		/// The converter delegate.
-		/// </value>
-		Func<TSource, TTarget> Converter { get; }
+		/// <param name="source">The instance of <see cref="TSource" />.</param>
+		/// <param name="target">The instance of <see cref="TTarget" />.</param>
+		/// <returns>
+		/// The converted instance of <see cref="TTarget" />.
+		/// </returns>
+		TTarget Convert(TSource source, TTarget target);
 	}
 }

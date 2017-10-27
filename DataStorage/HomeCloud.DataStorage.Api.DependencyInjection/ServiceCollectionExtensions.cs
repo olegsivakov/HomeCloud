@@ -2,14 +2,33 @@
 {
 	#region Usings
 
+	using HomeCloud.Core;
+
 	using HomeCloud.DataAccess.Components.Factories;
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
+
+	using HomeCloud.DataStorage.Business.Components.Commands;
+	using HomeCloud.DataStorage.Business.Components.Handlers;
+	using HomeCloud.DataStorage.Business.Components.Processors;
+	using HomeCloud.DataStorage.Business.Components.Providers;
+
+	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.Business.Entities.Mapping;
+	using HomeCloud.DataStorage.Business.Entities.Mapping.Mappers;
+
+	using HomeCloud.DataStorage.Business.Services.Commands;
+	using HomeCloud.DataStorage.Business.Services.Handlers;
+	using HomeCloud.DataStorage.Business.Services.Processors;
+	using HomeCloud.DataStorage.Business.Services.Providers;
+
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
+
+	using DataContracts = HomeCloud.DataStorage.DataAccess.Contracts;
 
 	#endregion
 
@@ -18,6 +37,8 @@
 	/// </summary>
 	public static partial class ServiceCollectionExtensions
 	{
+		#region Public Methods
+
 		/// <summary>
 		/// Adds the dependencies to container.
 		/// </summary>
@@ -29,6 +50,13 @@
 			services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
 
 			services.AddSingleton<IDataContextScopeFactory, DataContextScopeFactory>();
+
+			AddConverters(services);
+			AddDataProviders(services);
+			AddComandHandlers(services);
+
+			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
+			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
 		}
 
 		/// <summary>
@@ -43,5 +71,45 @@
 			services.Configure<Database>(configuration.GetSection(nameof(Database)));
 			services.Configure<FileSystem>(configuration.GetSection(nameof(FileSystem)));
 		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Adds the converters to container.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		private static void AddConverters(this IServiceCollection services)
+		{
+			StorageConverter storageConverter = new StorageConverter();
+
+			services.AddSingleton<ITypeConverter<DataContracts.Storage, Storage>>(storageConverter);
+			services.AddSingleton<ITypeConverter<Storage, DataContracts.Storage>>(storageConverter);
+
+			services.AddSingleton<IMapper, EntityMapper>();
+		}
+
+		/// <summary>
+		/// Adds the comand handlers to container.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		private static void AddComandHandlers(this IServiceCollection services)
+		{
+			services.AddSingleton<IDataCommandHandlerFactory, DataCommandHandlerFactory > ();
+		}
+
+		/// <summary>
+		/// Adds the data providers to container.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		private static void AddDataProviders(this IServiceCollection services)
+		{
+			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
+
+			services.AddSingleton<IDataProviderFactory, DataProviderFactory>();
+		}
+
+		#endregion
 	}
 }
