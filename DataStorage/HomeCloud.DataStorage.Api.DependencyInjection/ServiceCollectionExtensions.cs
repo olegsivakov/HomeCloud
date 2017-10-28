@@ -24,7 +24,7 @@
 	using HomeCloud.DataStorage.Business.Services.Providers;
 
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;
-
+	using HomeCloud.DependencyInjection;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
@@ -96,7 +96,7 @@
 		/// <param name="services">The services.</param>
 		private static void AddComandHandlers(this IServiceCollection services)
 		{
-			services.AddSingleton<IDataCommandHandlerFactory, DataCommandHandlerFactory > ();
+			services.AddTransient<IDataStoreCommandHandler, DataStoreCommandHandler>();
 		}
 
 		/// <summary>
@@ -105,9 +105,17 @@
 		/// <param name="services">The services.</param>
 		private static void AddDataProviders(this IServiceCollection services)
 		{
-			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
+			services.AddTransient<IDataStoreProvider, DataStoreProvider>();
+		}
 
-			services.AddSingleton<IDataProviderFactory, DataProviderFactory>();
+		/// <summary>
+		/// Adds the factories to the container.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		private static void AddFactories(this IServiceCollection services)
+		{
+			services.AddFactory<IDataCommandHandler>();
+			services.AddFactory<IDataProvider>();
 		}
 
 		#endregion

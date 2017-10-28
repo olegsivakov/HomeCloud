@@ -7,12 +7,9 @@
 
 	using HomeCloud.Core;
 
-	using HomeCloud.DataStorage.Business.Components.Handlers;
-
 	using HomeCloud.DataStorage.Business.Services.Commands;
 	using HomeCloud.DataStorage.Business.Services.Handlers;
 	using HomeCloud.DataStorage.Business.Services.Processors;
-	using HomeCloud.DataStorage.Business.Services.Providers;
 
 	#endregion
 
@@ -21,7 +18,7 @@
 	/// </summary>
 	/// <seealso cref="HomeCloud.DataStorage.Business.Components.Handlers.DataCommandHandlerFactory" />
 	/// <seealso cref="HomeCloud.DataStorage.Business.Services.Processors.ICommandHandlerProcessor" />
-	public class CommandHandlerProcessor : DataCommandHandlerFactory, ICommandHandlerProcessor
+	public class CommandHandlerProcessor : ICommandHandlerProcessor
 	{
 		#region Private Members
 
@@ -30,18 +27,23 @@
 		/// </summary>
 		private readonly IList<ICommandHandler> handlers = new List<ICommandHandler>();
 
+		/// <summary>
+		/// The command handler factory
+		/// </summary>
+		private readonly IServiceFactory<IDataCommandHandler> commandHandlerFactory = null;
+
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CommandHandlerProcessor"/> class.
+		/// Initializes a new instance of the <see cref="CommandHandlerProcessor" /> class.
 		/// </summary>
 		/// <param name="commandFactory">The action command factory.</param>
-		/// <param name="providerFactory">The data provider factory.</param>
-		public CommandHandlerProcessor(IActionCommandFactory commandFactory, IDataProviderFactory providerFactory)
-			: base(commandFactory, providerFactory)
+		/// <param name="commandHandlerFactory">The command handler factory.</param>
+		public CommandHandlerProcessor(IActionCommandFactory commandFactory, IServiceFactory<IDataCommandHandler> commandHandlerFactory)
 		{
+			this.commandHandlerFactory = commandHandlerFactory;
 		}
 
 		#endregion
@@ -64,9 +66,9 @@
 		/// <returns>
 		/// The instance of <see cref="IDataCommandHandler" />.
 		/// </returns>
-		public override IDataCommandHandler CreateHandler<T>()
+		public IDataCommandHandler CreateDataHandler<T>() where T : IDataCommandHandler
 		{
-			IDataCommandHandler handler = base.CreateHandler<T>();
+			IDataCommandHandler handler = this.commandHandlerFactory.Get<T>();
 
 			this.AddHandler(handler);
 

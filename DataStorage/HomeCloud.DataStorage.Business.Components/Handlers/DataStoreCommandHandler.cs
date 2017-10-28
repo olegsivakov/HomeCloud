@@ -39,10 +39,10 @@
 		/// </summary>
 		/// <param name="commandFactory">The command factory.</param>
 		/// <param name="providerFactory">The provider factory.</param>
-		public DataStoreCommandHandler(IActionCommandFactory commandFactory, IDataProviderFactory providerFactory)
+		public DataStoreCommandHandler(IActionCommandFactory commandFactory, IServiceFactory<IDataProvider> providerFactory)
 		{
 			this.commandFactory = commandFactory;
-			this.Provider = providerFactory.GetProvider<IDataStoreProvider>();
+			this.Provider = providerFactory.Get<IDataStoreProvider>();
 		}
 
 		#endregion

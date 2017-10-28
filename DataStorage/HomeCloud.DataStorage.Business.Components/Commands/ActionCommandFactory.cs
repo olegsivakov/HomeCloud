@@ -22,7 +22,7 @@
 		/// <summary>
 		/// The data provider factory.
 		/// </summary>
-		private readonly IDataProviderFactory dataProviderFactory = null;
+		private readonly IServiceFactory<IDataProvider> dataProviderFactory = null;
 
 		#endregion
 
@@ -32,7 +32,7 @@
 		/// Initializes a new instance of the <see cref="ActionCommandFactory"/> class.
 		/// </summary>
 		/// <param name="dataProviderFactory">The data provider factory.</param>
-		public ActionCommandFactory(IDataProviderFactory dataProviderFactory)
+		public ActionCommandFactory(IServiceFactory<IDataProvider> dataProviderFactory)
 		{
 			this.dataProviderFactory = dataProviderFactory;
 		}
@@ -80,7 +80,7 @@
 		public virtual ICommand CreateCommand<TProvider>(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
 			where TProvider : IDataProvider
 		{
-			IDataProvider provider = this.dataProviderFactory.GetProvider<TProvider>();
+			IDataProvider provider = this.dataProviderFactory.Get<TProvider>();
 
 			return this.CreateCommand(provider, executeAction, undoAction);
 		}

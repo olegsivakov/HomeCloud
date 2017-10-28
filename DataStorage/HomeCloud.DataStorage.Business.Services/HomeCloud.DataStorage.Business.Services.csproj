@@ -45,14 +45,12 @@
     </Compile>
     <Compile Include="Commands\IActionCommandFactory.cs" />
     <Compile Include="Handlers\IDataCommandHandler.cs" />
-    <Compile Include="Handlers\IDataCommandHandlerFactory.cs" />
     <Compile Include="Handlers\IDataStoreCommandHandler.cs" />
     <Compile Include="IStorageService.cs" />
     <Compile Include="Processors\ICommandHandlerProcessor.cs" />
     <Compile Include="Providers\IAggregationDataProvider.cs" />
     <Compile Include="Providers\IDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\IDataProviderFactory.cs" />
     <Compile Include="Providers\IDataStoreProvider.cs" />
     <Compile Include="Providers\IFileSystemProvider.cs" />
   </ItemGroup>

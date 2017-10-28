@@ -83,6 +83,10 @@
       <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
       <Name>HomeCloud.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.DependencyInjection\HomeCloud.DependencyInjection.csproj">
+      <Project>{1ecffe32-e4cb-4ae0-965f-d50911916d26}</Project>
+      <Name>HomeCloud.DependencyInjection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.Configuration\HomeCloud.DataStorage.Api.Configuration.csproj">
       <Project>{7ADC327A-5475-4D3F-A8A9-8066292DA44C}</Project>
       <Name>HomeCloud.DataStorage.Api.Configuration</Name>
