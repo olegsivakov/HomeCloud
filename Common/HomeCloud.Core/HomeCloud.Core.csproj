@@ -42,10 +42,8 @@
     <Compile Include="ICommand.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="IMapper.cs" />
-    <Compile Include="IMapperFactory.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="ITypeConverter.cs" />
-    <Compile Include="Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

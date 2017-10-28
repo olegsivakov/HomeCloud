@@ -1,9 +1,8 @@
-﻿namespace HomeCloud.Core
+﻿namespace HomeCloud.DataStorage.Business.Entities.Mapping
 {
 	#region Usings
 
-	using System;
-	using System.Collections.Generic;
+	using HomeCloud.Core;
 
 	#endregion
 
@@ -16,21 +15,21 @@
 		#region Private Members
 
 		/// <summary>
-		/// The type converter container.
+		/// The type converter factory.
 		/// </summary>
-		private readonly IDictionary<Type, ITypeConverter> container = null;
+		private readonly IServiceFactory<ITypeConverter> converterFactory = null;
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Mapper"/> class.
+		/// Initializes a new instance of the <see cref="Mapper" /> class.
 		/// </summary>
-		/// <param name="registrar">The action to register type converters.</param>
-		public Mapper(Action<IDictionary<Type, ITypeConverter>> registrar = null)
+		/// <param name="converterFactory">The type converter factory.</param>
+		public Mapper(IServiceFactory<ITypeConverter> converterFactory)
 		{
-			registrar?.Invoke(this.container);
+			this.converterFactory = converterFactory;
 		}
 
 		#endregion
@@ -49,16 +48,9 @@
 		/// </returns>
 		public TTarget Map<TSource, TTarget>(TSource source, TTarget target)
 		{
-			Type type = typeof(ITypeConverter<TSource, TTarget>);
+			ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;
 
-			if (!this.container.ContainsKey(type))
-			{
-				return default(TTarget);
-			}
-
-			ITypeConverter<TSource, TTarget> typeConverter = (this.container[type] as ITypeConverter<TSource, TTarget>);
-
-			return typeConverter.Convert(source, target);
+			return converter != null ? converter.Convert(source, target) : default(TTarget);
 		}
 
 		#endregion

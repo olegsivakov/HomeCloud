@@ -87,7 +87,7 @@
 			services.AddSingleton<ITypeConverter<DataContracts.Storage, Storage>>(storageConverter);
 			services.AddSingleton<ITypeConverter<Storage, DataContracts.Storage>>(storageConverter);
 
-			services.AddSingleton<IMapper, EntityMapper>();
+			services.AddSingleton<IMapper, Mapper>();
 		}
 
 		/// <summary>
@@ -114,6 +114,7 @@
 		/// <param name="services">The services.</param>
 		private static void AddFactories(this IServiceCollection services)
 		{
+			services.AddFactory<ITypeConverter>();
 			services.AddFactory<IDataCommandHandler>();
 			services.AddFactory<IDataProvider>();
 		}
