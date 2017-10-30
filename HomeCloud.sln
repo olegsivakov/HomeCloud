@@ -69,6 +69,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Busin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Validation", "Common\HomeCloud.Validation\HomeCloud.Validation.csproj", "{51D11D70-099D-449E-BBF1-ACACDAD110FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Services.Abstractions", "DataStorage\HomeCloud.DataStorage.Business.Services.Abstractions\HomeCloud.DataStorage.Business.Services.Abstractions.csproj", "{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Validation.Abstractions", "DataStorage\HomeCloud.DataStorage.Business.Validation.Abstractions\HomeCloud.DataStorage.Business.Validation.Abstractions.csproj", "{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Providers.Abstractions", "DataStorage\HomeCloud.DataStorage.Business.Providers.Abstractions\HomeCloud.DataStorage.Business.Providers.Abstractions.csproj", "{5D3E908C-07F8-420D-BE94-9D831152CA2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Providers", "DataStorage\HomeCloud.DataStorage.Business.Providers\HomeCloud.DataStorage.Business.Providers.csproj", "{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Handlers.Abstractions", "DataStorage\HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj", "{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Handlers", "DataStorage\HomeCloud.DataStorage.Business.Handlers\HomeCloud.DataStorage.Business.Handlers.csproj", "{7E36375B-AC01-474E-878E-272620C6BC1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +165,30 @@ Global
 		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E36375B-AC01-474E-878E-272620C6BC1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E36375B-AC01-474E-878E-272620C6BC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E36375B-AC01-474E-878E-272620C6BC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E36375B-AC01-474E-878E-272620C6BC1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +218,12 @@ Global
 		{1ECFFE32-E4CB-4AE0-965F-D50911916D26} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 		{1E4F6B7E-895B-41C0-8392-1C398794D775} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
 		{51D11D70-099D-449E-BBF1-ACACDAD110FF} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
+		{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
+		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
+		{7E36375B-AC01-474E-878E-272620C6BC1E} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA97106E-A9E5-423B-9B9E-36E657021CB8}
