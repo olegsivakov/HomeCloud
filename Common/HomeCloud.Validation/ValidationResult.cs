@@ -26,6 +26,22 @@
 		/// <value>
 		/// The validation errors.
 		/// </value>
-		public IList<string> Errors { get; set; } = new List<string>();
+		public IEnumerable<string> Errors { get; set; }
+
+		/// <summary>
+		/// Concatenates two instances of <see cref="ValidationResult>"/>.
+		/// </summary>
+		/// <param name="first">The first instance of <see cref="ValidationResult"/>.</param>
+		/// <param name="second">The second instance of <see cref="ValidationResult"/>.</param>
+		/// <returns>
+		/// The result of the concatenation.
+		/// </returns>
+		public static ValidationResult operator +(ValidationResult first, ValidationResult second)
+		{
+			return new ValidationResult()
+			{
+				Errors = (first?.Errors ?? Enumerable.Empty<string>()).Union(second?.Errors ?? Enumerable.Empty<string>()).ToList()
+			};
+		}
 	}
 }
