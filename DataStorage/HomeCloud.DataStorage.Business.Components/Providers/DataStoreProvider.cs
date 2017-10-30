@@ -3,15 +3,22 @@
 	#region Usings
 
 	using HomeCloud.Core;
-
+	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
 
+	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
+
 	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.Business.Entities.Mapping.Extensions;
+
 	using HomeCloud.DataStorage.Business.Services.Providers;
 
 	using Microsoft.Extensions.Options;
+
+	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
+	using DirectoryContract = HomeCloud.DataStorage.DataAccess.Contracts.Directory;
 
 	#endregion
 
@@ -68,6 +75,20 @@
 		/// <param name="storage">The storage.</param>
 		public void CreateStorage(Storage storage)
 		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+
+				StorageContract storageContract = storageRepository.Save(this.mapper.MapNew<Storage, StorageContract>(storage));
+
+				storage = this.mapper.Map(storageContract, storage);
+
+				IDirectoryRepository directoryRepository = scope.GetRepository<IDirectoryRepository>();
+
+				directoryRepository.Save(this.mapper.MapNew<Catalog, DirectoryContract>(storage.CatalogRoot));
+
+				scope.Commit();
+			}
 		}
 
 		#endregion

@@ -25,7 +25,7 @@ BEGIN
 		[Name],
 		[CreationDate],
 		[UpdatedDate]
-	FROM [dbo].[Directory]
+	FROM [dbo].[Directory] WITH(NOLOCK)
 	WHERE
 		[StorageID] = @local_StorageID
 		AND

@@ -23,7 +23,7 @@ BEGIN
 		[Extension],
 		[CreationDate],
 		[UpdatedDate]
-	FROM [dbo].[File]
+	FROM [dbo].[File] WITH(NOLOCK)
 	WHERE
 		[DirectoryID] = @local_DirectoryID
 	ORDER BY [Name] ASC

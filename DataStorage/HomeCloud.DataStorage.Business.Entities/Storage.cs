@@ -11,13 +11,39 @@
 	/// </summary>
 	public class Storage
 	{
+		#region Private Members
+
+		/// <summary>
+		/// The unique identifier member.
+		/// </summary>
+		private Guid id = Guid.Empty;
+
+		#endregion
+
+		#region Public Properties
+
 		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>
 		/// The identifier.
 		/// </value>
-		public Guid ID { get; set; }
+		public Guid ID
+		{
+			get
+			{
+				return this.id;
+			}
+			set
+			{
+				this.id = value;
+
+				if (this.CatalogRoot != null)
+				{
+					this.CatalogRoot.StorageID = this.id;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the name.
@@ -41,7 +67,7 @@
 		/// <value>
 		/// The root catalog.
 		/// </value>
-		public Catalog CatalogRoot { get; set; }
+		public Catalog CatalogRoot { get; set; } = new Catalog();
 
 		/// <summary>
 		/// Gets or sets the creation date.
@@ -58,5 +84,7 @@
 		/// The updated date.
 		/// </value>
 		public DateTime UpdatedDate { get; set; }
+
+		#endregion
 	}
 }

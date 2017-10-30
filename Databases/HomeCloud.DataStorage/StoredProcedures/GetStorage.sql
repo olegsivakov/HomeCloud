@@ -20,7 +20,7 @@ BEGIN
 		[Quota],
 		[CreationDate],
 		[UpdatedDate]
-	FROM [dbo].[Storage]
+	FROM [dbo].[Storage] WITH(NOLOCK)
 	ORDER BY [Name] ASC
 	OFFSET (@local_StartIndex * @local_ChunkSize) ROWS
 	FETCH NEXT @local_ChunkSize ROWS ONLY

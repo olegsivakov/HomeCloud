@@ -10,14 +10,13 @@ CREATE PROCEDURE [dbo].[InsertStorage]
 AS
 BEGIN
 	DECLARE @local_Name INT = @Name,
-			@local_Quota INT = @Quota
+			@local_Quota INT = @Quota,
+			@local_ID UNIQUEIDENTIFIER = NEWID()
 
-	INSERT INTO [dbo].[Storage] ([Name], [Quota], [CreationDate], [UpdatedDate])
-	VALUES (@local_Name, @local_Quota, GETDATE(), GETDATE())
+	INSERT INTO [dbo].[Storage] ([ID], [Name], [Quota], [CreationDate], [UpdatedDate])
+	VALUES (@local_ID, @local_Name, @local_Quota, GETDATE(), GETDATE())
 
-	DECLARE @ID INT = SCOPE_IDENTITY()
-
-	EXEC [dbo].[GetStorageByID] @ID
+	EXEC [dbo].[GetStorageByID] @local_ID
 END
 GO
 

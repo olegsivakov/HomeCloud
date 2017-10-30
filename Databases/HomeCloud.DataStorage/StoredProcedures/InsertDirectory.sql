@@ -12,14 +12,13 @@ AS
 BEGIN
 	DECLARE @local_ParentID UNIQUEIDENTIFIER = @ParentID,
 			@local_StorageID UNIQUEIDENTIFIER = @StorageID,
-			@local_Name NVARCHAR(250) = @Name
+			@local_Name NVARCHAR(250) = @Name,
+			@local_ID UNIQUEIDENTIFIER = NEWID()
 
-	INSERT INTO [dbo].[Directory] ([ParentID], [StorageID], [Name], [CreationDate], [UpdatedDate])
-	VALUES (@local_ParentID, @local_StorageID, @local_Name, GETDATE(), GETDATE())
+	INSERT INTO [dbo].[Directory] ([ID], [ParentID], [StorageID], [Name], [CreationDate], [UpdatedDate])
+	VALUES (@local_ID, @local_ParentID, @local_StorageID, @local_Name, GETDATE(), GETDATE())
 
-	DECLARE @ID INT = SCOPE_IDENTITY()
-
-	EXEC [dbo].[GetDirectoryByID] @ID
+	EXEC [dbo].[GetDirectoryByID] @local_ID
 END
 GO
 

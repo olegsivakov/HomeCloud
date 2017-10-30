@@ -18,7 +18,7 @@ BEGIN
 		[Quota],
 		[CreationDate],
 		[UpdatedDate]
-	FROM [dbo].[Storage]
+	FROM [dbo].[Storage] WITH(NOLOCK)
 	WHERE
 		ID = @local_ID
 END

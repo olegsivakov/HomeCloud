@@ -19,7 +19,7 @@ BEGIN
 		[Extension],
 		[CreationDate],
 		[UpdatedDate]
-	FROM [dbo].[File]
+	FROM [dbo].[File] WITH(NOLOCK)
 	WHERE
 		ID = @local_ID
 END

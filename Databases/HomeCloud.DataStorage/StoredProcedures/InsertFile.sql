@@ -12,14 +12,13 @@ AS
 BEGIN
 	DECLARE @local_DirectoryID UNIQUEIDENTIFIER = @DirectoryID,
 			@local_Name NVARCHAR(250) =  @Name,
-			@local_Extension NVARCHAR(10) = @Extension
+			@local_Extension NVARCHAR(10) = @Extension,
+			@local_ID UNIQUEIDENTIFIER = NEWID()
 
 	INSERT INTO [dbo].[File] ([ID], [DirectoryID], [Name], [Extension], [CreationDate], [UpdatedDate])
-	VALUES (@local_DirectoryID, @local_Name, @local_Extension, GETDATE(), GETDATE())
+	VALUES (@local_ID, @local_DirectoryID, @local_Name, @local_Extension, GETDATE(), GETDATE())
 
-	DECLARE @ID INT = SCOPE_IDENTITY()
-
-	EXEC [dbo].[GetFileByID] @ID
+	EXEC [dbo].[GetFileByID] @local_ID
 END
 GO
 

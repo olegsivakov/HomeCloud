@@ -19,7 +19,7 @@ BEGIN
 		[Name],
 		[CreationDate],
 		[UpdatedDate]
-	FROM [dbo].[Directory]
+	FROM [dbo].[Directory] WITH(NOLOCK)
 	WHERE
 		ID = @local_ID
 END
