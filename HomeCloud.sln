@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DependencyInjecti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Validation", "DataStorage\HomeCloud.DataStorage.Business.Validation\HomeCloud.DataStorage.Business.Validation.csproj", "{1E4F6B7E-895B-41C0-8392-1C398794D775}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Validation", "Common\HomeCloud.Validation\HomeCloud.Validation.csproj", "{51D11D70-099D-449E-BBF1-ACACDAD110FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +149,10 @@ Global
 		{1E4F6B7E-895B-41C0-8392-1C398794D775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E4F6B7E-895B-41C0-8392-1C398794D775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E4F6B7E-895B-41C0-8392-1C398794D775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51D11D70-099D-449E-BBF1-ACACDAD110FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +181,7 @@ Global
 		{966A2B4D-E905-4FB8-B470-8E34A014BD0A} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
 		{1ECFFE32-E4CB-4AE0-965F-D50911916D26} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 		{1E4F6B7E-895B-41C0-8392-1C398794D775} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
+		{51D11D70-099D-449E-BBF1-ACACDAD110FF} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA97106E-A9E5-423B-9B9E-36E657021CB8}
