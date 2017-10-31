@@ -1,9 +1,8 @@
-﻿namespace HomeCloud.DataStorage.Business.Services.Processors
+﻿namespace HomeCloud.DataStorage.Business.Handlers
 {
 	#region Usings
 
 	using HomeCloud.Core;
-	using HomeCloud.DataStorage.Business.Services.Handlers;
 
 	#endregion
 
@@ -19,9 +18,9 @@
 		void AddHandler(ICommandHandler handler);
 
 		/// <summary>
-		/// Creates and attaches the instance of <see cref="T:HomeCloud.DataStorage.Business.Services.Handlers.IDataCommandHandler" /> type to execute data command.
+		/// Creates and attaches the instance of <see cref="T:HomeCloud.DataStorage.Business.Handlers.IDataCommandHandler" /> type to execute data command.
 		/// </summary>
-		/// <typeparam name="T">The type of the handler derived from <see cref="T:HomeCloud.DataStorage.Business.Services.Handlers.IDataCommandHandler" />.</typeparam>
+		/// <typeparam name="T">The type of the handler derived from <see cref="T:HomeCloud.DataStorage.Business.Handlers.IDataCommandHandler" />.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="IDataCommandHandler" />.
 		/// </returns>

@@ -1,34 +1,30 @@
-﻿namespace HomeCloud.DataStorage.Business.Components.Providers
+﻿namespace HomeCloud.DataStorage.Business.Providers
 {
 	#region Usings
 
 	using HomeCloud.Core;
+	using HomeCloud.Core.Extensions;
+
 	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
 
-	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
-
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.Business.Entities.Mapping.Extensions;
 
-	using HomeCloud.DataStorage.Business.Services.Providers;
+	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
 
 	using Microsoft.Extensions.Options;
 
-	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
 	using DirectoryContract = HomeCloud.DataStorage.DataAccess.Contracts.Directory;
-	using HomeCloud.DataStorage.Business.Validation.Abstractions;
-	using HomeCloud.Validation;
-	using HomeCloud.Exceptions;
+	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
 
 	#endregion
 
 	/// <summary>
 	///  Provides methods to manage data from data store database.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Services.Providers.IDataStoreProvider" />
+	/// <seealso cref="HomeCloud.DataStorage.Business.Providers.IDataStoreProvider" />
 	public class DataStoreProvider : IDataStoreProvider
 	{
 		#region Private Members
@@ -48,11 +44,6 @@
 		/// </summary>
 		private readonly IMapper mapper = null;
 
-		/// <summary>
-		/// The validator factory.
-		/// </summary>
-		private readonly IServiceFactory<IStorageValidator> validatorFactory = null;
-
 		#endregion
 
 		#region Constructors
@@ -66,14 +57,12 @@
 		public DataStoreProvider(
 			IDataContextScopeFactory dataContextScopeFactory,
 			IOptionsSnapshot<ConnectionStrings> connectionStrings,
-			IMapper mapper,
-			IServiceFactory<IStorageValidator> validatorFactory)
+			IMapper mapper)
 		{
 			this.dataContextScopeFactory = dataContextScopeFactory;
 			this.connectionStrings = connectionStrings?.Value;
 
 			this.mapper = mapper;
-			this.validatorFactory = validatorFactory;
 		}
 
 		#endregion
@@ -102,7 +91,13 @@
 			}
 		}
 
-		public void 
+		public void DeleteStorage(Storage storage)
+		{
+		}
+
+		public void SetStorageQuota(Storage storage, long quota)
+		{
+		}
 
 		#endregion
 	}

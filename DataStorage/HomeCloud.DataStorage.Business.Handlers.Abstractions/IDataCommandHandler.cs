@@ -1,11 +1,11 @@
-﻿namespace HomeCloud.DataStorage.Business.Services.Handlers
+﻿namespace HomeCloud.DataStorage.Business.Handlers
 {
 	#region Usings
 
 	using System;
 
 	using HomeCloud.Core;
-	using HomeCloud.DataStorage.Business.Services.Providers;
+	using HomeCloud.DataStorage.Business.Providers;
 
 	#endregion
 

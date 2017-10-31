@@ -30,20 +30,60 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Options, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Extensions.Options.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DataStoreProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\DataAccess\HomeCloud.DataAccess.Services\HomeCloud.DataAccess.Services.csproj">
+      <Project>{8FABA1B4-263E-42C7-A4E3-AEF6118DFCF2}</Project>
+      <Name>HomeCloud.DataAccess.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj">
+      <Project>{D6491DC7-E589-43AF-9A68-EB52AEEBCE6E}</Project>
+      <Name>HomeCloud.Core.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
+      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
+      <Name>HomeCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Api.Configuration\HomeCloud.DataStorage.Api.Configuration.csproj">
+      <Project>{7ADC327A-5475-4D3F-A8A9-8066292DA44C}</Project>
+      <Name>HomeCloud.DataStorage.Api.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
+      <Project>{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}</Project>
+      <Name>HomeCloud.DataStorage.Business.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Providers.Abstractions\HomeCloud.DataStorage.Business.Providers.Abstractions.csproj">
+      <Project>{5d3e908c-07f8-420d-be94-9d831152ca2e}</Project>
+      <Name>HomeCloud.DataStorage.Business.Providers.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Contracts\HomeCloud.DataStorage.DataAccess.Contracts.csproj">
+      <Project>{77DF87C3-0B2B-4A14-9B4F-C86B2761FCF2}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Services\HomeCloud.DataStorage.DataAccess.Services.csproj">
+      <Project>{0735155E-018B-45DA-8B1A-C9C7AAACA0D9}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

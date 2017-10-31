@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 
 #endregion
 
-[assembly: AssemblyTitle("HomeCloud.DataStorage.Business.Components")]
+[assembly: AssemblyTitle("HomeCloud.DataStorage.Business.Commands.Abstractions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 
-[assembly: Guid("8d3fdec3-8565-4f4e-ae01-08c69fc851f2")]
+[assembly: Guid("836bda6b-d311-45da-8b66-de4adfbe83a3")]

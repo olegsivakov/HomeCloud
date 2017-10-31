@@ -1,17 +1,17 @@
-﻿namespace HomeCloud.DataStorage.Business.Components.Commands
+﻿namespace HomeCloud.DataStorage.Business.Commands
 {
 	#region Usings
 
 	using System;
 
-	using HomeCloud.DataStorage.Business.Services.Providers;
+	using HomeCloud.DataStorage.Business.Providers;
 
 	#endregion
 
 	/// <summary>
 	/// Represents the command that executes the specified action against the data provided by <see cref="IDataProvider"/>.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Components.Commands.ActionCommand" />
+	/// <seealso cref="HomeCloud.DataStorage.Business.Commands.ActionCommand" />
 	public class DataCommand : ActionCommand
 	{
 		#region Private Members

@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Business.Components.Processors
+﻿namespace HomeCloud.DataStorage.Business.Handlers
 {
 	#region Usings
 
@@ -6,18 +6,14 @@
 	using System.Collections.Generic;
 
 	using HomeCloud.Core;
-
-	using HomeCloud.DataStorage.Business.Services.Commands;
-	using HomeCloud.DataStorage.Business.Services.Handlers;
-	using HomeCloud.DataStorage.Business.Services.Processors;
+	using HomeCloud.DataStorage.Business.Commands;
 
 	#endregion
 
 	/// <summary>
 	/// Provides methods to process execution of the set of attached command handlers.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Components.Handlers.DataCommandHandlerFactory" />
-	/// <seealso cref="HomeCloud.DataStorage.Business.Services.Processors.ICommandHandlerProcessor" />
+	/// <seealso cref="HomeCloud.DataStorage.Business.Handlers.ICommandHandlerProcessor" />
 	public class CommandHandlerProcessor : ICommandHandlerProcessor
 	{
 		#region Private Members
@@ -60,11 +56,11 @@
 		}
 
 		/// <summary>
-		/// Creates and attaches the instance of <see cref="T:HomeCloud.DataStorage.Business.Services.Handlers.IDataCommandHandler" /> type to execute data command.
+		/// Creates and attaches the instance of <see cref="T:HomeCloud.DataStorage.Business.Handlers.IDataCommandHandler" /> type to execute data command.
 		/// </summary>
-		/// <typeparam name="T">The type of the handler derived from <see cref="T:HomeCloud.DataStorage.Business.Services.Handlers.IDataCommandHandler" />.</typeparam>
+		/// <typeparam name="T">The type of the handler derived from <see cref="T:HomeCloud.DataStorage.Business.Handlers.IDataCommandHandler" />.</typeparam>
 		/// <returns>
-		/// The instance of <see cref="IDataCommandHandler" />.
+		/// The instance of <see cref="T:HomeCloud.DataStorage.Business.Handlers.IDataCommandHandler" />.
 		/// </returns>
 		public IDataCommandHandler CreateDataHandler<T>() where T : IDataCommandHandler
 		{

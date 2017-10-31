@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Business.Components.Commands
+﻿namespace HomeCloud.DataStorage.Business.Commands
 {
 	#region Usings
 
@@ -6,15 +6,14 @@
 
 	using HomeCloud.Core;
 
-	using HomeCloud.DataStorage.Business.Services.Commands;
-	using HomeCloud.DataStorage.Business.Services.Providers;
+	using HomeCloud.DataStorage.Business.Providers;
 
 	#endregion
 
 	/// <summary>
 	/// Provides methods to create the instance of <see cref="ICommand"/> that executes the specified action.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Services.Commands.IActionCommandFactory" />
+	/// <seealso cref="HomeCloud.DataStorage.Business.Commands.IActionCommandFactory" />
 	public class ActionCommandFactory : IActionCommandFactory
 	{
 		#region Private Members

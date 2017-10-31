@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Business.Services.Providers
+﻿namespace HomeCloud.DataStorage.Business.Providers
 {
 	#region Usings
 

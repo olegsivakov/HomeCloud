@@ -8,20 +8,11 @@
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
-
-	using HomeCloud.DataStorage.Business.Components.Commands;
-	using HomeCloud.DataStorage.Business.Components.Handlers;
-	using HomeCloud.DataStorage.Business.Components.Processors;
-	using HomeCloud.DataStorage.Business.Components.Providers;
-
+	using HomeCloud.DataStorage.Business.Commands;
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Entities.Mapping;
-	using HomeCloud.DataStorage.Business.Entities.Mapping.Mappers;
-
-	using HomeCloud.DataStorage.Business.Services.Commands;
-	using HomeCloud.DataStorage.Business.Services.Handlers;
-	using HomeCloud.DataStorage.Business.Services.Processors;
-	using HomeCloud.DataStorage.Business.Services.Providers;
+	using HomeCloud.DataStorage.Business.Handlers;
+	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 	using HomeCloud.DataStorage.Business.Validation.Abstractions;
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;

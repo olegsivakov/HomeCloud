@@ -1,21 +1,19 @@
-﻿namespace HomeCloud.DataStorage.Business.Components.Handlers
+﻿namespace HomeCloud.DataStorage.Business.Handlers
 {
 	#region Usings
 
 	using System;
 
 	using HomeCloud.Core;
-
-	using HomeCloud.DataStorage.Business.Services.Commands;
-	using HomeCloud.DataStorage.Business.Services.Handlers;
-	using HomeCloud.DataStorage.Business.Services.Providers;
+	using HomeCloud.DataStorage.Business.Providers;
+	using HomeCloud.DataStorage.Business.Commands;
 
 	#endregion
 
 	/// <summary>
 	/// Provides methods to handle the command that executes the specified action against the data provided by <see cref="IDataStoreCommandHandler"/>.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Services.Handlers.IDataStoreCommandHandler" />
+	/// <seealso cref="HomeCloud.DataStorage.Business.Handlers.IDataStoreCommandHandler" />
 	public class DataStoreCommandHandler : IDataStoreCommandHandler
 	{
 		#region Private Members

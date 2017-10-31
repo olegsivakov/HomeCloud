@@ -1,11 +1,5 @@
-﻿namespace HomeCloud.DataStorage.Business.Entities.Mapping.Extensions
+﻿namespace HomeCloud.Core.Extensions
 {
-	#region Usings
-
-	using HomeCloud.Core;
-
-	#endregion
-
 	/// <summary>
 	/// Provides extension methods for mapping one instance to another.
 	/// </summary>

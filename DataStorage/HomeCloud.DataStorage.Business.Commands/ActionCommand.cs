@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Business.Components.Commands
+﻿namespace HomeCloud.DataStorage.Business.Commands
 {
 	#region Usings
 

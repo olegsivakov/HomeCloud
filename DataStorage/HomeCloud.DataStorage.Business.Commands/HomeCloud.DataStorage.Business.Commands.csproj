@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}</ProjectGuid>
+    <ProjectGuid>{58EE6BB1-8F76-4F4D-B26F-856091C1474C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HomeCloud.DataStorage.Business.Handlers</RootNamespace>
-    <AssemblyName>HomeCloud.DataStorage.Business.Handlers.Abstractions</AssemblyName>
+    <RootNamespace>HomeCloud.DataStorage.Business.Commands</RootNamespace>
+    <AssemblyName>HomeCloud.DataStorage.Business.Commands</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,22 +30,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ICommandHandlerProcessor.cs" />
-    <Compile Include="IDataCommandHandler.cs" />
-    <Compile Include="IDataStoreCommandHandler.cs" />
+    <Compile Include="ActionCommand.cs" />
+    <Compile Include="ActionCommandFactory.cs" />
+    <Compile Include="DataCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
       <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
       <Name>HomeCloud.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Commands.Abstractions\HomeCloud.DataStorage.Business.Commands.Abstractions.csproj">
+      <Project>{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}</Project>
+      <Name>HomeCloud.DataStorage.Business.Commands.Abstractions</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Providers.Abstractions\HomeCloud.DataStorage.Business.Providers.Abstractions.csproj">
       <Project>{5D3E908C-07F8-420D-BE94-9D831152CA2E}</Project>
