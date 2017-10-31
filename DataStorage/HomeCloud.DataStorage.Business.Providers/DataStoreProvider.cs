@@ -83,6 +83,8 @@
 
 				storage = this.mapper.Map(storageContract, storage);
 
+				storage.CatalogRoot.Name = storage.ID.ToString();
+
 				IDirectoryRepository directoryRepository = scope.GetRepository<IDirectoryRepository>();
 
 				directoryRepository.Save(this.mapper.MapNew<Catalog, DirectoryContract>(storage.CatalogRoot));

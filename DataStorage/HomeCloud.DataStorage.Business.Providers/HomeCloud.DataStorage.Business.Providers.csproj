@@ -45,7 +45,9 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AggregationDataProvider.cs" />
     <Compile Include="DataStoreProvider.cs" />
+    <Compile Include="FileSystemProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
