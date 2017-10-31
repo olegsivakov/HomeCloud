@@ -63,6 +63,14 @@
       <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
       <Name>HomeCloud.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj">
+      <Project>{85F9BA9C-3D04-4D92-A743-AFE91EF05060}</Project>
+      <Name>HomeCloud.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj">
+      <Project>{51D11D70-099D-449E-BBF1-ACACDAD110FF}</Project>
+      <Name>HomeCloud.Validation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.Configuration\HomeCloud.DataStorage.Api.Configuration.csproj">
       <Project>{7ADC327A-5475-4D3F-A8A9-8066292DA44C}</Project>
       <Name>HomeCloud.DataStorage.Api.Configuration</Name>
@@ -74,6 +82,10 @@
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Providers.Abstractions\HomeCloud.DataStorage.Business.Providers.Abstractions.csproj">
       <Project>{5d3e908c-07f8-420d-be94-9d831152ca2e}</Project>
       <Name>HomeCloud.DataStorage.Business.Providers.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Validation.Abstractions\HomeCloud.DataStorage.Business.Validation.Abstractions.csproj">
+      <Project>{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}</Project>
+      <Name>HomeCloud.DataStorage.Business.Validation.Abstractions</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Contracts\HomeCloud.DataStorage.DataAccess.Contracts.csproj">
       <Project>{77DF87C3-0B2B-4A14-9B4F-C86B2761FCF2}</Project>

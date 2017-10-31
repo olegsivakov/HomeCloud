@@ -20,11 +20,11 @@
 
 	#endregion
 
-	public class StoragePresenceValidator : Validator<Storage>, IStoragePresenceValidator
+	public class StorageDataPresenceValidator : Validator<Storage>, IStorageDataPresenceValidator
 	{
 		#region Constructors
 
-		public StoragePresenceValidator(IDataContextScopeFactory dataContextScopeFactory, IOptionsSnapshot<ConnectionStrings> connectionStrings, IOptions<FileSystem> fileSystem)
+		public StorageDataPresenceValidator(IDataContextScopeFactory dataContextScopeFactory, IOptionsSnapshot<ConnectionStrings> connectionStrings)
 			: base()
 		{
 			this.If(storage => storage.ID == Guid.Empty).AddMessage("The identifier of the specified storage is empty.");

@@ -12,10 +12,10 @@
 	#endregion
 
 	/// <summary>
-	/// Provides methods to handle the command that executes the specified action against the data provided by <see cref="IDataStoreCommandHandler"/>.
+	/// Provides methods to handle the command that executes the specified action against the data provided by <see cref="IFileSystemCommandHandler"/>.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Handlers.IDataStoreCommandHandler" />
-	public class DataStoreCommandHandler : IDataStoreCommandHandler
+	/// <seealso cref="HomeCloud.DataStorage.Business.Handlers.IFileSystemCommandHandler" />
+	public class FileSystemCommandHandler : IFileSystemCommandHandler
 	{
 		#region Private Members
 
@@ -34,19 +34,19 @@
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DataStoreCommandHandler" /> class.
+		/// Initializes a new instance of the <see cref="FileSystemCommandHandler" /> class.
 		/// </summary>
 		/// <param name="commandFactory">The command factory.</param>
 		/// <param name="providerFactory">The provider factory.</param>
-		public DataStoreCommandHandler(IActionCommandFactory commandFactory, IServiceFactory<IDataProvider> providerFactory)
+		public FileSystemCommandHandler(IActionCommandFactory commandFactory, IServiceFactory<IDataProvider> providerFactory)
 		{
 			this.commandFactory = commandFactory;
-			this.Provider = providerFactory.Get<IDataStoreProvider>();
+			this.Provider = providerFactory.Get<IFileSystemProvider>();
 		}
 
 		#endregion
 
-		#region IDataStoreCommandHandler Implementations
+		#region IAggregatedDataCommandHandler Implementations
 
 		/// <summary>
 		/// Gets the data provider.

@@ -9,6 +9,10 @@
 	using HomeCloud.DataStorage.Business.Entities;
 
 	using Microsoft.Extensions.Options;
+	using HomeCloud.Core;
+	using HomeCloud.DataStorage.Business.Validation.Abstractions;
+	using HomeCloud.Validation;
+	using HomeCloud.Exceptions;
 
 	#endregion
 
@@ -21,9 +25,9 @@
 		#region Private Members
 
 		/// <summary>
-		/// The file system settings
+		/// The factory of catalog validators.
 		/// </summary>
-		private readonly FileSystem fileSystemSettings = null;
+		private readonly IServiceFactory<ICatalogValidator> catalogValidatorFactory = null;
 
 		#endregion
 
@@ -33,9 +37,9 @@
 		/// Initializes a new instance of the <see cref="FileSystemProvider" /> class.
 		/// </summary>
 		/// <param name="fileSystemSettings">The file system settings.</param>
-		public FileSystemProvider(IOptionsSnapshot<FileSystem> fileSystemSettings)
+		public FileSystemProvider(IServiceFactory<ICatalogValidator> catalogValidatorFactory)
 		{
-			this.fileSystemSettings = fileSystemSettings?.Value;
+			this.catalogValidatorFactory = catalogValidatorFactory;
 		}
 
 		#endregion
@@ -46,16 +50,17 @@
 		/// Creates the storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		public void CreateStorage(Storage storage)
+		public Storage CreateStorage(Storage storage)
 		{
-			string path = Path.Combine(this.fileSystemSettings.StoragePath, storage.CatalogRoot.Name);
-			if (Directory.Exists(path))
+			ValidationResult validationResult = this.catalogValidatorFactory.Get<ICatalogRequiredValidator>().Validate(storage.CatalogRoot);
+			if (!validationResult.IsValid)
 			{
-				DirectoryInfo result = Directory.CreateDirectory(path);
-
-				storage.CatalogRoot.Path = result.FullName;
-				storage.CatalogRoot.Size = result.EnumerateFiles(null, SearchOption.AllDirectories).Sum(file => (long)file.Length);
+				throw new ValidationException(validationResult.Errors);
 			}
+
+			storage.CatalogRoot.Path = (!Directory.Exists(storage.CatalogRoot.Path) ? Directory.CreateDirectory(storage.CatalogRoot.Path) : new DirectoryInfo(storage.CatalogRoot.Path))?.FullName;
+
+			return storage;
 		}
 
 		public void DeleteStorage(Storage storage)

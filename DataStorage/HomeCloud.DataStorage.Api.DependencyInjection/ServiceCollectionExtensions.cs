@@ -89,6 +89,8 @@
 		private static void AddComandHandlers(this IServiceCollection services)
 		{
 			services.AddTransient<IDataStoreCommandHandler, DataStoreCommandHandler>();
+			services.AddTransient<IFileSystemCommandHandler, FileSystemCommandHandler>();
+			services.AddTransient<IAggregatedDataCommandHandler, AggregatedDataCommandHandler>();
 		}
 
 		/// <summary>
@@ -98,6 +100,8 @@
 		private static void AddDataProviders(this IServiceCollection services)
 		{
 			services.AddTransient<IDataStoreProvider, DataStoreProvider>();
+			services.AddTransient<IFileSystemProvider, FileSystemProvider>();
+			services.AddTransient<IAggregationDataProvider, AggregationDataProvider>();
 		}
 
 		/// <summary>
@@ -106,7 +110,9 @@
 		/// <param name="services">The services.</param>
 		private static void AddValidators(this IServiceCollection services)
 		{
-			services.AddTransient<IStoragePresenceValidator, StoragePresenceValidator>();
+			services.AddTransient<IStorageDataPresenceValidator, StorageDataPresenceValidator>();
+			services.AddTransient<ICatalogDataPresenceValidator, CatalogDataPresenceValidator>();
+			services.AddTransient<IIdentifierRequiredValidator, IdentifierRequiredValidator>();
 		}
 
 		/// <summary>

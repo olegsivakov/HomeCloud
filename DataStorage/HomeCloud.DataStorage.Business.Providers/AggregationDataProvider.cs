@@ -7,6 +7,9 @@ using HomeCloud.DataStorage.Business.Entities;
 using AggregatedCatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.AggregatedCatalog;
 using HomeCloud.DataStorage.DataAccess.Services.Repositories;
 using Microsoft.Extensions.Options;
+using HomeCloud.DataStorage.Business.Validation.Abstractions;
+using HomeCloud.Validation;
+using HomeCloud.Exceptions;
 
 namespace HomeCloud.DataStorage.Business.Providers
 {
@@ -29,6 +32,11 @@ namespace HomeCloud.DataStorage.Business.Providers
 		/// </summary>
 		private readonly IMapper mapper = null;
 
+		/// <summary>
+		/// The factory of catalog validators.
+		/// </summary>
+		private readonly IServiceFactory<ICatalogValidator> catalogValidatorFactory = null;
+
 		#endregion
 
 		#region Constructors
@@ -42,12 +50,14 @@ namespace HomeCloud.DataStorage.Business.Providers
 		public AggregationDataProvider(
 			IDataContextScopeFactory dataContextScopeFactory,
 			IOptionsSnapshot<ConnectionStrings> connectionStrings,
-			IMapper mapper)
+			IMapper mapper,
+			IServiceFactory<ICatalogValidator> catalogValidatorFactory)
 		{
 			this.dataContextScopeFactory = dataContextScopeFactory;
 			this.connectionStrings = connectionStrings?.Value;
 
 			this.mapper = mapper;
+			this.catalogValidatorFactory = catalogValidatorFactory;
 		}
 
 		#endregion
@@ -58,14 +68,24 @@ namespace HomeCloud.DataStorage.Business.Providers
 		/// Creates the storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		public void CreateStorage(Storage storage)
+		public Storage CreateStorage(Storage storage)
 		{
+			ValidationResult validationResult = this.catalogValidatorFactory.Get<IIdentifierRequiredValidator>().Validate(storage.CatalogRoot);
+			validationResult += this.catalogValidatorFactory.Get<ICatalogRequiredValidator>().Validate(storage.CatalogRoot);
+
+			if (!validationResult.IsValid)
+			{
+				throw new ValidationException(validationResult.Errors);
+			}
+
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogAggregationRepository repository = scope.GetRepository<ICatalogAggregationRepository>();
 
 				repository.Save(this.mapper.MapNew<Catalog, AggregatedCatalogContract>(storage.CatalogRoot));
 			}
+
+			return storage;
 		}
 
 		public void DeleteStorage(Storage storage)

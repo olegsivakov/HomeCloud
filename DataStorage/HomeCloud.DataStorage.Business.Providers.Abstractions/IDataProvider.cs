@@ -15,7 +15,7 @@
 		/// Creates the storage.
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="storage"/>.</param>
-		void CreateStorage(Storage storage);
+		Storage CreateStorage(Storage storage);
 
 		/// <summary>
 		/// Updates the storage.

@@ -39,7 +39,11 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IStoragePresenceValidator.cs" />
+    <Compile Include="ICatalogRequiredValidator.cs" />
+    <Compile Include="ICatalogDataPresenceValidator.cs" />
+    <Compile Include="ICatalogValidator.cs" />
+    <Compile Include="IIdentifierRequiredValidator.cs" />
+    <Compile Include="IStorageDataPresenceValidator.cs" />
     <Compile Include="IStorageValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -73,24 +73,24 @@
 		/// Creates the storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		public void CreateStorage(Storage storage)
+		public Storage CreateStorage(Storage storage)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 
 				StorageContract storageContract = storageRepository.Save(this.mapper.MapNew<Storage, StorageContract>(storage));
-
 				storage = this.mapper.Map(storageContract, storage);
-
-				storage.CatalogRoot.Name = storage.ID.ToString();
 
 				IDirectoryRepository directoryRepository = scope.GetRepository<IDirectoryRepository>();
 
-				directoryRepository.Save(this.mapper.MapNew<Catalog, DirectoryContract>(storage.CatalogRoot));
+				DirectoryContract directoryContract = directoryRepository.Save(this.mapper.MapNew<Catalog, DirectoryContract>(storage.CatalogRoot));
+				storage.CatalogRoot = this.mapper.Map(directoryContract, storage.CatalogRoot);
 
 				scope.Commit();
 			}
+
+			return storage;
 		}
 
 		public void DeleteStorage(Storage storage)
