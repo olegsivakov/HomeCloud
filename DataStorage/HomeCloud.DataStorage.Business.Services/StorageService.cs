@@ -3,6 +3,7 @@
 	#region Usings
 
 	using HomeCloud.Core;
+	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Handlers;
 
 	#endregion
@@ -40,9 +41,13 @@
 
 		#region IStorageService Implementations
 
-		public void CreateStorage()
+		public void CreateStorage(Storage storage)
 		{
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateCommand(provider => provider.CreateStorage(null), provider => provider.CreateStorage(null));
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateCommand(provider => provider.CreateStorage(storage), provider => provider.CreateStorage(null));
+			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateCommand(provider => provider.CreateStorage(storage), provider => provider.CreateStorage(null));
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateCommand(provider => provider.CreateStorage(storage), provider => provider.CreateStorage(null));
+
+			this.processor.Process();
 		}
 
 		#endregion
