@@ -19,6 +19,9 @@
 
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
 	using DirectoryContract = HomeCloud.DataStorage.DataAccess.Contracts.Directory;
+	using HomeCloud.DataStorage.Business.Validation.Abstractions;
+	using HomeCloud.Validation;
+	using HomeCloud.Exceptions;
 
 	#endregion
 
@@ -45,6 +48,11 @@
 		/// </summary>
 		private readonly IMapper mapper = null;
 
+		/// <summary>
+		/// The validator factory.
+		/// </summary>
+		private readonly IServiceFactory<IStorageValidator> validatorFactory = null;
+
 		#endregion
 
 		#region Constructors
@@ -58,11 +66,14 @@
 		public DataStoreProvider(
 			IDataContextScopeFactory dataContextScopeFactory,
 			IOptionsSnapshot<ConnectionStrings> connectionStrings,
-			IMapper mapper)
+			IMapper mapper,
+			IServiceFactory<IStorageValidator> validatorFactory)
 		{
 			this.dataContextScopeFactory = dataContextScopeFactory;
 			this.connectionStrings = connectionStrings?.Value;
+
 			this.mapper = mapper;
+			this.validatorFactory = validatorFactory;
 		}
 
 		#endregion
@@ -90,6 +101,8 @@
 				scope.Commit();
 			}
 		}
+
+		public void 
 
 		#endregion
 	}

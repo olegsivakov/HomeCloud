@@ -43,7 +43,19 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IStoragePresenceValidator.cs" />
+    <Compile Include="IStorageValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj">
+      <Project>{51D11D70-099D-449E-BBF1-ACACDAD110FF}</Project>
+      <Name>HomeCloud.Validation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
+      <Project>{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}</Project>
+      <Name>HomeCloud.DataStorage.Business.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

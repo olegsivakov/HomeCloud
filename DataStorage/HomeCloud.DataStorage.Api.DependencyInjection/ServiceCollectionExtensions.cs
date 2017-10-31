@@ -22,7 +22,8 @@
 	using HomeCloud.DataStorage.Business.Services.Handlers;
 	using HomeCloud.DataStorage.Business.Services.Processors;
 	using HomeCloud.DataStorage.Business.Services.Providers;
-
+	using HomeCloud.DataStorage.Business.Validation;
+	using HomeCloud.DataStorage.Business.Validation.Abstractions;
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;
 	using HomeCloud.DependencyInjection;
 	using Microsoft.Extensions.Configuration;
@@ -109,12 +110,22 @@
 		}
 
 		/// <summary>
+		/// Adds the data providers to container.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		private static void AddValidators(this IServiceCollection services)
+		{
+			services.AddTransient<IStoragePresenceValidator, StoragePresenceValidator>();
+		}
+
+		/// <summary>
 		/// Adds the factories to the container.
 		/// </summary>
 		/// <param name="services">The services.</param>
 		private static void AddFactories(this IServiceCollection services)
 		{
 			services.AddFactory<ITypeConverter>();
+			services.AddFactory<IStorageValidator>();
 			services.AddFactory<IDataCommandHandler>();
 			services.AddFactory<IDataProvider>();
 		}

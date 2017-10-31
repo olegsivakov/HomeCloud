@@ -16,5 +16,17 @@
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="storage"/>.</param>
 		void CreateStorage(Storage storage);
+
+		/// <summary>
+		/// Updates the storage.
+		/// </summary>
+		/// <param name="storage">The instance of <see cref="storage"/>.</param>
+		void SetStorageQuota(Storage storage, long quota);
+
+		/// <summary>
+		/// Deletes the storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		void DeleteStorage(Storage storage);
 	}
 }
