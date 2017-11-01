@@ -46,6 +46,8 @@
 			AddConverters(services);
 			AddDataProviders(services);
 			AddComandHandlers(services);
+			AddValidators(services);
+			AddFactories(services);
 
 			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
 			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
@@ -110,9 +112,9 @@
 		/// <param name="services">The services.</param>
 		private static void AddValidators(this IServiceCollection services)
 		{
-			services.AddTransient<IStorageDataPresenceValidator, StorageDataPresenceValidator>();
-			services.AddTransient<ICatalogDataPresenceValidator, CatalogDataPresenceValidator>();
-			services.AddTransient<IIdentifierRequiredValidator, IdentifierRequiredValidator>();
+			services.AddTransient<IPresenceValidator, PresenceValidator>();
+			services.AddTransient<IUniqueValidator, UniqueValidator>();
+			services.AddTransient<ICatalogRequiredValidator, CatalogRequiredValidator>();
 		}
 
 		/// <summary>

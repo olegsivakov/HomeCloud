@@ -83,6 +83,10 @@
       <Project>{1bb3a1ee-9f2e-458d-9d6d-b16f0676230f}</Project>
       <Name>HomeCloud.DataStorage.Business.Services.Abstractions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Validation.Abstractions\HomeCloud.DataStorage.Business.Validation.Abstractions.csproj">
+      <Project>{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}</Project>
+      <Name>HomeCloud.DataStorage.Business.Validation.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Contracts\HomeCloud.DataStorage.DataAccess.Contracts.csproj">
       <Project>{77DF87C3-0B2B-4A14-9B4F-C86B2761FCF2}</Project>
       <Name>HomeCloud.DataStorage.DataAccess.Contracts</Name>

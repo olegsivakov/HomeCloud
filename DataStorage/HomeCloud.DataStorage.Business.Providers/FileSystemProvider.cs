@@ -22,22 +22,12 @@
 	/// <seealso cref="HomeCloud.DataStorage.Business.Providers.IFileSystemProvider" />
 	public class FileSystemProvider : IFileSystemProvider
 	{
-		#region Private Members
-
-		/// <summary>
-		/// The factory of catalog validators.
-		/// </summary>
-		private readonly IServiceFactory<ICatalogValidator> catalogValidatorFactory = null;
-
-		#endregion
-
 		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileSystemProvider" /> class.
 		/// </summary>
-		/// <param name="fileSystemSettings">The file system settings.</param>
-		public FileSystemProvider(IServiceFactory<ICatalogValidator> catalogValidatorFactory)
+		public FileSystemProvider()
 		{
 			this.catalogValidatorFactory = catalogValidatorFactory;
 		}
@@ -52,13 +42,7 @@
 		/// <param name="storage">The storage.</param>
 		public Storage CreateStorage(Storage storage)
 		{
-			ValidationResult validationResult = this.catalogValidatorFactory.Get<ICatalogRequiredValidator>().Validate(storage.CatalogRoot);
-			if (!validationResult.IsValid)
-			{
-				throw new ValidationException(validationResult.Errors);
-			}
-
-			storage.CatalogRoot.Path = (!Directory.Exists(storage.CatalogRoot.Path) ? Directory.CreateDirectory(storage.CatalogRoot.Path) : new DirectoryInfo(storage.CatalogRoot.Path))?.FullName;
+			storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
 
 			return storage;
 		}

@@ -7,7 +7,7 @@
     <ProjectGuid>{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HomeCloud.DataStorage.Business.Validation.Abstractions</RootNamespace>
+    <RootNamespace>HomeCloud.DataStorage.Business.Validation</RootNamespace>
     <AssemblyName>HomeCloud.DataStorage.Business.Validation.Abstractions</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,14 +40,18 @@
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ICatalogRequiredValidator.cs" />
-    <Compile Include="ICatalogDataPresenceValidator.cs" />
     <Compile Include="ICatalogValidator.cs" />
-    <Compile Include="IIdentifierRequiredValidator.cs" />
-    <Compile Include="IStorageDataPresenceValidator.cs" />
     <Compile Include="IStorageValidator.cs" />
+    <Compile Include="IUniqueValidator.cs" />
+    <Compile Include="IPresenceValidator.cs" />
+    <Compile Include="IValidationServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
+      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
+      <Name>HomeCloud.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj">
       <Project>{51D11D70-099D-449E-BBF1-ACACDAD110FF}</Project>
       <Name>HomeCloud.Validation</Name>

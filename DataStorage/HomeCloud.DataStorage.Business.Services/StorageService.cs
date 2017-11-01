@@ -6,6 +6,7 @@
 	using HomeCloud.DataStorage.Api.Configuration;
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Handlers;
+	using HomeCloud.DataStorage.Business.Validation.Abstractions;
 	using Microsoft.Extensions.Options;
 	using System;
 	using System.IO;
@@ -31,6 +32,15 @@
 		/// </summary>
 		private readonly FileSystem fileSystemSettings = null;
 
+		#region Private Members
+
+		/// <summary>
+		/// The factory of catalog validators.
+		/// </summary>
+		private readonly IServiceFactory<ICatalogValidator> catalogValidatorFactory = null;
+
+		#endregion
+
 		#endregion
 
 		#region Constructors
@@ -40,7 +50,13 @@
 		/// </summary>
 		/// <param name="processor">The command processor.</param>
 		/// <param name="commandHandlerFactory">The command handler factory.</param>
-		public StorageService(ICommandHandlerProcessor processor, IServiceFactory<IDataCommandHandler> commandHandlerFactory, IOptionsSnapshot<FileSystem> fileSystemSettings)
+		/// <param name="fileSystemSettings">The file system settings.</param>
+		/// <param name="catalogValidatorFactory">The catalog validator factory.</param>
+		public StorageService(
+			ICommandHandlerProcessor processor,
+			IServiceFactory<IDataCommandHandler> commandHandlerFactory,
+			IOptionsSnapshot<FileSystem> fileSystemSettings,
+			IServiceFactory<ICatalogValidator> catalogValidatorFactory)
 		{
 			this.processor = processor;
 			this.commandHandlerFactory = commandHandlerFactory;
@@ -54,7 +70,7 @@
 
 		public void CreateStorage(Storage storage)
 		{
-			storage.Name = storage.CatalogRoot.Name = Guid.NewGuid().ToString();
+			storage.CatalogRoot.Name = storage.Name;
 			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StoragePath, storage.CatalogRoot.Name);
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateCommand(provider => storage = provider.CreateStorage(storage), null);
