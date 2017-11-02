@@ -6,11 +6,11 @@
 	public class FileSystem
 	{
 		/// <summary>
-		/// Gets or sets the storage path.
+		/// Gets or sets the root path to the storages.
 		/// </summary>
 		/// <value>
-		/// The storage path.
+		/// The root path to the storages.
 		/// </value>
-		public string StoragePath { get; set; }
+		public string StorageRootPath { get; set; }
 	}
 }

@@ -41,6 +41,7 @@
 		/// <value>
 		/// The creation date.
 		/// </value>
+		[Computed]
 		public DateTime CreationDate { get; set; }
 
 		/// <summary>

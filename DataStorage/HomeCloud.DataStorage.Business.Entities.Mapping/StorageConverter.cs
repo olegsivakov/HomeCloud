@@ -9,11 +9,12 @@
 	#endregion
 
 	/// <summary>
-	/// Provides converter methods for <see cref="Storage"/> entity.
+	/// Provides converter methods for <see cref="Storage" /> entity.
 	/// </summary>
+	/// <seealso cref="HomeCloud.DataStorage.Business.Entities.Mapping.TypeConverterBase" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.Storage, HomeCloud.DataStorage.Business.Entities.Storage}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Storage, HomeCloud.DataStorage.DataAccess.Contracts.Storage}" />
-	public class StorageConverter : ITypeConverter<Contracts.Storage, Storage>, ITypeConverter<Storage, Contracts.Storage>
+	public class StorageConverter : TypeConverterBase, ITypeConverter<Contracts.Storage, Storage>, ITypeConverter<Storage, Contracts.Storage>
 	{
 		#region ITypeConverter<Contracts.Storage, Storage> Implementations
 
@@ -27,15 +28,7 @@
 		/// </returns>
 		public Storage Convert(Contracts.Storage source, Storage target)
 		{
-			if (source == null)
-			{
-				return null;
-			}
-
-			if (target == null)
-			{
-				target = new Storage();
-			}
+			target = this.Validate(source, target);
 
 			target.ID = source.ID;
 			target.Name = source.Name;
@@ -60,21 +53,13 @@
 		/// </returns>
 		public Contracts.Storage Convert(Storage source, Contracts.Storage target)
 		{
-			if (source == null)
-			{
-				return null;
-			}
-
-			if (target == null)
-			{
-				target = new Contracts.Storage();
-			}
+			target = this.Validate(source, target);
 
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.Quota = source.Quota;
-			target.CreationDate = source.CreationDate;
-			target.UpdatedDate = source.UpdatedDate;
+			target.CreationDate = System.DateTime.Now;
+			target.UpdatedDate = System.DateTime.Now;
 
 			return target;
 		}

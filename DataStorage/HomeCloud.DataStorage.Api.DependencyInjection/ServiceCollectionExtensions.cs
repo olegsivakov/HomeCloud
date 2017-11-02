@@ -67,7 +67,7 @@
 		public static void Configure(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.Configure<Database>(configuration.GetSection(nameof(Database)));
-			services.Configure<ConnectionStrings>(configuration.GetSection(nameof(ConnectionStrings)));
+			services.Configure<ConnectionStrings>(configuration.GetSection(nameof(Database)).GetSection(nameof(ConnectionStrings)));
 
 			services.Configure<FileSystem>(configuration.GetSection(nameof(FileSystem)));
 		}
@@ -86,6 +86,13 @@
 
 			services.AddSingleton<ITypeConverter<DataContracts.Storage, Storage>>(storageConverter);
 			services.AddSingleton<ITypeConverter<Storage, DataContracts.Storage>>(storageConverter);
+
+			CatalogConverter catalogConverter = new CatalogConverter();
+
+			services.AddSingleton<ITypeConverter<DataContracts.Directory, Catalog>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<Catalog, DataContracts.Directory>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<DataContracts.AggregatedCatalog, Catalog>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<Catalog, DataContracts.AggregatedCatalog>>(catalogConverter);
 
 			services.AddSingleton<IMapper, Mapper>();
 		}
@@ -107,9 +114,9 @@
 		/// <param name="services">The services.</param>
 		private static void AddDataProviders(this IServiceCollection services)
 		{
-			services.AddTransient<IDataStoreProvider, DataStoreProvider>();
-			services.AddTransient<IFileSystemProvider, FileSystemProvider>();
-			services.AddTransient<IAggregationDataProvider, AggregationDataProvider>();
+			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
+			services.AddSingleton<IFileSystemProvider, FileSystemProvider>();
+			services.AddSingleton<IAggregationDataProvider, AggregationDataProvider>();
 		}
 
 		/// <summary>

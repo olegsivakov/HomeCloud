@@ -20,6 +20,14 @@
 		public Guid ID { get; set; }
 
 		/// <summary>
+		/// Gets or sets the parent catalog identifier.
+		/// </summary>
+		/// <value>
+		/// The parent catalog identifier.
+		/// </value>
+		public Guid? ParentID { get; set; }
+
+		/// <summary>
 		/// Gets or sets the storage identifier.
 		/// </summary>
 		/// <value>

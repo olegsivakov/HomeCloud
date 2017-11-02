@@ -88,7 +88,7 @@
 		public void CreateStorage(Storage storage)
 		{
 			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
-			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StoragePath, storage.CatalogRoot.Name);
+			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 			ValidationResult result = storageValidator.Get<IRequiredValidator>().Validate(storage);

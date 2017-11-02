@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System;
+
 	using HomeCloud.DataStorage.Api.DependencyInjection;
 	using HomeCloud.Exceptions;
 
@@ -45,16 +47,20 @@
 
 		#region Public Methods
 
+
 		/// <summary>
 		/// Configures and adds services to the container. This method gets called by the runtime.
 		/// </summary>
-		/// <param name="services">The service collection of <see cref="IServiceCollection"/> type.</param>
-		public void ConfigureServices(IServiceCollection services)
+		/// <param name="services">The service collection of <see cref="IServiceCollection" /> type.</param>
+		/// <returns>The instance of <see cref="IServiceProvider"/>.</returns>
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services.AddDependencies();
 			services.Configure(this.Configuration);
 
 			services.AddMvc();
+
+			return services.BuildServiceProvider();
 		}
 
 		/// <summary>
