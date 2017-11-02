@@ -24,7 +24,7 @@
 		/// <summary>
 		/// The document database client member.
 		/// </summary>
-		private static readonly IMongoClient Сlient = new MongoClient();
+		private static IMongoClient client = null;
 
 		/// <summary>
 		/// The document database member.
@@ -38,10 +38,18 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DocumentContext" /> class.
 		/// </summary>
-		/// <param name="databaseName">The database name.</param>
-		public DocumentContext(string databaseName)
+		/// <param name="connectionString">The connection string.</param>
+		public DocumentContext(string connectionString)
 		{
-			database = Сlient.GetDatabase(databaseName);
+			if (client is null)
+			{
+				client = new MongoClient(connectionString);
+			}
+
+			if (database is null)
+			{
+				database = client.GetDatabase(MongoUrl.Create(connectionString).DatabaseName);
+			}
 		}
 
 		#endregion
@@ -110,6 +118,17 @@
 			IMongoCollection<TDocument> collection = await this.GetCollectionAsync<TDocument>();
 
 			await collection.DeleteManyAsync(selector);
+		}
+
+		#endregion
+
+		#region IDisposable Implementations
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
 		}
 
 		#endregion

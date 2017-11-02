@@ -8,14 +8,21 @@
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
+
 	using HomeCloud.DataStorage.Business.Commands;
+
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Entities.Mapping;
+
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
+	using HomeCloud.DataStorage.Business.Services;
 	using HomeCloud.DataStorage.Business.Validation;
+
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;
+
 	using HomeCloud.DependencyInjection;
+
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
@@ -128,6 +135,11 @@
 
 			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
 			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
+		}
+
+		private static void AddServices(this IServiceCollection services)
+		{
+			services.AddScoped<IStorageService, StorageService>();
 		}
 
 		#endregion

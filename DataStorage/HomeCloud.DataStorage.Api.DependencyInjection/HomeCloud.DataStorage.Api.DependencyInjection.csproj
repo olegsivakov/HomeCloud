@@ -104,6 +104,14 @@
       <Project>{9c7d63e0-297d-4c62-9b00-cfe8d0288a02}</Project>
       <Name>HomeCloud.DataStorage.Business.Providers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Services.Abstractions\HomeCloud.DataStorage.Business.Services.Abstractions.csproj">
+      <Project>{1bb3a1ee-9f2e-458d-9d6d-b16f0676230f}</Project>
+      <Name>HomeCloud.DataStorage.Business.Services.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Services\HomeCloud.DataStorage.Business.Services.csproj">
+      <Project>{5D3E601C-979E-43F1-B3C6-EC6A780112BD}</Project>
+      <Name>HomeCloud.DataStorage.Business.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Validation.Abstractions\HomeCloud.DataStorage.Business.Validation.Abstractions.csproj">
       <Project>{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}</Project>
       <Name>HomeCloud.DataStorage.Business.Validation.Abstractions</Name>

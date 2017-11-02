@@ -12,7 +12,7 @@
 	/// <summary>
 	/// Defines methods to query documents from data sources.
 	/// </summary>
-	public interface IDocumentContext
+	public interface IDocumentContext : IDisposable
 	{
 		/// <summary>
 		/// Inserts the document asynchronously.

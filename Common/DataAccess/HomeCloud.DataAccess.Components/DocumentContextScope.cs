@@ -34,13 +34,13 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DocumentContextScope" /> class.
 		/// </summary>
-		/// <param name="databaseName">The database name.</param>
+		/// <param name="connectionString">The connection string.</param>
 		/// <param name="repositoryFactory">The <see cref="IDocumentRepositoryFactory" /> factory.</param>
-		public DocumentContextScope(string databaseName, IDocumentRepositoryFactory repositoryFactory = null)
+		public DocumentContextScope(string connectionString, IDocumentRepositoryFactory repositoryFactory = null)
 		{
 			DocumentContextScope.repositoryFactory = repositoryFactory;
 
-			this.context = new DocumentContext(databaseName);
+			this.context = new DocumentContext(connectionString);
 		}
 
 		#endregion

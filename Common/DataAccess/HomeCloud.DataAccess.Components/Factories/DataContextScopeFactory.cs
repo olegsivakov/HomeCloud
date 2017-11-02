@@ -82,15 +82,15 @@
 		/// <summary>
 		/// Creates document context scope.
 		/// </summary>
-		/// <param name="databaseName">The database name.</param>
+		/// <param name="connectionString">The connection string.</param>
 		/// <returns>
 		/// The instance of <see cref="T:IDataContextScope" />.
 		/// </returns>
-		public IDocumentContextScope CreateDocumentContextScope(string databaseName)
+		public IDocumentContextScope CreateDocumentContextScope(string connectionString)
 		{
 			IDocumentRepositoryFactory repositoryFactory = this.repositoryFactory?.GetFactory<IDocumentRepositoryFactory>();
 
-			return new DocumentContextScope(databaseName, repositoryFactory);
+			return new DocumentContextScope(connectionString, repositoryFactory);
 		}
 
 		#endregion
