@@ -166,7 +166,22 @@
 		/// </returns>
 		public File Save(File entity)
 		{
-			return this.context.Query<File>(entity.ID == Guid.Empty ? InsertFileStoredProcedure : UpdateFileStoredProcedure, entity).FirstOrDefault();
+			Guid id = entity.ID == Guid.Empty ? Guid.NewGuid() : entity.ID;
+
+			if (this.context.Execute(
+				entity.ID == Guid.Empty ? InsertFileStoredProcedure : UpdateFileStoredProcedure,
+				new
+				{
+					@ID = entity.ID,
+					@DirectoryID = entity.DirectoryID,
+					@Name = entity.Name,
+					@Extension = entity.Extension
+				}) > 0)
+			{
+				entity.ID = id;
+			}
+
+			return entity;
 		}
 
 		#endregion

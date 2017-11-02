@@ -131,7 +131,21 @@
 		/// </returns>
 		public Storage Save(Storage entity)
 		{
-			return this.context.Query<Storage>(entity.ID == Guid.Empty ? InsertStorageStoredProcedure : UpdateStorageStoredProcedure, entity).FirstOrDefault();
+			Guid id = entity.ID == Guid.Empty ? Guid.NewGuid() : entity.ID;
+
+			if (this.context.Execute(
+				entity.ID == Guid.Empty ? InsertStorageStoredProcedure : UpdateStorageStoredProcedure,
+				new
+				{
+					@ID = id,
+					@Name = entity.Name,
+					@Quota = entity.Quota
+				}) > 0)
+			{
+				entity.ID = id;
+			}
+
+			return entity;
 		}
 
 		#endregion

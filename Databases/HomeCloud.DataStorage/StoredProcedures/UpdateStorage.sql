@@ -21,8 +21,6 @@ BEGIN
 		[UpdatedDate] = GETDATE()
 	WHERE
 		[ID] = @local_ID
-
-	EXEC [dbo].[GetStorageByID] @local_ID
 END
 GO
 

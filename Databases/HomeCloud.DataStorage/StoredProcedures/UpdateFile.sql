@@ -24,8 +24,6 @@ BEGIN
 		[UpdatedDate] = GETDATE()
 	WHERE
 		[ID] = @local_ID
-
-	EXEC [dbo].[GetFileByID] @local_ID
 END
 GO
 

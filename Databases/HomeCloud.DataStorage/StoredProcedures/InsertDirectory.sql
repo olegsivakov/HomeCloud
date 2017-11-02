@@ -5,20 +5,19 @@ END
 GO
 
 CREATE PROCEDURE [dbo].[InsertDirectory]
+	@ID UNIQUEIDENTIFIER,
 	@ParentID UNIQUEIDENTIFIER = NULL,
 	@StorageID UNIQUEIDENTIFIER,
 	@Name NVARCHAR(250)
 AS
 BEGIN
-	DECLARE @local_ParentID UNIQUEIDENTIFIER = @ParentID,
+	DECLARE @local_ID UNIQUEIDENTIFIER = @ID,
+			@local_ParentID UNIQUEIDENTIFIER = @ParentID,
 			@local_StorageID UNIQUEIDENTIFIER = @StorageID,
-			@local_Name NVARCHAR(250) = @Name,
-			@local_ID UNIQUEIDENTIFIER = NEWID()
+			@local_Name NVARCHAR(250) = @Name
 
 	INSERT INTO [dbo].[Directory] ([ID], [ParentID], [StorageID], [Name], [CreationDate], [UpdatedDate])
 	VALUES (@local_ID, @local_ParentID, @local_StorageID, @local_Name, GETDATE(), GETDATE())
-
-	EXEC [dbo].[GetDirectoryByID] @local_ID
 END
 GO
 

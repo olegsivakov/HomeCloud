@@ -164,7 +164,22 @@
 		/// <returns>The instance of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Directory" />.</returns>
 		public Directory Save(Directory entity)
 		{
-			return this.context.Query<Directory>(entity.ID == Guid.Empty ? InsertDirectoryStoredProcedure : UpdateDirectoryStoredProcedure, entity).FirstOrDefault();
+			Guid id = entity.ID == Guid.Empty ? Guid.NewGuid() : entity.ID;
+
+			if (this.context.Execute(
+				entity.ID == Guid.Empty ? InsertDirectoryStoredProcedure : UpdateDirectoryStoredProcedure,
+				new
+				{
+					@ID = entity.ID,
+					@ParentID = entity.ParentID,
+					@StorageID = entity.StorageID,
+					@Name = entity.Name
+				}) > 0)
+			{
+				entity.ID = id;
+			}
+
+			return entity;
 		}
 
 		#endregion
