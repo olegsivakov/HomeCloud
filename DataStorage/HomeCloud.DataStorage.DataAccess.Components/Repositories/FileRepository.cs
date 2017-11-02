@@ -172,13 +172,13 @@
 				entity.ID == Guid.Empty ? InsertFileStoredProcedure : UpdateFileStoredProcedure,
 				new
 				{
-					@ID = entity.ID,
+					@ID = id,
 					@DirectoryID = entity.DirectoryID,
 					@Name = entity.Name,
 					@Extension = entity.Extension
 				}) > 0)
 			{
-				entity.ID = id;
+				return this.Get(id);
 			}
 
 			return entity;

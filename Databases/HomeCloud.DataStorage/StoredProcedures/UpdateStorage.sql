@@ -11,8 +11,8 @@ CREATE PROCEDURE [dbo].[UpdateStorage]
 AS
 BEGIN
 	DECLARE @local_ID UNIQUEIDENTIFIER = @ID,
-			@local_Name INT = @Name,
-			@local_Quota INT = @Quota
+			@local_Name NVARCHAR(100) = @Name,
+			@local_Quota BIGINT = @Quota
 
 	UPDATE [dbo].[Storage]
 	SET

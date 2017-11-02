@@ -142,7 +142,7 @@
 					@Quota = entity.Quota
 				}) > 0)
 			{
-				entity.ID = id;
+				return this.Get(id);
 			}
 
 			return entity;

@@ -170,13 +170,13 @@
 				entity.ID == Guid.Empty ? InsertDirectoryStoredProcedure : UpdateDirectoryStoredProcedure,
 				new
 				{
-					@ID = entity.ID,
+					@ID = id,
 					@ParentID = entity.ParentID,
 					@StorageID = entity.StorageID,
 					@Name = entity.Name
 				}) > 0)
 			{
-				entity.ID = id;
+				return this.Get(id);
 			}
 
 			return entity;

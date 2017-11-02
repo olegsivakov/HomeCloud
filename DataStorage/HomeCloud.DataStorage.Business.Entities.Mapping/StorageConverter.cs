@@ -58,8 +58,6 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.Quota = source.Quota;
-			target.CreationDate = System.DateTime.Now;
-			target.UpdatedDate = System.DateTime.Now;
 
 			return target;
 		}

@@ -3,7 +3,6 @@
 	#region Usings
 
 	using System;
-	using Dapper.Contrib.Extensions;
 
 	#endregion
 
@@ -18,7 +17,6 @@
 		/// <value>
 		/// The identifier.
 		/// </value>
-		[Write(false)]
 		public Guid ID { get; set; }
 
 		/// <summary>
@@ -43,8 +41,6 @@
 		/// <value>
 		/// The creation date.
 		/// </value>
-		[Write(false)]
-		[Computed]
 		public DateTime CreationDate { get; set; }
 
 		/// <summary>
@@ -53,8 +49,6 @@
 		/// <value>
 		/// The updated date.
 		/// </value>
-		[Write(false)]
-		[Computed]
 		public DateTime UpdatedDate { get; set; }
 	}
 }
