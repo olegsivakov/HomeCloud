@@ -8,6 +8,7 @@
 	using Microsoft.AspNetCore.Mvc;
 
 	using HomeCloud.DataStorage.Api.Models;
+	using HomeCloud.DataStorage.Business.Services;
 
 	#endregion
 
@@ -17,6 +18,28 @@
 	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.ControllerBase" />
 	public class StorageController : ControllerBase
 	{
+		#region Private Members
+
+		/// <summary>
+		/// The <see cref="IStorageService"/> service.
+		/// </summary>
+		private readonly IStorageService storageService = null;
+
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StorageController"/> class.
+		/// </summary>
+		/// <param name="storageService">The <see cref="IStorageService"/> service.</param>
+		public StorageController(IStorageService storageService)
+		{
+			this.storageService = storageService;
+		}
+
+		#endregion
+
 		/// <summary>
 		/// Gets the list of storage models.
 		/// </summary>
@@ -53,7 +76,21 @@
 		{
 			return await this.HttpPost(model, async () =>
 			{
-				return model;
+				var storage = new Business.Entities.Storage()
+				{
+					Name = "Aleh Sivakou's storage"
+				};
+
+				this.storageService.CreateStorage(storage);
+
+				return new StorageViewModel()
+				{
+					ID = storage.ID,
+					Name = storage.Name,
+					Quota = storage.Quota.ToString(),
+					CreationDate = storage.CreationDate
+					
+				};
 			});
 		}
 

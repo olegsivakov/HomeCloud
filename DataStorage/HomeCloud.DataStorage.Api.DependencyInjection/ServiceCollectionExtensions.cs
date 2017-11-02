@@ -54,6 +54,7 @@
 			AddComandHandlers(services);
 			AddValidators(services);
 			AddFactories(services);
+			AddServices(services);
 
 			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
 		}
@@ -65,9 +66,9 @@
 		/// <param name="configuration">A set of configuration properties.</param>
 		public static void Configure(this IServiceCollection services, IConfiguration configuration)
 		{
+			services.Configure<Database>(configuration.GetSection(nameof(Database)));
 			services.Configure<ConnectionStrings>(configuration.GetSection(nameof(ConnectionStrings)));
 
-			services.Configure<Database>(configuration.GetSection(nameof(Database)));
 			services.Configure<FileSystem>(configuration.GetSection(nameof(FileSystem)));
 		}
 
@@ -129,6 +130,7 @@
 		private static void AddFactories(this IServiceCollection services)
 		{
 			services.AddFactory<ITypeConverter>();
+			services.AddFactory<ICatalogValidator>();
 			services.AddFactory<IStorageValidator>();
 			services.AddFactory<IDataCommandHandler>();
 			services.AddFactory<IDataProvider>();
@@ -137,6 +139,10 @@
 			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
 		}
 
+		/// <summary>
+		/// Adds the services to the container.
+		/// </summary>
+		/// <param name="services">The services.</param>
 		private static void AddServices(this IServiceCollection services)
 		{
 			services.AddScoped<IStorageService, StorageService>();

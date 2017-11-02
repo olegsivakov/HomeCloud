@@ -16,6 +16,7 @@
 	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Options;
+	using System;
 
 	#endregion
 
@@ -86,7 +87,7 @@
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage"/> has been failed.</exception>
 		public void CreateStorage(Storage storage)
 		{
-			storage.CatalogRoot.Name = storage.Name;
+			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
 			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StoragePath, storage.CatalogRoot.Name);
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();

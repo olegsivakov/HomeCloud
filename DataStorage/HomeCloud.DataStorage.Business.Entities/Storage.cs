@@ -51,11 +51,7 @@
 		/// <value>
 		/// The name.
 		/// </value>
-		public string Name
-		{
-			get => this.ID.ToString();
-			set => this.ID.ToString();
-		}
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the quota.
