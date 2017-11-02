@@ -22,7 +22,7 @@
 	#endregion
 
 	/// <summary>
-	///  Provides methods to manage data from data store database.
+	///  Provides methods to provide data from data store database.
 	/// </summary>
 	/// <seealso cref="HomeCloud.DataStorage.Business.Providers.IDataStoreProvider" />
 	public class DataStoreProvider : IDataStoreProvider
@@ -70,9 +70,10 @@
 		#region IDataStoreProvider Implementations
 
 		/// <summary>
-		/// Creates the storage.
+		/// Creates the specified storage.
 		/// </summary>
-		/// <param name="storage">The storage.</param>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public Storage CreateStorage(Storage storage)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
@@ -91,14 +92,6 @@
 			}
 
 			return storage;
-		}
-
-		public void DeleteStorage(Storage storage)
-		{
-		}
-
-		public void SetStorageQuota(Storage storage, long quota)
-		{
 		}
 
 		#endregion

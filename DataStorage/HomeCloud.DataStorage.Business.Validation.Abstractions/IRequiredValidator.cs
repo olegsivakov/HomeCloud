@@ -1,11 +1,11 @@
 ﻿namespace HomeCloud.DataStorage.Business.Validation
 {
 	/// <summary>
-	/// Defines methods to validate whether the specified instance is unique.
+	/// Defines methods to validate required attributes of the instance.
 	/// </summary>
 	/// <seealso cref="HomeCloud.DataStorage.Business.Validation.IStorageValidator" />
 	/// <seealso cref="HomeCloud.DataStorage.Business.Validation.ICatalogValidator" />
-	public interface IUniqueValidator : IStorageValidator, ICatalogValidator
+	public interface IRequiredValidator : IStorageValidator, ICatalogValidator
 	{
 	}
 }

@@ -12,21 +12,10 @@
 	public interface IDataProvider
 	{
 		/// <summary>
-		/// Creates the storage.
+		/// Creates the specified storage.
 		/// </summary>
-		/// <param name="storage">The instance of <see cref="storage"/>.</param>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		Storage CreateStorage(Storage storage);
-
-		/// <summary>
-		/// Updates the storage.
-		/// </summary>
-		/// <param name="storage">The instance of <see cref="storage"/>.</param>
-		void SetStorageQuota(Storage storage, long quota);
-
-		/// <summary>
-		/// Deletes the storage.
-		/// </summary>
-		/// <param name="storage">The storage.</param>
-		void DeleteStorage(Storage storage);
 	}
 }

@@ -14,7 +14,6 @@
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
-	using HomeCloud.DataStorage.Business.Validation.Abstractions;
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;
 	using HomeCloud.DependencyInjection;
 	using Microsoft.Extensions.Configuration;
@@ -49,7 +48,6 @@
 			AddValidators(services);
 			AddFactories(services);
 
-			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
 			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
 		}
 
@@ -114,7 +112,7 @@
 		{
 			services.AddTransient<IPresenceValidator, PresenceValidator>();
 			services.AddTransient<IUniqueValidator, UniqueValidator>();
-			services.AddTransient<ICatalogRequiredValidator, CatalogRequiredValidator>();
+			services.AddTransient<IRequiredValidator, RequiredValidator>();
 		}
 
 		/// <summary>
@@ -127,6 +125,9 @@
 			services.AddFactory<IStorageValidator>();
 			services.AddFactory<IDataCommandHandler>();
 			services.AddFactory<IDataProvider>();
+
+			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
+			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
 		}
 
 		#endregion

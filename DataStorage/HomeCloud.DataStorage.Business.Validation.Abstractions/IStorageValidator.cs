@@ -7,6 +7,9 @@
 
 	#endregion
 
+	/// <summary>
+	/// Defines methods to validate the instance of <see cref="Storage"/>.
+	/// </summary>
 	public interface IStorageValidator : IValidator<Storage>
 	{
 	}

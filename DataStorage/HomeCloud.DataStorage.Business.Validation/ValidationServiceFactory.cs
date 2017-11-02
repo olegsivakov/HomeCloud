@@ -2,10 +2,11 @@
 {
 	#region Usings
 
-	using HomeCloud.Core;
-	using HomeCloud.Validation;
 	using System;
 	using System.Collections.Generic;
+
+	using HomeCloud.Core;
+	using HomeCloud.Validation;
 
 	#endregion
 
@@ -17,6 +18,9 @@
 	{
 		#region Private Members
 
+		/// <summary>
+		/// The service factory container.
+		/// </summary>
 		private IDictionary<Type, object> container = new Dictionary<Type, object>();
 
 		#endregion

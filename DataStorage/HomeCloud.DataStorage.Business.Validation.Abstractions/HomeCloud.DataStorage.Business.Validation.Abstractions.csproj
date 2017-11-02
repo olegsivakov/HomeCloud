@@ -30,17 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ICatalogRequiredValidator.cs" />
     <Compile Include="ICatalogValidator.cs" />
+    <Compile Include="IRequiredValidator.cs" />
     <Compile Include="IStorageValidator.cs" />
     <Compile Include="IUniqueValidator.cs" />
     <Compile Include="IPresenceValidator.cs" />

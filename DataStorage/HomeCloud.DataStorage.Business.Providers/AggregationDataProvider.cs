@@ -1,18 +1,27 @@
-﻿using HomeCloud.Core;
-using HomeCloud.Core.Extensions;
-using HomeCloud.DataAccess.Services;
-using HomeCloud.DataAccess.Services.Factories;
-using HomeCloud.DataStorage.Api.Configuration;
-using HomeCloud.DataStorage.Business.Entities;
-using AggregatedCatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.AggregatedCatalog;
-using HomeCloud.DataStorage.DataAccess.Services.Repositories;
-using Microsoft.Extensions.Options;
-using HomeCloud.DataStorage.Business.Validation.Abstractions;
-using HomeCloud.Validation;
-using HomeCloud.Exceptions;
-
-namespace HomeCloud.DataStorage.Business.Providers
+﻿namespace HomeCloud.DataStorage.Business.Providers
 {
+	#region Usings
+
+	using HomeCloud.Core;
+	using HomeCloud.Core.Extensions;
+
+	using HomeCloud.DataAccess.Services;
+	using HomeCloud.DataAccess.Services.Factories;
+
+	using HomeCloud.DataStorage.Api.Configuration;
+	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
+
+	using Microsoft.Extensions.Options;
+
+	using AggregatedCatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.AggregatedCatalog;
+
+	#endregion
+
+	/// <summary>
+	/// Provides methods to provide data from aggregated data source.
+	/// </summary>
+	/// <seealso cref="HomeCloud.DataStorage.Business.Providers.IAggregationDataProvider" />
 	public class AggregationDataProvider : IAggregationDataProvider
 	{
 		#region Private Members
@@ -32,11 +41,6 @@ namespace HomeCloud.DataStorage.Business.Providers
 		/// </summary>
 		private readonly IMapper mapper = null;
 
-		/// <summary>
-		/// The factory of catalog validators.
-		/// </summary>
-		private readonly IServiceFactory<ICatalogValidator> catalogValidatorFactory = null;
-
 		#endregion
 
 		#region Constructors
@@ -50,14 +54,12 @@ namespace HomeCloud.DataStorage.Business.Providers
 		public AggregationDataProvider(
 			IDataContextScopeFactory dataContextScopeFactory,
 			IOptionsSnapshot<ConnectionStrings> connectionStrings,
-			IMapper mapper,
-			IServiceFactory<ICatalogValidator> catalogValidatorFactory)
+			IMapper mapper)
 		{
 			this.dataContextScopeFactory = dataContextScopeFactory;
 			this.connectionStrings = connectionStrings?.Value;
 
 			this.mapper = mapper;
-			this.catalogValidatorFactory = catalogValidatorFactory;
 		}
 
 		#endregion
@@ -65,19 +67,12 @@ namespace HomeCloud.DataStorage.Business.Providers
 		#region IDataStoreProvider Implementations
 
 		/// <summary>
-		/// Creates the storage.
+		/// Creates the specified storage.
 		/// </summary>
-		/// <param name="storage">The storage.</param>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public Storage CreateStorage(Storage storage)
 		{
-			ValidationResult validationResult = this.catalogValidatorFactory.Get<IIdentifierRequiredValidator>().Validate(storage.CatalogRoot);
-			validationResult += this.catalogValidatorFactory.Get<ICatalogRequiredValidator>().Validate(storage.CatalogRoot);
-
-			if (!validationResult.IsValid)
-			{
-				throw new ValidationException(validationResult.Errors);
-			}
-
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogAggregationRepository repository = scope.GetRepository<ICatalogAggregationRepository>();
@@ -86,14 +81,6 @@ namespace HomeCloud.DataStorage.Business.Providers
 			}
 
 			return storage;
-		}
-
-		public void DeleteStorage(Storage storage)
-		{
-		}
-
-		public void SetStorageQuota(Storage storage, long quota)
-		{
 		}
 
 		#endregion

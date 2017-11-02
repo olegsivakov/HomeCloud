@@ -6,8 +6,8 @@
 
 	using HomeCloud.Core;
 
-	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Commands;
+	using HomeCloud.DataStorage.Business.Providers;
 
 	#endregion
 

@@ -2,17 +2,27 @@
 {
 	#region Usings
 
+	using System.IO;
+
 	using HomeCloud.Core;
+
 	using HomeCloud.DataStorage.Api.Configuration;
+
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Handlers;
-	using HomeCloud.DataStorage.Business.Validation.Abstractions;
+	using HomeCloud.DataStorage.Business.Validation;
+
+	using HomeCloud.Exceptions;
+	using HomeCloud.Validation;
+
 	using Microsoft.Extensions.Options;
-	using System;
-	using System.IO;
 
 	#endregion
 
+	/// <summary>
+	/// Provides methods to handle storages.
+	/// </summary>
+	/// <seealso cref="HomeCloud.DataStorage.Business.Services.IStorageService" />
 	public class StorageService : IStorageService
 	{
 		#region Private Members
@@ -35,9 +45,9 @@
 		#region Private Members
 
 		/// <summary>
-		/// The factory of catalog validators.
+		/// The validation service factory.
 		/// </summary>
-		private readonly IServiceFactory<ICatalogValidator> catalogValidatorFactory = null;
+		private readonly IValidationServiceFactory validationServiceFactory = null;
 
 		#endregion
 
@@ -51,27 +61,46 @@
 		/// <param name="processor">The command processor.</param>
 		/// <param name="commandHandlerFactory">The command handler factory.</param>
 		/// <param name="fileSystemSettings">The file system settings.</param>
-		/// <param name="catalogValidatorFactory">The catalog validator factory.</param>
+		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public StorageService(
 			ICommandHandlerProcessor processor,
 			IServiceFactory<IDataCommandHandler> commandHandlerFactory,
 			IOptionsSnapshot<FileSystem> fileSystemSettings,
-			IServiceFactory<ICatalogValidator> catalogValidatorFactory)
+			IValidationServiceFactory validationServiceFactory)
 		{
 			this.processor = processor;
 			this.commandHandlerFactory = commandHandlerFactory;
 
 			this.fileSystemSettings = fileSystemSettings?.Value;
+			this.validationServiceFactory = validationServiceFactory;
 		}
 
 		#endregion
 
 		#region IStorageService Implementations
 
+		/// <summary>
+		/// Creates the specified storage.
+		/// </summary>
+		/// <param name="storage">The instance of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.</param>
+		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage"/> has been failed.</exception>
 		public void CreateStorage(Storage storage)
 		{
 			storage.CatalogRoot.Name = storage.Name;
 			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StoragePath, storage.CatalogRoot.Name);
+
+			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+			ValidationResult result = storageValidator.Get<IRequiredValidator>().Validate(storage);
+			result += storageValidator.Get<IUniqueValidator>().Validate(storage);
+
+			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			result += catalogValidator.Get<IRequiredValidator>().Validate(storage.CatalogRoot);
+			result += catalogValidator.Get<IUniqueValidator>().Validate(storage.CatalogRoot);
+
+			if (!result.IsValid)
+			{
+				throw new ValidationException(result.Errors);
+			}
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateCommand(provider => storage = provider.CreateStorage(storage), null);
 			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateCommand(provider => storage = provider.CreateStorage(storage), null);
