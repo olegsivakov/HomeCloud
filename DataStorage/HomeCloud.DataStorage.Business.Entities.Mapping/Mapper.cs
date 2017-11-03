@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Threading.Tasks;
+
 	using HomeCloud.Core;
 
 	#endregion
@@ -46,11 +48,14 @@
 		/// <returns>
 		/// The mapped instance of <see cref="TTarget" />.
 		/// </returns>
-		public TTarget Map<TSource, TTarget>(TSource source, TTarget target)
+		public async Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
 		{
-			ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;
+			return await Task.Run(() =>
+			{
+				ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;
 
-			return converter != null ? converter.Convert(source, target) : default(TTarget);
+				return converter != null ? converter.Convert(source, target) : default(TTarget);
+			});
 		}
 
 		#endregion

@@ -2,7 +2,7 @@
 {
 	#region Usings
 
-	using System;
+	using System.Threading.Tasks;
 
 	#endregion
 
@@ -24,6 +24,6 @@
 		/// </summary>
 		/// <param name="instance">The instance to validate.</param>
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		ValidationResult Validate(T instance);
+		Task<ValidationResult> ValidateAsync(T instance);
 	}
 }

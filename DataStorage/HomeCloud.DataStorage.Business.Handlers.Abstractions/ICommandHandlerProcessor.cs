@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Threading.Tasks;
+
 	using HomeCloud.Core;
 
 	#endregion
@@ -27,8 +29,9 @@
 		IDataCommandHandler CreateDataHandler<T>() where T : IDataCommandHandler;
 
 		/// <summary>
-		/// Processes the execution of attached command handlers..
+		/// Processes the execution of attached command handlers.
 		/// </summary>
-		void Process();
+		/// <returns>The asynchronous operation.</returns>
+		Task ProcessAsync();
 	}
 }

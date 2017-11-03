@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Providers;
@@ -24,11 +25,13 @@
 		IDataProvider Provider { get; }
 
 		/// <summary>
-		/// Creates the data command.
+		/// Creates the asynchronous data command.
 		/// </summary>
-		/// <param name="executeAction">The action to execute.</param>
-		/// <param name="undoAction">The action to revert command execution result.</param>
-		/// <returns>The command of <see cref="ICommand"/>.</returns>
-		ICommand CreateCommand(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction);
+		/// <param name="executeAsyncAction">The asynchronous action to execute.</param>
+		/// <param name="undoAsyncAction">The asynchronous action to undo.</param>
+		/// <returns>
+		/// The command of <see cref="ICommand" />.
+		/// </returns>
+		ICommand CreateAsyncCommand(Func<IDataProvider, Task> executeAsyncAction, Func<IDataProvider, Task> undoAsyncAction);
 	}
 }

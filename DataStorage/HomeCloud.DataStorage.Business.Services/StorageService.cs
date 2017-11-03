@@ -4,6 +4,7 @@
 
 	using System;
 	using System.IO;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
@@ -84,30 +85,33 @@
 		/// Creates the specified storage.
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.</param>
-		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage"/> has been failed.</exception>
-		public void CreateStorage(Storage storage)
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
+		public async Task CreateStorageAsync(Storage storage)
 		{
 			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
 			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-			ValidationResult result = storageValidator.Get<IRequiredValidator>().Validate(storage);
-			result += storageValidator.Get<IUniqueValidator>().Validate(storage);
+			ValidationResult result = await storageValidator.Get<IRequiredValidator>().ValidateAsync(storage);
+			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
 
 			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			result += catalogValidator.Get<IRequiredValidator>().Validate(storage.CatalogRoot);
-			result += catalogValidator.Get<IUniqueValidator>().Validate(storage.CatalogRoot);
+			result += await catalogValidator.Get<IRequiredValidator>().ValidateAsync(storage.CatalogRoot);
+			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(storage.CatalogRoot);
 
 			if (!result.IsValid)
 			{
 				throw new ValidationException(result.Errors);
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateCommand(provider => storage = provider.CreateStorage(storage), null);
-			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateCommand(provider => storage = provider.CreateStorage(storage), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateCommand(provider => storage = provider.CreateStorage(storage), null);
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
+			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
 
-			this.processor.Process();
+			await this.processor.ProcessAsync();
 		}
 
 		#endregion

@@ -4,6 +4,7 @@
 
 	using System;
 	using System.IO;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataAccess.Services.Factories;
@@ -65,17 +66,17 @@
 		/// </summary>
 		/// <param name="instance">The instance to validate.</param>
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		public ValidationResult Validate(Storage instance)
+		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(id =>
+			this.If(async id =>
 			{
 				using (IDbContextScope scope = dataContextScopeFactory.CreateDbContextScope(connectionStrings.DataStorageDB))
 				{
-					return scope.GetRepository<IStorageRepository>().Get(id) is null;
+					return await scope.GetRepository<IStorageRepository>().GetAsync(id) is null;
 				}
 			}).AddMessage("The storage does not exist.");
 
-			return this.Validate(instance.ID);
+			return await this.ValidateAsync(instance.ID);
 		}
 
 		/// <summary>
@@ -83,20 +84,20 @@
 		/// </summary>
 		/// <param name="instance">The instance to validate.</param>
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		public ValidationResult Validate(Catalog instance)
+		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(id =>
+			this.If(async id =>
 			{
 				using (IDbContextScope scope = dataContextScopeFactory.CreateDbContextScope(connectionStrings.DataStorageDB))
 				{
-					return scope.GetRepository<ICatalogRepository>().Get(id) is null;
+					return await scope.GetRepository<ICatalogRepository>().GetAsync(id) is null;
 				}
 			}).AddMessage("The catalog does not exist.");
 
 			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddMessage("The catalog path is empty.");
 			this.If(id => !Directory.Exists(instance.Path)).AddMessage("The catalog doesn't exist by specified path.");
 
-			return this.Validate(instance.ID);
+			return await this.ValidateAsync(instance.ID);
 		}
 
 		#endregion

@@ -1,5 +1,11 @@
 ﻿namespace HomeCloud.Core
 {
+	#region Usings
+
+	using System.Threading.Tasks;
+
+	#endregion
+
 	/// <summary>
 	/// Defines common interface to convert instance of one type to the instance of another type.
 	/// </summary>
@@ -15,6 +21,6 @@
 		/// <returns>
 		/// The mapped instance of <see cref="TTarget" />.
 		/// </returns>
-		TTarget Map<TSource, TTarget>(TSource source, TTarget target);
+		Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target);
 	}
 }

@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Threading.Tasks;
+
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.Validation;
 
@@ -34,11 +36,11 @@
 		/// </summary>
 		/// <param name="instance">The instance to validate.</param>
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		public ValidationResult Validate(Storage instance)
+		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddMessage("The storage name is empty.");
 
-			return this.Validate((object)instance);
+			return await this.ValidateAsync((object)instance);
 		}
 
 		/// <summary>
@@ -46,12 +48,12 @@
 		/// </summary>
 		/// <param name="instance">The instance to validate.</param>
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		public ValidationResult Validate(Catalog instance)
+		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddMessage("The catalog name is empty.");
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Path)).AddMessage("The catalog path is empty.");
 
-			return this.Validate((object)instance);
+			return await this.ValidateAsync((object)instance);
 		}
 
 		#endregion

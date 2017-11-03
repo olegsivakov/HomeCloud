@@ -1,5 +1,11 @@
 ﻿namespace HomeCloud.Validation
 {
+	#region Usings
+
+	using System.Threading.Tasks;
+
+	#endregion
+
 	/// <summary>
 	/// Defines methods to handle the rule that is executed to validate the instance of <see cref="T"/>.
 	/// </summary>
@@ -18,6 +24,6 @@
 		/// </summary>
 		/// <param name="instance">The instance of <see cref="T"/> to validate.</param>
 		/// <returns>The instance of <see cref="ValidationResult"/> containing <c>false</c> value that indicates that the rule has been applied successfully and instance of <see cref="T"/> is not valid. Otherwise it contains <c>true</c>.</returns>
-		ValidationResult IsSatisfiedBy(T instance);
+		Task<ValidationResult> IsSatisfiedByAsync(T instance);
 	}
 }

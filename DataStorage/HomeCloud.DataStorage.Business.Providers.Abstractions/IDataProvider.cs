@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Threading.Tasks;
+
 	using HomeCloud.DataStorage.Business.Entities;
 
 	#endregion
@@ -16,6 +18,6 @@
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
-		Storage CreateStorage(Storage storage);
+		Task<Storage> CreateStorage(Storage storage);
 	}
 }

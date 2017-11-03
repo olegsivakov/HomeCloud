@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
@@ -48,7 +49,7 @@
 		/// <returns>
 		/// The command of <see cref="T:HomeCloud.Core.ICommand" />.
 		/// </returns>
-		public virtual ICommand CreateCommand(Action executeAction, Action undoAction)
+		public virtual ICommand CreateCommand(Func<Task> executeAction, Func<Task> undoAction)
 		{
 			return new ActionCommand(executeAction, undoAction);
 		}
@@ -62,7 +63,7 @@
 		/// <returns>
 		/// The command of <see cref="T:HomeCloud.Core.ICommand" />.
 		/// </returns>
-		public virtual ICommand CreateCommand(IDataProvider provider, Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
+		public virtual ICommand CreateCommand(IDataProvider provider, Func<IDataProvider, Task> executeAction, Func<IDataProvider, Task> undoAction)
 		{
 			return new DataCommand(provider, executeAction, undoAction);
 		}
@@ -76,7 +77,7 @@
 		/// <returns>
 		/// The command of <see cref="T:HomeCloud.Core.ICommand" />.
 		/// </returns>
-		public virtual ICommand CreateCommand<TProvider>(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
+		public virtual ICommand CreateCommand<TProvider>(Func<IDataProvider, Task> executeAction, Func<IDataProvider, Task> undoAction)
 			where TProvider : IDataProvider
 		{
 			IDataProvider provider = this.dataProviderFactory.Get<TProvider>();

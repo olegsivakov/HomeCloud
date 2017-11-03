@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
@@ -19,12 +20,12 @@
 		/// <summary>
 		/// The action to execute.
 		/// </summary>
-		private readonly Action executeAction = null;
+		private readonly Func<Task> executeAction = null;
 
 		/// <summary>
 		/// The action to revert command execution result.
 		/// </summary>
-		private readonly Action undoAction = null;
+		private readonly Func<Task> undoAction = null;
 
 		#endregion
 
@@ -33,9 +34,9 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ActionCommand"/> class.
 		/// </summary>
-		/// <param name="executeAction">The action to execute.</param>
-		/// <param name="undoAction">The action to revert command execution result.</param>
-		public ActionCommand(Action executeAction, Action undoAction)
+		/// <param name="executeAction">The asynchronous action to execute.</param>
+		/// <param name="undoAction">The asynchronous action to revert command execution result.</param>
+		public ActionCommand(Func<Task> executeAction, Func<Task> undoAction)
 		{
 			this.executeAction = executeAction;
 			this.undoAction = undoAction;
@@ -62,11 +63,14 @@
 		/// <summary>
 		/// Executes the command.
 		/// </summary>
-		public virtual void Execute()
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		public virtual async Task ExecuteAsync()
 		{
 			if (this.executeAction != null)
 			{
-				this.executeAction();
+				await this.executeAction();
 
 				this.IsCompleted = true;
 			}
@@ -75,11 +79,14 @@
 		/// <summary>
 		/// Reverts the command results to previous state.
 		/// </summary>
-		public virtual void Undo()
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		public virtual async Task UndoAsync()
 		{
 			if (this.undoAction != null)
 			{
-				this.undoAction();
+				await this.undoAction();
 
 				this.IsCompleted = false;
 			}

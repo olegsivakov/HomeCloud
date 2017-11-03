@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	#endregion
 
@@ -19,7 +20,7 @@
 		/// <summary>
 		/// The rule delegate member.
 		/// </summary>
-		private readonly Func<T, bool> rule = null;
+		private readonly Func<T, Task<bool>> rule = null;
 
 		/// <summary>
 		/// The message
@@ -34,7 +35,7 @@
 		/// Initializes a new instance of the <see cref="ValidationRule{T}"/> class.
 		/// </summary>
 		/// <param name="rule">The rule delegate.</param>
-		public ValidationRule(Func<T, bool> rule)
+		public ValidationRule(Func<T, Task<bool>> rule)
 		{
 			this.rule = rule;
 		}
@@ -64,11 +65,11 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.Validation.ValidationResult" /> containing <c>false</c> value that indicates that the rule has been applied successfully and instance of <see cref="!:T" /> is not valid. Otherwise it contains <c>true</c>.
 		/// </returns>
-		public ValidationResult IsSatisfiedBy(T instance)
+		public async Task<ValidationResult> IsSatisfiedByAsync(T instance)
 		{
 			ValidationResult result = new ValidationResult();
 
-			if (this.rule != null && this.rule(instance))
+			if (this.rule != null && await this.rule(instance))
 			{
 				result.Errors = new List<string>() { this.message };
 			}

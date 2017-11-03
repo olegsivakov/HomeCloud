@@ -1,5 +1,11 @@
 ﻿namespace HomeCloud.Core.Extensions
 {
+	#region Usings
+
+	using System.Threading.Tasks;
+
+	#endregion
+
 	/// <summary>
 	/// Provides extension methods for mapping one instance to another.
 	/// </summary>
@@ -13,9 +19,9 @@
 		/// <param name="mapper">The <see cref="IMapper"/> mapper.</param>
 		/// <param name="source">The instance of <see cref="TSource"/>.</param>
 		/// <returns>The instance of <see cref="TTarget"/>.</returns>
-		public static TTarget MapNew<TSource, TTarget>(this IMapper mapper, TSource source)
+		public static async Task<TTarget> MapNewAsync<TSource, TTarget>(this IMapper mapper, TSource source)
 		{
-			return mapper.Map(source, default(TTarget));
+			return await mapper.MapAsync(source, default(TTarget));
 		}
 	}
 }

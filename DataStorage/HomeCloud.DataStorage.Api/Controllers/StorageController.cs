@@ -81,7 +81,7 @@
 					Name = "Aleh Sivakou's storage"
 				};
 
-				this.storageService.CreateStorage(storage);
+				await this.storageService.CreateStorageAsync(storage);
 
 				return new StorageViewModel()
 				{

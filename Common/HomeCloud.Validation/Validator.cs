@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	#endregion
 
@@ -32,13 +33,13 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.Validation.ValidationResult" /> indicating whether the specified instance is valid and containing the detailed message about the validation result.
 		/// </returns>
-		public ValidationResult Validate(T instance)
+		public async Task<ValidationResult> ValidateAsync(T instance)
 		{
 			ValidationResult result = new ValidationResult();
 
 			foreach (IValidationRule<T> rule in this.rules)
 			{
-				ValidationResult ruleResult = rule.IsSatisfiedBy(instance);
+				ValidationResult ruleResult = await rule.IsSatisfiedByAsync(instance);
 				if (!ruleResult.IsValid)
 				{
 					result += ruleResult;
@@ -57,9 +58,23 @@
 		/// </summary>
 		/// <param name="rule">The rule delegate.</param>
 		/// <returns>The instance of <see cref="IValidationRule{T}"/>.</returns>
-		protected virtual IValidationRule<T> If(Func<T, bool> rule)
+		protected virtual IValidationRule<T> If(Func<T, Task<bool>> rule)
 		{
 			IValidationRule<T> result = new ValidationRule<T>(rule);
+
+			this.rules.Add(result);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Wraps the creation of validation rule and adds it to the list of ones to execute.
+		/// </summary>
+		/// <param name="rule">The rule delegate.</param>
+		/// <returns>The instance of <see cref="IValidationRule{T}"/>.</returns>
+		protected virtual IValidationRule<T> If(Func<T, bool> rule)
+		{
+			IValidationRule<T> result = new ValidationRule<T>((instance) => Task.Run(() => rule(instance)));
 
 			this.rules.Add(result);
 

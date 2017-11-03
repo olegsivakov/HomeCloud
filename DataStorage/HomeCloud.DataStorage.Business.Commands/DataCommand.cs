@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Providers;
 
@@ -31,7 +32,7 @@
 		/// <param name="provider">The data provider.</param>
 		/// <param name="executeAction">The action to execute.</param>
 		/// <param name="undoAction">The action to revert command execution result.</param>
-		public DataCommand(IDataProvider provider, Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
+		public DataCommand(IDataProvider provider, Func<IDataProvider, Task> executeAction, Func<IDataProvider, Task> undoAction)
 			: base(() => executeAction(provider), () => undoAction(provider))
 		{
 			this.provider = provider;
@@ -46,22 +47,28 @@
 		/// <summary>
 		/// Executes the command.
 		/// </summary>
-		public override void Execute()
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		public override async Task ExecuteAsync()
 		{
 			if (this.provider != null)
 			{
-				base.Execute();
+				await base.ExecuteAsync();
 			}
 		}
 
 		/// <summary>
 		/// Reverts the command results to previous state.
 		/// </summary>
-		public override void Undo()
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		public override async Task UndoAsync()
 		{
 			if (this.provider != null)
 			{
-				base.Undo();
+				await base.UndoAsync();
 			}
 		}
 

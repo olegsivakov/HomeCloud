@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Providers;
@@ -20,7 +21,7 @@
 		/// <param name="executeAction">The action to execute.</param>
 		/// <param name="undoAction">The action to revert command execution result.</param>
 		/// <returns>The command of <see cref="ICommand"/>.</returns>
-		ICommand CreateCommand(Action executeAction, Action undoAction);
+		ICommand CreateCommand(Func<Task> executeAction, Func<Task> undoAction);
 
 		/// <summary>
 		/// Creates the command that executes the specified action against the data provided by the <see cref="IDataProvider"/> provider.
@@ -29,7 +30,7 @@
 		/// <param name="executeAction">The action to execute.</param>
 		/// <param name="undoAction">The action to revert command execution result.</param>
 		/// <returns>The command of <see cref="ICommand"/>.</returns>
-		ICommand CreateCommand(IDataProvider provider, Action<IDataProvider> executeAction, Action<IDataProvider> undoAction);
+		ICommand CreateCommand(IDataProvider provider, Func<IDataProvider, Task> executeAction, Func<IDataProvider, Task> undoAction);
 
 		/// <summary>
 		/// Creates the command that executes the specified action against the data provided by the data provider of the specified <see cref="IDataProvider"/> type.
@@ -38,7 +39,7 @@
 		/// <param name="executeAction">The action to execute.</param>
 		/// <param name="undoAction">The action to revert command execution result.</param>
 		/// <returns>The command of <see cref="ICommand"/>.</returns>
-		ICommand CreateCommand<TProvider>(Action<IDataProvider> executeAction, Action<IDataProvider> undoAction)
+		ICommand CreateCommand<TProvider>(Func<IDataProvider, Task> executeAction, Func<IDataProvider, Task> undoAction)
 			where TProvider : IDataProvider;
 	}
 }

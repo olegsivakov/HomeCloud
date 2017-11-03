@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Commands;
@@ -74,7 +75,10 @@
 		/// <summary>
 		/// Processes the execution of attached command handlers..
 		/// </summary>
-		public void Process()
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		public async Task ProcessAsync()
 		{
 			ICommandHandler current = null;
 
@@ -84,7 +88,7 @@
 				{
 					current = handler;
 
-					handler.Execute();
+					await handler.ExecuteAsync();
 				}
 			}
 			catch (Exception exception)
@@ -95,10 +99,10 @@
 				{
 					current = this.handlers[index];
 
-					current.Undo();
+					await current.UndoAsync();
 				}
 
-				throw exception;
+				await Task.FromException(exception);
 			}
 		}
 

@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Threading.Tasks;
+
 	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
@@ -74,19 +76,23 @@
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
-		public Storage CreateStorage(Storage storage)
+		public async Task<Storage> CreateStorage(Storage storage)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 
-				StorageContract storageContract = storageRepository.Save(this.mapper.MapNew<Storage, StorageContract>(storage));
-				storage = this.mapper.Map(storageContract, storage);
+				StorageContract storageContract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
+				storageContract = await storageRepository.SaveAsync(storageContract);
+
+				storage = await this.mapper.MapAsync(storageContract, storage);
 
 				ICatalogRepository directoryRepository = scope.GetRepository<ICatalogRepository>();
 
-				DirectoryContract directoryContract = directoryRepository.Save(this.mapper.MapNew<Catalog, DirectoryContract>(storage.CatalogRoot));
-				storage.CatalogRoot = this.mapper.Map(directoryContract, storage.CatalogRoot);
+				DirectoryContract directoryContract = await this.mapper.MapNewAsync<Catalog, DirectoryContract>(storage.CatalogRoot);
+				directoryContract = await directoryRepository.SaveAsync(directoryContract);
+
+				storage.CatalogRoot = await this.mapper.MapAsync(directoryContract, storage.CatalogRoot);
 
 				scope.Commit();
 			}

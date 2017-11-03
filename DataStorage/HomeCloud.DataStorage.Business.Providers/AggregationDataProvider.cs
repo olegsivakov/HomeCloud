@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Threading.Tasks;
+
 	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
@@ -14,7 +16,7 @@
 
 	using Microsoft.Extensions.Options;
 
-	using AggregatedCatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
+	using CatalogDocument = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
 
 	#endregion
 
@@ -71,13 +73,16 @@
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
-		public Storage CreateStorage(Storage storage)
+		public async Task<Storage> CreateStorage(Storage storage)
 		{
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
 
-				repository.Save(this.mapper.MapNew<Catalog, AggregatedCatalogContract>(storage.CatalogRoot));
+				CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(storage.CatalogRoot);
+				catalogDocument = await repository.SaveAsync(catalogDocument);
+
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot);
 			}
 
 			return storage;

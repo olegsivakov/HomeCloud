@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System.IO;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Entities;
 
@@ -32,11 +33,14 @@
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
-		public Storage CreateStorage(Storage storage)
+		public async Task<Storage> CreateStorage(Storage storage)
 		{
-			storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
+			return await Task.Run(() =>
+			{
+				storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
 
-			return storage;
+				return storage;
+			});
 		}
 
 		#endregion

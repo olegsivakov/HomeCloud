@@ -1,5 +1,11 @@
 ﻿namespace HomeCloud.Core
 {
+	#region Usings
+
+	using System.Threading.Tasks;
+
+	#endregion
+
 	/// <summary>
 	/// Defines the command.
 	/// </summary>
@@ -16,11 +22,13 @@
 		/// <summary>
 		/// Executes the command.
 		/// </summary>
-		void Execute();
+		/// <returns>The asynchronous operation.</returns>
+		Task ExecuteAsync();
 
 		/// <summary>
 		/// Reverts the command results to previous state.
 		/// </summary>
-		void Undo();
+		/// <returns>The asynchronous operation.</returns>
+		Task UndoAsync();
 	}
 }

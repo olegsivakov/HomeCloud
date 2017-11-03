@@ -35,6 +35,7 @@
     </Compile>
     <Compile Include="AggregatedDataCommandHandler.cs" />
     <Compile Include="CommandHandlerProcessor.cs" />
+    <Compile Include="DataCommandHandlerBase.cs" />
     <Compile Include="DataStoreCommandHandler.cs" />
     <Compile Include="FileSystemCommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

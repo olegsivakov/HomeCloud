@@ -12,7 +12,7 @@
 	#endregion
 
 	/// <summary>
-	/// Represents aggregated catalog document.
+	/// Represents catalog document.
 	/// </summary>
 	[DocumentCollection(CollectionName = "catalogs")]
 	public class CatalogDocument : IDocument
