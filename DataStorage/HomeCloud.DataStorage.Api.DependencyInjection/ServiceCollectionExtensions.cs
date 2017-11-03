@@ -44,7 +44,7 @@
 		public static void AddDependencies(this IServiceCollection services)
 		{
 			services.AddSingleton<IDbRepositoryFactory, DataStorageRepositoryFactory>();
-			services.AddSingleton<IDocumentRepositoryFactory, DataAggregationRepositoryFactory>();
+			services.AddSingleton<IDocumentRepositoryFactory, DocumentDataRepositoryFactory>();
 			services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
 
 			services.AddSingleton<IDataContextScopeFactory, DataContextScopeFactory>();
@@ -89,10 +89,10 @@
 
 			CatalogConverter catalogConverter = new CatalogConverter();
 
-			services.AddSingleton<ITypeConverter<DataContracts.Directory, Catalog>>(catalogConverter);
-			services.AddSingleton<ITypeConverter<Catalog, DataContracts.Directory>>(catalogConverter);
-			services.AddSingleton<ITypeConverter<DataContracts.AggregatedCatalog, Catalog>>(catalogConverter);
-			services.AddSingleton<ITypeConverter<Catalog, DataContracts.AggregatedCatalog>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<DataContracts.Catalog, Catalog>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<Catalog, DataContracts.Catalog>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<DataContracts.CatalogDocument, Catalog>>(catalogConverter);
+			services.AddSingleton<ITypeConverter<Catalog, DataContracts.CatalogDocument>>(catalogConverter);
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

@@ -51,6 +51,7 @@
       <Link>Properties\DataAccessAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DbContext.cs" />
+    <Compile Include="DocumentCollectionAttribute.cs" />
     <Compile Include="DocumentContext.cs" />
     <Compile Include="IDbCommand.cs" />
     <Compile Include="IDbContext.cs" />

@@ -89,7 +89,7 @@
 			{
 				using (IDbContextScope scope = dataContextScopeFactory.CreateDbContextScope(connectionStrings.DataStorageDB))
 				{
-					return scope.GetRepository<IDirectoryRepository>().Get(id) is null;
+					return scope.GetRepository<ICatalogRepository>().Get(id) is null;
 				}
 			}).AddMessage("The catalog does not exist.");
 

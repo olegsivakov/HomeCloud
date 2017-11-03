@@ -92,7 +92,7 @@
 		}
 
 		/// <summary>
-		/// Deletes the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Directory" /> type the list belongs to.
+		/// Deletes the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Catalog" /> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The parent entity unique identifier.</param>
 		public void DeleteByDirectoryID(Guid id)
@@ -113,7 +113,7 @@
 		/// <returns>
 		/// The list of instances of <see cref="!:T" /> type.
 		/// </returns>
-		/// <exception cref="NotSupportedException">Not supported as data requires the relationship for <see cref="Directory"/>.</exception>
+		/// <exception cref="NotSupportedException">Not supported as data requires the relationship for <see cref="Catalog"/>.</exception>
 		public IEnumerable<File> Find(int offset = 0, int limit = 20)
 		{
 			throw new NotSupportedException();
@@ -137,7 +137,7 @@
 		}
 
 		/// <summary>
-		/// Gets the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Directory" /> type the list belongs to.
+		/// Gets the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Catalog" /> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>

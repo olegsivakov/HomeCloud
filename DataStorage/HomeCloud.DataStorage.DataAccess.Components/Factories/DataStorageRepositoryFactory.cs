@@ -24,7 +24,7 @@
 			: base(container =>
 			{
 				container.Add(typeof(IStorageRepository), typeof(StorageRepository));
-				container.Add(typeof(IDirectoryRepository), typeof(DirectoryRepository));
+				container.Add(typeof(ICatalogRepository), typeof(CatalogRepository));
 				container.Add(typeof(IFileRepository), typeof(FileRepository));
 			})
 		{

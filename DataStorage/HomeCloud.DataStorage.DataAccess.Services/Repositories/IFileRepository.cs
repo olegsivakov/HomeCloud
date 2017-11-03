@@ -17,13 +17,13 @@
 	public interface IFileRepository : IDbRepository<File>
 	{
 		/// <summary>
-		/// Deletes the list of entities by specified identifier of entity of <see cref="Directory"/> type the list belongs to.
+		/// Deletes the list of entities by specified identifier of entity of <see cref="Catalog"/> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The parent entity unique identifier.</param>
 		void DeleteByDirectoryID(Guid id);
 
 		/// <summary>
-		/// Gets the list of entities by specified identifier of entity of <see cref="Directory"/> type the list belongs to.
+		/// Gets the list of entities by specified identifier of entity of <see cref="Catalog"/> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>

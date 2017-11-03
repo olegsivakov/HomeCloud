@@ -5,7 +5,9 @@
 	using System;
 	using System.Collections.Generic;
 
+	using System.Linq;
 	using System.Linq.Expressions;
+
 	using System.Threading.Tasks;
 
 	using MongoDB.Bson;
@@ -130,6 +132,8 @@
 		/// </summary>
 		/// <typeparam name="TDocument">The type of the document.</typeparam>
 		/// <param name="selector">The document selector.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The asynchronous operation that returns the list of <see cref="TDocument" />.
 		/// </returns>
@@ -180,22 +184,25 @@
 		private async Task<IMongoCollection<TDocument>> GetCollectionAsync<TDocument>()
 			where TDocument : IDocument
 		{
-			string documentName = typeof(TDocument).Name;
+			Type type = typeof(TDocument);
+
+			DocumentCollectionAttribute collectionAttribute = (type.GetCustomAttributes(typeof(DocumentCollectionAttribute), false).FirstOrDefault() as DocumentCollectionAttribute);
+			string collectionName = collectionAttribute?.CollectionName ?? typeof(TDocument).Name;
 
 			IAsyncCursor<BsonDocument> collections = await database.ListCollectionsAsync(
 					new ListCollectionsOptions
 					{
-						Filter = new BsonDocument("name", documentName)
+						Filter = new BsonDocument("name", collectionName)
 					});
 
 			bool isExists = await collections.AnyAsync();
 
 			if (!isExists)
 			{
-				await database.CreateCollectionAsync(documentName);
+				await database.CreateCollectionAsync(collectionName);
 			}
 
-			return database.GetCollection<TDocument>(documentName);
+			return database.GetCollection<TDocument>(collectionName);
 		}
 
 		#endregion

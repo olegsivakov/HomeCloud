@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using System;
 	using System.IO;
 
 	using HomeCloud.Core;
@@ -16,7 +17,6 @@
 	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Options;
-	using System;
 
 	#endregion
 

@@ -33,9 +33,9 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Repositories\ICatalogAggregationRepository.cs" />
-    <Compile Include="Repositories\IFileAggregationRepository.cs" />
-    <Compile Include="Repositories\IDirectoryRepository.cs" />
+    <Compile Include="Repositories\ICatalogDocumentRepository.cs" />
+    <Compile Include="Repositories\IFileDocumentRepository.cs" />
+    <Compile Include="Repositories\ICatalogRepository.cs" />
     <Compile Include="Repositories\IFileRepository.cs" />
     <Compile Include="Repositories\IStorageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

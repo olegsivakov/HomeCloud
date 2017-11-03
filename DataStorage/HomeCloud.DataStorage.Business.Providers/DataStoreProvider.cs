@@ -16,7 +16,7 @@
 
 	using Microsoft.Extensions.Options;
 
-	using DirectoryContract = HomeCloud.DataStorage.DataAccess.Contracts.Directory;
+	using DirectoryContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
 
 	#endregion
@@ -83,7 +83,7 @@
 				StorageContract storageContract = storageRepository.Save(this.mapper.MapNew<Storage, StorageContract>(storage));
 				storage = this.mapper.Map(storageContract, storage);
 
-				IDirectoryRepository directoryRepository = scope.GetRepository<IDirectoryRepository>();
+				ICatalogRepository directoryRepository = scope.GetRepository<ICatalogRepository>();
 
 				DirectoryContract directoryContract = directoryRepository.Save(this.mapper.MapNew<Catalog, DirectoryContract>(storage.CatalogRoot));
 				storage.CatalogRoot = this.mapper.Map(directoryContract, storage.CatalogRoot);

@@ -55,7 +55,11 @@
 		/// </summary>
 		/// <typeparam name="TDocument">The type of the document.</typeparam>
 		/// <param name="selector">The document selector.</param>
-		/// <returns>The asynchronous operation that returns the list of <see cref="TDocument"/>.</returns>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The asynchronous operation that returns the list of <see cref="TDocument" />.
+		/// </returns>
 		Task<IEnumerable<TDocument>> FindAsync<TDocument>(Expression<Func<TDocument, bool>> selector, int? offset = null, int? limit = null)
 			where TDocument : IDocument;
 

@@ -38,9 +38,9 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AggregatedCatalog.cs" />
-    <Compile Include="AggregatedFile.cs" />
-    <Compile Include="Directory.cs" />
+    <Compile Include="CatalogDocument.cs" />
+    <Compile Include="FileDocument.cs" />
+    <Compile Include="Catalog.cs" />
     <Compile Include="File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />

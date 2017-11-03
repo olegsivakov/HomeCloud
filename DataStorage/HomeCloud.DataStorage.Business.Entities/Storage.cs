@@ -34,6 +34,7 @@
 			{
 				return this.id;
 			}
+
 			set
 			{
 				this.id = value;

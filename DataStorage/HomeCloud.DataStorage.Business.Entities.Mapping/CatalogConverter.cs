@@ -2,8 +2,10 @@
 {
 	#region Usings
 
-	using HomeCloud.Core;
 	using System;
+
+	using HomeCloud.Core;
+
 	using Contracts = HomeCloud.DataStorage.DataAccess.Contracts;
 
 	#endregion
@@ -12,13 +14,13 @@
 	/// Provides converter methods for <see cref="Catalog" /> entity.
 	/// </summary>
 	/// <seealso cref="HomeCloud.DataStorage.Business.Entities.Mapping.TypeConverterBase" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.Directory, HomeCloud.DataStorage.Business.Entities.Catalog}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.Directory}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.AggregatedCatalog, HomeCloud.DataStorage.Business.Entities.Catalog}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.AggregatedCatalog}" />
-	public class CatalogConverter : TypeConverterBase, ITypeConverter<Contracts.Directory, Catalog>, ITypeConverter<Catalog, Contracts.Directory>, ITypeConverter<Contracts.AggregatedCatalog, Catalog>, ITypeConverter<Catalog, Contracts.AggregatedCatalog>
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.Catalog, HomeCloud.DataStorage.Business.Entities.Catalog}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.Catalog}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument, HomeCloud.DataStorage.Business.Entities.Catalog}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument}" />
+	public class CatalogConverter : TypeConverterBase, ITypeConverter<Contracts.Catalog, Catalog>, ITypeConverter<Catalog, Contracts.Catalog>, ITypeConverter<Contracts.CatalogDocument, Catalog>, ITypeConverter<Catalog, Contracts.CatalogDocument>
 	{
-		#region ITypeConverter<Contracts.Directory, Catalog> Implementations
+		#region ITypeConverter<Contracts.Catalog, Catalog> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -28,7 +30,7 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Catalog Convert(Contracts.Directory source, Catalog target)
+		public Catalog Convert(Contracts.Catalog source, Catalog target)
 		{
 			target = this.Validate(source, target);
 
@@ -44,7 +46,7 @@
 
 		#endregion
 
-		#region ITypeConverter<Catalog, Contracts.Directory> Implementations
+		#region ITypeConverter<Catalog, Contracts.Catalog> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -54,7 +56,7 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Contracts.Directory Convert(Catalog source, Contracts.Directory target)
+		public Contracts.Catalog Convert(Catalog source, Contracts.Catalog target)
 		{
 			target = this.Validate(source, target);
 
@@ -70,7 +72,7 @@
 
 		#endregion
 
-		#region ITypeConverter<Contracts.AggregatedCatalog, Catalog> Implementations
+		#region ITypeConverter<Contracts.CatalogDocument, Catalog> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -80,7 +82,7 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Catalog Convert(Contracts.AggregatedCatalog source, Catalog target)
+		public Catalog Convert(Contracts.CatalogDocument source, Catalog target)
 		{
 			target = this.Validate(source, target);
 
@@ -97,7 +99,7 @@
 
 		#endregion
 
-		#region ITypeConverter<Catalog, Contracts.AggregatedCatalog> Implementations
+		#region ITypeConverter<Catalog, Contracts.CatalogDocument> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -107,7 +109,7 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Contracts.AggregatedCatalog Convert(Catalog source, Contracts.AggregatedCatalog target)
+		public Contracts.CatalogDocument Convert(Catalog source, Contracts.CatalogDocument target)
 		{
 			target = this.Validate(source, target);
 

@@ -14,7 +14,7 @@
 
 	using Microsoft.Extensions.Options;
 
-	using AggregatedCatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.AggregatedCatalog;
+	using AggregatedCatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
 
 	#endregion
 
@@ -75,7 +75,7 @@
 		{
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
-				ICatalogAggregationRepository repository = scope.GetRepository<ICatalogAggregationRepository>();
+				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
 
 				repository.Save(this.mapper.MapNew<Catalog, AggregatedCatalogContract>(storage.CatalogRoot));
 			}
