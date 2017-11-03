@@ -190,10 +190,10 @@
 			string collectionName = collectionAttribute?.CollectionName ?? typeof(TDocument).Name;
 
 			IAsyncCursor<BsonDocument> collections = await database.ListCollectionsAsync(
-					new ListCollectionsOptions
-					{
-						Filter = new BsonDocument("name", collectionName)
-					});
+																						new ListCollectionsOptions
+																						{
+																							Filter = new BsonDocument("name", collectionName)
+																						});
 
 			bool isExists = await collections.AnyAsync();
 

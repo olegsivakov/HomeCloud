@@ -7,6 +7,7 @@
 	using System.Data;
 	using System.Data.SqlClient;
 	using System.Linq.Expressions;
+	using System.Threading.Tasks;
 
 	using Dapper;
 
@@ -69,9 +70,9 @@
 		/// <returns>
 		/// The list of instances of <see cref="T" />.
 		/// </returns>
-		public IEnumerable<T> Query<T>(string sqlQuery, object parameter = null)
+		public async Task<IEnumerable<T>> QueryAsync<T>(string sqlQuery, object parameter = null)
 		{
-			return this.connection.Query<T>(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.connection.QueryAsync<T>(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -82,9 +83,9 @@
 		/// <returns>
 		/// The number of rows affected.
 		/// </returns>
-		public int Execute(string sqlQuery, object parameter = null)
+		public async Task<int> ExecuteAsync(string sqlQuery, object parameter = null)
 		{
-			return this.connection.Execute(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.connection.ExecuteAsync(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -96,11 +97,11 @@
 		/// <param name="parameters">The parameters.</param>
 		/// <param name="outputParameters">The output parameters.</param>
 		/// <returns>The result of SQL query.</returns>
-		public TResult ExecuteScalar<TInput, TResult>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters)
+		public async Task<TResult> ExecuteScalarAsync<TInput, TResult>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters)
 		{
 			if (parameters == null)
 			{
-				return this.connection.ExecuteScalar<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+				return await this.connection.ExecuteScalarAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 			}
 
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
@@ -113,7 +114,7 @@
 				}
 			}
 
-			return this.connection.ExecuteScalar<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.connection.ExecuteScalarAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -125,11 +126,11 @@
 		/// <param name="parameters">The parameters.</param>
 		/// <param name="outputParameters">The output parameters.</param>
 		/// <returns>The list of instances of <see cref="TResult"/> type.</returns>
-		public IEnumerable<TResult> Query<TInput, TResult>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters)
+		public async Task<IEnumerable<TResult>> QueryAsync<TInput, TResult>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters)
 		{
 			if (parameters == null)
 			{
-				return this.connection.Query<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+				return await this.connection.QueryAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 			}
 
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
@@ -142,7 +143,7 @@
 				}
 			}
 
-			return this.connection.Query<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.connection.QueryAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -155,7 +156,7 @@
 		/// <returns>
 		/// The number of rows affected.
 		/// </returns>
-		public int Execute<TInput>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters)
+		public async Task<int> ExecuteAsync<TInput>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters)
 		{
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
 
@@ -167,7 +168,7 @@
 				}
 			}
 			
-			return this.connection.Execute(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.connection.ExecuteAsync(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
 		}
 
 		#endregion

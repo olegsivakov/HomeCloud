@@ -12,25 +12,25 @@
 	#endregion
 
 	/// <summary>
-	/// Defines combination of methods against <see cref="File"/> entity.
+	/// Defines methods to handle <see cref="Catalog" /> data.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataAccess.Services.IDbRepository{HomeCloud.DataStorage.DataAccess.Contracts.File}" />
-	public interface IFileRepository : IDbRepository<File>
+	/// <seealso cref="HomeCloud.DataAccess.Services.IDbRepository{HomeCloud.DataStorage.DataAccess.Contracts.Catalog}" />
+	public interface ICatalogRepository : IDbRepository<Catalog>
 	{
 		/// <summary>
-		/// Deletes the list of entities by specified identifier of entity of <see cref="Catalog" /> type the list belongs to.
+		/// Deletes the list of entities by specified identifier of parent entity the list belongs to.
 		/// </summary>
 		/// <param name="id">The parent entity unique identifier.</param>
 		/// <returns>The asynchronous operation.</returns>
-		Task DeleteByDirectoryIDAsync(Guid id);
+		Task DeleteByParentIDAsync(Guid? id);
 
 		/// <summary>
-		/// Gets the list of entities by specified identifier of entity of <see cref="Catalog"/> type the list belongs to.
+		/// Gets the list of entities by specified identifier of parent entity the list belongs to.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>
 		/// <param name="limit">The number of records to select.</param>
-		/// <returns>The list of instances of <see cref="File"/>.</returns>
-		Task<IEnumerable<File>> GetByDirectoryIDAsync(Guid id, int offset = 0, int limit = 20);
+		/// <returns>The list of instances of <see cref="Catalog"/>.</returns>
+		Task<IEnumerable<Catalog>> GetByParentIDAsync(Guid? id, int offset = 0, int limit = 20);
 	}
 }

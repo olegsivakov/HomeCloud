@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataAccess.Contracts;
 
@@ -28,7 +29,7 @@
 		/// </summary>
 		/// <param name="id">The identifier.</param>
 		/// <returns>The instance of <see cref="T"/> type.</returns>
-		T Get(Guid id);
+		Task<T> GetAsync(Guid id);
 
 		/// <summary>
 		/// Looks for all records of <see cref="T" /> type.
@@ -38,19 +39,20 @@
 		/// <returns>
 		/// The list of instances of <see cref="T" /> type.
 		/// </returns>
-		IEnumerable<T> Find(int offset = 0, int limit = 20);
+		Task<IEnumerable<T>> FindAsync(int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Saves the specified entity.
 		/// </summary>
 		/// <param name="entity">The entity.</param>
 		/// <returns>The instance of <see cref="T"/>.</returns>
-		T Save(T entity);
+		Task<T> SaveAsync(T entity);
 
 		/// <summary>
 		/// Deletes the entity by specified unique identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		void Delete(Guid id);
+		/// <returns>The asynchronous operation.</returns>
+		Task DeleteAsync(Guid id);
 	}
 }

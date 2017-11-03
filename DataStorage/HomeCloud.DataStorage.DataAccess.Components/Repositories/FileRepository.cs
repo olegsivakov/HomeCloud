@@ -5,6 +5,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataAccess.Contracts;
 
@@ -81,9 +82,10 @@
 		/// Deletes the entity by specified identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		public void Delete(Guid id)
+		/// <returns>The asynchronous operation.</returns>
+		public async Task DeleteAsync(Guid id)
 		{
-			this.context.Execute(
+			await this.context.ExecuteAsync(
 				DeleteFileByIDStoredProcedure,
 				new
 				{
@@ -95,9 +97,10 @@
 		/// Deletes the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Catalog" /> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The parent entity unique identifier.</param>
-		public void DeleteByDirectoryID(Guid id)
+		/// <returns>The asynchronous operation.</returns>
+		public async Task DeleteByDirectoryIDAsync(Guid id)
 		{
-			this.context.Execute(
+			await this.context.ExecuteAsync(
 				DeleteFileByDirectoryIDStoredProcedure,
 				new
 				{
@@ -114,9 +117,9 @@
 		/// The list of instances of <see cref="!:T" /> type.
 		/// </returns>
 		/// <exception cref="NotSupportedException">Not supported as data requires the relationship for <see cref="Catalog"/>.</exception>
-		public IEnumerable<File> Find(int offset = 0, int limit = 20)
+		public async Task<IEnumerable<File>> FindAsync(int offset = 0, int limit = 20)
 		{
-			throw new NotSupportedException();
+			return await Task.FromException<IEnumerable<File>>(new NotSupportedException());
 		}
 
 		/// <summary>
@@ -126,14 +129,16 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.File" />.
 		/// </returns>
-		public File Get(Guid id)
+		public async Task<File> GetAsync(Guid id)
 		{
-			return this.context.Query<File>(
+			IEnumerable<File> result = await this.context.QueryAsync<File>(
 				GetFileByIDStoredProcedure,
 				new
 				{
 					@ID = id
-				}).FirstOrDefault();
+				});
+
+			return result.FirstOrDefault();
 		}
 
 		/// <summary>
@@ -145,9 +150,9 @@
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.File" />.
 		/// </returns>
-		public IEnumerable<File> GetByDirectoryID(Guid id, int offset = 0, int limit = 20)
+		public async Task<IEnumerable<File>> GetByDirectoryIDAsync(Guid id, int offset = 0, int limit = 20)
 		{
-			return this.context.Query<File>(
+			return await this.context.QueryAsync<File>(
 				GetFileByDirectoryIDStoredProcedure,
 				new
 				{
@@ -164,11 +169,11 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.File" />.
 		/// </returns>
-		public File Save(File entity)
+		public async Task<File> SaveAsync(File entity)
 		{
 			Guid id = entity.ID == Guid.Empty ? Guid.NewGuid() : entity.ID;
 
-			if (this.context.Execute(
+			if (await this.context.ExecuteAsync(
 				entity.ID == Guid.Empty ? InsertFileStoredProcedure : UpdateFileStoredProcedure,
 				new
 				{
@@ -178,7 +183,7 @@
 					@Extension = entity.Extension
 				}) > 0)
 			{
-				return this.Get(id);
+				return await this.GetAsync(id);
 			}
 
 			return entity;

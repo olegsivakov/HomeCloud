@@ -5,6 +5,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataAccess.Contracts;
 
@@ -76,9 +77,10 @@
 		/// Deletes the entity by specified identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		public void Delete(Guid id)
+		/// <returns>The asynchronous operation.</returns>
+		public async Task DeleteAsync(Guid id)
 		{
-			this.context.Execute(
+			await this.context.ExecuteAsync(
 				DeleteStorageByIDStoredProcedure,
 				new
 				{
@@ -93,14 +95,16 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" />.
 		/// </returns>
-		public Storage Get(Guid id)
+		public async Task<Storage> GetAsync(Guid id)
 		{
-			return this.context.Query<Storage>(
+			IEnumerable<Storage> result = await this.context.QueryAsync<Storage>(
 				GetStorageByIDStoredProcedure,
 				new
 				{
 					@ID = id
-				}).FirstOrDefault();
+				});
+
+			return result.FirstOrDefault();
 		}
 
 		/// <summary>
@@ -111,9 +115,9 @@
 		/// <returns>
 		/// The list of instances of <see cref="T" /> type.
 		/// </returns>
-		public IEnumerable<Storage> Find(int offset = 0, int limit = 20)
+		public async Task<IEnumerable<Storage>> FindAsync(int offset = 0, int limit = 20)
 		{
-			return this.context.Query<Storage>(
+			return await this.context.QueryAsync<Storage>(
 				GetStorageStoredProcedure,
 				new
 				{
@@ -129,11 +133,11 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" />.
 		/// </returns>
-		public Storage Save(Storage entity)
+		public async Task<Storage> SaveAsync(Storage entity)
 		{
 			Guid id = entity.ID == Guid.Empty ? Guid.NewGuid() : entity.ID;
 
-			if (this.context.Execute(
+			if (await this.context.ExecuteAsync(
 				entity.ID == Guid.Empty ? InsertStorageStoredProcedure : UpdateStorageStoredProcedure,
 				new
 				{
@@ -142,7 +146,7 @@
 					@Quota = entity.Quota
 				}) > 0)
 			{
-				return this.Get(id);
+				return await this.GetAsync(id);
 			}
 
 			return entity;
