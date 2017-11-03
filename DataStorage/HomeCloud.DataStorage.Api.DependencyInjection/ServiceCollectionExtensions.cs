@@ -44,7 +44,7 @@
 		public static void AddDependencies(this IServiceCollection services)
 		{
 			services.AddSingleton<IDbRepositoryFactory, DataStorageRepositoryFactory>();
-			services.AddSingleton<IDocumentRepositoryFactory, DocumentRepositoryFactory>();
+			services.AddSingleton<IDocumentRepositoryFactory, DataAggregationRepositoryFactory>();
 			services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
 
 			services.AddSingleton<IDataContextScopeFactory, DataContextScopeFactory>();

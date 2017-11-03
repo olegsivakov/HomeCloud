@@ -44,12 +44,13 @@
 		/// Saves the specified entity.
 		/// </summary>
 		/// <param name="entity">The entity.</param>
-		void Save(T entity);
+		/// <returns>The instance of <see cref="T"/>.</returns>
+		T Save(T entity);
 
 		/// <summary>
 		/// Deletes the entity by specified unique identifier.
 		/// </summary>
-		/// <param name="id">The unique identifier..</param>
+		/// <param name="id">The unique identifier.</param>
 		void Delete(Guid id);
 	}
 }

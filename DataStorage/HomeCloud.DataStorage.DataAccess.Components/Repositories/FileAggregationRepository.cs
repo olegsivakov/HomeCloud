@@ -42,24 +42,46 @@
 
 		#region IAggregatedFileRepository Implementations
 
+		/// <summary>
+		/// Deletes the entity by specified unique identifier.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
 		public void Delete(Guid id)
 		{
-			throw new NotImplementedException();
+			this.context.DeleteAsync<AggregatedFile>(catalog => catalog.ID == id);
 		}
 
+		/// <summary>
+		/// Looks for all records of <see cref="T" /> type.
+		/// </summary>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="T" /> type.
+		/// </returns>
 		public IEnumerable<AggregatedFile> Find(int offset = 0, int limit = 20)
 		{
-			throw new NotImplementedException();
+			return this.context.FindAsync<AggregatedFile>(catalog => true, offset, limit).Result;
 		}
 
+		/// <summary>
+		/// Gets the entity by specified unique identifier.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>The instance of <see cref="T"/> type.</returns>
 		public AggregatedFile Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return this.context.GetAsync<AggregatedFile>(catalog => catalog.ID == id).Result;
 		}
 
-		public void Save(AggregatedFile entity)
+		/// <summary>
+		/// Saves the specified entity.
+		/// </summary>
+		/// <param name="entity">The entity.</param>
+		/// <returns>The instance of <see cref="AggregatedFile"/>.</returns>
+		public AggregatedFile Save(AggregatedFile entity)
 		{
-			throw new NotImplementedException();
+			return this.context.UpsertAsync(entity).Result;
 		}
 
 		#endregion

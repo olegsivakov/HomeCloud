@@ -17,8 +17,8 @@
 		/// <summary>
 		/// Inserts the document asynchronously.
 		/// </summary>
-		/// <typeparam name="TDocument">The type of the document.</typeparam>
-		/// <param name="document">The document.</param>
+		/// <typeparam name="TDocument">The type of the document to insert.</typeparam>
+		/// <param name="document">The document to insert.</param>
 		/// <returns>The asynchronous operation.</returns>
 		Task InsertAsync<TDocument>(TDocument document)
 			where TDocument : IDocument;
@@ -26,10 +26,28 @@
 		/// <summary>
 		/// Updates the document asynchronously.
 		/// </summary>
+		/// <typeparam name="TDocument">The type of the document to update.</typeparam>
+		/// <param name="document">The document to update.</param>
+		/// <returns>The asynchronous operation that returns the instance of <see cref="TDocument" />..</returns>
+		Task<TDocument> UpdateAsync<TDocument>(TDocument document)
+			where TDocument : IDocument;
+
+		/// <summary>
+		/// Updates the existing document asynchronously or creates a new one if no documents matched.
+		/// </summary>
+		/// <typeparam name="TDocument">The type of the document to upsert.</typeparam>
+		/// <param name="document">The document to upsert.</param>
+		/// <returns>The asynchronous operation that returns the instance of <see cref="TDocument" />..</returns>
+		Task<TDocument> UpsertAsync<TDocument>(TDocument document)
+			where TDocument : IDocument;
+
+		/// <summary>
+		/// Looks for the first document in the result set by specified document selector asynchronously.
+		/// </summary>
 		/// <typeparam name="TDocument">The type of the document.</typeparam>
-		/// <param name="document">The document.</param>
-		/// <returns>The asynchronous operation.</returns>
-		Task UpdateAsync<TDocument>(TDocument document)
+		/// <param name="selector">The selector.</param>
+		/// <returns>The asynchronous operation that returns the instance of <see cref="TDocument" />.</returns>
+		Task<TDocument> GetAsync<TDocument>(Expression<Func<TDocument, bool>> selector)
 			where TDocument : IDocument;
 
 		/// <summary>
@@ -38,7 +56,7 @@
 		/// <typeparam name="TDocument">The type of the document.</typeparam>
 		/// <param name="selector">The document selector.</param>
 		/// <returns>The asynchronous operation that returns the list of <see cref="TDocument"/>.</returns>
-		Task<IEnumerable<TDocument>> FindAsync<TDocument>(Expression<Func<TDocument, bool>> selector)
+		Task<IEnumerable<TDocument>> FindAsync<TDocument>(Expression<Func<TDocument, bool>> selector, int? offset = null, int? limit = null)
 			where TDocument : IDocument;
 
 		/// <summary>
