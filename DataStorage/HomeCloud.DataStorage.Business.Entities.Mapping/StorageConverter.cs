@@ -29,6 +29,10 @@
 		public Storage Convert(Contracts.Storage source, Storage target)
 		{
 			target = this.Validate(source, target);
+			if (target == null)
+			{
+				return null;
+			}
 
 			target.ID = source.ID;
 			target.Name = source.Name;
@@ -54,6 +58,10 @@
 		public Contracts.Storage Convert(Storage source, Contracts.Storage target)
 		{
 			target = this.Validate(source, target);
+			if (target == null)
+			{
+				return null;
+			}
 
 			target.ID = source.ID;
 			target.Name = source.Name;

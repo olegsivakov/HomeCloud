@@ -10,6 +10,7 @@
 
 	using HomeCloud.DataStorage.DataAccess.Contracts;
 	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
+	using System.Linq.Expressions;
 
 	#endregion
 
@@ -56,14 +57,15 @@
 		/// <summary>
 		/// Looks for all records of <see cref="CatalogDocument" /> type.
 		/// </summary>
+		/// <param name="selector">The data selector.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The list of instances of <see cref="CatalogDocument" /> type.
 		/// </returns>
-		public async Task<IEnumerable<CatalogDocument>> FindAsync(int offset = 0, int limit = 20)
+		public async Task<IEnumerable<CatalogDocument>> FindAsync(Expression<Func<CatalogDocument, bool>> selector, int offset = 0, int limit = 20)
 		{
-			return await this.context.FindAsync<CatalogDocument>(catalog => true, offset, limit);
+			return await this.context.FindAsync<CatalogDocument>(selector, offset, limit);
 		}
 
 		/// <summary>

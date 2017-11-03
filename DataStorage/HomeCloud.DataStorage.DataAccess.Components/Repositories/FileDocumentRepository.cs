@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 
 	using HomeCloud.DataAccess.Contracts;
@@ -56,14 +57,15 @@
 		/// <summary>
 		/// Looks for all records of <see cref="T" /> type.
 		/// </summary>
+		/// <param name="selector">The data selector.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The list of instances of <see cref="T" /> type.
 		/// </returns>
-		public async Task<IEnumerable<FileDocument>> FindAsync(int offset = 0, int limit = 20)
+		public async Task<IEnumerable<FileDocument>> FindAsync(Expression<Func<FileDocument, bool>> selector, int offset = 0, int limit = 20)
 		{
-			return await this.context.FindAsync<FileDocument>(catalog => true, offset, limit);
+			return await this.context.FindAsync<FileDocument>(selector, offset, limit);
 		}
 
 		/// <summary>

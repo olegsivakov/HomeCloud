@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -18,7 +20,7 @@
 
 	using Microsoft.Extensions.Options;
 
-	using DirectoryContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
+	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
 
 	#endregion
@@ -85,19 +87,64 @@
 				StorageContract storageContract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
 				storageContract = await storageRepository.SaveAsync(storageContract);
 
-				storage = await this.mapper.MapAsync(storageContract, storage);
+				storage = await this.mapper.MapAsync(storageContract, storage) ?? storage;
 
-				ICatalogRepository directoryRepository = scope.GetRepository<ICatalogRepository>();
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
-				DirectoryContract directoryContract = await this.mapper.MapNewAsync<Catalog, DirectoryContract>(storage.CatalogRoot);
-				directoryContract = await directoryRepository.SaveAsync(directoryContract);
+				CatalogContract catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(storage.CatalogRoot);
+				catalogContract = await catalogRepository.SaveAsync(catalogContract);
 
-				storage.CatalogRoot = await this.mapper.MapAsync(directoryContract, storage.CatalogRoot);
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot) ?? storage.CatalogRoot;
 
 				scope.Commit();
 			}
 
 			return storage;
+		}
+
+		/// <summary>
+		/// Gets the list of storages.
+		/// </summary>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
+		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		{
+			if (limit == 0)
+			{
+				return await Task.FromResult(Enumerable.Empty<Storage>());
+			}
+
+			IEnumerable<StorageContract> data = null;
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+
+				data = await storageRepository.FindAsync(offset, limit);
+			}
+
+			IEnumerable<Task<Storage>> tasks = data.Select(async item => await this.mapper.MapNewAsync<StorageContract, Storage>(item));
+
+			return await Task.WhenAll(tasks);
+		}
+
+		/// <summary>
+		/// Gets the catalog by the initial instance set.
+		/// </summary>
+		/// <param name="catalog">The initial catalog set.</param>
+		/// <returns>The instance of <see cref="Catalog"/>.</returns>
+		public async Task<Catalog> GetCatalog(Catalog catalog)
+		{
+			IEnumerable<CatalogContract> catalogContracts = null;
+
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+
+				catalogContracts = await catalogRepository.GetByParentIDAsync(catalog.StorageID, null, 0, 1);
+			}
+
+			return await this.mapper.MapAsync(catalogContracts.FirstOrDefault(), catalog) ?? catalog;
 		}
 
 		#endregion

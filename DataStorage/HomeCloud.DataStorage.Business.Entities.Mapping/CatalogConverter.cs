@@ -33,6 +33,10 @@
 		public Catalog Convert(Contracts.Catalog source, Catalog target)
 		{
 			target = this.Validate(source, target);
+			if (target == null)
+			{
+				return null;
+			}
 
 			target.ID = source.ID;
 			target.ParentID = source.ParentID;
@@ -59,6 +63,10 @@
 		public Contracts.Catalog Convert(Catalog source, Contracts.Catalog target)
 		{
 			target = this.Validate(source, target);
+			if (target == null)
+			{
+				return null;
+			}
 
 			target.ID = source.ID;
 			target.ParentID = source.ParentID;
@@ -85,6 +93,10 @@
 		public Catalog Convert(Contracts.CatalogDocument source, Catalog target)
 		{
 			target = this.Validate(source, target);
+			if (target == null)
+			{
+				return null;
+			}
 
 			if (target.ID == Guid.Empty)
 			{
@@ -112,6 +124,10 @@
 		public Contracts.CatalogDocument Convert(Catalog source, Contracts.CatalogDocument target)
 		{
 			target = this.Validate(source, target);
+			if (target == null)
+			{
+				return null;
+			}
 
 			target.ID = source.ID;
 			target.Path = source.Path;

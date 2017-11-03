@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Threading.Tasks;
 
@@ -112,6 +113,31 @@
 			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
 
 			await this.processor.ProcessAsync();
+		}
+
+		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		{
+			IEnumerable<Storage> storages = null;
+
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storages = await provider.GetStorages(offset, limit), null);
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider =>
+			{
+				foreach (Storage storage in storages)
+				{
+					storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
+				}
+			}, null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider =>
+			{
+				foreach (Storage storage in storages)
+				{
+					storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
+				}
+			}, null);
+
+			await this.processor.ProcessAsync();
+
+			return storages;
 		}
 
 		#endregion

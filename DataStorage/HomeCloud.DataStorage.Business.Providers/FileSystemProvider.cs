@@ -2,10 +2,13 @@
 {
 	#region Usings
 
+	using System;
 	using System.IO;
 	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Entities;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	#endregion
 
@@ -40,6 +43,35 @@
 				storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
 
 				return storage;
+			});
+		}
+
+		/// <summary>
+		/// Gets the list of storages.
+		/// </summary>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
+		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		{
+			return await Task.FromException<IEnumerable<Storage>>(new NotSupportedException());
+		}
+
+		/// <summary>
+		/// Gets the catalog by the initial instance set.
+		/// </summary>
+		/// <param name="catalog">The initial catalog set.</param>
+		/// <returns>The instance of <see cref="Catalog"/>.</returns>
+		public async Task<Catalog> GetCatalog(Catalog catalog)
+		{
+			return await Task.Run(() =>
+			{
+				if (Directory.Exists(catalog.Path))
+				{
+					catalog.Size = Directory.GetFiles(catalog.Path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)).Sum(file => file.Length);
+				}
+
+				return catalog;
 			});
 		}
 

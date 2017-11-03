@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -17,6 +19,7 @@
 	using Microsoft.Extensions.Options;
 
 	using CatalogDocument = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
+	using System;
 
 	#endregion
 
@@ -82,10 +85,40 @@
 				CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(storage.CatalogRoot);
 				catalogDocument = await repository.SaveAsync(catalogDocument);
 
-				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot);
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot) ?? storage.CatalogRoot;
 			}
 
 			return storage;
+		}
+
+		/// <summary>
+		/// Gets the list of storages.
+		/// </summary>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
+		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		{
+			return await Task.FromException<IEnumerable<Storage>>(new NotSupportedException());
+		}
+
+		/// <summary>
+		/// Gets the catalog by the initial instance set.
+		/// </summary>
+		/// <param name="catalog">The initial catalog set.</param>
+		/// <returns>The instance of <see cref="Catalog"/>.</returns>
+		public async Task<Catalog> GetCatalog(Catalog catalog)
+		{
+			CatalogDocument catalogDocument = null;
+
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+
+				catalogDocument = await repository.GetAsync(catalog.ID);
+			}
+
+			return await this.mapper.MapAsync(catalogDocument, catalog) ?? catalog;
 		}
 
 		#endregion

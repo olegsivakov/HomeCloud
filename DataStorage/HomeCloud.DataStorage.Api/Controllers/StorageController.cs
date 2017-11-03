@@ -49,7 +49,10 @@
 		[HttpGet("v1/[controller]s")]
 		public async Task<IActionResult> Get(int offset = 0, int limit = 20)
 		{
-			return this.Ok(System.Linq.Enumerable.Empty<StorageViewModel>());
+			var data = await this.storageService.GetStorages(0, 20);
+
+			return this.Ok(data);
+			//return this.Ok(System.Linq.Enumerable.Empty<StorageViewModel>());
 		}
 
 		/// <summary>
