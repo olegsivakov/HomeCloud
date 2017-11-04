@@ -14,8 +14,7 @@
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Validation;
-
-	using HomeCloud.Exceptions;
+	
 	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Options;
@@ -90,7 +89,7 @@
 		/// The asynchronous operation.
 		/// </returns>
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
-		public async Task CreateStorageAsync(Storage storage)
+		public async Task<ServiceResult> CreateStorageAsync(Storage storage)
 		{
 			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
 			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
@@ -105,7 +104,10 @@
 
 			if (!result.IsValid)
 			{
-				throw new ValidationException(result.Errors);
+				return new ServiceResult()
+				{
+					Errors = result.Errors
+				};
 			}
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
@@ -113,6 +115,8 @@
 			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
 
 			await this.processor.ProcessAsync();
+
+			return new ServiceResult();
 		}
 
 		/// <summary>
@@ -123,7 +127,7 @@
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.
 		/// </returns>
-		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		public async Task<ServiceResult<IEnumerable<Storage>>> GetStorages(int offset = 0, int limit = 20)
 		{
 			IEnumerable<Storage> storages = null;
 
@@ -151,7 +155,7 @@
 
 			await this.processor.ProcessAsync();
 
-			return storages;
+			return new ServiceResult<IEnumerable<Storage>>(storages);
 		}
 
 		#endregion

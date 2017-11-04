@@ -36,7 +36,12 @@
     <Compile Include="DataViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageViewModel.cs" />
-    <Compile Include="ViewModelBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Api\HomeCloud.Api.csproj">
+      <Project>{d32a0793-f2c3-489e-a168-e24b390165c9}</Project>
+      <Name>HomeCloud.Api</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

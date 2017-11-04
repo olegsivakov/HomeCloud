@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using HomeCloud.Api.Mvc;
 	using HomeCloud.Core;
 
 	using HomeCloud.DataAccess.Components.Factories;
@@ -25,6 +26,7 @@
 	using HomeCloud.DependencyInjection;
 
 	using HomeCloud.Mapping;
+	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
@@ -97,6 +99,10 @@
 			services.AddSingleton<ITypeConverter<DataContracts.CatalogDocument, Catalog>>(catalogConverter);
 			services.AddSingleton<ITypeConverter<Catalog, DataContracts.CatalogDocument>>(catalogConverter);
 
+			ServiceResultConverter serviceResultConverter = new ServiceResultConverter();
+
+			services.AddSingleton<ITypeConverter<ValidationResult, ServiceResult>>(serviceResultConverter);
+
 			StorageViewModelConverter storageViewModelConverter = new StorageViewModelConverter();
 
 			services.AddSingleton<ITypeConverter<Storage, StorageViewModel>>(storageViewModelConverter);
@@ -108,6 +114,10 @@
 			services.AddSingleton<ITypeConverter<DataViewModel, Catalog>>(dataViewModelConverter);
 			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>>(dataViewModelConverter);
 			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>>(dataViewModelConverter);
+
+			ErrorViewModelConverter errorViewModelConverter = new ErrorViewModelConverter();
+
+			services.AddSingleton<ITypeConverter<ServiceResult, ErrorViewModel>>(errorViewModelConverter);
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

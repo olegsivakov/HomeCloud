@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Api\HomeCloud.Api.csproj" />
     <ProjectReference Include="..\..\Common\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.Configuration\HomeCloud.DataStorage.Api.Configuration.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.DependencyInjection\HomeCloud.DataStorage.Api.DependencyInjection.csproj" />

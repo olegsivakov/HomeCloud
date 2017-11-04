@@ -91,6 +91,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api.Models.Converters", "DataStorage\HomeCloud.DataStorage.Api.Models.Converters\HomeCloud.DataStorage.Api.Models.Converters.csproj", "{2FC80C33-4CCD-4CAC-B77F-837802DB9E3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Api", "Common\HomeCloud.Api\HomeCloud.Api.csproj", "{D32A0793-F2C3-489E-A168-E24B390165C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,6 +221,10 @@ Global
 		{2FC80C33-4CCD-4CAC-B77F-837802DB9E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FC80C33-4CCD-4CAC-B77F-837802DB9E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FC80C33-4CCD-4CAC-B77F-837802DB9E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D32A0793-F2C3-489E-A168-E24B390165C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D32A0793-F2C3-489E-A168-E24B390165C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D32A0793-F2C3-489E-A168-E24B390165C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D32A0793-F2C3-489E-A168-E24B390165C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,6 +265,7 @@ Global
 		{E9B4C4CA-59D3-4A92-82A8-FCF28C2EC028} = {01D9489A-3C6D-4DC2-88B3-01F909DDC651}
 		{81FB920A-2AFC-4FDB-8444-3DD21068D2F5} = {384C98CA-3A90-4359-A4A7-1AA241228BB3}
 		{2FC80C33-4CCD-4CAC-B77F-837802DB9E3B} = {384C98CA-3A90-4359-A4A7-1AA241228BB3}
+		{D32A0793-F2C3-489E-A168-E24B390165C9} = {ADC25D01-E872-437A-95D0-31F20E5B24A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA97106E-A9E5-423B-9B9E-36E657021CB8}

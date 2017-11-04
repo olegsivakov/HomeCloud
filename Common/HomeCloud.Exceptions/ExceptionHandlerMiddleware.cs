@@ -93,22 +93,6 @@
 						};
 					});
 			}
-			catch (ValidationException exception)
-			{
-				await this.ProcessExceptionAsync(
-					context,
-					exception,
-					() =>
-					{
-						context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-
-						return new HttpExceptionResponse
-						{
-							StatusCode = context.Response.StatusCode,
-							Errors = exception.Errors
-						};
-					});
-			}
 			catch (NotFoundException exception)
 			{
 				await this.ProcessExceptionAsync(
@@ -165,16 +149,16 @@
 
 			context.Response.ContentType = "application/json";
 
-			HttpExceptionResponse response = action();
-
-			await context.Response.WriteAsync(JsonConvert.SerializeObject(
-				response,
+			string json = JsonConvert.SerializeObject(
+				action(),
 				new JsonSerializerSettings
 				{
 					ContractResolver = new CamelCasePropertyNamesContractResolver()
-				}));
+				});
 
-			this.logger.LogError(0, exception, exception.Message);
+			await context.Response.WriteAsync(json);
+
+			this.logger.LogError(0, exception, json);
 		}
 
 		#endregion

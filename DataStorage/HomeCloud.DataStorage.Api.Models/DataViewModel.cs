@@ -4,13 +4,23 @@
 
 	using System;
 
+	using HomeCloud.Api.Mvc;
+
 	#endregion
 
 	/// <summary>
 	/// Represents catalog/file view model.
 	/// </summary>
-	public class DataViewModel : ViewModelBase
+	public class DataViewModel : IViewModel
 	{
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public Guid ID { get; set; }
+
 		/// <summary>
 		/// Gets or sets the name.
 		/// </summary>

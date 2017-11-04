@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
 
 	#endregion
@@ -12,12 +13,20 @@
 	public class HttpExceptionResponse
 	{
 		/// <summary>
+		/// Gets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public Guid ID { get; set; } = Guid.NewGuid();
+
+		/// <summary>
 		/// Gets or sets the status code.
 		/// </summary>
 		/// <value>
 		/// The status code.
 		/// </value>
-		public int StatusCode { get; set; }
+		public virtual int StatusCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the error messages.
@@ -25,6 +34,6 @@
 		/// <value>
 		/// The error messages.
 		/// </value>
-		public IEnumerable<string> Errors { get; set; }
+		public virtual IEnumerable<string> Errors { get; set; }
 	}
 }

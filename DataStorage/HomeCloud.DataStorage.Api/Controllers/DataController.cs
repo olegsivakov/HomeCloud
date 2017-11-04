@@ -9,6 +9,8 @@
 
 	using HomeCloud.DataStorage.Api.Models;
 
+	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
+
 	#endregion
 
 	/// <summary>

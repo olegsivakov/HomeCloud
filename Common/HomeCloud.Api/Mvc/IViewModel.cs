@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Api.Models
+﻿namespace HomeCloud.Api.Mvc
 {
 	#region Usings
 
@@ -7,9 +7,9 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the base view model.
+	/// Defines the <see cref="RESTful API"/> view model.
 	/// </summary>
-	public abstract class ViewModelBase
+	public interface IViewModel
 	{
 		/// <summary>
 		/// Gets or sets the identifier.
@@ -17,6 +17,6 @@
 		/// <value>
 		/// The identifier.
 		/// </value>
-		public Guid ID { get; set; }
+		Guid ID { get; set; }
 	}
 }

@@ -4,13 +4,23 @@
 
 	using System;
 
+	using HomeCloud.Api.Mvc;
+
 	#endregion
 
 	/// <summary>
 	/// Represents storage view model.
 	/// </summary>
-	public class StorageViewModel : ViewModelBase
+	public class StorageViewModel : IViewModel
 	{
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public Guid ID { get; set; }
+
 		/// <summary>
 		/// Gets or sets the name.
 		/// </summary>

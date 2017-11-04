@@ -19,7 +19,7 @@
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type.</param>
 		/// <returns>The asynchronous operation.</returns>
-		Task CreateStorageAsync(Storage storage);
+		Task<ServiceResult> CreateStorageAsync(Storage storage);
 
 		/// <summary>
 		/// Gets the list of storages.
@@ -27,6 +27,6 @@
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
-		Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20);
+		Task<ServiceResult<IEnumerable<Storage>>> GetStorages(int offset = 0, int limit = 20);
 	}
 }

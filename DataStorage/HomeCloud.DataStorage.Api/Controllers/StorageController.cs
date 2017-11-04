@@ -15,6 +15,9 @@
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.Core.Extensions;
 
+	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
+	using HomeCloud.Api.Mvc;
+
 	#endregion
 
 	/// <summary>
@@ -60,9 +63,15 @@
 		[HttpGet("v1/[controller]s")]
 		public async Task<IActionResult> Get(int offset, int limit)
 		{
-			return await HttpGet(offset, limit, async () =>
+			IActionResult actionResult = null;
+
+			actionResult = await HttpGet(offset, limit, async () =>
 			{
-				IEnumerable<Storage> storages = await this.storageService.GetStorages(offset, limit);
+				ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStorages(offset, limit);
+				if (!result.IsSuccess)
+				{
+					await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
+				}
 				IEnumerable<Task<StorageViewModel>> tasks = storages.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
 
 				return (await Task.WhenAll(tasks)).AsEnumerable();

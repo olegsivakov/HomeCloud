@@ -56,6 +56,10 @@
       <Project>{8FABA1B4-263E-42C7-A4E3-AEF6118DFCF2}</Project>
       <Name>HomeCloud.DataAccess.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Common\HomeCloud.Api\HomeCloud.Api.csproj">
+      <Project>{D32A0793-F2C3-489E-A168-E24B390165C9}</Project>
+      <Name>HomeCloud.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
       <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
       <Name>HomeCloud.Core</Name>

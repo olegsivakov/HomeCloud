@@ -34,10 +34,15 @@
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DataViewModelConverter.cs" />
+    <Compile Include="ErrorViewModelConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageViewModelConverter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Api\HomeCloud.Api.csproj">
+      <Project>{D32A0793-F2C3-489E-A168-E24B390165C9}</Project>
+      <Name>HomeCloud.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
       <Project>{c1174732-d61a-4543-9477-52278023fd78}</Project>
       <Name>HomeCloud.Core</Name>

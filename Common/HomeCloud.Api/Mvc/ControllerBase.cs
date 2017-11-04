@@ -1,14 +1,14 @@
-﻿namespace HomeCloud.DataStorage.Api.Controllers
+﻿namespace HomeCloud.Api.Mvc
 {
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	using Microsoft.AspNetCore.Mvc;
+	using HomeCloud.Api.Http;
 
-	using HomeCloud.DataStorage.Api.Models;
-	using System.Collections.Generic;
+	using Microsoft.AspNetCore.Mvc;
 
 	#endregion
 
@@ -18,6 +18,23 @@
 	public abstract class ControllerBase : Controller
 	{
 		#region Public Methods
+
+		/// <summary>
+		/// Creates an <see cref="HomeCloud.Api.Http.UnprocessableEntityResult"/> object that produces an Microsoft.AspNetCore.Http.StatusCodes.Status200OK response.
+		/// </summary>
+		/// <param name="value">The <see cref="ErrorViewModel"/> value to format in the entity body.</param>
+		/// <returns>The created <see cref="HomeCloud.Api.Http.UnprocessableEntityResult"/> for the response.</returns>
+		public virtual UnprocessableEntityResult UnprocessableEntity(ErrorViewModel value)
+		{
+			UnprocessableEntityResult result = new UnprocessableEntityResult(value);
+			value.StatusCode = result.StatusCode.GetValueOrDefault();
+
+			return result;
+		}
+
+		#endregion
+
+		#region Protected Methods
 
 		/// <summary>
 		/// Executes <see cref="HttpGet" /> method against the entry.
@@ -30,8 +47,9 @@
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
 		protected async virtual Task<IActionResult> HttpGet<T>(int offset, int limit, Func<Task<IEnumerable<T>>> action)
-			where T : ViewModelBase
+			where T : IViewModel
 		{
+			ObjectResult
 			if (offset < 0)
 			{
 				return this.BadRequest("The offset parameter should be positive number.");
@@ -57,7 +75,7 @@
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
 		protected async virtual Task<IActionResult> HttpGet<T>(Guid id, Func<Task<T>> action)
-			where T : ViewModelBase
+			where T : IViewModel
 		{
 			if (id == Guid.Empty)
 			{
@@ -77,7 +95,7 @@
 		/// <param name="action">The action to execute against entry.</param>
 		/// <returns>The asynchronous operation of <see cref="IActionResult"/>.</returns>
 		protected async virtual Task<IActionResult> HttpPost<T>(T model, Func<Task<T>> action)
-			where T : ViewModelBase
+			where T : IViewModel
 		{
 			if (model == null)
 			{
@@ -98,7 +116,7 @@
 		/// <param name="action">The action to execute against entry.</param>
 		/// <returns>The asynchronous operation of <see cref="IActionResult"/>.</returns>
 		protected async virtual Task<IActionResult> HttpPut<T>(Guid id, T model, Func<Task<T>> action)
-			where T : ViewModelBase
+			where T : IViewModel
 		{
 			if (model == null || model.ID != id)
 			{
