@@ -41,7 +41,7 @@
 		{
 			return await this.HttpGet(id, async () =>
 			{
-				return new DataViewModel() { ID = id };
+				return this.Ok(new DataViewModel() { ID = id });
 			});
 		}
 
@@ -53,9 +53,9 @@
 		[HttpPost("v1/storages/{storageID}/[controller]")]
 		public async Task<IActionResult> Post(Guid storageID, DataViewModel model)
 		{
-			return await this.HttpPost(model, async () =>
+			return await this.HttpPost<DataViewModel, ObjectResult>(model, async () =>
 			{
-				return model;
+				return this.Ok(model);
 			});
 		}
 

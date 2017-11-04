@@ -30,9 +30,9 @@
 	}
 
 	/// <summary>
-	/// Represents the <see cref="T"/> result of service operation execution.
+	/// Represents the <see cref="T" /> result of service operation execution.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T">The type of result instance.</typeparam>
 	public class ServiceResult<T> : ServiceResult
 	{
 		#region Constructors

@@ -6,14 +6,14 @@
 	using Microsoft.AspNetCore.Mvc;
 
 	#endregion
-	
+
 	/// <summary>
 	/// An Microsoft.AspNetCore.Mvc.ObjectResult that when executed performs content
 	/// negotiation, formats the entity body, and will produce a Microsoft.AspNetCore.Http.StatusCodes.Status422UnprocessableEntity
 	/// response if negotiation and formatting succeed.
 	/// </summary>
 	/// <seealso cref="Microsoft.AspNetCore.Mvc.ObjectResult" />
-	public class UnprocessableEntityResult : ObjectResult, IObjectResult
+	public class UnprocessableEntityResult : ObjectResult
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UnprocessableEntityResult" /> class.

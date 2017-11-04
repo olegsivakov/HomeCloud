@@ -63,18 +63,19 @@
 		[HttpGet("v1/[controller]s")]
 		public async Task<IActionResult> Get(int offset, int limit)
 		{
-			IActionResult actionResult = null;
-
-			actionResult = await HttpGet(offset, limit, async () =>
+			return await HttpGet(offset, limit, async () =>
 			{
 				ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStorages(offset, limit);
 				if (!result.IsSuccess)
 				{
-					await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
-				}
-				IEnumerable<Task<StorageViewModel>> tasks = storages.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
+					ErrorViewModel error = await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
 
-				return (await Task.WhenAll(tasks)).AsEnumerable();
+					return this.UnprocessableEntity(error);
+				}
+
+				IEnumerable<Task<StorageViewModel>> tasks = result.Data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
+
+				return this.Ok(await Task.WhenAll(tasks));
 			});
 		}
 
@@ -88,7 +89,7 @@
 		{
 			return await this.HttpGet(id, async () =>
 			{
-				return new StorageViewModel() { ID = id };
+				return this.Ok(new StorageViewModel() { ID = id });
 			});
 		}
 
@@ -100,13 +101,19 @@
 		[HttpPost("v1/[controller]s")]
 		public async Task<IActionResult> Post([FromBody] StorageViewModel model)
 		{
-			return await this.HttpPost(model, async () =>
+			return await this.HttpPost< StorageViewModel, ObjectResult>(model, async () =>
 			{
 				Storage entity = await this.mapper.MapNewAsync<StorageViewModel, Storage>(model);
 
-				await this.storageService.CreateStorageAsync(entity);
+				ServiceResult result = await this.storageService.CreateStorageAsync(entity);
+				if (!result.IsSuccess)
+				{
+					ErrorViewModel error = await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
 
-				return await this.mapper.MapAsync(entity, model);
+					return this.UnprocessableEntity(error);
+				}
+
+				return this.Ok(await this.mapper.MapAsync(entity, model));
 			});
 		}
 

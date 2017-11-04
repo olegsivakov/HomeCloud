@@ -35,7 +35,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Http\IObjectResult.cs" />
     <Compile Include="Http\UnprocessableEntityResult.cs" />
     <Compile Include="Mvc\ControllerBase.cs" />
     <Compile Include="Mvc\ErrorViewModel.cs" />
