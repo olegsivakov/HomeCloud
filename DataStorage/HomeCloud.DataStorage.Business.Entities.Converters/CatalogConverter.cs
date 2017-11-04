@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Business.Entities.Mapping
+﻿namespace HomeCloud.DataStorage.Business.Entities.Converters
 {
 	#region Usings
 

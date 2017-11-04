@@ -1,9 +1,8 @@
-﻿namespace HomeCloud.DataStorage.Business.Entities.Mapping
+﻿namespace HomeCloud.DataStorage.Business.Entities.Converters
 {
 	#region Usings
 
 	using HomeCloud.Core;
-
 	using Contracts = HomeCloud.DataStorage.DataAccess.Contracts;
 
 	#endregion

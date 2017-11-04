@@ -12,7 +12,7 @@
 	using HomeCloud.DataStorage.Business.Commands;
 
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.Business.Entities.Mapping;
+	using HomeCloud.DataStorage.Business.Entities.Converters;
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Services;

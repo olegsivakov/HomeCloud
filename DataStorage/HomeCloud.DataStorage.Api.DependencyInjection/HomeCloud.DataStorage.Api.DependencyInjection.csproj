@@ -84,9 +84,9 @@
       <Project>{58ee6bb1-8f76-4f4d-b26f-856091c1474c}</Project>
       <Name>HomeCloud.DataStorage.Business.Commands</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities.Mapping\HomeCloud.DataStorage.Business.Entities.Mapping.csproj">
-      <Project>{966A2B4D-E905-4FB8-B470-8E34A014BD0A}</Project>
-      <Name>HomeCloud.DataStorage.Business.Entities.Mapping</Name>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities.Converters\HomeCloud.DataStorage.Business.Entities.Converters.csproj">
+      <Project>{E9B4C4CA-59D3-4A92-82A8-FCF28C2EC028}</Project>
+      <Name>HomeCloud.DataStorage.Business.Entities.Converters</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
       <Project>{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}</Project>
