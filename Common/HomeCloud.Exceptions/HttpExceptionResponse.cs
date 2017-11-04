@@ -1,5 +1,11 @@
 ﻿namespace HomeCloud.Exceptions
 {
+	#region Usings
+
+	using System.Collections.Generic;
+
+	#endregion
+
 	/// <summary>
 	/// Represents <see cref="HTTP"/>-based error response.
 	/// </summary>
@@ -14,11 +20,11 @@
 		public int StatusCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the message.
+		/// Gets or sets the error messages.
 		/// </summary>
 		/// <value>
-		/// The message.
+		/// The error messages.
 		/// </value>
-		public string Message { get; set; }
+		public IEnumerable<string> Errors { get; set; }
 	}
 }

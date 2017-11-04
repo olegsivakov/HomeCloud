@@ -115,25 +115,39 @@
 			await this.processor.ProcessAsync();
 		}
 
+		/// <summary>
+		/// Gets the list of storages.
+		/// </summary>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.
+		/// </returns>
 		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
 			IEnumerable<Storage> storages = null;
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storages = await provider.GetStorages(offset, limit), null);
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider =>
-			{
-				foreach (Storage storage in storages)
+
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(
+				async provider =>
 				{
-					storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
-				}
-			}, null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider =>
-			{
-				foreach (Storage storage in storages)
+					foreach (Storage storage in storages)
+					{
+						storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
+					}
+				},
+				null);
+
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(
+				async provider =>
 				{
-					storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
-				}
-			}, null);
+					foreach (Storage storage in storages)
+					{
+						storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
+					}
+				},
+				null);
 
 			await this.processor.ProcessAsync();
 

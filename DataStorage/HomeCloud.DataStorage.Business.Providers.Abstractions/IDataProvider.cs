@@ -2,11 +2,10 @@
 {
 	#region Usings
 
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Entities;
-	using System.Collections.Generic;
-	using System;
 
 	#endregion
 

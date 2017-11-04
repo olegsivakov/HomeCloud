@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using Microsoft.AspNetCore.Http;
@@ -72,7 +73,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Message = exception.Message
+							Errors = new List<string>() { exception.Message }
 						};
 					});
 			}
@@ -88,7 +89,23 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Message = exception.Message
+							Errors = new List<string>() { exception.Message }
+						};
+					});
+			}
+			catch (ValidationException exception)
+			{
+				await this.ProcessExceptionAsync(
+					context,
+					exception,
+					() =>
+					{
+						context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+
+						return new HttpExceptionResponse
+						{
+							StatusCode = context.Response.StatusCode,
+							Errors = exception.Errors
 						};
 					});
 			}
@@ -104,7 +121,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Message = exception.Message
+							Errors = new List<string>() { exception.Message }
 						};
 					});
 			}
@@ -120,7 +137,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Message = exception.InnerException is null ? exception.Message : string.Format("{0}: {1}", exception.Message, exception.InnerException.Message)
+							Errors = new List<string>() { exception.InnerException is null ? exception.Message : string.Format("{0}: {1}", exception.Message, exception.InnerException.Message) }
 						};
 					});
 			}
@@ -157,7 +174,7 @@
 					ContractResolver = new CamelCasePropertyNamesContractResolver()
 				}));
 
-			this.logger.LogError(0, exception, response.Message);
+			this.logger.LogError(0, exception, exception.Message);
 		}
 
 		#endregion

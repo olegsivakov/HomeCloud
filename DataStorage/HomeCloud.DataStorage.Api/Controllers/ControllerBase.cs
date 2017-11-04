@@ -8,6 +8,7 @@
 	using Microsoft.AspNetCore.Mvc;
 
 	using HomeCloud.DataStorage.Api.Models;
+	using System.Collections.Generic;
 
 	#endregion
 
@@ -19,15 +20,50 @@
 		#region Public Methods
 
 		/// <summary>
-		/// HTTPs the get.
+		/// Executes <see cref="HttpGet" /> method against the entry.
 		/// </summary>
-		/// <typeparam name="T">The type of model derived from <see cref="ViewModelBase"/>.</typeparam>
+		/// <typeparam name="T">The type of model derived from <see cref="ViewModelBase" />.</typeparam>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return..</param>
+		/// <param name="action">The action to execute against entry.</param>
+		/// <returns>
+		/// The asynchronous operation of <see cref="IActionResult" />.
+		/// </returns>
+		protected async virtual Task<IActionResult> HttpGet<T>(int offset, int limit, Func<Task<IEnumerable<T>>> action)
+			where T : ViewModelBase
+		{
+			if (offset < 0)
+			{
+				return this.BadRequest("The offset parameter should be positive number.");
+			}
+
+			if (limit <= 0)
+			{
+				return this.BadRequest("The limit parameter cannot be less or equal zero.");
+			}
+
+			IEnumerable<T> result = await action();
+
+			return this.Ok(result);
+		}
+
+		/// <summary>
+		/// Executes <see cref="HttpGet" /> method against the entry.
+		/// </summary>
+		/// <typeparam name="T">The type of model derived from <see cref="ViewModelBase" />.</typeparam>
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="action">The action to execute against entry.</param>
-		/// <returns>The asynchronous operation of <see cref="IActionResult"/>.</returns>
+		/// <returns>
+		/// The asynchronous operation of <see cref="IActionResult" />.
+		/// </returns>
 		protected async virtual Task<IActionResult> HttpGet<T>(Guid id, Func<Task<T>> action)
 			where T : ViewModelBase
 		{
+			if (id == Guid.Empty)
+			{
+				return this.BadRequest("The specified unique identifier is empty");
+			}
+
 			T result = await action();
 
 			return this.Ok(result);

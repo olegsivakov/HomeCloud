@@ -3,12 +3,17 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using Microsoft.AspNetCore.Mvc;
 
 	using HomeCloud.DataStorage.Api.Models;
 	using HomeCloud.DataStorage.Business.Services;
+	using HomeCloud.Mapping;
+	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.Core.Extensions;
 
 	#endregion
 
@@ -25,6 +30,11 @@
 		/// </summary>
 		private readonly IStorageService storageService = null;
 
+		/// <summary>
+		/// The <see cref="IMapper"/> mapper.
+		/// </summary>
+		private readonly IMapper mapper = null;
+
 		#endregion
 
 		#region Constructors
@@ -33,9 +43,10 @@
 		/// Initializes a new instance of the <see cref="StorageController"/> class.
 		/// </summary>
 		/// <param name="storageService">The <see cref="IStorageService"/> service.</param>
-		public StorageController(IStorageService storageService)
+		public StorageController(IStorageService storageService, IMapper mapper)
 		{
 			this.storageService = storageService;
+			this.mapper = mapper;
 		}
 
 		#endregion
@@ -47,12 +58,15 @@
 		/// <param name="limit">The limit.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the list of instances of <see cref="StorageViewModel"/>.</returns>
 		[HttpGet("v1/[controller]s")]
-		public async Task<IActionResult> Get(int offset = 0, int limit = 20)
+		public async Task<IActionResult> Get(int offset, int limit)
 		{
-			var data = await this.storageService.GetStorages(0, 20);
+			return await HttpGet(offset, limit, async () =>
+			{
+				IEnumerable<Storage> storages = await this.storageService.GetStorages(offset, limit);
+				IEnumerable<Task<StorageViewModel>> tasks = storages.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
 
-			return this.Ok(data);
-			//return this.Ok(System.Linq.Enumerable.Empty<StorageViewModel>());
+				return (await Task.WhenAll(tasks)).AsEnumerable();
+			});
 		}
 
 		/// <summary>
@@ -75,25 +89,15 @@
 		/// <param name="model">The model of <see cref="StorageViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
 		[HttpPost("v1/[controller]s")]
-		public async Task<IActionResult> Post(StorageViewModel model)
+		public async Task<IActionResult> Post([FromBody] StorageViewModel model)
 		{
 			return await this.HttpPost(model, async () =>
 			{
-				var storage = new Business.Entities.Storage()
-				{
-					Name = "Aleh Sivakou's storage"
-				};
+				Storage entity = await this.mapper.MapNewAsync<StorageViewModel, Storage>(model);
 
-				await this.storageService.CreateStorageAsync(storage);
+				await this.storageService.CreateStorageAsync(entity);
 
-				return new StorageViewModel()
-				{
-					ID = storage.ID,
-					Name = storage.Name,
-					Quota = storage.Quota.ToString(),
-					CreationDate = storage.CreationDate
-					
-				};
+				return await this.mapper.MapAsync(entity, model);
 			});
 		}
 

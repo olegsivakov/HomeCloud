@@ -8,6 +8,8 @@
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
+	using HomeCloud.DataStorage.Api.Models;
+	using HomeCloud.DataStorage.Api.Models.Converters;
 
 	using HomeCloud.DataStorage.Business.Commands;
 
@@ -94,6 +96,18 @@
 			services.AddSingleton<ITypeConverter<Catalog, DataContracts.Catalog>>(catalogConverter);
 			services.AddSingleton<ITypeConverter<DataContracts.CatalogDocument, Catalog>>(catalogConverter);
 			services.AddSingleton<ITypeConverter<Catalog, DataContracts.CatalogDocument>>(catalogConverter);
+
+			StorageViewModelConverter storageViewModelConverter = new StorageViewModelConverter();
+
+			services.AddSingleton<ITypeConverter<Storage, StorageViewModel>>(storageViewModelConverter);
+			services.AddSingleton<ITypeConverter<StorageViewModel, Storage>>(storageViewModelConverter);
+
+			DataViewModelConverter dataViewModelConverter = new DataViewModelConverter();
+
+			services.AddSingleton<ITypeConverter<Catalog, DataViewModel>>(dataViewModelConverter);
+			services.AddSingleton<ITypeConverter<DataViewModel, Catalog>>(dataViewModelConverter);
+			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>>(dataViewModelConverter);
+			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>>(dataViewModelConverter);
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

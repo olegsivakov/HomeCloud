@@ -76,6 +76,14 @@
       <Project>{7ADC327A-5475-4D3F-A8A9-8066292DA44C}</Project>
       <Name>HomeCloud.DataStorage.Api.Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Api.Models.Converters\HomeCloud.DataStorage.Api.Models.Converters.csproj">
+      <Project>{2FC80C33-4CCD-4CAC-B77F-837802DB9E3B}</Project>
+      <Name>HomeCloud.DataStorage.Api.Models.Converters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Api.Models\HomeCloud.DataStorage.Api.Models.csproj">
+      <Project>{81FB920A-2AFC-4FDB-8444-3DD21068D2F5}</Project>
+      <Name>HomeCloud.DataStorage.Api.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Commands.Abstractions\HomeCloud.DataStorage.Business.Commands.Abstractions.csproj">
       <Project>{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}</Project>
       <Name>HomeCloud.DataStorage.Business.Commands.Abstractions</Name>

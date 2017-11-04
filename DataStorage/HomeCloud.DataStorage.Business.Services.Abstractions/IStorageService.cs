@@ -2,8 +2,8 @@
 {
 	#region Usings
 
-	using System.Threading.Tasks;
 	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Entities;
 
