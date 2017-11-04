@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Core
+﻿namespace HomeCloud.Mapping
 {
 	#region Usings
 
@@ -21,6 +21,7 @@
 		/// <returns>
 		/// The mapped instance of <see cref="TTarget" />.
 		/// </returns>
-		Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target);
+		Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
+			where TTarget : new();
 	}
 }

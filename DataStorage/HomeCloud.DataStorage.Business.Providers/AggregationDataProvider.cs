@@ -2,11 +2,11 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
-	using System.Linq;
+	
 	using System.Threading.Tasks;
 
-	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataAccess.Services;
@@ -16,10 +16,11 @@
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
 
+	using HomeCloud.Mapping;
+
 	using Microsoft.Extensions.Options;
 
 	using CatalogDocument = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
-	using System;
 
 	#endregion
 

@@ -4,6 +4,8 @@
 
 	using System.Threading.Tasks;
 
+	using HomeCloud.Mapping;
+
 	#endregion
 
 	/// <summary>
@@ -20,8 +22,9 @@
 		/// <param name="source">The instance of <see cref="TSource"/>.</param>
 		/// <returns>The instance of <see cref="TTarget"/>.</returns>
 		public static async Task<TTarget> MapNewAsync<TSource, TTarget>(this IMapper mapper, TSource source)
+			where TTarget : new()
 		{
-			return await mapper.MapAsync(source, default(TTarget));
+			return await mapper.MapAsync(source, new TTarget());
 		}
 	}
 }

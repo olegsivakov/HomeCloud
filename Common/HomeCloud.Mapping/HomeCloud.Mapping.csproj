@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D6491DC7-E589-43AF-9A68-EB52AEEBCE6E}</ProjectGuid>
+    <ProjectGuid>{E7EE67FB-9CA6-4465-ADE9-0D24C78394B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HomeCloud.Core.Extensions</RootNamespace>
-    <AssemblyName>HomeCloud.Core.Extensions</AssemblyName>
+    <RootNamespace>HomeCloud.Mapping</RootNamespace>
+    <AssemblyName>HomeCloud.Mapping</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,17 +33,14 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="MappingExtensions.cs" />
+    <Compile Include="IMapper.cs" />
+    <Compile Include="Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeCloud.Core\HomeCloud.Core.csproj">
-      <Project>{c1174732-d61a-4543-9477-52278023fd78}</Project>
+      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
       <Name>HomeCloud.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.Mapping\HomeCloud.Mapping.csproj">
-      <Project>{E7EE67FB-9CA6-4465-ADE9-0D24C78394B4}</Project>
-      <Name>HomeCloud.Mapping</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

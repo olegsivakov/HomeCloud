@@ -13,7 +13,6 @@
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Entities.Mapping;
-
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Services;
@@ -22,6 +21,8 @@
 	using HomeCloud.DataStorage.DataAccess.Components.Factories;
 
 	using HomeCloud.DependencyInjection;
+
+	using HomeCloud.Mapping;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;

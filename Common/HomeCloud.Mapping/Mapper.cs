@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Business.Entities.Mapping
+﻿namespace HomeCloud.Mapping
 {
 	#region Usings
 
@@ -11,7 +11,7 @@
 	/// <summary>
 	/// Provides common implementation of mapper to convert instance of one type to the instance of another type.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Core.IMapper" />
+	/// <seealso cref="HomeCloud.Mapping.IMapper" />
 	public class Mapper : IMapper
 	{
 		#region Private Members
@@ -49,12 +49,23 @@
 		/// The mapped instance of <see cref="TTarget" />.
 		/// </returns>
 		public async Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
+			where TTarget : new()
 		{
 			return await Task.Run(() =>
 			{
+				if (source == null)
+				{
+					return target;
+				}
+
+				if (target == null)
+				{
+					target = new TTarget();
+				}
+
 				ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;
 
-				return converter != null ? converter.Convert(source, target) : default(TTarget);
+				return converter.Convert(source, target);
 			});
 		}
 

@@ -6,17 +6,16 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
-	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataAccess.Services;
 	using HomeCloud.DataAccess.Services.Factories;
 
 	using HomeCloud.DataStorage.Api.Configuration;
-
 	using HomeCloud.DataStorage.Business.Entities;
-
 	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
+
+	using HomeCloud.Mapping;
 
 	using Microsoft.Extensions.Options;
 

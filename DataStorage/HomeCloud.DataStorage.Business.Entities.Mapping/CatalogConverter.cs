@@ -13,12 +13,11 @@
 	/// <summary>
 	/// Provides converter methods for <see cref="Catalog" /> entity.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Business.Entities.Mapping.TypeConverterBase" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.Catalog, HomeCloud.DataStorage.Business.Entities.Catalog}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.Catalog}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument, HomeCloud.DataStorage.Business.Entities.Catalog}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument}" />
-	public class CatalogConverter : TypeConverterBase, ITypeConverter<Contracts.Catalog, Catalog>, ITypeConverter<Catalog, Contracts.Catalog>, ITypeConverter<Contracts.CatalogDocument, Catalog>, ITypeConverter<Catalog, Contracts.CatalogDocument>
+	public class CatalogConverter : ITypeConverter<Contracts.Catalog, Catalog>, ITypeConverter<Catalog, Contracts.Catalog>, ITypeConverter<Contracts.CatalogDocument, Catalog>, ITypeConverter<Catalog, Contracts.CatalogDocument>
 	{
 		#region ITypeConverter<Contracts.Catalog, Catalog> Implementations
 
@@ -32,12 +31,6 @@
 		/// </returns>
 		public Catalog Convert(Contracts.Catalog source, Catalog target)
 		{
-			target = this.Validate(source, target);
-			if (target == null)
-			{
-				return null;
-			}
-
 			target.ID = source.ID;
 			target.ParentID = source.ParentID;
 			target.Name = source.Name;
@@ -62,12 +55,6 @@
 		/// </returns>
 		public Contracts.Catalog Convert(Catalog source, Contracts.Catalog target)
 		{
-			target = this.Validate(source, target);
-			if (target == null)
-			{
-				return null;
-			}
-
 			target.ID = source.ID;
 			target.ParentID = source.ParentID;
 			target.Name = source.Name;
@@ -92,12 +79,6 @@
 		/// </returns>
 		public Catalog Convert(Contracts.CatalogDocument source, Catalog target)
 		{
-			target = this.Validate(source, target);
-			if (target == null)
-			{
-				return null;
-			}
-
 			if (target.ID == Guid.Empty)
 			{
 				target.ID = source.ID;
@@ -123,12 +104,6 @@
 		/// </returns>
 		public Contracts.CatalogDocument Convert(Catalog source, Contracts.CatalogDocument target)
 		{
-			target = this.Validate(source, target);
-			if (target == null)
-			{
-				return null;
-			}
-
 			target.ID = source.ID;
 			target.Path = source.Path;
 			target.Size = source.Size;

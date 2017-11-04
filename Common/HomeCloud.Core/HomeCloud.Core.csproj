@@ -35,7 +35,6 @@
     </Compile>
     <Compile Include="ICommand.cs" />
     <Compile Include="ICommandHandler.cs" />
-    <Compile Include="IMapper.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="ITypeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
