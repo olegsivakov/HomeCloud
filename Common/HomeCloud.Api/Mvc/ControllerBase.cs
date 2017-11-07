@@ -20,7 +20,7 @@
 		#region Public Methods
 
 		/// <summary>
-		/// Creates an <see cref="HomeCloud.Api.Http.UnprocessableEntityResult" /> object that produces an Microsoft.AspNetCore.Http.StatusCodes.Status200OK response.
+		/// Creates an <see cref="HomeCloud.Api.Http.UnprocessableEntityResult" /> object that produces an Microsoft.AspNetCore.Http.StatusCodes.Status422UnprocessableEntity response.
 		/// </summary>
 		/// <param name="value">The <see cref="ErrorViewModel" /> value to format in the entity body.</param>
 		/// <returns>

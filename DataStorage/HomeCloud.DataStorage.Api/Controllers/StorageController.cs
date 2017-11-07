@@ -15,9 +15,6 @@
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.Core.Extensions;
 
-	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
-	using HomeCloud.Api.Mvc;
-
 	#endregion
 
 	/// <summary>
@@ -47,6 +44,7 @@
 		/// </summary>
 		/// <param name="storageService">The <see cref="IStorageService"/> service.</param>
 		public StorageController(IStorageService storageService, IMapper mapper)
+			: base(mapper)
 		{
 			this.storageService = storageService;
 			this.mapper = mapper;
@@ -63,20 +61,19 @@
 		[HttpGet("v1/[controller]s")]
 		public async Task<IActionResult> Get(int offset, int limit)
 		{
-			return await HttpGet(offset, limit, async () =>
-			{
-				ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStorages(offset, limit);
-				if (!result.IsSuccess)
+			return await HttpGet(
+				offset,
+				limit,
+				async () =>
 				{
-					ErrorViewModel error = await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
+					return await this.storageService.GetStorages(offset, limit);
+				},
+				async (data) =>
+				{
+					IEnumerable<Task<StorageViewModel>> tasks = data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
 
-					return this.UnprocessableEntity(error);
-				}
-
-				IEnumerable<Task<StorageViewModel>> tasks = result.Data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
-
-				return this.Ok(await Task.WhenAll(tasks));
-			});
+					return (await Task.WhenAll(tasks)).AsEnumerable();
+				});
 		}
 
 		/// <summary>
