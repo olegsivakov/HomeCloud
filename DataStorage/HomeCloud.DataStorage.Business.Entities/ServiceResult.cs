@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -26,7 +27,7 @@
 		/// <value>
 		/// The list of errors.
 		/// </value>
-		public IEnumerable<string> Errors { get; set; }
+		public IEnumerable<Exception> Errors { get; set; }
 	}
 
 	/// <summary>

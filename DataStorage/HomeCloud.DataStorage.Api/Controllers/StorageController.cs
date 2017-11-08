@@ -14,6 +14,7 @@
 	using HomeCloud.Mapping;
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.Core.Extensions;
+	using HomeCloud.Api.Http;
 
 	#endregion
 
@@ -61,19 +62,32 @@
 		[HttpGet("v1/[controller]s")]
 		public async Task<IActionResult> Get(int offset, int limit)
 		{
-			return await HttpGet(
-				offset,
-				limit,
-				async () =>
-				{
-					return await this.storageService.GetStorages(offset, limit);
-				},
-				async (data) =>
-				{
-					IEnumerable<Task<StorageViewModel>> tasks = data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
+			return await HttpGet(offset, limit, async () =>
+			{
+				var serviceResult = await this.storageService.GetStorages(offset, limit);
 
-					return (await Task.WhenAll(tasks)).AsEnumerable();
-				});
+				HttpGetResult<IEnumerable<StorageViewModel>> result = new HttpGetResult<IEnumerable<StorageViewModel>>(this);
+				var tasks = serviceResult.Data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
+
+				result.Data = await Task.WhenAll(tasks);
+				result.Errors = serviceResult.Errors;
+
+				return result;
+			});
+
+			//return await HttpGet(
+			//	offset,
+			//	limit,
+			//	async () =>
+			//	{
+			//		return await this.storageService.GetStorages(offset, limit);
+			//	},
+			//	async (data) =>
+			//	{
+			//		IEnumerable<Task<StorageViewModel>> tasks = data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
+
+			//		return (await Task.WhenAll(tasks)).AsEnumerable();
+			//	});
 		}
 
 		/// <summary>

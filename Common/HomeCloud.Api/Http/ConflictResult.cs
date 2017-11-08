@@ -9,20 +9,20 @@
 
 	/// <summary>
 	/// An Microsoft.AspNetCore.Mvc.ObjectResult that when executed performs content
-	/// negotiation, formats the entity body, and will produce a <see cref="Microsoft.AspNetCore.Http.StatusCodes.Status422UnprocessableEntity"/>
+	/// negotiation, formats the entity body, and will produce a <see cref="Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict"/>
 	/// response if negotiation and formatting succeed.
 	/// </summary>
 	/// <seealso cref="Microsoft.AspNetCore.Mvc.ObjectResult" />
-	public class UnprocessableEntityResult : ObjectResult
+	public class ConflictResult : ObjectResult
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UnprocessableEntityResult" /> class.
+		/// Initializes a new instance of the <see cref="ConflictResult" /> class.
 		/// </summary>
 		/// <param name="value">The content to format into the entity body.</param>
-		public UnprocessableEntityResult(object value)
+		public ConflictResult(object value)
 			: base(value)
 		{
-			this.StatusCode = StatusCodes.Status422UnprocessableEntity;
+			this.StatusCode = StatusCodes.Status409Conflict;
 		}
 	}
 }

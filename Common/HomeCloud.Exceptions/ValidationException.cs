@@ -25,26 +25,13 @@
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidationException"/> class.
+		/// Initializes a new instance of the <see cref="ValidationException" /> class.
 		/// </summary>
-		/// <param name="errors">The list of validation errors.</param>
-		public ValidationException(IEnumerable<string> errors)
-			: base(ValidationExceptionMessge)
+		/// <param name="message">The message that describes the error.</param>
+		public ValidationException(string message = null)
+			: base(message ?? ValidationExceptionMessge)
 		{
-			this.Errors = errors;
 		}
-
-		#endregion
-
-		#region Public Properties
-
-		/// <summary>
-		/// Gets the list of validation errors.
-		/// </summary>
-		/// <value>
-		/// The list of validation errors.
-		/// </value>
-		public IEnumerable<string> Errors { get; private set; }
 
 		#endregion
 	}

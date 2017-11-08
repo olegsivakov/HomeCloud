@@ -22,23 +22,23 @@
 			this.mapper = mapper;
 		}
 
-		protected async Task<IActionResult> HttpGet<TData, TModel>(int offset, int limit, Func<Task<ServiceResult<IEnumerable<TData>>>> dataAction, Func<IEnumerable<TData>, Task<IEnumerable<TModel>>> modelAction)
-			where TModel : IViewModel
-		{
-			return await this.HttpGet(offset, limit, async () =>
-			{
-				ServiceResult<IEnumerable<TData>> result = await dataAction();
-				if (!result.IsSuccess)
-				{
-					ErrorViewModel error = await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
+		//protected async Task<IActionResult> HttpGet<TData, TModel>(int offset, int limit, Func<Task<ServiceResult<IEnumerable<TData>>>> dataAction, Func<IEnumerable<TData>, Task<IEnumerable<TModel>>> modelAction)
+		//	where TModel : IViewModel
+		//{
+		//	return await this.HttpGet(offset, limit, async () =>
+		//	{
+		//		ServiceResult<IEnumerable<TData>> result = await dataAction();
+		//		if (!result.IsSuccess)
+		//		{
+		//			ErrorViewModel error = await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
 
-					return this.UnprocessableEntity(error);
-				}
+		//			return this.UnprocessableEntity(error);
+		//		}
 
-				IEnumerable<TModel> model = await modelAction(result.Data);
+		//		IEnumerable<TModel> model = await modelAction(result.Data);
 
-				return this.Ok(model);
-			});
-		}
+		//		return this.Ok(model);
+		//	});
+		//}
 	}
 }

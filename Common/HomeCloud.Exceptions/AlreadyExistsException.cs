@@ -7,27 +7,27 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the errors that occur when the resource cannot be found.
+	/// Represents the errors that occur when the resource already exists.
 	/// </summary>
 	/// <seealso cref="System.Exception" />
-	public class NotFoundException : Exception
+	public class AlreadyExistsException : Exception
 	{
 		#region Constants
 
 		/// <summary>
 		/// The <see cref="'The requested resource cannot be found.'"/> message
 		/// </summary>
-		private const string NotFoundExceptionMessage = "The requested resource cannot be found.";
+		private const string NotFoundExceptionMessage = "The requested resource already exists.";
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NotFoundException" /> class.
+		/// Initializes a new instance of the <see cref="AlreadyExistsException" /> class.
 		/// </summary>
 		/// <param name="message">The message that describes the error.</param>
-		public NotFoundException(string message = null)
+		public AlreadyExistsException(string message = null)
 			: base(message ?? NotFoundExceptionMessage)
 		{
 		}

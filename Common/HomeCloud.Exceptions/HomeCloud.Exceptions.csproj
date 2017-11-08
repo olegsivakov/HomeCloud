@@ -45,6 +45,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AlreadyExistsException.cs" />
     <Compile Include="ExceptionHandlerExtensions.cs" />
     <Compile Include="ExceptionHandlerMiddleware.cs" />
     <Compile Include="HttpExceptionResponse.cs" />
