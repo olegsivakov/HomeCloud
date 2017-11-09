@@ -58,6 +58,16 @@
 		}
 
 		/// <summary>
+		/// Gets storage by specified identifier.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>the instance of <see cref="Storage"/>.</returns>
+		public async Task<Storage> GetStorage(Guid id)
+		{
+			return await Task.FromException<Storage>(new NotSupportedException());
+		}
+
+		/// <summary>
 		/// Gets the catalog by the initial instance set.
 		/// </summary>
 		/// <param name="catalog">The initial catalog set.</param>

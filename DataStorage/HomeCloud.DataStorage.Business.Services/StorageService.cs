@@ -143,19 +143,39 @@
 				},
 				null);
 
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(
-				async provider =>
-				{
-					foreach (Storage storage in storages)
-					{
-						storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
-					}
-				},
-				null);
-
 			await this.processor.ProcessAsync();
 
 			return new ServiceResult<IEnumerable<Storage>>(storages);
+		}
+
+		/// <summary>
+		/// Gets the storage.
+		/// </summary>
+		/// <param name="id">The storage identifier.</param>
+		/// <returns>
+		/// The operation result containing the list of instances of <see cref="Storage" />.
+		/// </returns>
+		public async Task<ServiceResult<Storage>> GetStorage(Guid id)
+		{
+			Storage storage = new Storage() { ID = id };
+
+			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+
+			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
+			if (!result.IsValid)
+			{
+				return new ServiceResult<Storage>(storage)
+				{
+					Errors = result.Errors
+				};
+			}
+
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(id), null);
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+
+			await this.processor.ProcessAsync();
+
+			return new ServiceResult<Storage>(storage);
 		}
 
 		#endregion

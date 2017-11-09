@@ -6,6 +6,7 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Entities;
+	using System;
 
 	#endregion
 
@@ -29,6 +30,12 @@
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
 		Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20);
 
+		/// <summary>
+		/// Gets storage by specified identifier.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>the instance of <see cref="Storage"/>.</returns>
+		Task<Storage> GetStorage(Guid id);
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
 		/// </summary>

@@ -21,6 +21,7 @@
 
 	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
+	using System;
 
 	#endregion
 
@@ -120,6 +121,29 @@
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 
 				data = await storageRepository.FindAsync(offset, limit);
+			}
+
+			return await this.mapper.MapNewAsync<StorageContract, Storage>(data);
+		}
+
+		/// <summary>
+		/// Gets storage by specified identifier.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>the instance of <see cref="Storage"/>.</returns>
+		public async Task<Storage> GetStorage(Guid id)
+		{
+			if (id == Guid.Empty)
+			{
+				return null;
+			}
+
+			StorageContract data = null;
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+
+				data = await storageRepository.GetAsync(id);
 			}
 
 			return await this.mapper.MapNewAsync<StorageContract, Storage>(data);

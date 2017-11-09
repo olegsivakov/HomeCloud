@@ -77,7 +77,14 @@
 		[HttpGet("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			return await this.HttpGet(id, async () => await this.HttpGetResult<Storage, StorageViewModel>(default(ServiceResult<Storage>)));
+			return await this.HttpGet(
+				id,
+				async () =>
+				{
+					ServiceResult<Storage> result = await this.storageService.GetStorage(id);
+
+					return await this.HttpGetResult<Storage, StorageViewModel>(result);
+				});
 		}
 
 		/// <summary>
