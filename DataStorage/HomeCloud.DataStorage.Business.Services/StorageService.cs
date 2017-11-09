@@ -120,6 +120,41 @@
 		}
 
 		/// <summary>
+		/// Updates the specified storage.
+		/// </summary>
+		/// <param name="storage">The instance of <see cref="Storage" /> type.</param>
+		/// <returns>
+		/// The operation result containing updated instance of <see cref="Storage"/>.
+		/// </returns>
+		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
+		{
+			storage.CatalogRoot.Name = storage.CatalogRoot.Name ?? Guid.NewGuid().ToString();
+			storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
+
+			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
+
+			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			result += await catalogValidator.Get<IRequiredValidator>().ValidateAsync(storage.CatalogRoot);
+
+			if (!result.IsValid)
+			{
+				return new ServiceResult<Storage>(storage)
+				{
+					Errors = result.Errors
+				};
+			}
+
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.UpdateStorage(storage), null);
+			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.UpdateStorage(storage), null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.UpdateStorage(storage), null);
+
+			await this.processor.ProcessAsync();
+
+			return new ServiceResult<Storage>(storage);
+		}
+
+		/// <summary>
 		/// Gets the list of storages.
 		/// </summary>
 		/// <param name="offset">The offset index.</param>
@@ -127,7 +162,7 @@
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.
 		/// </returns>
-		public async Task<ServiceResult<IEnumerable<Storage>>> GetStorages(int offset = 0, int limit = 20)
+		public async Task<ServiceResult<IEnumerable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20)
 		{
 			IEnumerable<Storage> storages = null;
 
@@ -155,7 +190,7 @@
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="Storage" />.
 		/// </returns>
-		public async Task<ServiceResult<Storage>> GetStorage(Guid id)
+		public async Task<ServiceResult<Storage>> GetStorageAsync(Guid id)
 		{
 			Storage storage = new Storage() { ID = id };
 

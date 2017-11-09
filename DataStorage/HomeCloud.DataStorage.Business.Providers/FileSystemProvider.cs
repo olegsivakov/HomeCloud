@@ -47,6 +47,24 @@
 		}
 
 		/// <summary>
+		/// Updates the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
+		public async Task<Storage> UpdateStorage(Storage storage)
+		{
+			return await Task.Run(() =>
+			{
+				if (!Directory.Exists(storage.CatalogRoot.Path))
+				{
+					storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
+				}
+
+				return storage;
+			});
+		}
+
+		/// <summary>
 		/// Gets the list of storages.
 		/// </summary>
 		/// <param name="offset">The offset index.</param>

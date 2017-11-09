@@ -97,14 +97,16 @@
 		/// </returns>
 		public async Task<Storage> GetAsync(Guid id)
 		{
-			IEnumerable<Storage> result = await this.context.QueryAsync<Storage>(
+			Storage result = (await this.context.QueryAsync<Storage>(
 				GetStorageByIDStoredProcedure,
 				new
 				{
 					@ID = id
-				});
+				})).FirstOrDefault();
 
-			return result.FirstOrDefault();
+			result?.AcceptChanges();
+
+			return result;
 		}
 
 		/// <summary>
@@ -117,13 +119,20 @@
 		/// </returns>
 		public async Task<IEnumerable<Storage>> FindAsync(int offset = 0, int limit = 20)
 		{
-			return await this.context.QueryAsync<Storage>(
+			IEnumerable<Storage> result = await this.context.QueryAsync<Storage>(
 				GetStorageStoredProcedure,
 				new
 				{
 					@StartIndex = offset,
 					@ChunkSize = limit
 				});
+
+			foreach (Storage item in result)
+			{
+				item.AcceptChanges();
+			}
+
+			return result;
 		}
 
 		/// <summary>

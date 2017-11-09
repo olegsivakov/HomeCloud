@@ -86,7 +86,27 @@
 				CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(storage.CatalogRoot);
 				catalogDocument = await repository.SaveAsync(catalogDocument);
 
-				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot) ?? storage.CatalogRoot;
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot);
+			}
+
+			return storage;
+		}
+
+		/// <summary>
+		/// Updates the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
+		public async Task<Storage> UpdateStorage(Storage storage)
+		{
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+
+				CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(storage.CatalogRoot);
+				catalogDocument = await repository.SaveAsync(catalogDocument);
+
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot);
 			}
 
 			return storage;

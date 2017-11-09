@@ -37,7 +37,7 @@
 
 		#endregion
 
-		#region ITypeConverter<Contracts.Storage, Storage> Implementations
+		#region ITypeConverter<Storage, Contracts.Storage> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.

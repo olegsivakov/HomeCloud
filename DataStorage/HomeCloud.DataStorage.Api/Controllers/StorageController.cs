@@ -63,7 +63,7 @@
 				limit,
 				async () =>
 				{
-					ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStorages(offset, limit);
+					ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStoragesAsync(offset, limit);
 
 					return await this.HttpGetResult<Storage, StorageViewModel>(result);
 				});
@@ -81,7 +81,7 @@
 				id,
 				async () =>
 				{
-					ServiceResult<Storage> result = await this.storageService.GetStorage(id);
+					ServiceResult<Storage> result = await this.storageService.GetStorageAsync(id);
 
 					return await this.HttpGetResult<Storage, StorageViewModel>(result);
 				});
@@ -123,7 +123,7 @@
 				{
 					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
 
-					ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
+					ServiceResult<Storage> result = await this.storageService.UpdateStorageAsync(entity);
 
 					return await this.HttpPutResult<Storage, StorageViewModel>(this.Get, result);
 				});

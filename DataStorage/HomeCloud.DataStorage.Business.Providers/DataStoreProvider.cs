@@ -87,14 +87,56 @@
 				StorageContract storageContract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
 				storageContract = await storageRepository.SaveAsync(storageContract);
 
-				storage = await this.mapper.MapAsync(storageContract, storage) ?? storage;
+				storage = await this.mapper.MapAsync(storageContract, storage);
 
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
 				CatalogContract catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(storage.CatalogRoot);
 				catalogContract = await catalogRepository.SaveAsync(catalogContract);
 
-				storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot) ?? storage.CatalogRoot;
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot);
+
+				scope.Commit();
+			}
+
+			return storage;
+		}
+
+		/// <summary>
+		/// Updates the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
+		public async Task<Storage> UpdateStorage(Storage storage)
+		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+
+				StorageContract storageContract = await storageRepository.GetAsync(storage.ID);
+				storage.Name = string.IsNullOrWhiteSpace(storage.Name) ? storageContract.Name : storage.Name.Trim();
+
+				storageContract = await this.mapper.MapAsync(storage, storageContract);
+				if (storageContract.IsChanged)
+				{
+					storageContract = await storageRepository.SaveAsync(storageContract);
+					storageContract.AcceptChanges();
+
+					storage = await this.mapper.MapAsync(storageContract, storage);
+				}
+
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+
+				CatalogContract catalogContract = (await catalogRepository.GetByParentIDAsync(storage.ID, null, 0, 1)).FirstOrDefault();
+				if (catalogContract == null)
+				{
+					catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(storage.CatalogRoot);
+					catalogContract.Name = Guid.NewGuid().ToString();
+
+					catalogContract = await catalogRepository.SaveAsync(catalogContract);
+
+					storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot);
+				}
 
 				scope.Commit();
 			}
@@ -133,11 +175,6 @@
 		/// <returns>the instance of <see cref="Storage"/>.</returns>
 		public async Task<Storage> GetStorage(Guid id)
 		{
-			if (id == Guid.Empty)
-			{
-				return null;
-			}
-
 			StorageContract data = null;
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{

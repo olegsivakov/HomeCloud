@@ -2,11 +2,11 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using HomeCloud.DataStorage.Business.Entities;
-	using System;
 
 	#endregion
 
@@ -25,12 +25,21 @@
 		Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage);
 
 		/// <summary>
+		/// Updates the specified storage.
+		/// </summary>
+		/// <param name="storage">The instance of <see cref="Storage" /> type.</param>
+		/// <returns>
+		/// The operation result containing updated instance of <see cref="Storage"/>.
+		/// </returns>
+		Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage);
+
+		/// <summary>
 		/// Gets the list of storages.
 		/// </summary>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>The operation result containing the list of instances of <see cref="Storage"/>.</returns>
-		Task<ServiceResult<IEnumerable<Storage>>> GetStorages(int offset = 0, int limit = 20);
+		Task<ServiceResult<IEnumerable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the storage.
@@ -39,6 +48,6 @@
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="Storage" />.
 		/// </returns>
-		Task<ServiceResult<Storage>> GetStorage(Guid id);
+		Task<ServiceResult<Storage>> GetStorageAsync(Guid id);
 	}
 }

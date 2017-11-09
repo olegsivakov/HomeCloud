@@ -23,6 +23,13 @@
 		Task<Storage> CreateStorage(Storage storage);
 
 		/// <summary>
+		/// Updates the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
+		Task<Storage> UpdateStorage(Storage storage);
+
+		/// <summary>
 		/// Gets the list of storages.
 		/// </summary>
 		/// <param name="offset">The offset index.</param>
@@ -36,6 +43,7 @@
 		/// <param name="id">The identifier.</param>
 		/// <returns>the instance of <see cref="Storage"/>.</returns>
 		Task<Storage> GetStorage(Guid id);
+
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
 		/// </summary>
