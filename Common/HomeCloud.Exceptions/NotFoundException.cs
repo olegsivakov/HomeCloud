@@ -1,16 +1,10 @@
 ﻿namespace HomeCloud.Exceptions
 {
-	#region Usings
-
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// Represents the errors that occur when the resource cannot be found.
 	/// </summary>
-	/// <seealso cref="System.Exception" />
-	public class NotFoundException : Exception
+	/// <seealso cref="HomeCloud.Exceptions.ValidationException" />
+	public class NotFoundException : ValidationException
 	{
 		#region Constants
 

@@ -40,5 +40,11 @@
     <Compile Include="ValidationRule.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj">
+      <Project>{85F9BA9C-3D04-4D92-A743-AFE91EF05060}</Project>
+      <Name>HomeCloud.Exceptions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

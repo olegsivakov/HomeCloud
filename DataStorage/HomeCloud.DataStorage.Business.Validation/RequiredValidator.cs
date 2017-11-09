@@ -24,7 +24,7 @@
 		public RequiredValidator()
 			: base()
 		{
-			this.If(obj => obj is null).AddMessage("The instance is not defined.");
+			this.If(obj => obj is null).AddError("The instance is not defined.");
 		}
 
 		#endregion
@@ -38,7 +38,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddMessage("The storage name is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The storage name is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}
@@ -50,8 +50,8 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddMessage("The catalog name is empty.");
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Path)).AddMessage("The catalog path is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The catalog name is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Path)).AddError("The catalog path is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}

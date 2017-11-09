@@ -2,8 +2,11 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+
+	using HomeCloud.Exceptions;
 
 	#endregion
 
@@ -26,7 +29,7 @@
 		/// <value>
 		/// The validation errors.
 		/// </value>
-		public IEnumerable<string> Errors { get; set; }
+		public IEnumerable<ValidationException> Errors { get; set; }
 
 		/// <summary>
 		/// Concatenates two instances of <see cref="ValidationResult>"/>.
@@ -40,7 +43,7 @@
 		{
 			return new ValidationResult()
 			{
-				Errors = (first?.Errors ?? Enumerable.Empty<string>()).Union(second?.Errors ?? Enumerable.Empty<string>()).ToList()
+				Errors = (first?.Errors ?? Enumerable.Empty<ValidationException>()).Union(second?.Errors ?? Enumerable.Empty<ValidationException>()).ToList()
 			};
 		}
 	}

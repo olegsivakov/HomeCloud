@@ -14,6 +14,7 @@
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
 
+	using HomeCloud.Exceptions;
 	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Options;
@@ -77,7 +78,7 @@
 				{
 					return await scope.GetRepository<IStorageRepository>().GetAsync(id) != null;
 				}
-			}).AddMessage("The storage already exists.");
+			}).AddError(new AlreadyExistsException("The storage already exists."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -100,10 +101,10 @@
 				{
 					return await scope.GetRepository<ICatalogRepository>().GetAsync(id) != null;
 				}
-			}).AddMessage("The catalog already exists.");
+			}).AddError(new AlreadyExistsException("The catalog already exists."));
 
-			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddMessage("The catalog path is empty.");
-			this.If(id => Directory.Exists(instance.Path)).AddMessage("The catalog already exists by specified path.");
+			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddError("The catalog path is empty.");
+			this.If(id => Directory.Exists(instance.Path)).AddError(new AlreadyExistsException("The catalog already exists by specified path."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

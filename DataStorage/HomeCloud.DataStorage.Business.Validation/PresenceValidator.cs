@@ -14,6 +14,7 @@
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
 
+	using HomeCloud.Exceptions;
 	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Options;
@@ -54,7 +55,7 @@
 			this.dataContextScopeFactory = dataContextScopeFactory;
 			this.connectionStrings = connectionStrings?.Value;
 
-			this.If(id => id == Guid.Empty).AddMessage("The unique identifier is empty.");
+			this.If(id => id == Guid.Empty).AddError("The unique identifier is empty.");
 		}
 
 		#endregion
@@ -74,7 +75,7 @@
 				{
 					return await scope.GetRepository<IStorageRepository>().GetAsync(id) is null;
 				}
-			}).AddMessage("The storage does not exist.");
+			}).AddError(new NotFoundException("The storage does not exist."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -92,10 +93,10 @@
 				{
 					return await scope.GetRepository<ICatalogRepository>().GetAsync(id) is null;
 				}
-			}).AddMessage("The catalog does not exist.");
+			}).AddError(new NotFoundException("The catalog does not exist."));
 
-			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddMessage("The catalog path is empty.");
-			this.If(id => !Directory.Exists(instance.Path)).AddMessage("The catalog doesn't exist by specified path.");
+			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddError("The catalog path is empty.");
+			this.If(id => !Directory.Exists(instance.Path)).AddError(new NotFoundException("The catalog doesn't exist by specified path."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

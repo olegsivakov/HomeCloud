@@ -122,9 +122,7 @@
 				data = await storageRepository.FindAsync(offset, limit);
 			}
 
-			IEnumerable<Task<Storage>> tasks = data.Select(async item => await this.mapper.MapNewAsync<StorageContract, Storage>(item));
-
-			return await Task.WhenAll(tasks);
+			return await this.mapper.MapNewAsync<StorageContract, Storage>(data);
 		}
 
 		/// <summary>

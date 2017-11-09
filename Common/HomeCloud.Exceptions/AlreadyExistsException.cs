@@ -1,16 +1,10 @@
 ﻿namespace HomeCloud.Exceptions
 {
-	#region Usings
-
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// Represents the errors that occur when the resource already exists.
 	/// </summary>
-	/// <seealso cref="System.Exception" />
-	public class AlreadyExistsException : Exception
+	/// <seealso cref="HomeCloud.Exceptions.ValidationException" />
+	public class AlreadyExistsException : ValidationException
 	{
 		#region Constants
 

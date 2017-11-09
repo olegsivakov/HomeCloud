@@ -4,6 +4,8 @@
 
 	using System.Threading.Tasks;
 
+	using HomeCloud.Exceptions;
+
 	#endregion
 
 	/// <summary>
@@ -13,11 +15,22 @@
 	public interface IValidationRule<T>
 	{
 		/// <summary>
-		/// Adds the message returned in case when the current instance of <see cref="IValidationRule{T}"/> determines that the instance of <see cref="T"/> is not valid and rule gets <c>true</c>.
+		/// Adds the error returned in case when the current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" /> determines that the instance of <see cref="!:T" /> is not valid and rule gets <c>true</c>.
 		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <returns>The current instance of <see cref="IValidationRule{T}"/>.</returns>
-		IValidationRule<T> AddMessage(string message);
+		/// <param name="exception">The validation exception.</param>
+		/// <returns>
+		/// The current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" />.
+		/// </returns>
+		IValidationRule<T> AddError(ValidationException exception);
+
+		/// <summary>
+		/// Adds the error returned in case when the current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" /> determines that the instance of <see cref="!:T" /> is not valid and rule gets <c>true</c>.
+		/// </summary>
+		/// <param name="message">The validation message.</param>
+		/// <returns>
+		/// The current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" />.
+		/// </returns>
+		IValidationRule<T> AddError(string message);
 
 		/// <summary>
 		/// Determines whether the rule applied to the specified instance is <c>true</c> and the specified instance is not valid.

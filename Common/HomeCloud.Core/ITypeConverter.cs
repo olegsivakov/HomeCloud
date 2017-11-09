@@ -1,11 +1,5 @@
 ﻿namespace HomeCloud.Core
 {
-	#region Usings
-
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// Marks the instance to be a type converter.
 	/// </summary>

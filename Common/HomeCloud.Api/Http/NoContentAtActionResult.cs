@@ -16,6 +16,9 @@
 	{
 		#region constants
 
+		/// <summary>
+		/// The <see cref="Location"/> header name.
+		/// </summary>
 		private const string LocationHeaderName = "Location";
 
 		#endregion

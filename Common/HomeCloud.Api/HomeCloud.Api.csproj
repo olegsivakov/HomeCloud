@@ -41,6 +41,7 @@
     <Compile Include="Http\HttpMethodResult.cs" />
     <Compile Include="Http\HttpPostResult.cs" />
     <Compile Include="Http\HttpPutResult.cs" />
+    <Compile Include="Http\IHttpMethodResult.cs" />
     <Compile Include="Http\NoContentAtActionResult.cs" />
     <Compile Include="Http\UnprocessableEntityResult.cs" />
     <Compile Include="Mvc\ControllerBase.cs" />

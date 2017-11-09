@@ -16,7 +16,7 @@
 	/// <summary>
 	/// Provides <see cref="RESTful API"/> with <see cref="DataViewModel"/> support.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.ControllerBase" />
+	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.Controller" />
 	public class DataController : ControllerBase
 	{
 		/// <summary>
@@ -39,10 +39,7 @@
 		[HttpGet("v1/storages/{storageID}/[controller]/{id}")]
 		public async Task<IActionResult> Get(Guid storageID, Guid id)
 		{
-			return await this.HttpGet(id, async () =>
-			{
-				return this.Ok(new DataViewModel() { ID = id });
-			});
+			return this.Ok(new DataViewModel() { ID = id });
 		}
 
 		/// <summary>
@@ -53,10 +50,7 @@
 		[HttpPost("v1/storages/{storageID}/[controller]")]
 		public async Task<IActionResult> Post(Guid storageID, DataViewModel model)
 		{
-			return await this.HttpPost<DataViewModel, ObjectResult>(model, async () =>
-			{
-				return this.Ok(model);
-			});
+			return this.Ok(model);
 		}
 
 		/// <summary>
@@ -68,10 +62,7 @@
 		[HttpPut("v1/storages/{storageID}/[controller]/{id}")]
 		public async Task<IActionResult> Put(Guid storageID, Guid id, [FromBody] DataViewModel model)
 		{
-			return await this.HttpPut(id, model, async () =>
-			{
-				return model;
-			});
+			return this.Ok(model);
 		}
 
 		/// <summary>

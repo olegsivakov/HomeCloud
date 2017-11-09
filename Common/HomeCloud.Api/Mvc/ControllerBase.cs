@@ -3,7 +3,6 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Api.Http;
@@ -13,9 +12,10 @@
 	#endregion
 
 	/// <summary>
-	/// Provides base <see cref="RESTful API"/> methods with view model support.
+	/// Provides base methods for <see cref="RESTful API" />.
 	/// </summary>
-	public abstract class ControllerBase : Controller
+	/// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+	public abstract class ControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
 	{
 		#region Public Methods
 
@@ -87,15 +87,13 @@
 		/// <summary>
 		/// Executes <see cref="HttpGet" /> method against the entry.
 		/// </summary>
-		/// <typeparam name="TModel">The type of the model.</typeparam>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return..</param>
 		/// <param name="action">The action to execute against entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
-		protected async virtual Task<IActionResult> HttpGet<TModel>(int offset, int limit, Func<Task<HttpGetResult<IEnumerable<TModel>>>> action)
-			where TModel : IViewModel
+		protected async virtual Task<IActionResult> HttpGet(int offset, int limit, Func<Task<IHttpMethodResult>> action)
 		{
 			if (offset < 0)
 			{
@@ -107,7 +105,7 @@
 				return this.BadRequest("The limit parameter cannot be less or equal zero.");
 			}
 
-			return (await action()).ToActionResult();
+			return await action();
 		}
 
 		/// <summary>
@@ -118,50 +116,44 @@
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
-		protected async virtual Task<IActionResult> HttpGet<TModel>(Guid id, Func<Task<HttpGetResult<TModel>>> action)
-			where TModel : IViewModel
+		protected async virtual Task<IActionResult> HttpGet(Guid id, Func<Task<IHttpMethodResult>> action)
 		{
 			if (id == Guid.Empty)
 			{
 				return this.BadRequest("The specified unique identifier is empty");
 			}
 
-			return (await action()).ToActionResult();
+			return await action();
 		}
 
 		/// <summary>
 		/// Executes <see cref="HttpPost" /> method against the entry.
 		/// </summary>
-		/// <typeparam name="TModel">The type of the model.</typeparam>
-		/// <typeparam name="TResult">The type of the result.</typeparam>
 		/// <param name="model">The model.</param>
 		/// <param name="action">The action to execute against entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
-		protected async virtual Task<IActionResult> HttpPost<TModel>(TModel model, Func<Task<HttpPostResult<TModel>>> action)
-			where TModel : IViewModel
+		protected async virtual Task<IActionResult> HttpPost(IViewModel model, Func<Task<IHttpMethodResult>> action)
 		{
 			if (model == null)
 			{
 				return this.BadRequest();
 			}
 
-			return (await action()).ToActionResult();
+			return await action();
 		}
 
 		/// <summary>
 		/// Executes <see cref="HttpPut" /> method against the entry.
 		/// </summary>
-		/// <typeparam name="T">The type of model derived from <see cref="ViewModelBase" />.</typeparam>
 		/// <param name="id">The entry unique identifier.</param>
 		/// <param name="model">The entry model.</param>
 		/// <param name="action">The action to execute against entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
-		protected async virtual Task<IActionResult> HttpPut<TModel>(Guid id, TModel model, Func<Task<HttpPutResult<TModel>>> action)
-			where TModel : IViewModel
+		protected async virtual Task<IActionResult> HttpPut(Guid id, IViewModel model, Func<Task<IHttpMethodResult>> action)
 		{
 			if (model == null || model.ID != id)
 			{
@@ -179,14 +171,14 @@
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
-		protected async virtual Task<IActionResult> Delete(Guid id, Func<Task<HttpDeleteResult>> action)
+		protected async virtual Task<IActionResult> HttpDelete(Guid id, Func<Task<IHttpMethodResult>> action)
 		{
 			if (id == Guid.Empty)
 			{
 				return this.BadRequest("The specified unique identifier is empty");
 			}
 
-			return (await action()).ToActionResult();
+			return await action();
 		}
 
 		#endregion

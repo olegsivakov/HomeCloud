@@ -89,7 +89,7 @@
 		/// The asynchronous operation.
 		/// </returns>
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
-		public async Task<ServiceResult> CreateStorageAsync(Storage storage)
+		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
 			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
 			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
@@ -104,7 +104,7 @@
 
 			if (!result.IsValid)
 			{
-				return new ServiceResult()
+				return new ServiceResult<Storage>(storage)
 				{
 					Errors = result.Errors
 				};
@@ -116,7 +116,7 @@
 
 			await this.processor.ProcessAsync();
 
-			return new ServiceResult();
+			return new ServiceResult<Storage>(storage);
 		}
 
 		/// <summary>

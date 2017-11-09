@@ -6,6 +6,8 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Exceptions;
+
 	#endregion
 
 	/// <summary>
@@ -23,9 +25,9 @@
 		private readonly Func<T, Task<bool>> rule = null;
 
 		/// <summary>
-		/// The message
+		/// The validation exception
 		/// </summary>
-		private string message = null;
+		private ValidationException exception = null;
 
 		#endregion
 
@@ -45,15 +47,29 @@
 		#region IValidationRule<T> Implementations
 
 		/// <summary>
-		/// Adds the message returned in case when the current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" /> determines that the instance of <see cref="!:T" /> is not valid and rule gets <c>true</c>.
+		/// Adds the error returned in case when the current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" /> determines that the instance of <see cref="!:T" /> is not valid and rule gets <c>true</c>.
 		/// </summary>
-		/// <param name="message">The message.</param>
+		/// <param name="exception">The validation exception.</param>
 		/// <returns>
 		/// The current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" />.
 		/// </returns>
-		public IValidationRule<T> AddMessage(string message)
+		public IValidationRule<T> AddError(ValidationException exception)
 		{
-			this.message = message;
+			this.exception = exception;
+
+			return this;
+		}
+
+		/// <summary>
+		/// Adds the error returned in case when the current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" /> determines that the instance of <see cref="!:T" /> is not valid and rule gets <c>true</c>.
+		/// </summary>
+		/// <param name="message">The validation message.</param>
+		/// <returns>
+		/// The current instance of <see cref="T:HomeCloud.Validation.IValidationRule`1" />.
+		/// </returns>
+		public IValidationRule<T> AddError(string message)
+		{
+			this.exception = new ValidationException(message);
 
 			return this;
 		}
@@ -71,7 +87,7 @@
 
 			if (this.rule != null && await this.rule(instance))
 			{
-				result.Errors = new List<string>() { this.message };
+				result.Errors = new List<ValidationException>() { this.exception };
 			}
 
 			return result;

@@ -186,7 +186,7 @@
 		{
 			Type type = typeof(TDocument);
 
-			DocumentCollectionAttribute collectionAttribute = (type.GetCustomAttributes(typeof(DocumentCollectionAttribute), false).FirstOrDefault() as DocumentCollectionAttribute);
+			DocumentCollectionAttribute collectionAttribute = (type.GetCustomAttributes(typeof(DocumentCollectionAttribute), false)?.FirstOrDefault() as DocumentCollectionAttribute);
 			string collectionName = collectionAttribute?.CollectionName ?? typeof(TDocument).Name;
 
 			IAsyncCursor<BsonDocument> collections = await database.ListCollectionsAsync(

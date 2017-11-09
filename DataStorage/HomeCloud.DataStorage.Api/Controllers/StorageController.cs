@@ -4,25 +4,26 @@
 
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading.Tasks;
 
-	using Microsoft.AspNetCore.Mvc;
+	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Api.Models;
-	using HomeCloud.DataStorage.Business.Services;
-	using HomeCloud.Mapping;
+
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.Core.Extensions;
-	using HomeCloud.Api.Http;
+	using HomeCloud.DataStorage.Business.Services;
+
+	using HomeCloud.Mapping;
+
+	using Microsoft.AspNetCore.Mvc;
 
 	#endregion
 
 	/// <summary>
 	/// Provides <see cref="RESTful API"/> with <see cref="StorageViewModel"/> support.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.ControllerBase" />
-	public class StorageController : ControllerBase
+	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.Controller" />
+	public class StorageController : Controller
 	{
 		#region Private Members
 
@@ -31,24 +32,19 @@
 		/// </summary>
 		private readonly IStorageService storageService = null;
 
-		/// <summary>
-		/// The <see cref="IMapper"/> mapper.
-		/// </summary>
-		private readonly IMapper mapper = null;
-
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StorageController"/> class.
+		/// Initializes a new instance of the <see cref="StorageController" /> class.
 		/// </summary>
-		/// <param name="storageService">The <see cref="IStorageService"/> service.</param>
+		/// <param name="storageService">The <see cref="IStorageService" /> service.</param>
+		/// <param name="mapper">The model type mapper.</param>
 		public StorageController(IStorageService storageService, IMapper mapper)
 			: base(mapper)
 		{
 			this.storageService = storageService;
-			this.mapper = mapper;
 		}
 
 		#endregion
@@ -62,32 +58,15 @@
 		[HttpGet("v1/[controller]s")]
 		public async Task<IActionResult> Get(int offset, int limit)
 		{
-			return await HttpGet(offset, limit, async () =>
-			{
-				var serviceResult = await this.storageService.GetStorages(offset, limit);
+			return await this.HttpGet(
+				offset,
+				limit,
+				async () =>
+				{
+					ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStorages(offset, limit);
 
-				HttpGetResult<IEnumerable<StorageViewModel>> result = new HttpGetResult<IEnumerable<StorageViewModel>>(this);
-				var tasks = serviceResult.Data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
-
-				result.Data = await Task.WhenAll(tasks);
-				result.Errors = serviceResult.Errors;
-
-				return result;
-			});
-
-			//return await HttpGet(
-			//	offset,
-			//	limit,
-			//	async () =>
-			//	{
-			//		return await this.storageService.GetStorages(offset, limit);
-			//	},
-			//	async (data) =>
-			//	{
-			//		IEnumerable<Task<StorageViewModel>> tasks = data.Select(async item => await this.mapper.MapNewAsync<Storage, StorageViewModel>(item));
-
-			//		return (await Task.WhenAll(tasks)).AsEnumerable();
-			//	});
+					return await this.HttpGetResult<Storage, StorageViewModel>(result);
+				});
 		}
 
 		/// <summary>
@@ -98,10 +77,7 @@
 		[HttpGet("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			return await this.HttpGet(id, async () =>
-			{
-				return this.Ok(new StorageViewModel() { ID = id });
-			});
+			return await this.HttpGet(id, async () => await this.HttpGetResult<Storage, StorageViewModel>(default(ServiceResult<Storage>)));
 		}
 
 		/// <summary>
@@ -112,20 +88,16 @@
 		[HttpPost("v1/[controller]s")]
 		public async Task<IActionResult> Post([FromBody] StorageViewModel model)
 		{
-			return await this.HttpPost< StorageViewModel, ObjectResult>(model, async () =>
-			{
-				Storage entity = await this.mapper.MapNewAsync<StorageViewModel, Storage>(model);
-
-				ServiceResult result = await this.storageService.CreateStorageAsync(entity);
-				if (!result.IsSuccess)
+			return await this.HttpPost(
+				model,
+				async () =>
 				{
-					ErrorViewModel error = await this.mapper.MapNewAsync<ServiceResult, ErrorViewModel>(result);
+					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
 
-					return this.UnprocessableEntity(error);
-				}
+					ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
 
-				return this.Ok(await this.mapper.MapAsync(entity, model));
-			});
+					return await this.HttpPostResult<Storage, StorageViewModel>(this.Get, result);
+				});
 		}
 
 		/// <summary>
@@ -137,10 +109,17 @@
 		[HttpPut("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Put(Guid id, [FromBody] StorageViewModel model)
 		{
-			return await this.HttpPut(id, model, async () =>
-			{
-				return model;
-			});
+			return await this.HttpPut(
+				id,
+				model,
+				async () =>
+				{
+					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
+
+					ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
+
+					return await this.HttpPutResult<Storage, StorageViewModel>(this.Get, result);
+				});
 		}
 
 		/// <summary>
@@ -151,7 +130,14 @@
 		[HttpDelete("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			return this.NoContent();
+			return await this.HttpDelete(
+				id,
+				async () =>
+				{
+					ServiceResult result = await this.storageService.CreateStorageAsync(null);
+
+					return await this.HttpDeleteResult(result);
+				});
 		}
 	}
 }

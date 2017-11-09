@@ -37,10 +37,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HomeCloud.Core\HomeCloud.Core.csproj">
-      <Project>{c1174732-d61a-4543-9477-52278023fd78}</Project>
-      <Name>HomeCloud.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.Mapping\HomeCloud.Mapping.csproj">
       <Project>{E7EE67FB-9CA6-4465-ADE9-0D24C78394B4}</Project>
       <Name>HomeCloud.Mapping</Name>

@@ -115,10 +115,6 @@
 			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>>(dataViewModelConverter);
 			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>>(dataViewModelConverter);
 
-			ErrorViewModelConverter errorViewModelConverter = new ErrorViewModelConverter();
-
-			services.AddSingleton<ITypeConverter<ServiceResult, ErrorViewModel>>(errorViewModelConverter);
-
 			services.AddSingleton<IMapper, Mapper>();
 		}
 
