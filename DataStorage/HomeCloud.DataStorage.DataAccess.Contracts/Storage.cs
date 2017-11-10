@@ -134,7 +134,7 @@
 		/// <param name="newValue">The new value.</param>
 		private bool TrackPropertyChanged<T>(T oldValue, T newValue)
 		{
-			if ((oldValue == null && newValue == null) || (oldValue?.Equals(newValue)).GetValueOrDefault())
+			if ((oldValue == null && newValue == null) || (!oldValue?.Equals(newValue) ?? true))
 			{
 				this.IsChanged = true;
 

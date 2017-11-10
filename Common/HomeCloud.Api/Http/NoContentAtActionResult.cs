@@ -23,17 +23,29 @@
 
 		#endregion
 
+		#region Private Members
+
+		/// <summary>
+		/// The <see cref="Microsoft.AspNetCore.Mvc.IUrlHelper"/> used to generate URLs.
+		/// </summary>
+		private readonly IUrlHelper urlHelper = null;
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NoContentAtActionResult"/> class.
+		/// Initializes a new instance of the <see cref="NoContentAtActionResult" /> class.
 		/// </summary>
+		/// <param name="urlHelper">The <see cref="Microsoft.AspNetCore.Mvc.IUrlHelper"/> used to generate URLs.</param>
 		/// <param name="actionName">The name of the action.</param>
 		/// <param name="controllerName">The name of the controller.</param>
 		/// <param name="routeValues">The route values.</param>
-		public NoContentAtActionResult(string actionName, string controllerName, object routeValues)
+		public NoContentAtActionResult(IUrlHelper urlHelper, string actionName, string controllerName, object routeValues)
 			: base(null)
 		{
+			this.urlHelper = urlHelper;
+
 			this.StatusCode = StatusCodes.Status204NoContent;
 
 			this.ActionName = actionName;
@@ -44,14 +56,6 @@
 		#endregion
 
 		#region Public Properties
-
-		/// <summary>
-		///  Gets or sets the <see cref="Microsoft.AspNetCore.Mvc.IUrlHelper"/> used to generate URLs.
-		/// </summary>
-		/// <value>
-		/// The URL helper.
-		/// </value>
-		public IUrlHelper UrlHelper { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the action to use for generating the URL.
@@ -89,7 +93,8 @@
 		{
 			base.OnFormatting(context);
 
-			string url = this.UrlHelper.Action(this.ActionName, this.ControllerName, this.RouteValues);
+			string scheme = this.urlHelper.ActionContext.HttpContext.Request.Scheme;
+			string url = this.urlHelper.Action(this.ActionName, this.ControllerName, this.RouteValues, scheme);
 
 			context.HttpContext.Response.Headers.Add(LocationHeaderName, url);
 		}

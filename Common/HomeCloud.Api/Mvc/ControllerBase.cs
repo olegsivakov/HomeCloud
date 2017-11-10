@@ -77,7 +77,7 @@
 		[NonAction]
 		public virtual NoContentAtActionResult NoContentAtAction(string actionName, string controllerName, object routeValues)
 		{
-			return new NoContentAtActionResult(actionName, controllerName, routeValues);
+			return new NoContentAtActionResult(this.Url, actionName, controllerName, routeValues);
 		}
 
 		#endregion
