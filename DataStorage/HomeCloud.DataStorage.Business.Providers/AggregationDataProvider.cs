@@ -158,6 +158,31 @@
 			return await this.mapper.MapAsync(catalogDocument, catalog) ?? catalog;
 		}
 
+		/// <summary>
+		/// Deletes the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The operation result.</returns>
+		public async Task DeleteStorage(Storage storage)
+		{
+			await this.DeleteCatalog(storage.CatalogRoot);
+		}
+
+		/// <summary>
+		/// Deletes the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The operation result.</returns>
+		public async Task DeleteCatalog(Catalog catalog)
+		{
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+
+				await repository.DeleteAsync(catalog.ID);
+			}
+		}
+
 		#endregion
 	}
 }

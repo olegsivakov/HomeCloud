@@ -119,6 +119,32 @@
 			});
 		}
 
+		/// <summary>
+		/// Deletes the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The operation result.</returns>
+		public async Task DeleteStorage(Storage storage)
+		{
+			await this.DeleteCatalog(storage.CatalogRoot);
+		}
+
+		/// <summary>
+		/// Deletes the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The operation result.</returns>
+		public async Task DeleteCatalog(Catalog catalog)
+		{
+			return await Task.Run(() =>
+			{
+				if (Directory.Exists(catalog.Path))
+				{
+					Directory.Delete(catalog.Path, true);
+				}
+			});
+		}
+
 		#endregion
 	}
 }

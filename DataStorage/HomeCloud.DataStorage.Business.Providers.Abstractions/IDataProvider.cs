@@ -41,7 +41,7 @@
 		/// Gets storage by specified identifier.
 		/// </summary>
 		/// <param name="id">The identifier.</param>
-		/// <returns>the instance of <see cref="Storage"/>.</returns>
+		/// <returns>The instance of <see cref="Storage"/>.</returns>
 		Task<Storage> GetStorage(Guid id);
 
 		/// <summary>
@@ -50,5 +50,18 @@
 		/// <param name="catalog">The initial catalog set.</param>
 		/// <returns>The instance of <see cref="Catalog"/>.</returns>
 		Task<Catalog> GetCatalog(Catalog catalog);
-	}
+
+		/// <summary>
+		/// Deletes the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The operation result.</returns>
+		Task DeleteStorage(Storage storage);
+
+		/// <summary>
+		/// Deletes the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The operation result.</returns>
+		Task DeleteCatalog(Catalog catalog);
 }

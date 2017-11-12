@@ -147,8 +147,7 @@
 			IEnumerable<Storage> storages = null;
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storages = await provider.GetStorages(offset, limit), null);
-
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(
 				async provider =>
 				{
 					foreach (Storage storage in storages)
@@ -164,7 +163,7 @@
 		}
 
 		/// <summary>
-		/// Gets the storage.
+		/// Gets the storage by specified identifier.
 		/// </summary>
 		/// <param name="id">The storage identifier.</param>
 		/// <returns>
@@ -175,8 +174,8 @@
 			Storage storage = new Storage() { ID = id };
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-
 			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
+
 			if (!result.IsValid)
 			{
 				return new ServiceResult<Storage>(storage)
@@ -186,7 +185,35 @@
 			}
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(id), null);
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+
+			await this.processor.ProcessAsync();
+
+			return new ServiceResult<Storage>(storage);
+		}
+
+		/// <summary>
+		/// Deletes the storage by specified identifier.
+		/// </summary>
+		/// <param name="id">The storage identifier.</param>
+		/// <returns>The operation result.</returns>
+		public async Task<ServiceResult> DeleteStorageAsync(Guid id)
+		{
+			Storage storage = new Storage() { ID = id };
+
+			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
+
+			if (!result.IsValid)
+			{
+				return new ServiceResult<Storage>(storage)
+				{
+					Errors = result.Errors
+				};
+			}
+
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(id), null);
+			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
 			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
 
 			await this.processor.ProcessAsync();

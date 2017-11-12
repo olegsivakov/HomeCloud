@@ -42,12 +42,19 @@
 		Task<ServiceResult<IEnumerable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20);
 
 		/// <summary>
-		/// Gets the storage.
+		/// Gets the storage by specified identifier.
 		/// </summary>
 		/// <param name="id">The storage identifier.</param>
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="Storage" />.
 		/// </returns>
 		Task<ServiceResult<Storage>> GetStorageAsync(Guid id);
+
+		/// <summary>
+		/// Deletes the storage by specified identifier.
+		/// </summary>
+		/// <param name="id">The storage identifier.</param>
+		/// <returns>The operation result.</returns>
+		Task<ServiceResult> DeleteStorageAsync(Guid id);
 	}
 }
