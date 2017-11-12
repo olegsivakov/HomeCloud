@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -21,7 +22,6 @@
 
 	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
-	using System;
 
 	#endregion
 

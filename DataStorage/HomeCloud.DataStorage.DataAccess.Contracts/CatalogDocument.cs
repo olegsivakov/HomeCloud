@@ -106,7 +106,7 @@
 		#region IChangeTracking Implementations
 
 		/// <summary>
-		/// Gets the object's changed status.
+		/// Gets a value indicating whether the object status is changed.
 		/// </summary>
 		[BsonIgnore]
 		public bool IsChanged { get; private set; }
@@ -124,11 +124,12 @@
 		#region Private Methods
 
 		/// <summary>
-		/// Tracks whether the property value has been changed and set it to <see cref="IsChanged"/>.
+		/// Tracks whether the property value has been changed and set it to <see cref="IsChanged" />.
 		/// </summary>
-		/// <typeparam name="T">The tpe of the property value.</typeparam>
+		/// <typeparam name="T">The type of the property value.</typeparam>
 		/// <param name="oldValue">The old value.</param>
 		/// <param name="newValue">The new value.</param>
+		/// <returns><c>true</c> if property value has been changed. Otherwise <c>false</c>.</returns>
 		private bool TrackPropertyChanged<T>(T oldValue, T newValue)
 		{
 			if ((oldValue == null && newValue == null) || (!oldValue?.Equals(newValue) ?? true))

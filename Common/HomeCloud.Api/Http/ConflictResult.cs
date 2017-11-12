@@ -8,7 +8,7 @@
 	#endregion
 
 	/// <summary>
-	/// An Microsoft.AspNetCore.Mvc.ObjectResult that when executed performs content
+	/// An <see cref="Microsoft.AspNetCore.Mvc.ObjectResult"/> that when executed performs content
 	/// negotiation, formats the entity body, and will produce a <see cref="Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict"/>
 	/// response if negotiation and formatting succeed.
 	/// </summary>

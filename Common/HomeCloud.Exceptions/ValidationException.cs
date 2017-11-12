@@ -8,7 +8,7 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the errors occured during object validation.
+	/// Represents the errors occurred during object validation.
 	/// </summary>
 	/// <seealso cref="System.Exception" />
 	public class ValidationException : Exception

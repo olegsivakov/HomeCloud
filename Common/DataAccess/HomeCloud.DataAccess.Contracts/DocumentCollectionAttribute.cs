@@ -7,7 +7,7 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the colection definition for the types derived from <see cref="IDocument"/>.
+	/// Represents the collection definition for the types derived from <see cref="IDocument"/>.
 	/// </summary>
 	/// <seealso cref="System.Attribute" />
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]

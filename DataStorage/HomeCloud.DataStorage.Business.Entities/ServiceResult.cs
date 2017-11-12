@@ -14,15 +14,15 @@
 	public class ServiceResult
 	{
 		/// <summary>
-		/// Gets a value indicating whether the execution result is successed.
+		/// Gets a value indicating whether the execution result is succeed.
 		/// </summary>
 		/// <value>
-		///   <c>true</c> if the execution result is successed; otherwise, <c>false</c>.
+		///   <c>true</c> if the execution result is succeed; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsSuccess => (this.Errors?.Count()).GetValueOrDefault() == 0;
 
 		/// <summary>
-		/// Gets or sets the list of errors occured.
+		/// Gets or sets the list of errors occurred.
 		/// </summary>
 		/// <value>
 		/// The list of errors.

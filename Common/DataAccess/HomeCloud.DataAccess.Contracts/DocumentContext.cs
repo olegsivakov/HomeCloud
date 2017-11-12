@@ -91,10 +91,10 @@
 		}
 
 		/// <summary>
-		/// Updates the existing document asynchronously or creates a new one if no documents matched.
+		/// <see cref="Upserts"/> the existing document asynchronously or creates a new one if no documents matched.
 		/// </summary>
-		/// <typeparam name="TDocument">The type of the document to upsert.</typeparam>
-		/// <param name="document">The document to upsert.</param>
+		/// <typeparam name="TDocument">The type of the document to <see cref="upsert"/>.</typeparam>
+		/// <param name="document">The document to <see cref="upsert"/>.</param>
 		/// <returns>
 		/// The asynchronous operation that returns the instance of <see cref="TDocument" />..
 		/// </returns>
