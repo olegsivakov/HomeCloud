@@ -51,7 +51,6 @@
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The catalog name is empty.");
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Path)).AddError("The catalog path is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}

@@ -95,8 +95,7 @@
 				}
 			}).AddError(new NotFoundException("The catalog does not exist."));
 
-			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddError("The catalog path is empty.");
-			this.If(id => !Directory.Exists(instance.Path)).AddError(new NotFoundException("The catalog doesn't exist by specified path."));
+			this.If(id => !string.IsNullOrWhiteSpace(instance.Path) && !Directory.Exists(instance.Path)).AddError(new NotFoundException("The catalog doesn't exist by specified path."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

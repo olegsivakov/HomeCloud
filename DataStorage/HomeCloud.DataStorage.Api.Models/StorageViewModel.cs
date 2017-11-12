@@ -35,7 +35,7 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		public long Size { get; set; }
+		public long? Size { get; set; }
 
 		/// <summary>
 		/// Gets or sets the quota.
@@ -43,7 +43,7 @@
 		/// <value>
 		/// The quota.
 		/// </value>
-		public long Quota { get; set; }
+		public long? Quota { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation date.

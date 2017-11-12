@@ -4,20 +4,15 @@
 
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-
-	using HomeCloud.DataStorage.Api.Configuration;
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Validation;
 	
 	using HomeCloud.Validation;
-
-	using Microsoft.Extensions.Options;
 
 	#endregion
 
@@ -40,18 +35,9 @@
 		private readonly IServiceFactory<IDataCommandHandler> commandHandlerFactory = null;
 
 		/// <summary>
-		/// The file system settings
-		/// </summary>
-		private readonly FileSystem fileSystemSettings = null;
-
-		#region Private Members
-
-		/// <summary>
 		/// The validation service factory.
 		/// </summary>
 		private readonly IValidationServiceFactory validationServiceFactory = null;
-
-		#endregion
 
 		#endregion
 
@@ -62,18 +48,14 @@
 		/// </summary>
 		/// <param name="processor">The command processor.</param>
 		/// <param name="commandHandlerFactory">The command handler factory.</param>
-		/// <param name="fileSystemSettings">The file system settings.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public StorageService(
 			ICommandHandlerProcessor processor,
 			IServiceFactory<IDataCommandHandler> commandHandlerFactory,
-			IOptionsSnapshot<FileSystem> fileSystemSettings,
 			IValidationServiceFactory validationServiceFactory)
 		{
 			this.processor = processor;
 			this.commandHandlerFactory = commandHandlerFactory;
-
-			this.fileSystemSettings = fileSystemSettings?.Value;
 			this.validationServiceFactory = validationServiceFactory;
 		}
 
@@ -92,7 +74,6 @@
 		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
 			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
-			storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 			ValidationResult result = await storageValidator.Get<IRequiredValidator>().ValidateAsync(storage);
@@ -129,7 +110,6 @@
 		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
 		{
 			storage.CatalogRoot.Name = storage.CatalogRoot.Name ?? Guid.NewGuid().ToString();
-			storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
@@ -207,6 +187,7 @@
 
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(id), null);
 			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
 
 			await this.processor.ProcessAsync();
 

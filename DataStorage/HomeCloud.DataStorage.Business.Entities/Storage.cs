@@ -60,7 +60,7 @@
 		/// <value>
 		/// The quota.
 		/// </value>
-		public long Quota { get; set; }
+		public long? Quota { get; set; }
 
 		/// <summary>
 		/// Gets or sets the root catalog in file storage.

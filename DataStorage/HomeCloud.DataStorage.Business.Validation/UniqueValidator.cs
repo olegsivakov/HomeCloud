@@ -103,8 +103,7 @@
 				}
 			}).AddError(new AlreadyExistsException("The catalog already exists."));
 
-			this.If(id => string.IsNullOrWhiteSpace(instance.Path)).AddError("The catalog path is empty.");
-			this.If(id => Directory.Exists(instance.Path)).AddError(new AlreadyExistsException("The catalog already exists by specified path."));
+			this.If(id => !string.IsNullOrWhiteSpace(instance.Path) && Directory.Exists(instance.Path)).AddError(new AlreadyExistsException("The catalog already exists by specified path."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

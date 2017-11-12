@@ -27,8 +27,9 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.Quota = source.Quota;
-			target.Size = source.CatalogRoot.Size;
 			target.CreationDate = source.CreationDate;
+
+			target.Size = source.CatalogRoot.Size;
 
 			return target;
 		}
@@ -51,6 +52,8 @@
 			target.Name = source.Name;
 			target.Quota = source.Quota;
 			target.CreationDate = source.CreationDate;
+
+			target.CatalogRoot.Size = source.Size;
 
 			return target;
 		}

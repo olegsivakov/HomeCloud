@@ -8,7 +8,10 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
+	using HomeCloud.DataStorage.Api.Configuration;
 	using HomeCloud.DataStorage.Business.Entities;
+
+	using Microsoft.Extensions.Options;
 
 	#endregion
 
@@ -18,13 +21,24 @@
 	/// <seealso cref="HomeCloud.DataStorage.Business.Providers.IFileSystemProvider" />
 	public class FileSystemProvider : IFileSystemProvider
 	{
+		#region Private Members
+
+		/// <summary>
+		/// The file system settings
+		/// </summary>
+		private readonly FileSystem fileSystemSettings = null;
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileSystemProvider" /> class.
 		/// </summary>
-		public FileSystemProvider()
+		/// <param name="fileSystemSettings">The file system settings.</param>
+		public FileSystemProvider(IOptionsSnapshot<FileSystem> fileSystemSettings)
 		{
+			this.fileSystemSettings = fileSystemSettings?.Value;
 		}
 
 		#endregion
@@ -40,6 +54,7 @@
 		{
 			return await Task.Run(() =>
 			{
+				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 				storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
 
 				return storage;
@@ -55,6 +70,7 @@
 		{
 			return await Task.Run(() =>
 			{
+				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 				if (!Directory.Exists(storage.CatalogRoot.Path))
 				{
 					storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;

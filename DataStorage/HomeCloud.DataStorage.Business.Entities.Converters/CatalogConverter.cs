@@ -105,8 +105,8 @@
 		public Contracts.CatalogDocument Convert(Catalog source, Contracts.CatalogDocument target)
 		{
 			target.ID = source.ID;
-			target.Path = source.Path;
-			target.Size = source.Size;
+			target.Path = string.IsNullOrWhiteSpace(source.Path) ? target.Path : source.Path;
+			target.Size = source.Size.HasValue ? source.Size.Value : target.Size;
 
 			return target;
 		}

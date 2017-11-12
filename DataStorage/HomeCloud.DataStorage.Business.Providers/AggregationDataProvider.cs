@@ -103,10 +103,16 @@
 			{
 				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
 
-				CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(storage.CatalogRoot);
-				catalogDocument = await repository.SaveAsync(catalogDocument);
+				CatalogDocument catalogDocument = await repository.GetAsync(storage.CatalogRoot.ID);
+				catalogDocument = await this.mapper.MapAsync(storage.CatalogRoot, catalogDocument);
 
-				storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot);
+				if (catalogDocument.IsChanged)
+				{
+					catalogDocument = await repository.SaveAsync(catalogDocument);
+					catalogDocument.AcceptChanges();
+
+					storage.CatalogRoot = await this.mapper.MapAsync(catalogDocument, storage.CatalogRoot);
+				}
 			}
 
 			return storage;

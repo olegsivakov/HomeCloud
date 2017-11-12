@@ -57,7 +57,7 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		public long Size { get; set; }
+		public long? Size { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation date.

@@ -114,9 +114,8 @@
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 
 				StorageContract storageContract = await storageRepository.GetAsync(storage.ID);
-				storage.Name = string.IsNullOrWhiteSpace(storage.Name) ? storageContract.Name : storage.Name.Trim();
-
 				storageContract = await this.mapper.MapAsync(storage, storageContract);
+
 				if (storageContract.IsChanged)
 				{
 					storageContract = await storageRepository.SaveAsync(storageContract);
@@ -131,12 +130,10 @@
 				if (catalogContract == null)
 				{
 					catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(storage.CatalogRoot);
-					catalogContract.Name = Guid.NewGuid().ToString();
-
 					catalogContract = await catalogRepository.SaveAsync(catalogContract);
-
-					storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot);
 				}
+
+				storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot);
 
 				scope.Commit();
 			}

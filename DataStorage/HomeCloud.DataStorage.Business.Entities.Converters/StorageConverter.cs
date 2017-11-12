@@ -50,8 +50,8 @@
 		public Contracts.Storage Convert(Storage source, Contracts.Storage target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
-			target.Quota = source.Quota;
+			target.Name = string.IsNullOrWhiteSpace(source.Name) ? target.Name : source.Name.Trim();
+			target.Quota = source.Quota.HasValue ? source.Quota.Value : target.Quota;
 
 			return target;
 		}
