@@ -146,10 +146,10 @@
 		[NonAction]
 		public async Task<HttpMethodResult> HttpDeleteResult(ServiceResult result)
 		{
-			return new HttpDeleteResult(this)
+			return await Task.FromResult(new HttpDeleteResult(this)
 			{
 				Errors = result.Errors
-			};
+			});
 		}
 
 		#endregion

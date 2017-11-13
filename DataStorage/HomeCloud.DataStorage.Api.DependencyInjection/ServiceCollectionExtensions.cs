@@ -124,9 +124,7 @@
 		/// <param name="services">The services.</param>
 		private static void AddComandHandlers(this IServiceCollection services)
 		{
-			services.AddTransient<IDataStoreCommandHandler, DataStoreCommandHandler>();
-			services.AddTransient<IFileSystemCommandHandler, FileSystemCommandHandler>();
-			services.AddTransient<IAggregatedDataCommandHandler, AggregatedDataCommandHandler>();
+			services.AddTransient<IDataCommandHandler, DataCommandHandler>();
 		}
 
 		/// <summary>
@@ -160,7 +158,7 @@
 			services.AddFactory<ITypeConverter>();
 			services.AddFactory<ICatalogValidator>();
 			services.AddFactory<IStorageValidator>();
-			services.AddFactory<IDataCommandHandler>();
+			services.AddFactory<ICommandHandler>();
 			services.AddFactory<IDataProvider>();
 
 			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();

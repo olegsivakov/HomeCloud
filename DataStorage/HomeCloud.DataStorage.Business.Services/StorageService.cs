@@ -10,8 +10,9 @@
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Handlers;
+	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
-	
+
 	using HomeCloud.Validation;
 
 	#endregion
@@ -30,11 +31,6 @@
 		private readonly ICommandHandlerProcessor processor = null;
 
 		/// <summary>
-		/// The command handler factory
-		/// </summary>
-		private readonly IServiceFactory<IDataCommandHandler> commandHandlerFactory = null;
-
-		/// <summary>
 		/// The validation service factory.
 		/// </summary>
 		private readonly IValidationServiceFactory validationServiceFactory = null;
@@ -47,15 +43,12 @@
 		/// Initializes a new instance of the <see cref="StorageService" /> class.
 		/// </summary>
 		/// <param name="processor">The command processor.</param>
-		/// <param name="commandHandlerFactory">The command handler factory.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public StorageService(
 			ICommandHandlerProcessor processor,
-			IServiceFactory<IDataCommandHandler> commandHandlerFactory,
 			IValidationServiceFactory validationServiceFactory)
 		{
 			this.processor = processor;
-			this.commandHandlerFactory = commandHandlerFactory;
 			this.validationServiceFactory = validationServiceFactory;
 		}
 
@@ -91,9 +84,11 @@
 				};
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
-			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.CreateStorage(storage), null);
+			Func<IDataProvider, Task> createStorageFunction = async provider => storage = await provider.CreateStorage(storage);
+
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 
@@ -125,9 +120,12 @@
 				};
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.UpdateStorage(storage), null);
-			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.UpdateStorage(storage), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.UpdateStorage(storage), null);
+			Func<IDataProvider, Task> updateStorageFunction = async provider => storage = await provider.UpdateStorage(storage);
+
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>()
+				.CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null)
+				.CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 
@@ -146,16 +144,16 @@
 		{
 			IEnumerable<Storage> storages = null;
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storages = await provider.GetStorages(offset, limit), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(
-				async provider =>
-				{
-					foreach (Storage storage in storages)
-					{
-						storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot);
-					}
-				},
-				null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => storages = await provider.GetStorages(offset, limit), null);
+			await this.processor.ProcessAsync();
+
+			this.processor.RemoveHandlers();
+
+			IDataCommandHandler handler = this.processor.CreateDataHandler<IDataCommandHandler>();
+			foreach (Storage storage in storages)
+			{
+				handler.CreateAsyncCommand<IAggregationDataProvider>(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+			}
 
 			await this.processor.ProcessAsync();
 
@@ -184,8 +182,10 @@
 				};
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(storage), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(storage), null);
+			Func<IDataProvider, Task> getStorageFunction = async provider => storage = await provider.GetStorage(storage);
+
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(getStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(getStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 
@@ -212,9 +212,13 @@
 				};
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.DeleteStorage(storage), null);
-			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.DeleteStorage(storage), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.DeleteStorage(storage), null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => storage = await provider.GetStorage(storage), null);
+
+			Func<IDataProvider, Task> deleteStorageFunction = async provider => storage = await provider.DeleteStorage(storage);
+			this.processor.CreateDataHandler<IDataCommandHandler>()
+				.CreateAsyncCommand<IDataStoreProvider>(deleteStorageFunction, null)
+				.CreateAsyncCommand<IFileSystemProvider>(deleteStorageFunction, null)
+				.CreateAsyncCommand<IAggregationDataProvider>(deleteStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 

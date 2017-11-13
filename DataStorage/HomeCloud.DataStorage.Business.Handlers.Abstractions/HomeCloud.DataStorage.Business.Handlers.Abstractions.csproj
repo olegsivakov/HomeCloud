@@ -33,11 +33,8 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IAggregatedDataCommandHandler.cs" />
     <Compile Include="ICommandHandlerProcessor.cs" />
     <Compile Include="IDataCommandHandler.cs" />
-    <Compile Include="IDataStoreCommandHandler.cs" />
-    <Compile Include="IFileSystemCommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

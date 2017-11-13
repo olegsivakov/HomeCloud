@@ -49,7 +49,7 @@
 		/// </returns>
 		public T Get<TService>() where TService : T
 		{
-			return this.provider.GetService<TService>();
+			return (T)this.provider.GetService(typeof(TService));
 		}
 
 		#endregion

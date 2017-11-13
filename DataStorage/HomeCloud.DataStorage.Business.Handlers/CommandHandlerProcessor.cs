@@ -27,7 +27,7 @@
 		/// <summary>
 		/// The command handler factory
 		/// </summary>
-		private readonly IServiceFactory<IDataCommandHandler> commandHandlerFactory = null;
+		private readonly IServiceFactory<ICommandHandler> commandHandlerFactory = null;
 
 		#endregion
 
@@ -38,7 +38,7 @@
 		/// </summary>
 		/// <param name="commandFactory">The action command factory.</param>
 		/// <param name="commandHandlerFactory">The command handler factory.</param>
-		public CommandHandlerProcessor(IActionCommandFactory commandFactory, IServiceFactory<IDataCommandHandler> commandHandlerFactory)
+		public CommandHandlerProcessor(IActionCommandFactory commandFactory, IServiceFactory<ICommandHandler> commandHandlerFactory)
 		{
 			this.commandHandlerFactory = commandHandlerFactory;
 		}
@@ -65,11 +65,21 @@
 		/// </returns>
 		public IDataCommandHandler CreateDataHandler<T>() where T : IDataCommandHandler
 		{
-			IDataCommandHandler handler = this.commandHandlerFactory.Get<T>();
-
-			this.AddHandler(handler);
+			IDataCommandHandler handler = this.commandHandlerFactory.Get<T>() as IDataCommandHandler;
+			if (handler != null)
+			{
+				this.AddHandler(handler);
+			}
 
 			return handler;
+		}
+
+		/// <summary>
+		/// Removes all attached handlers.
+		/// </summary>
+		public void RemoveHandlers()
+		{
+			this.handlers.Clear();
 		}
 
 		/// <summary>

@@ -29,6 +29,11 @@
 		IDataCommandHandler CreateDataHandler<T>() where T : IDataCommandHandler;
 
 		/// <summary>
+		/// Removes all attached handlers.
+		/// </summary>
+		void RemoveHandlers();
+
+		/// <summary>
 		/// Processes the execution of attached command handlers.
 		/// </summary>
 		/// <returns>The asynchronous operation.</returns>

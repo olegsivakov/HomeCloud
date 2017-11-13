@@ -17,21 +17,15 @@
 	public interface IDataCommandHandler : ICommandHandler
 	{
 		/// <summary>
-		/// Gets the data provider.
-		/// </summary>
-		/// <value>
-		/// The data provider.
-		/// </value>
-		IDataProvider Provider { get; }
-
-		/// <summary>
 		/// Creates the asynchronous data command.
 		/// </summary>
+		/// <typeparam name="TDataProvider">The type of the data provider.</typeparam>
 		/// <param name="executeAsyncAction">The asynchronous action to execute.</param>
 		/// <param name="undoAsyncAction">The asynchronous action to undo.</param>
 		/// <returns>
-		/// The command of <see cref="ICommand" />.
+		/// The current instance of <see cref="IDataCommandHandler"/>.
 		/// </returns>
-		ICommand CreateAsyncCommand(Func<IDataProvider, Task> executeAsyncAction, Func<IDataProvider, Task> undoAsyncAction);
+		IDataCommandHandler CreateAsyncCommand<TDataProvider>(Func<IDataProvider, Task> executeAsyncAction, Func<IDataProvider, Task> undoAsyncAction)
+			where TDataProvider : IDataProvider;
 	}
 }
