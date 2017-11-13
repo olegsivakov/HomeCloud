@@ -54,6 +54,11 @@
 		{
 			return await Task.Run(() =>
 			{
+				if (string.IsNullOrWhiteSpace(storage.CatalogRoot.Path) && string.IsNullOrWhiteSpace(storage.CatalogRoot.Name))
+				{
+					return storage;
+				}
+
 				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 				storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
 
@@ -70,7 +75,13 @@
 		{
 			return await Task.Run(() =>
 			{
+				if (string.IsNullOrWhiteSpace(storage.CatalogRoot.Path) && string.IsNullOrWhiteSpace(storage.CatalogRoot.Name))
+				{
+					return storage;
+				}
+
 				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
+
 				if (!Directory.Exists(storage.CatalogRoot.Path))
 				{
 					storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
@@ -110,6 +121,11 @@
 		{
 			return await Task.Run(() =>
 			{
+				if (string.IsNullOrWhiteSpace(catalog.Path))
+				{
+					return catalog;
+				}
+
 				if (Directory.Exists(catalog.Path))
 				{
 					catalog.Size = Directory.GetFiles(catalog.Path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)).Sum(file => file.Length);
@@ -144,6 +160,11 @@
 		{
 			return await Task.Run(() =>
 			{
+				if (string.IsNullOrWhiteSpace(catalog.Path) && string.IsNullOrWhiteSpace(catalog.Name))
+				{
+					return catalog;
+				}
+
 				catalog.Path = catalog.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, catalog.Name);
 
 				if (Directory.Exists(catalog.Path))

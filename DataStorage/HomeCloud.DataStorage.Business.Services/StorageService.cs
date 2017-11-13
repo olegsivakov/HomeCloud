@@ -85,10 +85,11 @@
 			}
 
 			Func<IDataProvider, Task> createStorageFunction = async provider => storage = await provider.CreateStorage(storage);
+			Func<IDataProvider, Task> createStorageUndoFunction = async provider => storage = await provider.DeleteStorage(storage);
 
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createStorageFunction, createStorageUndoFunction);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, createStorageUndoFunction);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, createStorageUndoFunction);
 
 			await this.processor.ProcessAsync();
 
