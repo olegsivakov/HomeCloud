@@ -184,8 +184,8 @@
 				};
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(id), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(storage), null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(storage), null);
 
 			await this.processor.ProcessAsync();
 
@@ -212,9 +212,9 @@
 				};
 			}
 
-			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.GetStorage(id), null);
-			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
-			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+			this.processor.CreateDataHandler<IDataStoreCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.DeleteStorage(storage), null);
+			this.processor.CreateDataHandler<IFileSystemCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.DeleteStorage(storage), null);
+			this.processor.CreateDataHandler<IAggregatedDataCommandHandler>().CreateAsyncCommand(async provider => storage = await provider.DeleteStorage(storage), null);
 
 			await this.processor.ProcessAsync();
 

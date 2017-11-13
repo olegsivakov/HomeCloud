@@ -55,9 +55,19 @@
 		}
 
 		/// <summary>
-		/// Looks for all records of <see cref="CatalogDocument" /> type.
+		/// Deletes the records of <see cref="CatalogDocument" /> type by specified expression.
 		/// </summary>
-		/// <param name="selector">The data selector.</param>
+		/// <param name="selector">The data expression.</param>
+		/// <returns>The asynchronous operation.</returns>
+		public async Task DeleteAsync(Expression<Func<CatalogDocument, bool>> selector)
+		{
+			await this.context.DeleteAsync(selector);
+		}
+
+		/// <summary>
+		/// Gets the records of <see cref="CatalogDocument" /> type by specified expression.
+		/// </summary>
+		/// <param name="selector">The data expression.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
@@ -65,7 +75,7 @@
 		/// </returns>
 		public async Task<IEnumerable<CatalogDocument>> FindAsync(Expression<Func<CatalogDocument, bool>> selector, int offset = 0, int limit = 20)
 		{
-			return await this.context.FindAsync<CatalogDocument>(selector, offset, limit);
+			return await this.context.FindAsync(selector, offset, limit);
 		}
 
 		/// <summary>

@@ -38,11 +38,11 @@
 		Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20);
 
 		/// <summary>
-		/// Gets storage by specified identifier.
+		/// Gets storage by initial instance set.
 		/// </summary>
-		/// <param name="id">The identifier.</param>
+		/// <param name="storage">The initial storage set.</param>
 		/// <returns>The instance of <see cref="Storage"/>.</returns>
-		Task<Storage> GetStorage(Guid id);
+		Task<Storage> GetStorage(Storage storage);
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
@@ -55,13 +55,18 @@
 		/// Deletes the specified storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		/// <returns>The operation result.</returns>
-		Task DeleteStorage(Storage storage);
+		/// <returns>
+		/// The deleted instance of <see cref="Storage"/>.
+		/// </returns>
+		Task<Storage> DeleteStorage(Storage storage);
 
 		/// <summary>
 		/// Deletes the specified catalog.
 		/// </summary>
 		/// <param name="catalog">The catalog.</param>
-		/// <returns>The operation result.</returns>
-		Task DeleteCatalog(Catalog catalog);
+		/// <returns>
+		/// The deleted instance of <see cref="Catalog"/>.
+		/// </returns>
+		Task<Catalog> DeleteCatalog(Catalog catalog);
+	}
 }

@@ -55,13 +55,23 @@
 		}
 
 		/// <summary>
-		/// Looks for all records of <see cref="T" /> type.
+		/// Deletes the records of <see cref="FileDocument" /> type by specified expression.
 		/// </summary>
-		/// <param name="selector">The data selector.</param>
+		/// <param name="selector">The data expression.</param>
+		/// <returns>The asynchronous operation.</returns>
+		public async Task DeleteAsync(Expression<Func<FileDocument, bool>> selector)
+		{
+			await this.context.DeleteAsync(selector);
+		}
+
+		/// <summary>
+		/// Gets the records of <see cref="FileDocument" /> type by specified expression.
+		/// </summary>
+		/// <param name="selector">The data expression.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
-		/// The list of instances of <see cref="T" /> type.
+		/// The list of instances of <see cref="FileDocument" /> type.
 		/// </returns>
 		public async Task<IEnumerable<FileDocument>> FindAsync(Expression<Func<FileDocument, bool>> selector, int offset = 0, int limit = 20)
 		{

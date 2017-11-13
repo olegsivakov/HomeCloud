@@ -70,7 +70,7 @@
 		{
 			return await Task.Run(() =>
 			{
-				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
+				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
 				if (!Directory.Exists(storage.CatalogRoot.Path))
 				{
 					storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
@@ -92,11 +92,11 @@
 		}
 
 		/// <summary>
-		/// Gets storage by specified identifier.
+		/// Gets storage by the initial instance set.
 		/// </summary>
-		/// <param name="id">The identifier.</param>
+		/// <param name="storage">The initial storage stet.</param>
 		/// <returns>the instance of <see cref="Storage"/>.</returns>
-		public async Task<Storage> GetStorage(Guid id)
+		public async Task<Storage> GetStorage(Storage storage)
 		{
 			return await Task.FromException<Storage>(new NotSupportedException());
 		}
@@ -123,25 +123,35 @@
 		/// Deletes the specified storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		/// <returns>The operation result.</returns>
-		public async Task DeleteStorage(Storage storage)
+		/// <returns>
+		/// The deleted instance of <see cref="Storage"/>.
+		/// </returns>
+		public async Task<Storage> DeleteStorage(Storage storage)
 		{
 			await this.DeleteCatalog(storage.CatalogRoot);
+
+			return storage;
 		}
 
 		/// <summary>
 		/// Deletes the specified catalog.
 		/// </summary>
 		/// <param name="catalog">The catalog.</param>
-		/// <returns>The operation result.</returns>
-		public async Task DeleteCatalog(Catalog catalog)
+		/// <returns>
+		/// The deleted instance of <see cref="Catalog"/>.
+		/// </returns>
+		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
 			return await Task.Run(() =>
 			{
+				catalog.Path = catalog.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, catalog.Name);
+
 				if (Directory.Exists(catalog.Path))
 				{
 					Directory.Delete(catalog.Path, true);
 				}
+
+				return catalog;
 			});
 		}
 

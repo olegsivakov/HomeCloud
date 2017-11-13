@@ -171,21 +171,15 @@
 		}
 
 		/// <summary>
-		/// Gets storage by specified identifier.
+		/// Gets storage by the initial instance set.
 		/// </summary>
-		/// <param name="id">The identifier.</param>
+		/// <param name="storage">The initial storage stet.</param>
 		/// <returns>the instance of <see cref="Storage"/>.</returns>
-		public async Task<Storage> GetStorage(Guid id)
+		public async Task<Storage> GetStorage(Storage storage)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
-				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-				StorageContract data = await storageRepository.GetAsync(id);
-
-				Storage storage = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
-				storage.CatalogRoot = await this.ExecuteGetCatalog(storage.CatalogRoot, scope);
-
-				return storage;
+				return await this.ExecuteGetStorage(storage, scope);
 			}
 		}
 
@@ -206,33 +200,44 @@
 		/// Deletes the specified storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		/// <returns>The operation result.</returns>
-		public async Task DeleteStorage(Storage storage)
+		/// <returns>
+		/// The deleted instance of <see cref="Storage"/>.
+		/// </returns>
+		public async Task<Storage> DeleteStorage(Storage storage)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
-				await this.ExecuteDeleteCatalog(storage.CatalogRoot, scope);
+				storage = await this.ExecuteGetStorage(storage, scope);
 
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 				await storageRepository.DeleteAsync(storage.ID);
 
 				scope.Commit();
 			}
+
+			return storage;
 		}
 
 		/// <summary>
 		/// Deletes the specified catalog.
 		/// </summary>
 		/// <param name="catalog">The catalog.</param>
-		/// <returns>The operation result.</returns>
-		public async Task DeleteCatalog(Catalog catalog)
+		/// <returns>
+		/// The deleted instance of <see cref="Catalog"/>.
+		/// </returns>
+		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
-				await this.ExecuteDeleteCatalog(catalog, scope);
+				catalog = await this.ExecuteGetCatalog(catalog, scope);
+
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				await catalogRepository.DeleteAsync(catalog.ID);
 
 				scope.Commit();
 			}
+
+			return catalog;
 		}
 
 		#endregion
@@ -242,7 +247,7 @@
 		/// <summary>
 		/// Executes the operation to get the catalog data by the initial instance set.
 		/// </summary>
-		/// <param name="catalog">The intial catalog.</param>
+		/// <param name="catalog">The initial catalog.</param>
 		/// <param name="scope">The database scope used to get the catalog.</param>
 		/// <returns>The instance of <see cref="Catalog"/>.</returns>
 		private async Task<Catalog> ExecuteGetCatalog(Catalog catalog, IDbContextScope scope)
@@ -254,15 +259,20 @@
 		}
 
 		/// <summary>
-		/// Executes the operation to delete the catalog data by the initial instance set.
+		/// Executes the operation to get the storage data by the initial instance set.
 		/// </summary>
-		/// <param name="catalog">The intial catalog.</param>
-		/// <param name="scope">The database scope used to get the catalog.</param>
-		/// <returns>The operaion result.</returns>
-		private async Task ExecuteDeleteCatalog(Catalog catalog, IDbContextScope scope)
+		/// <param name="storage">The initial storage.</param>
+		/// <param name="scope">The database scope used to get the storage.</param>
+		/// <returns>The instance of <see cref="Storage"/>.</returns>
+		private async Task<Storage> ExecuteGetStorage(Storage storage, IDbContextScope scope)
 		{
-			ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-			await catalogRepository.DeleteAsync(catalog.ID);
+			IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+			StorageContract data = await storageRepository.GetAsync(storage.ID);
+
+			storage = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
+			storage.CatalogRoot = await this.ExecuteGetCatalog(storage.CatalogRoot, scope);
+
+			return storage;
 		}
 
 		#endregion

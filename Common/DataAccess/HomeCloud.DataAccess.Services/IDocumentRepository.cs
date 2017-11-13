@@ -33,9 +33,9 @@
 		Task<T> GetAsync(Guid id);
 
 		/// <summary>
-		/// Looks for all records of <see cref="T" /> type.
+		/// Gets the records of <see cref="T" /> type by specified expression.
 		/// </summary>
-		/// <param name="selector">The data selector.</param>
+		/// <param name="selector">The data expression.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
@@ -56,5 +56,12 @@
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>The asynchronous operation.</returns>
 		Task DeleteAsync(Guid id);
+
+		/// <summary>
+		/// Deletes the records of <see cref="T" /> type by specified expression.
+		/// </summary>
+		/// <param name="selector">The data expression.</param>
+		/// <returns>The asynchronous operation.</returns>
+		Task DeleteAsync(Expression<Func<T, bool>> selector);
 	}
 }

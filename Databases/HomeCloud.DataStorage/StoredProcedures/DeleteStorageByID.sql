@@ -19,6 +19,10 @@ BEGIN
 	DELETE FROM [dbo].[Directory]
 	WHERE
 		[StorageID] = @local_ID
+
+	DELETE FROM [dbo].[Storage]
+	WHERE
+		[ID] = @local_ID
 END
 GO
 

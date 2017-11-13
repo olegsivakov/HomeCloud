@@ -130,13 +130,15 @@
 		}
 
 		/// <summary>
-		/// Gets storage by specified identifier.
+		/// Gets storage by the initial instance set.
 		/// </summary>
-		/// <param name="id">The identifier.</param>
+		/// <param name="storage">The initial storage stet.</param>
 		/// <returns>the instance of <see cref="Storage"/>.</returns>
-		public async Task<Storage> GetStorage(Guid id)
+		public async Task<Storage> GetStorage(Storage storage)
 		{
-			return await Task.FromException<Storage>(new NotSupportedException());
+			storage.CatalogRoot = await this.GetCatalog(storage.CatalogRoot);
+
+			return storage;
 		}
 
 		/// <summary>
@@ -155,32 +157,40 @@
 				catalogDocument = await repository.GetAsync(catalog.ID);
 			}
 
-			return await this.mapper.MapAsync(catalogDocument, catalog) ?? catalog;
+			return await this.mapper.MapAsync(catalogDocument, catalog);
 		}
 
 		/// <summary>
 		/// Deletes the specified storage.
 		/// </summary>
 		/// <param name="storage">The storage.</param>
-		/// <returns>The operation result.</returns>
-		public async Task DeleteStorage(Storage storage)
+		/// <returns>
+		/// The deleted instance of <see cref="Storage"/>.
+		/// </returns>
+		public async Task<Storage> DeleteStorage(Storage storage)
 		{
-			await this.DeleteCatalog(storage.CatalogRoot);
+			storage.CatalogRoot = await this.DeleteCatalog(storage.CatalogRoot);
+
+			return storage;
 		}
 
 		/// <summary>
 		/// Deletes the specified catalog.
 		/// </summary>
 		/// <param name="catalog">The catalog.</param>
-		/// <returns>The operation result.</returns>
-		public async Task DeleteCatalog(Catalog catalog)
+		/// <returns>
+		/// The deleted instance of <see cref="Catalog"/>.
+		/// </returns>
+		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
 
-				await repository.DeleteAsync(catalog.ID);
+				await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
 			}
+
+			return catalog;
 		}
 
 		#endregion

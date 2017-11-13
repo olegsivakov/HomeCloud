@@ -29,7 +29,7 @@
 		[NonAction]
 		public virtual NotFoundObjectResult NotFound(ErrorViewModel value)
 		{
-			NotFoundObjectResult result = this.NotFound(value);
+			NotFoundObjectResult result = this.NotFound((object)value);
 			value.StatusCode = result.StatusCode.GetValueOrDefault();
 
 			return result;

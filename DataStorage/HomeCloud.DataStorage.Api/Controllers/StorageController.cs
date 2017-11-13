@@ -141,7 +141,7 @@
 				id,
 				async () =>
 				{
-					ServiceResult result = await this.storageService.CreateStorageAsync(null);
+					ServiceResult result = await this.storageService.DeleteStorageAsync(id);
 
 					return await this.HttpDeleteResult(result);
 				});
