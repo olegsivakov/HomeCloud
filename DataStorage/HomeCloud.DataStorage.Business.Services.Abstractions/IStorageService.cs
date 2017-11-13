@@ -46,7 +46,7 @@
 		/// </summary>
 		/// <param name="id">The storage identifier.</param>
 		/// <returns>
-		/// The operation result containing the list of instances of <see cref="Storage" />.
+		/// The operation result containing the instance of <see cref="Storage" />.
 		/// </returns>
 		Task<ServiceResult<Storage>> GetStorageAsync(Guid id);
 
