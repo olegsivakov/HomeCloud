@@ -1,58 +1,11 @@
 ﻿namespace HomeCloud.DataStorage.Business.Entities
 {
-	#region Usings
-
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// Represents storage entity.
 	/// </summary>
-	public class Storage
+	public class Storage : CatalogRoot
 	{
-		#region Private Members
-
-		/// <summary>
-		/// The unique identifier member.
-		/// </summary>
-		private Guid id = Guid.Empty;
-
-		#endregion
-
 		#region Public Properties
-
-		/// <summary>
-		/// Gets or sets the identifier.
-		/// </summary>
-		/// <value>
-		/// The identifier.
-		/// </value>
-		public Guid ID
-		{
-			get
-			{
-				return this.id;
-			}
-
-			set
-			{
-				this.id = value;
-
-				if (this.CatalogRoot != null)
-				{
-					this.CatalogRoot.StorageID = this.id;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the name.
-		/// </summary>
-		/// <value>
-		/// The name.
-		/// </value>
-		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the quota.
@@ -61,30 +14,6 @@
 		/// The quota.
 		/// </value>
 		public long? Quota { get; set; }
-
-		/// <summary>
-		/// Gets or sets the root catalog in file storage.
-		/// </summary>
-		/// <value>
-		/// The root catalog.
-		/// </value>
-		public Catalog CatalogRoot { get; set; } = new Catalog();
-
-		/// <summary>
-		/// Gets or sets the creation date.
-		/// </summary>
-		/// <value>
-		/// The creation date.
-		/// </value>
-		public DateTime CreationDate { get; set; }
-
-		/// <summary>
-		/// Gets or sets the updated date.
-		/// </summary>
-		/// <value>
-		/// The updated date.
-		/// </value>
-		public DateTime UpdatedDate { get; set; }
 
 		#endregion
 	}

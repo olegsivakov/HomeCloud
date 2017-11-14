@@ -43,6 +43,65 @@
 
 		#endregion
 
+		#region IFileSystemProvider Implementations
+
+		/// <summary>
+		/// Generates the absolute path to the catalog of the specified storage.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>The absolute path to the storage catalog.</returns>
+		public async Task<string> GeneratePath(Storage storage)
+		{
+			return await Task.Run(() =>
+			{
+				if (string.IsNullOrWhiteSpace(this.fileSystemSettings.StorageRootPath))
+				{
+					throw new ArgumentException("The root path to the storages is not configured.");
+				}
+
+				if (string.IsNullOrWhiteSpace(storage.CatalogRoot.Name))
+				{
+					throw new ArgumentException("The storage catalog name is empty");
+				}
+
+				storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
+
+				return storage.CatalogRoot.Path;
+			});
+		}
+
+		/// <summary>
+		/// Generates the absolute path to the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The absolute path to the storage catalog.</returns>
+		public async Task<string> GeneratePath(Catalog catalog)
+		{
+			return await Task.Run(() =>
+			{
+				if (string.IsNullOrWhiteSpace(catalog.Parent?.Path))
+				{
+					throw new ArgumentException("The parent catalog path is empty");
+				}
+
+				if (!Directory.Exists(catalog.Parent.Path))
+				{
+					throw new DirectoryNotFoundException("The catalog doesn't exist by specified path.");
+				}
+
+				if (string.IsNullOrWhiteSpace(catalog.Name))
+				{
+					throw new ArgumentException("The catalog name is empty");
+				}
+
+				catalog.Path = Path.Combine(catalog.Parent.Path, catalog.Name);
+
+				return catalog.Path;
+			});
+		}
+
+		#endregion
+
 		#region IDataStoreProvider Implementations
 
 		/// <summary>

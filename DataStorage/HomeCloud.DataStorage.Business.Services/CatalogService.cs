@@ -25,6 +25,12 @@
 		/// </returns>
 		public Task<ServiceResult<Catalog>> CreateCatalogAsync(Catalog catalog)
 		{
+			//Prepare
+			//1. Get parent catalog
+			//Validate
+			//1. check parent id exists && check parent path exists
+			//2. check catalog id exists && check catalog path exists
+			//6. create catalog
 		}
 
 		/// <summary>

@@ -32,7 +32,7 @@
 		public Catalog Convert(Contracts.Catalog source, Catalog target)
 		{
 			target.ID = source.ID;
-			target.ParentID = source.ParentID;
+			target.Parent = source.ParentID.HasValue ? new Catalog() { ID = source.ParentID.Value } : null;
 			target.Name = source.Name;
 			target.StorageID = source.StorageID;
 			target.UpdatedDate = source.UpdatedDate;
@@ -56,7 +56,7 @@
 		public Contracts.Catalog Convert(Catalog source, Contracts.Catalog target)
 		{
 			target.ID = source.ID;
-			target.ParentID = source.ParentID;
+			target.Parent = source.ParentID?.ID;
 			target.Name = source.Name;
 			target.StorageID = source.StorageID;
 			target.UpdatedDate = source.UpdatedDate;
