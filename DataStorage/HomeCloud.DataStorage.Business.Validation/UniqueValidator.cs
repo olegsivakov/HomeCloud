@@ -55,7 +55,7 @@
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
 			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("The storage already exists."));
-			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("The storage already exists by specified path."));
+			this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("The storage with provided name already exists."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -67,11 +67,18 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
+			Catalog catalog = await this.dataProviderFactory.Get<IDataStoreProvider>().GetCatalog(instance);
+
 			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("The catalog already exists."));
-			if ((instance.Parent?.ID).GetValueOrDefault() != Guid.Empty)
+			this.If(async id =>
 			{
-				this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("The catalog already exists by specified path."));
-			}
+				if (catalog.Parent?.ID == instance.Parent?.ID && catalog.Name == instance.Name)
+				{
+					return false;
+				}
+
+				return await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance);
+			}).AddError(new AlreadyExistsException("The catalog with the provided name already exists in parent catalog."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

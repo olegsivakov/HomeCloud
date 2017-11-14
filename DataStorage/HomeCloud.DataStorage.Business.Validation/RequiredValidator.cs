@@ -6,6 +6,7 @@
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.Validation;
+	using System;
 
 	#endregion
 
@@ -51,6 +52,7 @@
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The catalog name is empty.");
+			this.If(obj => (instance.Parent?.ID).GetValueOrDefault() == Guid.Empty).AddError("The parent catalog is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}

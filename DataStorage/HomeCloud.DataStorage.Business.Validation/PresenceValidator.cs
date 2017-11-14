@@ -57,7 +57,7 @@
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
 			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new NotFoundException("The storage does not exist."));
-			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new NotFoundException("The storage does not exist by specified path."));
+			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new NotFoundException("The storage with the provided name does not exist."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -70,7 +70,7 @@
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
 			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new NotFoundException("The catalog does not exist."));
-			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new NotFoundException("The catalog does not exist by specified path."));
+			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new NotFoundException("The catalog with the provided name does not exist in parent catalog."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
