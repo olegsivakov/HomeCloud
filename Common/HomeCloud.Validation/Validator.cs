@@ -37,9 +37,15 @@
 		{
 			ValidationResult result = new ValidationResult();
 
+			IList<Task<ValidationResult>> tasks = new List<Task<ValidationResult>>();
 			foreach (IValidationRule<T> rule in this.rules)
 			{
-				ValidationResult ruleResult = await rule.IsSatisfiedByAsync(instance);
+				tasks.Add(rule.IsSatisfiedByAsync(instance));
+			}
+			IEnumerable<ValidationResult> ruleResults = await Task.WhenAll(tasks);
+
+			foreach (ValidationResult ruleResult in ruleResults)
+			{
 				if (!ruleResult.IsValid)
 				{
 					result += ruleResult;

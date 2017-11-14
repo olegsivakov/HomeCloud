@@ -74,6 +74,22 @@
 		#region IDataStoreProvider Implementations
 
 		/// <summary>
+		/// Gets a value indicating whether the specified storage already exists.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> StorageExists(Storage storage)
+		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+				StorageContract data = await storageRepository.GetAsync(storage.ID);
+
+				return data != null;
+			}
+		}
+
+		/// <summary>
 		/// Creates the specified storage.
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
@@ -180,6 +196,22 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				return await this.ExecuteGetStorage(storage, scope);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the specified catalog already exists.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> CatalogExists(Catalog catalog)
+		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				CatalogContract data = await catalogRepository.GetAsync(catalog.ID);
+
+				return data != null;
 			}
 		}
 

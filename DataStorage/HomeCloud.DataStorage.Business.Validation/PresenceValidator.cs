@@ -3,21 +3,15 @@
 	#region Usings
 
 	using System;
-	using System.IO;
 	using System.Threading.Tasks;
 
-	using HomeCloud.DataAccess.Services;
-	using HomeCloud.DataAccess.Services.Factories;
-
-	using HomeCloud.DataStorage.Api.Configuration;
+	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
+	using HomeCloud.DataStorage.Business.Providers;
 
 	using HomeCloud.Exceptions;
 	using HomeCloud.Validation;
-
-	using Microsoft.Extensions.Options;
 
 	#endregion
 
@@ -31,29 +25,22 @@
 		#region Private Members
 
 		/// <summary>
-		/// The data context scope factory
+		/// The <see cref="IDataProvider"/> factory.
 		/// </summary>
-		private readonly IDataContextScopeFactory dataContextScopeFactory = null;
-
-		/// <summary>
-		/// The connection strings
-		/// </summary>
-		private readonly ConnectionStrings connectionStrings = null;
+		private readonly IServiceFactory<IDataProvider> dataProviderFactory = null;
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PresenceValidator"/> class.
+		/// Initializes a new instance of the <see cref="PresenceValidator" /> class.
 		/// </summary>
-		/// <param name="dataContextScopeFactory">The data context scope factory.</param>
-		/// <param name="connectionStrings">The connection strings.</param>
-		public PresenceValidator(IDataContextScopeFactory dataContextScopeFactory, IOptionsSnapshot<ConnectionStrings> connectionStrings)
+		/// <param name="dataProviderFactory">The <see cref="IDataProvider"/> factory.</param>
+		public PresenceValidator(IServiceFactory<IDataProvider> dataProviderFactory)
 			: base()
 		{
-			this.dataContextScopeFactory = dataContextScopeFactory;
-			this.connectionStrings = connectionStrings?.Value;
+			this.dataProviderFactory = dataProviderFactory;
 
 			this.If(id => id == Guid.Empty).AddError("The unique identifier is empty.");
 		}
@@ -69,13 +56,8 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(async id =>
-			{
-				using (IDbContextScope scope = dataContextScopeFactory.CreateDbContextScope(connectionStrings.DataStorageDB))
-				{
-					return await scope.GetRepository<IStorageRepository>().GetAsync(id) is null;
-				}
-			}).AddError(new NotFoundException("The storage does not exist."));
+			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new NotFoundException("The storage does not exist."));
+			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new NotFoundException("The storage does not exist by specified path."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -87,15 +69,8 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(async id =>
-			{
-				using (IDbContextScope scope = dataContextScopeFactory.CreateDbContextScope(connectionStrings.DataStorageDB))
-				{
-					return await scope.GetRepository<ICatalogRepository>().GetAsync(id) is null;
-				}
-			}).AddError(new NotFoundException("The catalog does not exist."));
-
-			this.If(id => !string.IsNullOrWhiteSpace(instance.Path) && !Directory.Exists(instance.Path)).AddError(new NotFoundException("The catalog doesn't exist by specified path."));
+			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new NotFoundException("The catalog does not exist."));
+			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new NotFoundException("The catalog does not exist by specified path."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

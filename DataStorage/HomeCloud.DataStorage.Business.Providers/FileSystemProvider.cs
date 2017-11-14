@@ -59,14 +59,12 @@
 					throw new ArgumentException("The root path to the storages is not configured.");
 				}
 
-				if (string.IsNullOrWhiteSpace(storage.CatalogRoot.Name))
+				if (string.IsNullOrWhiteSpace(storage.Name))
 				{
 					throw new ArgumentException("The storage catalog name is empty");
 				}
 
-				storage.CatalogRoot.Path = Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
-
-				return storage.CatalogRoot.Path;
+				return Path.Combine(this.fileSystemSettings.StorageRootPath, storage.Name);
 			});
 		}
 
@@ -94,15 +92,27 @@
 					throw new ArgumentException("The catalog name is empty");
 				}
 
-				catalog.Path = Path.Combine(catalog.Parent.Path, catalog.Name);
-
-				return catalog.Path;
+				return Path.Combine(catalog.Parent.Path, catalog.Name);
 			});
 		}
 
 		#endregion
 
 		#region IDataStoreProvider Implementations
+
+		/// <summary>
+		/// Gets a value indicating whether the specified storage already exists.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> StorageExists(Storage storage)
+		{
+			this.CheckStorageRoot();
+
+			string path = !string.IsNullOrWhiteSpace(storage.Path) ? storage.Path : await this.GeneratePath(storage);
+
+			return Directory.Exists(path);
+		}
 
 		/// <summary>
 		/// Creates the specified storage.
@@ -172,6 +182,18 @@
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether the specified catalog already exists.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> CatalogExists(Catalog catalog)
+		{
+			string path = !string.IsNullOrWhiteSpace(catalog.Path) ? catalog.Path : await this.GeneratePath(catalog);
+
+			return Directory.Exists(path);
+		}
+
+		/// <summary>
 		/// Gets the catalog by the initial instance set.
 		/// </summary>
 		/// <param name="catalog">The initial catalog set.</param>
@@ -233,6 +255,22 @@
 
 				return catalog;
 			});
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Checks <see cref="FileSystem.StorageRootPath"/> value is not empty.
+		/// </summary>
+		/// <exception cref="ArgumentException">The root path to the storages is not configured.</exception>
+		private void CheckStorageRoot()
+		{
+			if (string.IsNullOrWhiteSpace(this.fileSystemSettings.StorageRootPath) || !Directory.Exists(this.fileSystemSettings.StorageRootPath))
+			{
+				throw new ArgumentException("The root path for the storages is not configured or does not exist.");
+			}
 		}
 
 		#endregion

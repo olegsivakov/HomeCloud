@@ -36,6 +36,14 @@
 		public string Extension { get; set; }
 
 		/// <summary>
+		/// Gets or sets the catalog.
+		/// </summary>
+		/// <value>
+		/// The catalog.
+		/// </value>
+		public CatalogRoot Catalog { get; set; }
+
+		/// <summary>
 		/// Gets or sets the file path.
 		/// </summary>
 		/// <value>

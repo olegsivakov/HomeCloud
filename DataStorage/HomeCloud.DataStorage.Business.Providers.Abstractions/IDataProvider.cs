@@ -16,6 +16,13 @@
 	public interface IDataProvider
 	{
 		/// <summary>
+		/// Gets a value indicating whether the specified storage already exists.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
+		Task<bool> StorageExists(Storage storage);
+
+		/// <summary>
 		/// Creates the specified storage.
 		/// </summary>
 		/// <param name="storage">The instance of <see cref="Storage" /> type to create.</param>
@@ -43,6 +50,13 @@
 		/// <param name="storage">The initial storage set.</param>
 		/// <returns>The instance of <see cref="Storage"/>.</returns>
 		Task<Storage> GetStorage(Storage storage);
+
+		/// <summary>
+		/// Gets a value indicating whether the specified catalog already exists.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
+		Task<bool> CatalogExists(Catalog catalog);
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.

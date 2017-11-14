@@ -61,3 +61,52 @@
 		Task<ServiceResult<IEnumerable<Catalog>>> GetCatalogsAsync(Catalog parent, int offset = 0, int limit = 20);
 	}
 }
+
+
+
+//Create Storage
+//Input:
+//	Name:
+
+//Validation:
+//	- validate id does not exist
+//	- validate name is not empty
+//	- generate path by name and validate physical catalog does not exist
+
+//Update Storage
+//Input:
+//	ID, Name, Size, quota
+
+//Validation:
+//	- Validate id exists
+//	- Validate Name is not empty
+
+
+
+//Create catalog/catalog entry
+//Input:
+//	Name, Parent ID
+
+//Prepare:
+//	Get parent catalog by parent id
+
+//Validation:
+//	- validate id does not exist
+//	- validate name is not empty
+//	- validate parent catalog not empty
+//	- generate path by name and validate physical catalog does not exist
+
+//Update Catalog
+//Input:
+//	ID, Name, Parent ID
+
+
+//Preparation:
+//	- Get parent catalog by parent id
+
+//Validation:
+//	- Validate id exists
+//	- validate name is not empty
+//	- validate parent catalog not empty
+//	if parent id is different or name is different
+//	- generate path by name and validate physical catalog does not exist
