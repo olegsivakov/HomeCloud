@@ -31,12 +31,9 @@
 		/// </returns>
 		public Catalog Convert(Contracts.Catalog source, Catalog target)
 		{
-			target.ID = source.ID;
+			this.Convert(source, (CatalogRoot)target);
+
 			target.Parent = source.ParentID.HasValue ? new Catalog() { ID = source.ParentID.Value } : null;
-			target.Name = source.Name;
-			target.StorageID = source.StorageID;
-			target.UpdatedDate = source.UpdatedDate;
-			target.CreationDate = source.CreationDate;
 
 			return target;
 		}
@@ -55,12 +52,9 @@
 		/// </returns>
 		public Contracts.Catalog Convert(Catalog source, Contracts.Catalog target)
 		{
-			target.ID = source.ID;
-			target.Parent = source.ParentID?.ID;
-			target.Name = source.Name;
-			target.StorageID = source.StorageID;
-			target.UpdatedDate = source.UpdatedDate;
-			target.CreationDate = source.CreationDate;
+			target = this.Convert((CatalogRoot)source, target);
+
+			target.ParentID = source.Parent?.ID;
 
 			return target;
 		}
@@ -79,13 +73,7 @@
 		/// </returns>
 		public Catalog Convert(Contracts.CatalogDocument source, Catalog target)
 		{
-			if (target.ID == Guid.Empty)
-			{
-				target.ID = source.ID;
-			}
-
-			target.Path = source.Path;
-			target.Size = source.Size;
+			this.Convert(source, (CatalogRoot)target);
 
 			return target;
 		}
@@ -104,9 +92,7 @@
 		/// </returns>
 		public Contracts.CatalogDocument Convert(Catalog source, Contracts.CatalogDocument target)
 		{
-			target.ID = source.ID;
-			target.Path = string.IsNullOrWhiteSpace(source.Path) ? target.Path : source.Path;
-			target.Size = source.Size.HasValue ? source.Size.Value : target.Size;
+			target = this.Convert((CatalogRoot)source, target);
 
 			return target;
 		}

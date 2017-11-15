@@ -14,8 +14,8 @@
 	/// <summary>
 	/// Provides converter methods for <see cref="CatalogRoot" /> entity.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.DataAccess.Contracts.Catalog}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.Catalog, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, CatalogContract}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{CatalogContract, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
 	public class CatalogRootConverter : ITypeConverter<CatalogRoot, CatalogContract>, ITypeConverter<CatalogContract, CatalogRoot>, ITypeConverter<CatalogRoot, CatalogDocument>, ITypeConverter<CatalogDocument, CatalogRoot>
