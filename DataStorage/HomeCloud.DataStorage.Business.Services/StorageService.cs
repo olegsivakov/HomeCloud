@@ -66,15 +66,11 @@
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
 		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
-			storage.CatalogRoot.Name = Guid.NewGuid().ToString();
+			storage.Name = Guid.NewGuid().ToString();
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 			ValidationResult result = await storageValidator.Get<IRequiredValidator>().ValidateAsync(storage);
 			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
-
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			result += await catalogValidator.Get<IRequiredValidator>().ValidateAsync(storage.CatalogRoot);
-			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(storage.CatalogRoot);
 
 			if (!result.IsValid)
 			{
@@ -105,13 +101,10 @@
 		/// </returns>
 		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
 		{
-			storage.CatalogRoot.Name = storage.CatalogRoot.Name ?? Guid.NewGuid().ToString();
+			storage.Name = storage.Name ?? Guid.NewGuid().ToString();
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
-
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			result += await catalogValidator.Get<IRequiredValidator>().ValidateAsync(storage.CatalogRoot);
 
 			if (!result.IsValid)
 			{
@@ -153,7 +146,7 @@
 			IDataCommandHandler handler = this.processor.CreateDataHandler<IDataCommandHandler>();
 			foreach (Storage storage in storages)
 			{
-				handler.CreateAsyncCommand<IAggregationDataProvider>(async provider => storage.CatalogRoot = await provider.GetCatalog(storage.CatalogRoot), null);
+				handler.CreateAsyncCommand<IAggregationDataProvider>(async provider => await provider.GetStorage(storage), null);
 			}
 
 			await this.processor.ProcessAsync();

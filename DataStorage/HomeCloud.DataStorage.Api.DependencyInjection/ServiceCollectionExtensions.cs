@@ -91,6 +91,10 @@
 
 			services.AddSingleton<ITypeConverter<DataContracts.Storage, Storage>>(storageConverter);
 			services.AddSingleton<ITypeConverter<Storage, DataContracts.Storage>>(storageConverter);
+			services.AddSingleton<ITypeConverter<DataContracts.Catalog, Storage>>(storageConverter);
+			services.AddSingleton<ITypeConverter<Storage, DataContracts.CatalogDocument>>(storageConverter);
+			services.AddSingleton<ITypeConverter<DataContracts.Catalog, Storage>>(storageConverter);
+			services.AddSingleton<ITypeConverter<Storage, DataContracts.CatalogDocument>>(storageConverter);
 
 			CatalogConverter catalogConverter = new CatalogConverter();
 
