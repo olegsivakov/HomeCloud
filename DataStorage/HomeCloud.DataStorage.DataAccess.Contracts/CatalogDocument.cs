@@ -15,6 +15,8 @@
 	/// <summary>
 	/// Represents catalog document.
 	/// </summary>
+	/// <seealso cref="HomeCloud.DataAccess.Contracts.IDocument" />
+	/// <seealso cref="System.ComponentModel.IChangeTracking" />
 	[DocumentCollection(CollectionName = "catalogs")]
 	public class CatalogDocument : IDocument, IChangeTracking
 	{

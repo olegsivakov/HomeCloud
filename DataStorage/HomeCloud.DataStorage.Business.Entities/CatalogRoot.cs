@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Represents catalog entity.
 	/// </summary>
-	public class CatalogRoot
+	public abstract class CatalogRoot
 	{
 		/// <summary>
 		/// Gets or sets the identifier.

@@ -17,7 +17,7 @@
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.Catalog}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument, HomeCloud.DataStorage.Business.Entities.Catalog}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument}" />
-	public class CatalogConverter : ITypeConverter<Contracts.Catalog, Catalog>, ITypeConverter<Catalog, Contracts.Catalog>, ITypeConverter<Contracts.CatalogDocument, Catalog>, ITypeConverter<Catalog, Contracts.CatalogDocument>
+	public class CatalogConverter : CatalogRootConverter, ITypeConverter<Contracts.Catalog, Catalog>, ITypeConverter<Catalog, Contracts.Catalog>, ITypeConverter<Contracts.CatalogDocument, Catalog>, ITypeConverter<Catalog, Contracts.CatalogDocument>
 	{
 		#region ITypeConverter<Contracts.Catalog, Catalog> Implementations
 

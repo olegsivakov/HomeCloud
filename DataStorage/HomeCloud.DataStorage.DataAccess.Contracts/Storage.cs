@@ -10,6 +10,7 @@
 	/// <summary>
 	/// Represents <see cref="Storage" /> data contract.
 	/// </summary>
+	/// <seealso cref="System.ComponentModel.IChangeTracking" />
 	public class Storage : IChangeTracking
 	{
 		#region Private Members

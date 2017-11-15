@@ -67,18 +67,8 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			Catalog catalog = await this.dataProviderFactory.Get<IDataStoreProvider>().GetCatalog(instance);
-
 			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("The catalog already exists."));
-			this.If(async id =>
-			{
-				if (catalog.Parent?.ID == instance.Parent?.ID && catalog.Name == instance.Name)
-				{
-					return false;
-				}
-
-				return await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance);
-			}).AddError(new AlreadyExistsException("The catalog with the provided name already exists in parent catalog."));
+			this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("The catalog with the provided name already exists in parent catalog."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

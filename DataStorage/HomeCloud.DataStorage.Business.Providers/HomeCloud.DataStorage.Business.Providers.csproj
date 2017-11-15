@@ -42,6 +42,7 @@
     <Compile Include="AggregationDataProvider.cs" />
     <Compile Include="DataStoreProvider.cs" />
     <Compile Include="FileSystemProvider.cs" />
+    <Compile Include="Helpers\FileSystemProviderHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

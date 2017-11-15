@@ -10,6 +10,7 @@
 
 	using HomeCloud.DataStorage.Api.Configuration;
 	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.Business.Providers.Helpers;
 
 	using Microsoft.Extensions.Options;
 
@@ -43,62 +44,9 @@
 
 		#endregion
 
-		#region IFileSystemProvider Implementations
-
-		/// <summary>
-		/// Generates the absolute path to the catalog of the specified storage.
-		/// </summary>
-		/// <param name="storage">The storage.</param>
-		/// <returns>The absolute path to the storage catalog.</returns>
-		public async Task<string> GeneratePath(Storage storage)
-		{
-			return await Task.Run(() =>
-			{
-				if (string.IsNullOrWhiteSpace(this.fileSystemSettings.StorageRootPath))
-				{
-					throw new ArgumentException("The root path to the storages is not configured.");
-				}
-
-				if (string.IsNullOrWhiteSpace(storage.Name))
-				{
-					throw new ArgumentException("The storage catalog name is empty");
-				}
-
-				return Path.Combine(this.fileSystemSettings.StorageRootPath, storage.Name);
-			});
-		}
-
-		/// <summary>
-		/// Generates the absolute path to the specified catalog.
-		/// </summary>
-		/// <param name="catalog">The catalog.</param>
-		/// <returns>The absolute path to the storage catalog.</returns>
-		public async Task<string> GeneratePath(Catalog catalog)
-		{
-			return await Task.Run(() =>
-			{
-				if (string.IsNullOrWhiteSpace(catalog.Parent?.Path))
-				{
-					throw new ArgumentException("The parent catalog path is empty");
-				}
-
-				if (!Directory.Exists(catalog.Parent.Path))
-				{
-					throw new DirectoryNotFoundException("The catalog doesn't exist by specified path.");
-				}
-
-				if (string.IsNullOrWhiteSpace(catalog.Name))
-				{
-					throw new ArgumentException("The catalog name is empty");
-				}
-
-				return Path.Combine(catalog.Parent.Path, catalog.Name);
-			});
-		}
-
-		#endregion
-
 		#region IDataStoreProvider Implementations
+
+		#region Storage Methods
 
 		/// <summary>
 		/// Gets a value indicating whether the specified storage already exists.
@@ -107,11 +55,14 @@
 		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> StorageExists(Storage storage)
 		{
-			this.CheckStorageRoot();
+			return await Task.Run(() =>
+			{
+				storage.ValidateStoragePath(this.fileSystemSettings);
 
-			string path = !string.IsNullOrWhiteSpace(storage.Path) ? storage.Path : await this.GeneratePath(storage);
+				string path = storage.GeneratePath(this.fileSystemSettings);
 
-			return Directory.Exists(path);
+				return Directory.Exists(path);
+			});
 		}
 
 		/// <summary>
@@ -123,13 +74,13 @@
 		{
 			return await Task.Run(() =>
 			{
-				if (string.IsNullOrWhiteSpace(storage.CatalogRoot.Path) && string.IsNullOrWhiteSpace(storage.CatalogRoot.Name))
-				{
-					return storage;
-				}
+				storage.ValidateStoragePath(this.fileSystemSettings);
 
-				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
-				storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
+				storage.Path = storage.GeneratePath(this.fileSystemSettings, true);
+				if (!Directory.Exists(storage.Path))
+				{
+					storage.Path = Directory.CreateDirectory(storage.Path).FullName;
+				}
 
 				return storage;
 			});
@@ -138,22 +89,18 @@
 		/// <summary>
 		/// Updates the specified storage.
 		/// </summary>
-		/// <param name="storage">The storage.</param>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to update.</param>
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
 			return await Task.Run(() =>
 			{
-				if (string.IsNullOrWhiteSpace(storage.CatalogRoot.Path) && string.IsNullOrWhiteSpace(storage.CatalogRoot.Name))
-				{
-					return storage;
-				}
+				storage.ValidateStoragePath(this.fileSystemSettings);
 
-				storage.CatalogRoot.Path = storage.CatalogRoot.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, storage.CatalogRoot.Name);
-
-				if (!Directory.Exists(storage.CatalogRoot.Path))
+				storage.Path = storage.GeneratePath(this.fileSystemSettings);
+				if (!Directory.Exists(storage.Path))
 				{
-					storage.CatalogRoot.Path = Directory.CreateDirectory(storage.CatalogRoot.Path).FullName;
+					storage.Path = Directory.CreateDirectory(storage.Path).FullName;
 				}
 
 				return storage;
@@ -172,14 +119,52 @@
 		}
 
 		/// <summary>
-		/// Gets storage by the initial instance set.
+		/// Gets storage by initial instance set.
 		/// </summary>
-		/// <param name="storage">The initial storage stet.</param>
-		/// <returns>the instance of <see cref="Storage"/>.</returns>
+		/// <param name="storage">The initial storage set.</param>
+		/// <returns>The instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> GetStorage(Storage storage)
 		{
-			return await Task.FromException<Storage>(new NotSupportedException());
+			return await Task.Run(() =>
+			{
+				storage.ValidateStoragePath(this.fileSystemSettings);
+
+				storage.Path = storage.GeneratePath(this.fileSystemSettings);
+				if (Directory.Exists(storage.Path))
+				{
+					storage.Size = Directory.GetFiles(storage.Path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)).Sum(file => file.Length);
+				}
+
+				return storage;
+			});
 		}
+
+		/// <summary>
+		/// Deletes the specified storage.
+		/// </summary>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to delete.</param>
+		/// <returns>
+		/// The deleted instance of <see cref="Storage"/> type.
+		/// </returns>
+		public async Task<Storage> DeleteStorage(Storage storage)
+		{
+			return await Task.Run(() =>
+			{
+				storage.ValidateStoragePath(this.fileSystemSettings);
+
+				storage.Path = storage.GeneratePath(this.fileSystemSettings);
+				if (Directory.Exists(storage.Path))
+				{
+					Directory.Delete(storage.Path, true);
+				}
+
+				return storage;
+			});
+		}
+
+		#endregion
+
+		#region Catalog Methods
 
 		/// <summary>
 		/// Gets a value indicating whether the specified catalog already exists.
@@ -188,25 +173,84 @@
 		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogExists(Catalog catalog)
 		{
-			string path = !string.IsNullOrWhiteSpace(catalog.Path) ? catalog.Path : await this.GeneratePath(catalog);
+			return await Task.Run(() =>
+			{
+				catalog.ValidateCatalogPath();
 
-			return Directory.Exists(path);
+				string path = catalog.GeneratePath();
+
+				return Directory.Exists(path);
+			});
+		}
+
+		/// <summary>
+		/// Creates the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The instance of <see cref="Catalog" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
+		public async Task<Catalog> CreateCatalog(Catalog catalog)
+		{
+			return await Task.Run(() =>
+			{
+				catalog.ValidateCatalogPath();
+
+				catalog.Path = catalog.GeneratePath(true);
+				if (!Directory.Exists(catalog.Path))
+				{
+					catalog.Path = Directory.CreateDirectory(catalog.Path).FullName;
+				}
+
+				return catalog;
+			});
+		}
+
+		/// <summary>
+		/// Updates the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The instance of <see cref="Catalog" /> type to update.</param>
+		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
+		public async Task<Catalog> UpdateCatalog(Catalog catalog)
+		{
+			return await Task.Run(() =>
+			{
+				catalog.ValidateCatalogPath();
+
+				catalog.Path = catalog.GeneratePath();
+				if (!Directory.Exists(catalog.Path))
+				{
+					catalog.Path = Directory.CreateDirectory(catalog.Path).FullName;
+				}
+
+				return catalog;
+			});
+		}
+
+		/// <summary>
+		/// Gets the list of catalogs located in specified parent catalog.
+		/// </summary>
+		/// <param name="parent">The parent catalog of <see cref="Catalog"/> type.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="Catalog" /> type.
+		/// </returns>
+		public async Task<IEnumerable<Catalog>> GetCatalogs(Catalog parent, int offset = 0, int limit = 20)
+		{
+			return await Task.FromException<IEnumerable<Catalog>>(new NotSupportedException());
 		}
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
 		/// </summary>
 		/// <param name="catalog">The initial catalog set.</param>
-		/// <returns>The instance of <see cref="Catalog"/>.</returns>
+		/// <returns>The instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> GetCatalog(Catalog catalog)
 		{
 			return await Task.Run(() =>
 			{
-				if (string.IsNullOrWhiteSpace(catalog.Path))
-				{
-					return catalog;
-				}
+				catalog.ValidateCatalogPath();
 
+				catalog.Path = catalog.GeneratePath();
 				if (Directory.Exists(catalog.Path))
 				{
 					catalog.Size = Directory.GetFiles(catalog.Path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)).Sum(file => file.Length);
@@ -217,37 +261,19 @@
 		}
 
 		/// <summary>
-		/// Deletes the specified storage.
-		/// </summary>
-		/// <param name="storage">The storage.</param>
-		/// <returns>
-		/// The deleted instance of <see cref="Storage"/>.
-		/// </returns>
-		public async Task<Storage> DeleteStorage(Storage storage)
-		{
-			await this.DeleteCatalog(storage.CatalogRoot);
-
-			return storage;
-		}
-
-		/// <summary>
 		/// Deletes the specified catalog.
 		/// </summary>
-		/// <param name="catalog">The catalog.</param>
+		/// <param name="catalog">The instance of <see cref="Catalog" /> type to delete.</param>
 		/// <returns>
-		/// The deleted instance of <see cref="Catalog"/>.
+		/// The deleted instance of <see cref="Catalog"/> type.
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
 			return await Task.Run(() =>
 			{
-				if (string.IsNullOrWhiteSpace(catalog.Path) && string.IsNullOrWhiteSpace(catalog.Name))
-				{
-					return catalog;
-				}
+				catalog.ValidateCatalogPath();
 
-				catalog.Path = catalog.Path ?? Path.Combine(this.fileSystemSettings.StorageRootPath, catalog.Name);
-
+				catalog.Path = catalog.GeneratePath();
 				if (Directory.Exists(catalog.Path))
 				{
 					Directory.Delete(catalog.Path, true);
@@ -258,20 +284,6 @@
 		}
 
 		#endregion
-
-		#region Private Methods
-
-		/// <summary>
-		/// Checks <see cref="FileSystem.StorageRootPath"/> value is not empty.
-		/// </summary>
-		/// <exception cref="ArgumentException">The root path to the storages is not configured.</exception>
-		private void CheckStorageRoot()
-		{
-			if (string.IsNullOrWhiteSpace(this.fileSystemSettings.StorageRootPath) || !Directory.Exists(this.fileSystemSettings.StorageRootPath))
-			{
-				throw new ArgumentException("The root path for the storages is not configured or does not exist.");
-			}
-		}
 
 		#endregion
 	}

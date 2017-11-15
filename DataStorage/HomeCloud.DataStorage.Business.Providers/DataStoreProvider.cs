@@ -73,6 +73,8 @@
 
 		#region IDataStoreProvider Implementations
 
+		#region Storage Methods
+
 		/// <summary>
 		/// Gets a value indicating whether the specified storage already exists.
 		/// </summary>
@@ -83,9 +85,9 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-				StorageContract data = await storageRepository.GetAsync(storage.ID);
+				StorageContract storageContract = await storageRepository.GetAsync(storage.ID);
 
-				return data != null;
+				return storageContract != null;
 			}
 		}
 
@@ -96,24 +98,25 @@
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
+			StorageContract storageContract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
+			CatalogContract catalogContract = await this.mapper.MapNewAsync<Storage, CatalogContract>(storage);
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-
-				StorageContract storageContract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
 				storageContract = await storageRepository.SaveAsync(storageContract);
 
-				storage = await this.mapper.MapAsync(storageContract, storage);
-
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-
-				CatalogContract catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(storage.CatalogRoot);
 				catalogContract = await catalogRepository.SaveAsync(catalogContract);
 
-				storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot);
-
 				scope.Commit();
+
+				storageContract.AcceptChanges();
+				catalogContract.AcceptChanges();
 			}
+
+			storage = await this.mapper.MapAsync(storageContract, storage);
+			storage = await this.mapper.MapAsync(catalogContract, storage);
 
 			return storage;
 		}
@@ -121,7 +124,7 @@
 		/// <summary>
 		/// Updates the specified storage.
 		/// </summary>
-		/// <param name="storage">The storage.</param>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to update.</param>
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
@@ -135,7 +138,6 @@
 				if (storageContract.IsChanged)
 				{
 					storageContract = await storageRepository.SaveAsync(storageContract);
-					storageContract.AcceptChanges();
 
 					storage = await this.mapper.MapAsync(storageContract, storage);
 				}
@@ -145,13 +147,16 @@
 				CatalogContract catalogContract = (await catalogRepository.GetByParentIDAsync(storage.ID, null, 0, 1)).FirstOrDefault();
 				if (catalogContract == null)
 				{
-					catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(storage.CatalogRoot);
+					catalogContract = await this.mapper.MapNewAsync<Storage, CatalogContract>(storage);
 					catalogContract = await catalogRepository.SaveAsync(catalogContract);
 				}
 
-				storage.CatalogRoot = await this.mapper.MapAsync(catalogContract, storage.CatalogRoot);
+				storage = await this.mapper.MapAsync(catalogContract, storage);
 
 				scope.Commit();
+
+				storageContract.AcceptChanges();
+				catalogContract.AcceptChanges();
 			}
 
 			return storage;
@@ -173,31 +178,69 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
 				IEnumerable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
-
 				IEnumerable<Storage> storages = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
-				foreach (Storage storage in storages)
-				{
-					storage.CatalogRoot = await this.ExecuteGetCatalog(storage.CatalogRoot, scope);
-				}
 
-				return storages;
+				IEnumerable<Task<Storage>> tasks = storages.Select(async storage =>
+				{
+					CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
+					return await this.mapper.MapAsync(catalogContract, storage);
+				});
+
+				return await Task.WhenAll(tasks);
 			}
 		}
 
 		/// <summary>
-		/// Gets storage by the initial instance set.
+		/// Gets storage by initial instance set.
 		/// </summary>
-		/// <param name="storage">The initial storage stet.</param>
-		/// <returns>the instance of <see cref="Storage"/>.</returns>
+		/// <param name="storage">The initial storage set.</param>
+		/// <returns>The instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> GetStorage(Storage storage)
 		{
+			StorageContract storageContract = null;
+			CatalogContract catalogContract = null;
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
-				return await this.ExecuteGetStorage(storage, scope);
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+				storageContract = await storageRepository.GetAsync(storage.ID);
+
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				catalogContract = await catalogRepository.GetAsync(storage.ID);
 			}
+
+			storage = await this.mapper.MapNewAsync<StorageContract, Storage>(storageContract);
+			storage = await this.mapper.MapAsync(catalogContract, storage);
+
+			return storage;
 		}
+
+		/// <summary>
+		/// Deletes the specified storage.
+		/// </summary>
+		/// <param name="storage">The instance of <see cref="Storage" /> type to delete.</param>
+		/// <returns>
+		/// The deleted instance of <see cref="Storage"/> type.
+		/// </returns>
+		public async Task<Storage> DeleteStorage(Storage storage)
+		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+				await storageRepository.DeleteAsync(storage.ID);
+
+				scope.Commit();
+			}
+
+			return storage;
+		}
+
+		#endregion
+
+		#region Catalog Methods
 
 		/// <summary>
 		/// Gets a value indicating whether the specified catalog already exists.
@@ -209,60 +252,125 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-				CatalogContract data = await catalogRepository.GetAsync(catalog.ID);
+				CatalogContract catalogContract = await catalogRepository.GetAsync(catalog.ID);
 
-				return data != null;
+				return catalogContract != null;
 			}
+		}
+
+		/// <summary>
+		/// Creates the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The instance of <see cref="Catalog" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
+		public async Task<Catalog> CreateCatalog(Catalog catalog)
+		{
+			CatalogContract catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
+
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				catalogContract = await catalogRepository.SaveAsync(catalogContract);
+
+				scope.Commit();
+
+				catalogContract.AcceptChanges();
+			}
+
+			catalog = await this.mapper.MapAsync(catalogContract, catalog);
+
+			return catalog;
+		}
+
+		/// <summary>
+		/// Updates the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The instance of <see cref="Catalog" /> type to update.</param>
+		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
+		public async Task<Catalog> UpdateCatalog(Catalog catalog)
+		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+
+				CatalogContract catalogContract = await catalogRepository.GetAsync(catalog.ID);
+				catalogContract = await this.mapper.MapAsync(catalog, catalogContract);
+
+				if (catalogContract.IsChanged)
+				{
+					catalogContract = await catalogRepository.SaveAsync(catalogContract);
+
+					catalog = await this.mapper.MapAsync(catalogContract, catalog);
+				}
+
+				scope.Commit();
+
+				catalogContract.AcceptChanges();
+			}
+
+			return catalog;
+		}
+
+		/// <summary>
+		/// Gets the list of catalogs located in specified parent catalog.
+		/// </summary>
+		/// <param name="parent">The parent catalog of <see cref="Catalog"/> type.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="Catalog" /> type.
+		/// </returns>
+		public async Task<IEnumerable<Catalog>> GetCatalogs(Catalog parent, int offset = 0, int limit = 20)
+		{
+			if (limit == 0)
+			{
+				return await Task.FromResult(Enumerable.Empty<Catalog>());
+			}
+
+			IEnumerable<CatalogContract> data = null;
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				data = await catalogRepository.GetByParentIDAsync(parent.StorageID, parent.ID, offset, limit);
+			}
+
+			return (await this.mapper.MapNewAsync<CatalogContract, Catalog>(data)).Select(catalog =>
+			{
+				catalog.Parent = parent;
+
+				return catalog;
+			});
 		}
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
 		/// </summary>
 		/// <param name="catalog">The initial catalog set.</param>
-		/// <returns>The instance of <see cref="Catalog"/>.</returns>
+		/// <returns>The instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> GetCatalog(Catalog catalog)
 		{
+			CatalogContract catalogContract = null;
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
-				return await this.ExecuteGetCatalog(catalog, scope);
-			}
-		}
-
-		/// <summary>
-		/// Deletes the specified storage.
-		/// </summary>
-		/// <param name="storage">The storage.</param>
-		/// <returns>
-		/// The deleted instance of <see cref="Storage"/>.
-		/// </returns>
-		public async Task<Storage> DeleteStorage(Storage storage)
-		{
-			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
-			{
-				storage = await this.ExecuteGetStorage(storage, scope);
-
-				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-				await storageRepository.DeleteAsync(storage.ID);
-
-				scope.Commit();
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				catalogContract = await catalogRepository.GetAsync(catalog.ID);
 			}
 
-			return storage;
+			return await this.mapper.MapAsync(catalogContract, catalog);
 		}
 
 		/// <summary>
 		/// Deletes the specified catalog.
 		/// </summary>
-		/// <param name="catalog">The catalog.</param>
+		/// <param name="catalog">The instance of <see cref="Catalog" /> type to delete.</param>
 		/// <returns>
-		/// The deleted instance of <see cref="Catalog"/>.
+		/// The deleted instance of <see cref="Catalog"/> type.
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
-				catalog = await this.ExecuteGetCatalog(catalog, scope);
-
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 				await catalogRepository.DeleteAsync(catalog.ID);
 
@@ -273,39 +381,6 @@
 		}
 
 		#endregion
-
-		#region Private Methods
-
-		/// <summary>
-		/// Executes the operation to get the catalog data by the initial instance set.
-		/// </summary>
-		/// <param name="catalog">The initial catalog.</param>
-		/// <param name="scope">The database scope used to get the catalog.</param>
-		/// <returns>The instance of <see cref="Catalog"/>.</returns>
-		private async Task<Catalog> ExecuteGetCatalog(Catalog catalog, IDbContextScope scope)
-		{
-			ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-			IEnumerable<CatalogContract> catalogContracts = await catalogRepository.GetByParentIDAsync(catalog.StorageID, null, 0, 1);
-
-			return await this.mapper.MapAsync(catalogContracts.FirstOrDefault(), catalog);
-		}
-
-		/// <summary>
-		/// Executes the operation to get the storage data by the initial instance set.
-		/// </summary>
-		/// <param name="storage">The initial storage.</param>
-		/// <param name="scope">The database scope used to get the storage.</param>
-		/// <returns>The instance of <see cref="Storage"/>.</returns>
-		private async Task<Storage> ExecuteGetStorage(Storage storage, IDbContextScope scope)
-		{
-			IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-			StorageContract data = await storageRepository.GetAsync(storage.ID);
-
-			storage = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
-			storage.CatalogRoot = await this.ExecuteGetCatalog(storage.CatalogRoot, scope);
-
-			return storage;
-		}
 
 		#endregion
 	}
