@@ -90,13 +90,13 @@
 		/// <summary>
 		/// Gets the list of catalogs located in specified parent catalog.
 		/// </summary>
-		/// <param name="parent">The parent catalog of <see cref="Catalog"/> type.</param>
+		/// <param name="parent">The parent catalog of <see cref="CatalogRoot"/> type.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		Task<IEnumerable<Catalog>> GetCatalogs(Catalog parent, int offset = 0, int limit = 20);
+		Task<IEnumerable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.

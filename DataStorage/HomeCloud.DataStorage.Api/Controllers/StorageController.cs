@@ -100,7 +100,6 @@
 				async () =>
 				{
 					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
-
 					ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
 
 					return await this.HttpPostResult<Storage, StorageViewModel>(this.Get, result);
@@ -122,7 +121,6 @@
 				async () =>
 				{
 					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
-
 					ServiceResult<Storage> result = await this.storageService.UpdateStorageAsync(entity);
 
 					return await this.HttpPutResult<Storage, StorageViewModel>(this.Get, result);

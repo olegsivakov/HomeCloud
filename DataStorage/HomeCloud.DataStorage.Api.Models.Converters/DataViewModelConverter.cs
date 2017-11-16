@@ -51,6 +51,7 @@
 		public Catalog Convert(DataViewModel source, Catalog target)
 		{
 			target.ID = source.ID;
+			target.Parent = new Catalog();
 			target.Name = source.Name;
 			target.CreationDate = target.CreationDate;
 
@@ -95,6 +96,7 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
+			target.Catalog = new Catalog();
 			target.CreationDate = target.CreationDate;
 
 			return target;

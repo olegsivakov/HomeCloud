@@ -14,16 +14,12 @@
 		#region Public Properties
 
 		/// <summary>
-		/// Gets or sets the storage identifier.
+		/// Gets or sets the display name.
 		/// </summary>
 		/// <value>
-		/// The storage identifier.
+		/// The display name.
 		/// </value>
-		public new Guid StorageID
-		{
-			get => this.ID;
-			set => this.ID = value;
-		}
+		public string DisplayName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the quota.

@@ -11,6 +11,6 @@
 		/// <value>
 		/// The parent catalog.
 		/// </value>
-		public Catalog Parent { get; set; }
+		public CatalogRoot Parent { get; set; }
 	}
 }

@@ -9,6 +9,7 @@
 	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.Business.Extensions;
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
@@ -139,15 +140,7 @@
 			IEnumerable<Storage> storages = null;
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => storages = await provider.GetStorages(offset, limit), null);
-			await this.processor.ProcessAsync();
-
-			this.processor.RemoveHandlers();
-
-			IDataCommandHandler handler = this.processor.CreateDataHandler<IDataCommandHandler>();
-			foreach (Storage storage in storages)
-			{
-				handler.CreateAsyncCommand<IAggregationDataProvider>(async provider => await provider.GetStorage(storage), null);
-			}
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommandFor<Storage, IAggregationDataProvider>(storages, async (provider, item) => await provider.GetStorage(item), null);
 
 			await this.processor.ProcessAsync();
 
@@ -193,22 +186,15 @@
 		/// <returns>The operation result.</returns>
 		public async Task<ServiceResult> DeleteStorageAsync(Guid id)
 		{
-			Storage storage = new Storage() { ID = id };
-
-			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
-
-			if (!result.IsValid)
+			ServiceResult<Storage> serviceResult = await this.GetStorageAsync(id);
+			if (!serviceResult.IsSuccess)
 			{
-				return new ServiceResult<Storage>(storage)
-				{
-					Errors = result.Errors
-				};
+				return serviceResult;
 			}
 
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => storage = await provider.GetStorage(storage), null);
-
+			Storage storage = serviceResult.Data;
 			Func<IDataProvider, Task> deleteStorageFunction = async provider => storage = await provider.DeleteStorage(storage);
+
 			this.processor.CreateDataHandler<IDataCommandHandler>()
 				.CreateAsyncCommand<IDataStoreProvider>(deleteStorageFunction, null)
 				.CreateAsyncCommand<IFileSystemProvider>(deleteStorageFunction, null)

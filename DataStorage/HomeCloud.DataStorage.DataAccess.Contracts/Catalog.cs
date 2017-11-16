@@ -30,11 +30,6 @@
 		/// </summary>
 		private Guid? parentID = null;
 
-		/// <summary>
-		/// The storage identifier member.
-		/// </summary>
-		private Guid storageID = Guid.Empty;
-
 		#endregion
 
 		#region Public Properties
@@ -73,25 +68,6 @@
 				if (this.TrackPropertyChanged(this.parentID, value))
 				{
 					this.parentID = value;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the storage identifier.
-		/// </summary>
-		/// <value>
-		/// The storage identifier.
-		/// </value>
-		public Guid StorageID
-		{
-			get => this.storageID;
-
-			set
-			{
-				if (this.TrackPropertyChanged(this.storageID, value))
-				{
-					this.storageID = value;
 				}
 			}
 		}

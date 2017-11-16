@@ -2,7 +2,6 @@
 {
 	#region Usings
 
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -144,7 +143,7 @@
 
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
-				CatalogContract catalogContract = (await catalogRepository.GetByParentIDAsync(storage.ID, null, 0, 1)).FirstOrDefault();
+				CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
 				if (catalogContract == null)
 				{
 					catalogContract = await this.mapper.MapNewAsync<Storage, CatalogContract>(storage);
@@ -314,13 +313,13 @@
 		/// <summary>
 		/// Gets the list of catalogs located in specified parent catalog.
 		/// </summary>
-		/// <param name="parent">The parent catalog of <see cref="Catalog"/> type.</param>
+		/// <param name="parent">The parent catalog of <see cref="CatalogRoot"/> type.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		public async Task<IEnumerable<Catalog>> GetCatalogs(Catalog parent, int offset = 0, int limit = 20)
+		public async Task<IEnumerable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
 			if (limit == 0)
 			{
@@ -331,7 +330,7 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-				data = await catalogRepository.GetByParentIDAsync(parent.StorageID, parent.ID, offset, limit);
+				data = await catalogRepository.GetByParentIDAsync(parent?.ID, offset, limit);
 			}
 
 			return (await this.mapper.MapNewAsync<CatalogContract, Catalog>(data)).Select(catalog =>

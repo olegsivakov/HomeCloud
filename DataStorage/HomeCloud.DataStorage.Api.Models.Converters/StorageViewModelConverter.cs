@@ -25,11 +25,11 @@
 		public StorageViewModel Convert(Storage source, StorageViewModel target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
+			target.Name = source.DisplayName;
 			target.Quota = source.Quota;
 			target.CreationDate = source.CreationDate;
 
-			target.Size = source.CatalogRoot.Size;
+			target.Size = source.Size;
 
 			return target;
 		}
@@ -49,11 +49,11 @@
 		public Storage Convert(StorageViewModel source, Storage target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
+			target.DisplayName = source.Name;
 			target.Quota = source.Quota;
 			target.CreationDate = source.CreationDate;
 
-			target.CatalogRoot.Size = source.Size;
+			target.Size = source.Size;
 
 			return target;
 		}

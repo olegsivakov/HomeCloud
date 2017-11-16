@@ -58,6 +58,10 @@
       <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>
       <Name>HomeCloud.DataStorage.Business.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Extensions\HomeCloud.DataStorage.Business.Extensions.csproj">
+      <Project>{56928fc5-36f4-4694-8aa5-526a22d3e5ec}</Project>
+      <Name>HomeCloud.DataStorage.Business.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj">
       <Project>{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}</Project>
       <Name>HomeCloud.DataStorage.Business.Handlers.Abstractions</Name>

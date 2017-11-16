@@ -39,7 +39,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The storage name is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.DisplayName)).AddError("The storage name is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}

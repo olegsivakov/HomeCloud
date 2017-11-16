@@ -120,7 +120,7 @@
 		{
 			if (id == Guid.Empty)
 			{
-				return this.BadRequest("The specified unique identifier is empty");
+				return this.BadRequest("The specified unique identifier is undefined.");
 			}
 
 			return await action();
@@ -138,7 +138,7 @@
 		{
 			if (model == null)
 			{
-				return this.BadRequest();
+				return this.BadRequest("The request body is undefined.");
 			}
 
 			return await action();
@@ -155,9 +155,14 @@
 		/// </returns>
 		protected async virtual Task<IActionResult> HttpPut(Guid id, IViewModel model, Func<Task<IHttpMethodResult>> action)
 		{
-			if (model == null || model.ID != id)
+			if (model == null)
 			{
-				return this.BadRequest();
+				return this.BadRequest("The request body is undefined.");
+			}
+
+			if (model.ID != id)
+			{
+				return this.BadRequest("The specified unique identifier does not match one defined in the request body.");
 			}
 
 			return (await action()).ToActionResult();
@@ -175,7 +180,7 @@
 		{
 			if (id == Guid.Empty)
 			{
-				return this.BadRequest("The specified unique identifier is empty");
+				return this.BadRequest("The specified unique identifier is undefined.");
 			}
 
 			return await action();

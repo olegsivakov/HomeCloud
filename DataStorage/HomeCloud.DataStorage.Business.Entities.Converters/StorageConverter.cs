@@ -33,7 +33,7 @@
 		public Storage Convert(Contracts.Storage source, Storage target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
+			target.DisplayName = source.Name;
 			target.Quota = source.Quota;
 			target.CreationDate = source.CreationDate;
 			target.UpdatedDate = source.UpdatedDate;
@@ -56,7 +56,7 @@
 		public Contracts.Storage Convert(Storage source, Contracts.Storage target)
 		{
 			target.ID = source.ID;
-			target.Name = string.IsNullOrWhiteSpace(source.Name) ? target.Name : source.Name.Trim();
+			target.Name = string.IsNullOrWhiteSpace(source.DisplayName) ? target.Name : source.DisplayName.Trim();
 			target.Quota = source.Quota.HasValue ? source.Quota.Value : target.Quota;
 
 			return target;

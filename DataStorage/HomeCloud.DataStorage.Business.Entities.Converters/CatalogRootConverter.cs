@@ -34,7 +34,6 @@
 		{
 			target.ID = source.ID;
 			target.Name = string.IsNullOrWhiteSpace(source.Name) ? target.Name : source.Name.Trim();
-			target.StorageID = source.StorageID == Guid.Empty ? target.StorageID : source.StorageID;
 			target.UpdatedDate = source.UpdatedDate;
 			target.CreationDate = source.CreationDate;
 
@@ -61,7 +60,6 @@
 			}
 
 			target.Name = source.Name;
-			target.StorageID = source.StorageID;
 			target.UpdatedDate = source.UpdatedDate;
 			target.CreationDate = source.CreationDate;
 

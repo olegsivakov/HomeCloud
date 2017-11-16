@@ -20,14 +20,6 @@
 		public Guid ID { get; set; }
 
 		/// <summary>
-		/// Gets or sets the storage identifier.
-		/// </summary>
-		/// <value>
-		/// The storage identifier.
-		/// </value>
-		public Guid StorageID { get; set; }
-
-		/// <summary>
 		/// Gets or sets the name.
 		/// </summary>
 		/// <value>

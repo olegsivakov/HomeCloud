@@ -52,13 +52,13 @@
 		/// <summary>
 		/// Gets the list of catalogs by specified parent one.
 		/// </summary>
-		/// <param name="parent">The parent catalog.</param>
+		/// <param name="parent">The parent catalog identifier.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="Catalog" />.
 		/// </returns>
-		Task<ServiceResult<IEnumerable<Catalog>>> GetCatalogsAsync(Catalog parent, int offset = 0, int limit = 20);
+		Task<ServiceResult<IEnumerable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20);
 	}
 }
 

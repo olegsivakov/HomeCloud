@@ -27,13 +27,12 @@
 		/// <summary>
 		/// Gets the list of entities by specified identifier of parent entity the list belongs to.
 		/// </summary>
-		/// <param name="storageID">The storage identifier.</param>
 		/// <param name="parentID">The parent identifier.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>
 		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" />.
 		/// </returns>
-		Task<IEnumerable<Catalog>> GetByParentIDAsync(Guid storageID, Guid? parentID, int offset = 0, int limit = 20);
+		Task<IEnumerable<Catalog>> GetByParentIDAsync(Guid? parentID, int offset = 0, int limit = 20);
 	}
 }
