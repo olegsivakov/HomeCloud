@@ -102,11 +102,13 @@
 
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
-				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-				storageContract = await storageRepository.SaveAsync(storageContract);
-
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 				catalogContract = await catalogRepository.SaveAsync(catalogContract);
+
+				storageContract.ID = catalogContract.ID;
+
+				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
+				storageContract = await storageRepository.SaveAsync(storageContract);
 
 				scope.Commit();
 
@@ -127,35 +129,36 @@
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
+			bool isChanged = false;
+
+			StorageContract storageContract = null;
+			CatalogContract catalogContract = null;
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 
-				StorageContract storageContract = await storageRepository.GetAsync(storage.ID);
+				storageContract = await storageRepository.GetAsync(storage.ID);
 				storageContract = await this.mapper.MapAsync(storage, storageContract);
 
-				if (storageContract.IsChanged)
+				if (isChanged = storageContract.IsChanged)
 				{
 					storageContract = await storageRepository.SaveAsync(storageContract);
-
-					storage = await this.mapper.MapAsync(storageContract, storage);
 				}
 
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-
-				CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
-				if (catalogContract == null)
-				{
-					catalogContract = await this.mapper.MapNewAsync<Storage, CatalogContract>(storage);
-					catalogContract = await catalogRepository.SaveAsync(catalogContract);
-				}
-
-				storage = await this.mapper.MapAsync(catalogContract, storage);
+				catalogContract = await catalogRepository.GetAsync(storage.ID);
 
 				scope.Commit();
 
 				storageContract.AcceptChanges();
 				catalogContract.AcceptChanges();
+			}
+
+			if (isChanged)
+			{
+				storage = await this.mapper.MapAsync(storageContract, storage);
+				storage = await this.mapper.MapAsync(catalogContract, storage);
 			}
 
 			return storage;
@@ -265,11 +268,17 @@
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
 			CatalogContract catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
+			CatalogContract parentCatalogContract = null;
 
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+
 				catalogContract = await catalogRepository.SaveAsync(catalogContract);
+				if ((catalogContract?.ParentID).HasValue)
+				{
+					parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
+				}
 
 				scope.Commit();
 
@@ -277,6 +286,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
 
 			return catalog;
 		}
@@ -288,23 +298,36 @@
 		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
+			bool isChanged = false;
+
+			CatalogContract catalogContract = null;
+			CatalogContract parentCatalogContract = null;
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
-				CatalogContract catalogContract = await catalogRepository.GetAsync(catalog.ID);
+				catalogContract = await catalogRepository.GetAsync(catalog.ID);
 				catalogContract = await this.mapper.MapAsync(catalog, catalogContract);
 
-				if (catalogContract.IsChanged)
+				if (isChanged = catalogContract.IsChanged)
 				{
 					catalogContract = await catalogRepository.SaveAsync(catalogContract);
-
-					catalog = await this.mapper.MapAsync(catalogContract, catalog);
+					if ((catalogContract?.ParentID).HasValue)
+					{
+						parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
+					}
 				}
 
 				scope.Commit();
 
 				catalogContract.AcceptChanges();
+			}
+
+			if (isChanged)
+			{
+				catalog = await this.mapper.MapAsync(catalogContract, catalog);
+				catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
 			}
 
 			return catalog;
@@ -349,14 +372,23 @@
 		public async Task<Catalog> GetCatalog(Catalog catalog)
 		{
 			CatalogContract catalogContract = null;
+			CatalogContract parentCatalogContract = null;
 
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+
 				catalogContract = await catalogRepository.GetAsync(catalog.ID);
+				if ((catalogContract?.ParentID).HasValue)
+				{
+					parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
+				}
 			}
 
-			return await this.mapper.MapAsync(catalogContract, catalog);
+			catalog = await this.mapper.MapAsync(catalogContract, catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
+
+			return catalog;
 		}
 
 		/// <summary>

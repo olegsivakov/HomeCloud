@@ -15,7 +15,6 @@ BEGIN
 	SELECT
 		[ID],
 		[ParentID],
-		[StorageID],
 		[Name],
 		[CreationDate],
 		[UpdatedDate]

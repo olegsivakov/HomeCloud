@@ -21,7 +21,6 @@
 		/// <returns>
 		/// The mapped instance of <see cref="TTarget" />.
 		/// </returns>
-		Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
-			where TTarget : new();
+		Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target);
 	}
 }

@@ -10,15 +10,8 @@ AS
 BEGIN
 	DECLARE @local_ID UNIQUEIDENTIFIER = @ID
 
-	DELETE FROM [dbo].[File]
-	FROM [dbo].[File] [file]
-	INNER JOIN [dbo].[Directory] directory ON directory.[ID] = [file].[DirectoryID]
-	WHERE
-		directory.[StorageID] = @local_ID
-
-	DELETE FROM [dbo].[Directory]
-	WHERE
-		[StorageID] = @local_ID
+	EXEC [dbo].[DeleteDirectoryByParentID] @local_ID
+	EXEC [dbo].[DeleteDirectoryByID] @local_ID
 
 	DELETE FROM [dbo].[Storage]
 	WHERE

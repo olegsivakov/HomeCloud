@@ -5,6 +5,8 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
+	using System.Linq;
+	using System;
 
 	#endregion
 
@@ -49,7 +51,6 @@
 		/// The mapped instance of <see cref="TTarget" />.
 		/// </returns>
 		public async Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
-			where TTarget : new()
 		{
 			return await Task.Run(() =>
 			{
@@ -60,10 +61,15 @@
 
 				if (target == null)
 				{
-					target = new TTarget();
+					target = (TTarget)typeof(TTarget).GetConstructor(Enumerable.Empty<Type>().ToArray())?.Invoke(null);
 				}
 
 				ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;
+				if (converter == null)
+				{
+					NullReferenceException exception = new NullReferenceException(string.Format("Unable to resolve dependency for {0}", typeof(ITypeConverter<TSource, TTarget>).FullName));
+					throw new TypeInitializationException(typeof(Mapper).FullName, exception);
+				}
 
 				return converter.Convert(source, target);
 			});

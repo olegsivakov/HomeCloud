@@ -1,12 +1,4 @@
-﻿IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE parent_object_id = OBJECT_ID('Directory') AND referenced_object_id = OBJECT_ID('Storage'))
-BEGIN
-	ALTER TABLE [dbo].[Directory]
-	ADD CONSTRAINT FK_Directory_Storage
-	FOREIGN KEY (StorageID) REFERENCES Storage(ID);
-END
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE parent_object_id = OBJECT_ID('Directory') AND referenced_object_id = OBJECT_ID('Directory'))
+﻿IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE parent_object_id = OBJECT_ID('Directory') AND referenced_object_id = OBJECT_ID('Directory'))
 BEGIN
 	ALTER TABLE [dbo].[Directory]
 	ADD CONSTRAINT FK_Directory_Directory

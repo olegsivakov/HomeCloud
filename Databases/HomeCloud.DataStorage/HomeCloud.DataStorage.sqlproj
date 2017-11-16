@@ -73,6 +73,7 @@
     <None Include="StoredProcedures\GetStorageByID.sql" />
     <None Include="StoredProcedures\InsertStorage.sql" />
     <None Include="StoredProcedures\UpdateStorage.sql" />
+    <None Include="Constraints\Storage.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StoredProcedures\GetDirectoryByID.sql" />

@@ -67,25 +67,25 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> CreateCatalogAsync(Catalog catalog)
 		{
-			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync((catalog.Parent?.ID).GetValueOrDefault());
-			if (!serviceResult.IsSuccess)
+			ServiceResult<Catalog> serviceResult = new ServiceResult<Catalog>(catalog);
+
+			Func<IDataProvider, Task> getCatalogFunction = async provider => catalog.Parent = await provider.GetCatalog((Catalog)catalog.Parent);
+			this.processor.CreateDataHandler<IDataCommandHandler>()
+				.CreateAsyncCommand<IDataStoreProvider>(getCatalogFunction, null)
+				.CreateAsyncCommand<IAggregationDataProvider>(getCatalogFunction, null);
+
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider =>
 			{
-				return serviceResult;
-			}
+				IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
-			catalog.Parent = serviceResult.Data;
+				ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
+				result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
 
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
-			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
-
-			if (!result.IsValid)
-			{
-				return new ServiceResult<Catalog>(catalog)
+				if (!result.IsValid)
 				{
-					Errors = result.Errors
-				};
-			}
+					serviceResult.Errors = result.Errors;
+				}
+			}, null);
 
 			Func<IDataProvider, Task> createCatalogFunction = async provider => catalog = await provider.CreateCatalog(catalog);
 			Func<IDataProvider, Task> createCatalogUndoFunction = async provider => catalog = await provider.DeleteCatalog(catalog);
@@ -96,7 +96,7 @@
 
 			await this.processor.ProcessAsync();
 
-			return new ServiceResult<Catalog>(catalog);
+			return serviceResult;
 		}
 
 		/// <summary>
@@ -155,8 +155,9 @@
 
 			Func<IDataProvider, Task> getCatalogFunction = async provider => catalog = await provider.GetCatalog(catalog);
 
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(getCatalogFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(getCatalogFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>()
+				.CreateAsyncCommand<IDataStoreProvider>(getCatalogFunction, null)
+				.CreateAsyncCommand<IAggregationDataProvider>(getCatalogFunction, null);
 
 			await this.processor.ProcessAsync();
 

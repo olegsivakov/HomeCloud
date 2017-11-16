@@ -146,8 +146,10 @@
 		{
 			Guid id = entity.ID == Guid.Empty ? Guid.NewGuid() : entity.ID;
 
+			string sqlQuery = entity.ID == Guid.Empty || (await this.GetAsync(id)) is null ? InsertStorageStoredProcedure : UpdateStorageStoredProcedure;
+
 			if (await this.context.ExecuteAsync(
-				entity.ID == Guid.Empty ? InsertStorageStoredProcedure : UpdateStorageStoredProcedure,
+				sqlQuery,
 				new
 				{
 					@ID = id,

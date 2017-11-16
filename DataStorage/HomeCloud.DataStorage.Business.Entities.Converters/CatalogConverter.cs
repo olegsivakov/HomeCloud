@@ -33,7 +33,10 @@
 		{
 			this.Convert(source, (CatalogRoot)target);
 
-			target.Parent = source.ParentID.HasValue ? new Catalog() { ID = source.ParentID.Value } : null;
+			if (source.ParentID != target.Parent?.ID)
+			{
+				target.Parent = source.ParentID.HasValue ? new Catalog() { ID = source.ParentID.Value } : null;
+			}
 
 			return target;
 		}

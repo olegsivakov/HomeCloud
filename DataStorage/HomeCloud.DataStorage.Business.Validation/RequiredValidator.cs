@@ -2,11 +2,15 @@
 {
 	#region Usings
 
+	using System;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
+
 	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.Business.Providers;
+
 	using HomeCloud.Validation;
-	using System;
 
 	#endregion
 
@@ -17,14 +21,25 @@
 	/// <seealso cref="HomeCloud.DataStorage.Business.Validation.IRequiredValidator" />
 	public class RequiredValidator : Validator<object>, IRequiredValidator
 	{
+		#region Private Members
+
+		/// <summary>
+		/// The <see cref="IDataProvider"/> factory.
+		/// </summary>
+		private readonly IServiceFactory<IDataProvider> dataProviderFactory = null;
+
+		#endregion
+
 		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RequiredValidator"/> class.
 		/// </summary>
-		public RequiredValidator()
+		public RequiredValidator(IServiceFactory<IDataProvider> dataProviderFactory)
 			: base()
 		{
+			this.dataProviderFactory = dataProviderFactory;
+
 			this.If(obj => obj is null).AddError("The instance is not defined.");
 		}
 
@@ -51,8 +66,24 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
+			Catalog catalog = new Catalog() { ID = (instance.Parent?.ID).GetValueOrDefault() };
+
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The catalog name is empty.");
 			this.If(obj => (instance.Parent?.ID).GetValueOrDefault() == Guid.Empty).AddError("The parent catalog is empty.");
+			this.If(async obj => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(catalog)).AddError("The parent catalog with the specified identifier does not exist.");
+			this.If(async obj =>
+			{
+				IDataProvider provider = this.dataProviderFactory.Get<IAggregationDataProvider>();
+				if (await provider.CatalogExists(catalog))
+				{
+					catalog = await provider.GetCatalog(catalog);
+
+					await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists()
+				}
+
+				return true;
+				if (catalog.Path)
+			}).AddError("The parent catalog with the specified identifier does not exist.");
 
 			return await this.ValidateAsync((object)instance);
 		}

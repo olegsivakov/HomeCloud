@@ -5,14 +5,12 @@ END
 GO
 
 CREATE PROCEDURE [dbo].[GetDirectoryByParentID]
-	@StorageID UNIQUEIDENTIFIER,
 	@ParentID UNIQUEIDENTIFIER = NULL,
 	@StartIndex INT,
 	@ChunkSize INT
 AS
 BEGIN
-	DECLARE @local_StorageID UNIQUEIDENTIFIER = @StorageID,
-			@local_ParentID UNIQUEIDENTIFIER = @ParentID,
+	DECLARE @local_ParentID UNIQUEIDENTIFIER = @ParentID,
 			@local_StartIndex INT = @StartIndex,
 			@local_ChunkSize INT = @ChunkSize
 
@@ -21,14 +19,11 @@ BEGIN
 	SELECT
 		[ID],
 		[ParentID],
-		[StorageID],
 		[Name],
 		[CreationDate],
 		[UpdatedDate]
 	FROM [dbo].[Directory] WITH(NOLOCK)
 	WHERE
-		[StorageID] = @local_StorageID
-		AND
 		((@local_ParentID IS NULL AND [ParentID] IS NULL)
 		OR
 		([ParentID] = @local_ParentID))

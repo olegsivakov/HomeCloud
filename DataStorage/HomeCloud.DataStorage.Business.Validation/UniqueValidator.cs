@@ -54,8 +54,8 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("The storage already exists."));
-			this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("The storage with provided name already exists."));
+			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Specified storage already exists."));
+			this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Storage with specified name already exists."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -67,8 +67,18 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("The catalog already exists."));
-			this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("The catalog with the provided name already exists in parent catalog."));
+			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("Specified catalog already exists."));
+			this.If(async id =>
+			{
+				Catalog catalog = new Catalog()
+				{
+					ID = id,
+					Name = instance.Name,
+					Parent = instance.Parent
+				};
+
+				return await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(catalog);
+			}).AddError(new AlreadyExistsException("Catalog with specified name already exists in parent catalog."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
