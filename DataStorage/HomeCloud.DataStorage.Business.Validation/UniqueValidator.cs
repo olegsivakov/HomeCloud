@@ -70,14 +70,10 @@
 			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("Specified catalog already exists."));
 			this.If(async id =>
 			{
-				Catalog catalog = new Catalog()
-				{
-					ID = id,
-					Name = instance.Name,
-					Parent = instance.Parent
-				};
+				Catalog catalog = instance.Clone() as Catalog;
+				catalog.Parent = await this.dataProviderFactory.Get<IAggregationDataProvider>().GetCatalog(instance.Parent as Catalog);
 
-				return await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(catalog);
+				return await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance);
 			}).AddError(new AlreadyExistsException("Catalog with specified name already exists in parent catalog."));
 
 			return await this.ValidateAsync(instance.ID);

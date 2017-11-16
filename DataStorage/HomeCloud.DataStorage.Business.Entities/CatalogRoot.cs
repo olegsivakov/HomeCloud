@@ -9,8 +9,10 @@
 	/// <summary>
 	/// Represents catalog entity.
 	/// </summary>
-	public abstract class CatalogRoot
+	public abstract class CatalogRoot : ICloneable
 	{
+		#region Public Properties
+
 		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
@@ -58,5 +60,22 @@
 		/// The updated date.
 		/// </value>
 		public DateTime UpdatedDate { get; set; }
+
+		#endregion
+
+		#region ICloneable Implementations
+
+		/// <summary>
+		/// Creates a new object that is a copy of the current instance.
+		/// </summary>
+		/// <returns>
+		/// A new object that is a copy of this instance.
+		/// </returns>
+		public virtual object Clone()
+		{
+			return this.MemberwiseClone();
+		}
+
+		#endregion
 	}
 }

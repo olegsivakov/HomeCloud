@@ -118,9 +118,8 @@
 			Func<IDataProvider, Task> updateStorageFunction = async provider => storage = await provider.UpdateStorage(storage);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 

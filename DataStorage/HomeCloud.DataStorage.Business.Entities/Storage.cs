@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Represents storage entity.
 	/// </summary>
-	public class Storage : CatalogRoot
+	public class Storage : CatalogRoot, ICloneable
 	{
 		#region Public Properties
 
@@ -28,6 +28,21 @@
 		/// The quota.
 		/// </value>
 		public long? Quota { get; set; }
+
+		#endregion
+
+		#region ICloneable Impolementations
+
+		/// <summary>
+		/// Creates a new object that is a copy of the current instance.
+		/// </summary>
+		/// <returns>
+		/// A new object that is a copy of this instance.
+		/// </returns>
+		public override object Clone()
+		{
+			return this.MemberwiseClone();
+		}
 
 		#endregion
 	}

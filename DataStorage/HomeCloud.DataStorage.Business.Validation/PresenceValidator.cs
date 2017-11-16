@@ -70,7 +70,13 @@
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
 			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new NotFoundException("Specified catalog does not exist."));
-			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance)).AddError(new NotFoundException("Catalog with specified name does not exist in parent catalog."));
+			this.If(async id =>
+			{
+				Catalog catalog = instance.Clone() as Catalog;
+				catalog.Parent = await this.dataProviderFactory.Get<IAggregationDataProvider>().GetCatalog(instance.Parent as Catalog);
+
+				return !await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance);
+			}).AddError(new NotFoundException("Catalog with specified name does not exist in parent catalog."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

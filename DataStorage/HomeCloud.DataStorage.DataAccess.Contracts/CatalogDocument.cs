@@ -47,7 +47,7 @@
 		/// <value>
 		/// The identifier.
 		/// </value>
-		[BsonId(IdGenerator = typeof(NullIdChecker))]
+		[BsonId(IdGenerator = typeof(GuidGenerator))]
 		[BsonRequired]
 		public Guid ID
 		{
