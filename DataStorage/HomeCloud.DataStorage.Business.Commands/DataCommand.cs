@@ -33,7 +33,7 @@
 		/// <param name="executeAction">The action to execute.</param>
 		/// <param name="undoAction">The action to revert command execution result.</param>
 		public DataCommand(IDataProvider provider, Func<IDataProvider, Task> executeAction, Func<IDataProvider, Task> undoAction)
-			: base(() => executeAction(provider), () => undoAction(provider))
+			: base(executeAction is null ? default(Func<Task>) : () => executeAction(provider), undoAction is null ? default(Func<Task>) : () => undoAction(provider))
 		{
 			this.provider = provider;
 		}

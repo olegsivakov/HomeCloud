@@ -70,7 +70,7 @@
 
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The catalog name is empty.");
 			this.If(obj => parentCatalog.ID == Guid.Empty).AddError("The parent catalog is empty.");
-			this.If(async obj => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(parentCatalog)).AddError("The parent catalog with the specified identifier does not exist.");
+			this.If(async obj => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(parentCatalog)).AddError("The parent catalog with the specified identifier does not exist.");
 			this.If(async obj =>
 			{
 				IDataProvider provider = this.dataProviderFactory.Get<IDataStoreProvider>();

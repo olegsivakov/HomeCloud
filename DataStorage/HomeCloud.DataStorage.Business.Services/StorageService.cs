@@ -70,6 +70,7 @@
 			storage.Name = Guid.NewGuid().ToString();
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+
 			ValidationResult result = await storageValidator.Get<IRequiredValidator>().ValidateAsync(storage);
 			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
 
@@ -102,8 +103,6 @@
 		/// </returns>
 		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
 		{
-			storage.Name = storage.Name ?? Guid.NewGuid().ToString();
-
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
 

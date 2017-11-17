@@ -129,8 +129,6 @@
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
-			bool isChanged = false;
-
 			StorageContract storageContract = null;
 			CatalogContract catalogContract = null;
 
@@ -141,7 +139,7 @@
 				storageContract = await storageRepository.GetAsync(storage.ID);
 				storageContract = await this.mapper.MapAsync(storage, storageContract);
 
-				if (isChanged = storageContract.IsChanged)
+				if (storageContract.IsChanged)
 				{
 					storageContract = await storageRepository.SaveAsync(storageContract);
 				}
@@ -155,11 +153,8 @@
 				catalogContract.AcceptChanges();
 			}
 
-			if (isChanged)
-			{
-				storage = await this.mapper.MapAsync(storageContract, storage);
-				storage = await this.mapper.MapAsync(catalogContract, storage);
-			}
+			storage = await this.mapper.MapAsync(storageContract, storage);
+			storage = await this.mapper.MapAsync(catalogContract, storage);
 
 			return storage;
 		}
@@ -298,8 +293,6 @@
 		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
-			bool isChanged = false;
-
 			CatalogContract catalogContract = null;
 			CatalogContract parentCatalogContract = null;
 
@@ -310,7 +303,7 @@
 				catalogContract = await catalogRepository.GetAsync(catalog.ID);
 				catalogContract = await this.mapper.MapAsync(catalog, catalogContract);
 
-				if (isChanged = catalogContract.IsChanged)
+				if (catalogContract.IsChanged)
 				{
 					catalogContract = await catalogRepository.SaveAsync(catalogContract);
 					if ((catalogContract?.ParentID).HasValue)
@@ -324,11 +317,8 @@
 				catalogContract.AcceptChanges();
 			}
 
-			if (isChanged)
-			{
-				catalog = await this.mapper.MapAsync(catalogContract, catalog);
-				catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
-			}
+			catalog = await this.mapper.MapAsync(catalogContract, catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
 
 			return catalog;
 		}

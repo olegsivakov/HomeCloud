@@ -16,6 +16,10 @@ BEGIN
 	WHERE
 		[DirectoryID] = @local_ID
 
+	DELETE FROM [dbo].[Storage]
+	WHERE
+		[ID] = @local_ID
+
 	DELETE FROM [dbo].[Directory]
 	WHERE
 		[ID] = @local_ID

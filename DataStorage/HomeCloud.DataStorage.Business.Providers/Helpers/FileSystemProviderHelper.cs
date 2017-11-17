@@ -43,7 +43,10 @@
 		/// <exception cref="ArgumentException">Storage path or name is empty.</exception>
 		public static void ValidateStoragePath(this Storage storage, FileSystem settings)
 		{
-			ValidateStorageRootSetting(settings);
+			if (string.IsNullOrWhiteSpace(storage.Path))
+			{
+				ValidateStorageRootSetting(settings);
+			}
 
 			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
@@ -78,7 +81,10 @@
 		/// <exception cref="DirectoryNotFoundException">The parent catalog does not exist by specified path.</exception>
 		public static void ValidateCatalogPath(this Catalog catalog)
 		{
-			ValidateParentCatalogPath(catalog);
+			if (string.IsNullOrWhiteSpace(catalog.Path))
+			{
+				ValidateParentCatalogPath(catalog);
+			}
 
 			if (string.IsNullOrWhiteSpace(catalog.Path) && string.IsNullOrWhiteSpace(catalog.Name))
 			{

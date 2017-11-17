@@ -57,7 +57,20 @@
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
 			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new NotFoundException("Specified storage does not exist."));
-			this.If(async id => !await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new NotFoundException("Storage with specified name does not exist."));
+			this.If(async id =>
+			{
+				Storage storage = instance.Clone() as Storage;
+
+				if (await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance))
+				{
+					storage = await this.dataProviderFactory.Get<IDataStoreProvider>().GetStorage(storage);
+					storage = await this.dataProviderFactory.Get<IAggregationDataProvider>().GetStorage(storage);
+
+					return !await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(storage);
+				}
+
+				return false;
+			}).AddError(new NotFoundException("Storage with specified name does not exist."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -73,6 +86,8 @@
 			this.If(async id =>
 			{
 				Catalog catalog = instance.Clone() as Catalog;
+
+				catalog.Parent = await this.dataProviderFactory.Get<IDataStoreProvider>().GetCatalog(instance.Parent as Catalog);
 				catalog.Parent = await this.dataProviderFactory.Get<IAggregationDataProvider>().GetCatalog(instance.Parent as Catalog);
 
 				return !await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance);

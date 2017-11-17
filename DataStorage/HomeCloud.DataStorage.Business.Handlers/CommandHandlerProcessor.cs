@@ -105,7 +105,7 @@
 			{
 				int currentIndex = this.handlers.IndexOf(current);
 
-				for (int index = currentIndex - 1; index >= 0; --index)
+				for (int index = currentIndex; index >= 0; --index)
 				{
 					current = this.handlers[index];
 

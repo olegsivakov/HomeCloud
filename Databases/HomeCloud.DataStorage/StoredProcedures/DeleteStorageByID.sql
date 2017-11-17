@@ -12,10 +12,6 @@ BEGIN
 
 	EXEC [dbo].[DeleteDirectoryByParentID] @local_ID
 	EXEC [dbo].[DeleteDirectoryByID] @local_ID
-
-	DELETE FROM [dbo].[Storage]
-	WHERE
-		[ID] = @local_ID
 END
 GO
 

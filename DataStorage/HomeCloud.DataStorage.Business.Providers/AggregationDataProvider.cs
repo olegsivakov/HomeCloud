@@ -119,7 +119,6 @@
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
-			bool isChanged = false;
 			CatalogDocument catalogDocument = null;
 
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
@@ -129,16 +128,11 @@
 				catalogDocument = await repository.GetAsync(storage.ID);
 				catalogDocument = await this.mapper.MapAsync(storage, catalogDocument);
 
-				if (isChanged = catalogDocument.IsChanged)
+				if (catalogDocument.IsChanged)
 				{
 					catalogDocument = await repository.SaveAsync(catalogDocument);
 					catalogDocument.AcceptChanges();
 				}
-			}
-
-			if (!isChanged)
-			{
-				return storage;
 			}
 
 			return await this.mapper.MapAsync(catalogDocument, storage);
@@ -241,7 +235,6 @@
 		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
-			bool isChanged = false;
 			CatalogDocument catalogDocument = null;
 
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
@@ -251,16 +244,11 @@
 				catalogDocument = await repository.GetAsync(catalog.ID);
 				catalogDocument = await this.mapper.MapAsync(catalog, catalogDocument);
 
-				if (isChanged = catalogDocument.IsChanged)
+				if (catalogDocument.IsChanged)
 				{
 					catalogDocument = await repository.SaveAsync(catalogDocument);
 					catalogDocument.AcceptChanges();
 				}
-			}
-
-			if (!isChanged)
-			{
-				return catalog;
 			}
 
 			return await this.mapper.MapAsync(catalogDocument, catalog);

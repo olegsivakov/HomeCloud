@@ -24,6 +24,7 @@
 		/// The identifier.
 		/// </value>
 		[BsonId(IdGenerator = typeof(NullIdChecker))]
+		[BsonIgnoreIfDefault]
 		[BsonRequired]
 		public Guid ID { get; set; }
 
