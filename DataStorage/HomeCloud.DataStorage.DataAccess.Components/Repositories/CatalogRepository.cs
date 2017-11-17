@@ -117,14 +117,16 @@
 		/// </returns>
 		public async Task<Catalog> GetAsync(Guid id)
 		{
-			IEnumerable<Catalog> result = await this.context.QueryAsync<Catalog>(
+			Catalog result = (await this.context.QueryAsync<Catalog>(
 				GetDirectoryByIDStoredProcedure,
 				new
 				{
 					@ID = id
-				});
+				})).FirstOrDefault();
 
-			return result.FirstOrDefault();
+			result?.AcceptChanges();
+
+			return result;
 		}
 
 		/// <summary>
@@ -152,7 +154,7 @@
 		/// </returns>
 		public async Task<IEnumerable<Catalog>> FindAsync(Catalog catalog, int offset = 0, int limit = 20)
 		{
-			return await this.context.QueryAsync<Catalog>(
+			IEnumerable<Catalog> result = await this.context.QueryAsync<Catalog>(
 				GetDirectoryByParentIDStoredProcedure,
 				new
 				{
@@ -161,6 +163,13 @@
 					@StartIndex = offset,
 					@ChunkSize = limit
 				});
+
+			foreach (Catalog item in result)
+			{
+				item.AcceptChanges();
+			}
+
+			return result;
 		}
 
 		/// <summary>

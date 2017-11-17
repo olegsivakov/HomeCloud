@@ -21,6 +21,7 @@
 
 	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
+	using System;
 
 	#endregion
 
@@ -84,9 +85,17 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
-				StorageContract storageContract = await storageRepository.GetAsync(storage.ID);
 
-				return storageContract != null;
+				StorageContract contract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
+				if (!string.IsNullOrWhiteSpace(contract.Name))
+				{
+					if ((await storageRepository.FindAsync(contract, 0, 1)).Any())
+					{
+						return true;
+					}
+				}
+
+				return contract.ID != Guid.Empty && await storageRepository.GetAsync(contract.ID) != null;
 			}
 		}
 
@@ -111,9 +120,6 @@
 				storageContract = await storageRepository.SaveAsync(storageContract);
 
 				scope.Commit();
-
-				storageContract.AcceptChanges();
-				catalogContract.AcceptChanges();
 			}
 
 			storage = await this.mapper.MapAsync(storageContract, storage);
@@ -148,9 +154,6 @@
 				catalogContract = await catalogRepository.GetAsync(storage.ID);
 
 				scope.Commit();
-
-				storageContract.AcceptChanges();
-				catalogContract.AcceptChanges();
 			}
 
 			storage = await this.mapper.MapAsync(storageContract, storage);
@@ -249,9 +252,17 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-				CatalogContract catalogContract = await catalogRepository.GetAsync(catalog.ID);
 
-				return catalogContract != null;
+				CatalogContract contract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
+				if (!string.IsNullOrWhiteSpace(contract.Name) || contract.ParentID.HasValue)
+				{
+					if ((await catalogRepository.FindAsync(contract, 0, 1)).Any())
+					{
+						return true;
+					}
+				}
+
+				return contract.ID != Guid.Empty && await catalogRepository.GetAsync(contract.ID) != null;
 			}
 		}
 
@@ -276,8 +287,6 @@
 				}
 
 				scope.Commit();
-
-				catalogContract.AcceptChanges();
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);
@@ -306,15 +315,17 @@
 				if (catalogContract.IsChanged)
 				{
 					catalogContract = await catalogRepository.SaveAsync(catalogContract);
-					if ((catalogContract?.ParentID).HasValue)
-					{
-						parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
-					}
+				}
+
+				if ((catalogContract?.ParentID).HasValue)
+				{
+					parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
 				}
 
 				scope.Commit();
 
-				catalogContract.AcceptChanges();
+				
+				
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);
@@ -343,7 +354,7 @@
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-				data = await catalogRepository.GetByParentIDAsync(parent?.ID, offset, limit);
+				data = await catalogRepository.FindAsync(new CatalogContract() { ParentID = parent?.ID }, offset, limit);
 			}
 
 			return (await this.mapper.MapNewAsync<CatalogContract, Catalog>(data)).Select(catalog =>

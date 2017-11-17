@@ -54,8 +54,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Specified storage already exists."));
-			this.If(async id => await this.dataProviderFactory.Get<IFileSystemProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Storage with specified name already exists."));
+			this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Specified storage already exists."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -67,14 +66,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(async id => id != Guid.Empty && await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("Specified catalog already exists."));
-			this.If(async id =>
-			{
-				Catalog catalog = instance.Clone() as Catalog;
-				catalog.Parent = await this.dataProviderFactory.Get<IAggregationDataProvider>().GetCatalog(instance.Parent as Catalog);
-
-				return await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(instance);
-			}).AddError(new AlreadyExistsException("Catalog with specified name already exists in parent catalog."));
+			this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("Specified catalog already exists."));
 
 			return await this.ValidateAsync(instance.ID);
 		}

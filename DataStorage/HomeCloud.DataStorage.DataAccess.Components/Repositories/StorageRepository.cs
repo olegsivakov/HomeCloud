@@ -110,21 +110,21 @@
 		}
 
 		/// <summary>
-		/// Looks for all records of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" /> that have <see cref="P:HomeCloud.DataStorage.DataAccess.Contracts.Storage.Name" /> value matched to specified name.
+		/// Gets the list of entities that match the specified one.
 		/// </summary>
-		/// <param name="name">The storage name.</param>
+		/// <param name="storage">The storage.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>
 		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
-		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" /> type.
+		/// The list of instances of <see cref="Storage" /> type.
 		/// </returns>
-		public async Task<IEnumerable<Storage>> FindAsync(string name, int offset = 0, int limit = 20)
+		public async Task<IEnumerable<Storage>> FindAsync(Storage storage, int offset = 0, int limit = 20)
 		{
 			IEnumerable<Storage> result = await this.context.QueryAsync<Storage>(
 				GetStorageStoredProcedure,
 				new
 				{
-					@Name = name is null ? null : name.Trim().ToLower(),
+					@Name = string.IsNullOrWhiteSpace(storage?.Name) ? null : storage.Name.Trim().ToLower(),
 					@StartIndex = offset,
 					@ChunkSize = limit
 				});
@@ -147,20 +147,7 @@
 		/// </returns>
 		public async Task<IEnumerable<Storage>> FindAsync(int offset = 0, int limit = 20)
 		{
-			IEnumerable<Storage> result = await this.context.QueryAsync<Storage>(
-				GetStorageStoredProcedure,
-				new
-				{
-					@StartIndex = offset,
-					@ChunkSize = limit
-				});
-
-			foreach (Storage item in result)
-			{
-				item.AcceptChanges();
-			}
-
-			return result;
+			return await this.FindAsync(null, offset, limit);
 		}
 
 		/// <summary>

@@ -72,7 +72,7 @@
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 
 			ValidationResult result = await storageValidator.Get<IRequiredValidator>().ValidateAsync(storage);
-			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
+			result += result.IsValid ? await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage) : result;
 
 			if (!result.IsValid)
 			{
@@ -86,8 +86,8 @@
 			Func<IDataProvider, Task> createStorageUndoFunction = async provider => storage = await provider.DeleteStorage(storage);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createStorageFunction, createStorageUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, createStorageUndoFunction);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, createStorageUndoFunction);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, createStorageUndoFunction);
 
 			await this.processor.ProcessAsync();
 
@@ -103,22 +103,34 @@
 		/// </returns>
 		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
 		{
-			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
-
-			if (!result.IsValid)
+			ServiceResult<Storage> storageResult = await this.GetStorageAsync(storage.ID);
+			if (!storageResult.IsSuccess)
 			{
-				return new ServiceResult<Storage>(storage)
+				return storageResult;
+			}
+
+			if (!string.IsNullOrWhiteSpace(storage.DisplayName) && storage.DisplayName != storageResult.Data.DisplayName)
+			{
+				storageResult.Data.ID = Guid.Empty;
+				storageResult.Data.DisplayName = storage.DisplayName;
+
+				IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+				ValidationResult result = await storageValidator.Get<IUniqueValidator>().ValidateAsync(storageResult.Data);
+
+				if (!result.IsValid)
 				{
-					Errors = result.Errors
-				};
+					return new ServiceResult<Storage>(storage)
+					{
+						Errors = result.Errors
+					};
+				}
 			}
 
 			Func<IDataProvider, Task> updateStorageFunction = async provider => storage = await provider.UpdateStorage(storage);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 

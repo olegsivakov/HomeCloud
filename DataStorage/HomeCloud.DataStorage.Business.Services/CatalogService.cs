@@ -70,7 +70,7 @@
 			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
 			ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
-			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
+			result += result.IsValid ? await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog) : result;
 
 			if (!result.IsValid)
 			{
@@ -84,6 +84,7 @@
 			Func<IDataProvider, Task> createCatalogUndoFunction = async provider => catalog = await provider.DeleteCatalog(catalog);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createCatalogFunction, createCatalogUndoFunction);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => catalog.Parent = await provider.GetCatalog(catalog.Parent as Catalog), null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createCatalogFunction, createCatalogUndoFunction);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createCatalogFunction, createCatalogUndoFunction);
 
@@ -101,22 +102,34 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-
-			ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
-			result += await catalogValidator.Get<IPresenceValidator>().ValidateAsync(catalog);
-
-			if (!result.IsValid)
+			ServiceResult<Catalog> catalogResult = await this.GetCatalogAsync(catalog.ID);
+			if (!catalogResult.IsSuccess)
 			{
-				return new ServiceResult<Catalog>(catalog)
+				return catalogResult;
+			}
+
+			if ((!string.IsNullOrWhiteSpace(catalog.Name) && catalog.Name != catalogResult.Data.Name) || ((catalog.Parent?.ID).HasValue) && catalog.Parent?.ID != catalogResult.Data.Parent?.ID)
+			{
+				catalogResult.Data.ID = Guid.Empty;
+				catalogResult.Data.Name = catalog.Name;
+				catalogResult.Data.Parent = catalog.Parent;
+
+				IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+				ValidationResult result = await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalogResult.Data);
+
+				if (!result.IsValid)
 				{
-					Errors = result.Errors
-				};
+					return new ServiceResult<Catalog>(catalog)
+					{
+						Errors = result.Errors
+					};
+				}
 			}
 
 			Func<IDataProvider, Task> updateCatalogFunction = async provider => catalog = await provider.UpdateCatalog(catalog);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateCatalogFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => catalog.Parent = await provider.GetCatalog(catalog.Parent as Catalog), null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateCatalogFunction, null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateCatalogFunction, null);
 

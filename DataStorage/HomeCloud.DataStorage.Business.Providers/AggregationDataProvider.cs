@@ -105,8 +105,6 @@
 
 				catalogDocument = await this.mapper.MapNewAsync<Storage, CatalogDocument>(storage);
 				catalogDocument = await repository.SaveAsync(catalogDocument);
-
-				catalogDocument.AcceptChanges();
 			}
 
 			return await this.mapper.MapAsync(catalogDocument, storage);
@@ -131,7 +129,6 @@
 				if (catalogDocument.IsChanged)
 				{
 					catalogDocument = await repository.SaveAsync(catalogDocument);
-					catalogDocument.AcceptChanges();
 				}
 			}
 
@@ -214,6 +211,7 @@
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
 			CatalogDocument catalogDocument = null;
+			CatalogDocument parentCatalogDocument = null;
 
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
@@ -222,10 +220,16 @@
 				catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(catalog);
 				catalogDocument = await repository.SaveAsync(catalogDocument);
 
-				catalogDocument.AcceptChanges();
+				if ((catalog.Parent?.ID).HasValue)
+				{
+					parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
+				}
 			}
 
-			return await this.mapper.MapAsync(catalogDocument, catalog);
+			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent as Catalog);
+
+			return catalog;
 		}
 
 		/// <summary>
@@ -236,6 +240,7 @@
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
 			CatalogDocument catalogDocument = null;
+			CatalogDocument parentCatalogDocument = null;
 
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
@@ -247,11 +252,18 @@
 				if (catalogDocument.IsChanged)
 				{
 					catalogDocument = await repository.SaveAsync(catalogDocument);
-					catalogDocument.AcceptChanges();
+				}
+
+				if ((catalog.Parent?.ID).HasValue)
+				{
+					parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 				}
 			}
 
-			return await this.mapper.MapAsync(catalogDocument, catalog);
+			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent as Catalog);
+
+			return catalog;
 		}
 
 		/// <summary>
@@ -276,14 +288,23 @@
 		public async Task<Catalog> GetCatalog(Catalog catalog)
 		{
 			CatalogDocument catalogDocument = null;
+			CatalogDocument parentCatalogDocument = null;
 
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
 				catalogDocument = await repository.GetAsync(catalog.ID);
+
+				if ((catalog.Parent?.ID).HasValue)
+				{
+					parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
+				}
 			}
 
-			return await this.mapper.MapAsync(catalogDocument, catalog);
+			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent as Catalog);
+
+			return catalog;
 		}
 
 		/// <summary>

@@ -54,7 +54,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(obj => string.IsNullOrWhiteSpace(instance.DisplayName)).AddError("The storage name is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.DisplayName)).AddError("The specified storage name is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}
@@ -68,26 +68,9 @@
 		{
 			Catalog parentCatalog = new Catalog() { ID = (instance.Parent?.ID).GetValueOrDefault() };
 
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The catalog name is empty.");
-			this.If(obj => parentCatalog.ID == Guid.Empty).AddError("The parent catalog is empty.");
-			this.If(async obj => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(parentCatalog)).AddError("The parent catalog with the specified identifier does not exist.");
-			this.If(async obj =>
-			{
-				IDataProvider provider = this.dataProviderFactory.Get<IDataStoreProvider>();
-				if (await provider.CatalogExists(parentCatalog))
-				{
-					parentCatalog = await provider.GetCatalog(parentCatalog);
-					parentCatalog = await this.dataProviderFactory.Get<IAggregationDataProvider>().GetCatalog(parentCatalog);
-					if (string.IsNullOrWhiteSpace(parentCatalog.Path))
-					{
-						return true;
-					}
-
-					return !(await this.dataProviderFactory.Get<IFileSystemProvider>().CatalogExists(parentCatalog));
-				}
-
-				return true;
-			}).AddError("The specified parent catalog does not exist.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The specified catalog name is empty.");
+			this.If(obj => parentCatalog.ID == Guid.Empty).AddError("The specified parent catalog is empty.");
+			this.If(async obj => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(parentCatalog)).AddError("The specified parent catalog does not exist.");
 
 			return await this.ValidateAsync((object)instance);
 		}

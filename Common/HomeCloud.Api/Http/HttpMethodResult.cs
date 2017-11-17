@@ -43,7 +43,7 @@
 		/// <value>
 		/// <c>true</c> if <see cref="HTTP" /> method has errors; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool HasErrors => this.Errors?.Count() > 0;
+		public virtual bool HasErrors => (this.Errors?.Any()).GetValueOrDefault();
 
 		/// <summary>
 		/// Gets or sets the list of errors.

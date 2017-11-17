@@ -216,11 +216,20 @@
 			{
 				catalog.ValidateCatalogPath();
 
-				catalog.Path = catalog.GeneratePath();
-				if (!Directory.Exists(catalog.Path))
+				string path = catalog.GeneratePath(true);
+				if (!Directory.Exists(path))
 				{
-					catalog.Path = Directory.CreateDirectory(catalog.Path).FullName;
+					if (catalog.Path != path && Directory.Exists(catalog.Path))
+					{
+						Directory.Move(catalog.Path, path);
+					}
+					else
+					{
+						catalog.Path = Directory.CreateDirectory(path).FullName;
+					}
 				}
+
+				catalog.Path = path;
 
 				return catalog;
 			});
