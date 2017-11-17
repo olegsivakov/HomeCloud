@@ -110,6 +110,34 @@
 		}
 
 		/// <summary>
+		/// Looks for all records of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" /> that have <see cref="P:HomeCloud.DataStorage.DataAccess.Contracts.Storage.Name" /> value matched to specified name.
+		/// </summary>
+		/// <param name="name">The storage name.</param>
+		/// <param name="offset">The index of the first record that should appear in the list.</param>
+		/// <param name="limit">The number of records to select.</param>
+		/// <returns>
+		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Storage" /> type.
+		/// </returns>
+		public async Task<IEnumerable<Storage>> FindAsync(string name, int offset = 0, int limit = 20)
+		{
+			IEnumerable<Storage> result = await this.context.QueryAsync<Storage>(
+				GetStorageStoredProcedure,
+				new
+				{
+					@Name = name is null ? null : name.Trim().ToLower(),
+					@StartIndex = offset,
+					@ChunkSize = limit
+				});
+
+			foreach (Storage item in result)
+			{
+				item.AcceptChanges();
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Looks for all records of <see cref="T" /> type.
 		/// </summary>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>

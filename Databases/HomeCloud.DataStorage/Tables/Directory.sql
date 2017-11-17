@@ -13,3 +13,13 @@ BEGIN
 END
 GO
 
+IF EXISTS (SELECT name from sys.indexes WHERE name = N'UI_Directory_Name')
+BEGIN
+	DROP INDEX UI_Directory_Name ON [dbo].[Directory]
+END
+GO
+
+CREATE UNIQUE INDEX UI_Directory_Name ON [dbo].[Directory] ([ParentID], [Name]);
+GO
+
+

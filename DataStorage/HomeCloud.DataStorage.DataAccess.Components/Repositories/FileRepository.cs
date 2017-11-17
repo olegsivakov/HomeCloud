@@ -142,21 +142,23 @@
 		}
 
 		/// <summary>
-		/// Gets the list of entities by specified identifier of entity of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Catalog" /> type the list belongs to.
+		/// Gets the list of entities that match the specified one.
 		/// </summary>
-		/// <param name="id">The unique identifier.</param>
+		/// <param name="file">The file to search by.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>
 		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
-		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.File" />.
+		/// The list of instances of <see cref="File" />.
 		/// </returns>
-		public async Task<IEnumerable<File>> GetByDirectoryIDAsync(Guid id, int offset = 0, int limit = 20)
+		public async Task<IEnumerable<File>> FindAsync(File file, int offset = 0, int limit = 20)
 		{
 			return await this.context.QueryAsync<File>(
 				GetFileByDirectoryIDStoredProcedure,
 				new
 				{
-					@ParentID = id,
+					@Name = string.IsNullOrWhiteSpace(file?.Name) ? null : file.Name.Trim().ToLower(),
+					@Extension = string.IsNullOrWhiteSpace(file?.Extension) ? null : file.Extension.Trim().ToLower(),
+					@ParentID = file.DirectoryID,
 					@StartIndex = offset,
 					@ChunkSize = limit
 				});

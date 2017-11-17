@@ -142,21 +142,22 @@
 		}
 
 		/// <summary>
-		/// Gets the list of entities by specified identifier of parent entity the list belongs to.
+		/// Gets the list of entities that match the sepcified one.
 		/// </summary>
-		/// <param name="parentID">The parent identifier.</param>
+		/// <param name="catalog">The catalog to search by.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>
 		/// <param name="limit">The number of records to select.</param>
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.DataAccess.Contracts.Catalog" />.
 		/// </returns>
-		public async Task<IEnumerable<Catalog>> GetByParentIDAsync(Guid? parentID, int offset = 0, int limit = 20)
+		public async Task<IEnumerable<Catalog>> FindAsync(Catalog catalog, int offset = 0, int limit = 20)
 		{
 			return await this.context.QueryAsync<Catalog>(
 				GetDirectoryByParentIDStoredProcedure,
 				new
 				{
-					@ParentID = parentID,
+					@Name = string.IsNullOrWhiteSpace(catalog?.Name) ? null : catalog.Name.Trim().ToLower(),
+					@ParentID = catalog?.ParentID,
 					@StartIndex = offset,
 					@ChunkSize = limit
 				});
