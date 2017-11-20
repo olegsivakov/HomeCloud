@@ -67,7 +67,6 @@
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
 		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
-			storage.ID = Guid.Empty;
 			storage.Name = Guid.NewGuid().ToString();
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
@@ -104,28 +103,17 @@
 		/// </returns>
 		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
 		{
-			ServiceResult<Storage> storageResult = await this.GetStorageAsync(storage.ID);
-			if (!storageResult.IsSuccess)
+			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+
+			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
+			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(new Storage() { DisplayName = storage.DisplayName });
+
+			if (!result.IsValid)
 			{
-				return storageResult;
-			}
-
-			if (storageResult.Data.CompareTo(storage) > 0)
-			{
-				storage.ID = Guid.Empty;
-
-				IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-				ValidationResult result = await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
-
-				storage.ID = storageResult.Data.ID;
-
-				if (!result.IsValid)
+				return new ServiceResult<Storage>(storage)
 				{
-					return new ServiceResult<Storage>(storage)
-					{
-						Errors = result.Errors
-					};
-				}
+					Errors = result.Errors
+				};
 			}
 
 			Func<IDataProvider, Task> updateStorageFunction = async provider => storage = await provider.UpdateStorage(storage);

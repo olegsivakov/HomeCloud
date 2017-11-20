@@ -54,7 +54,15 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Specified storage already exists."));
+			if (instance.ID != Guid.Empty)
+			{
+				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(new Storage() { ID = id })).AddError(new AlreadyExistsException("Specified storage already exists."));
+			}
+
+			if (!string.IsNullOrWhiteSpace(instance.DisplayName))
+			{
+				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(new Storage() { DisplayName = instance.DisplayName })).AddError(new AlreadyExistsException("Storage with specified name already exists."));
+			}
 
 			return await this.ValidateAsync(instance.ID);
 		}

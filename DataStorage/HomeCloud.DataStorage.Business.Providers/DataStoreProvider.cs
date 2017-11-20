@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -21,7 +22,6 @@
 
 	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
-	using System;
 
 	#endregion
 
@@ -82,6 +82,11 @@
 		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> StorageExists(Storage storage)
 		{
+			if (string.IsNullOrWhiteSpace(storage.DisplayName) && storage.ID == Guid.Empty)
+			{
+				return false;
+			}
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
@@ -89,7 +94,8 @@
 				StorageContract contract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
 				if (!string.IsNullOrWhiteSpace(contract.Name))
 				{
-					if ((await storageRepository.FindAsync(contract, 0, 1)).Any())
+					StorageContract result = (await storageRepository.FindAsync(contract, 0, 1)).FirstOrDefault();
+					if (result != null && contract.ID != result.ID)
 					{
 						return true;
 					}
@@ -323,9 +329,6 @@
 				}
 
 				scope.Commit();
-
-				
-				
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);

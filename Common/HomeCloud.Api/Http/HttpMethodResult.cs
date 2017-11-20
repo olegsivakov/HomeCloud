@@ -105,10 +105,9 @@
 			{
 				if (this.Errors.Any(error => error is NotFoundException))
 				{
-					string message = this.Errors.FirstOrDefault(error => error is NotFoundException).Message;
 					ErrorViewModel model = new ErrorViewModel()
 					{
-						Errors = new List<string>() { message }
+						Errors = this.Errors.Where(error => error is NotFoundException).Select(error => error.Message)
 					};
 
 					return this.Controller.NotFound(model);
@@ -116,10 +115,9 @@
 
 				if (this.Errors.Any(error => error is AlreadyExistsException))
 				{
-					string message = this.Errors.FirstOrDefault(error => error is AlreadyExistsException).Message;
 					ErrorViewModel model = new ErrorViewModel()
 					{
-						Errors = new List<string>() { message }
+						Errors = this.Errors.Where(error => error is AlreadyExistsException).Select(error => error.Message)
 					};
 
 					return this.Controller.Conflict(model);

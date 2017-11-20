@@ -56,7 +56,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new NotFoundException("Specified storage does not exist."));
+			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(new Storage() { ID = id })).AddError(new NotFoundException("Specified storage does not exist."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
@@ -68,7 +68,7 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new NotFoundException("Specified catalog does not exist."));
+			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(new Catalog() { ID = id })).AddError(new NotFoundException("Specified catalog does not exist."));
 
 			return await this.ValidateAsync(instance.ID);
 		}
