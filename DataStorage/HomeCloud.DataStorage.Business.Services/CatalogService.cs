@@ -67,6 +67,8 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> CreateCatalogAsync(Catalog catalog)
 		{
+			catalog.ID = Guid.Empty;
+
 			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
 			ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
@@ -108,14 +110,14 @@
 				return catalogResult;
 			}
 
-			if ((!string.IsNullOrWhiteSpace(catalog.Name) && catalog.Name != catalogResult.Data.Name) || ((catalog.Parent?.ID).HasValue) && catalog.Parent?.ID != catalogResult.Data.Parent?.ID)
+			if (catalogResult.Data.CompareTo(catalog) > 0)
 			{
-				catalogResult.Data.ID = Guid.Empty;
-				catalogResult.Data.Name = catalog.Name;
-				catalogResult.Data.Parent = catalog.Parent;
+				catalog.ID = Guid.Empty;
 
 				IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-				ValidationResult result = await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalogResult.Data);
+				ValidationResult result = await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
+
+				catalog.ID = catalogResult.Data.ID;
 
 				if (!result.IsValid)
 				{

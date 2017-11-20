@@ -67,6 +67,7 @@
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
 		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
+			storage.ID = Guid.Empty;
 			storage.Name = Guid.NewGuid().ToString();
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
@@ -109,13 +110,14 @@
 				return storageResult;
 			}
 
-			if (!string.IsNullOrWhiteSpace(storage.DisplayName) && storage.DisplayName != storageResult.Data.DisplayName)
+			if (storageResult.Data.CompareTo(storage) > 0)
 			{
-				storageResult.Data.ID = Guid.Empty;
-				storageResult.Data.DisplayName = storage.DisplayName;
+				storage.ID = Guid.Empty;
 
 				IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-				ValidationResult result = await storageValidator.Get<IUniqueValidator>().ValidateAsync(storageResult.Data);
+				ValidationResult result = await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
+
+				storage.ID = storageResult.Data.ID;
 
 				if (!result.IsValid)
 				{
@@ -129,8 +131,8 @@
 			Func<IDataProvider, Task> updateStorageFunction = async provider => storage = await provider.UpdateStorage(storage);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
 
 			await this.processor.ProcessAsync();
 
