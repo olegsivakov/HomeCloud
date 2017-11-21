@@ -103,21 +103,23 @@
 		{
 			if (this.HasErrors)
 			{
-				if (this.Errors.Any(error => error is NotFoundException))
+				IEnumerable<NotFoundException> notFoundExceptions = this.Errors.OfType<NotFoundException>();
+				if (notFoundExceptions.Any())
 				{
 					ErrorViewModel model = new ErrorViewModel()
 					{
-						Errors = this.Errors.Where(error => error is NotFoundException).Select(error => error.Message)
+						Errors = notFoundExceptions.Select(error => error.Message)
 					};
 
 					return this.Controller.NotFound(model);
 				}
 
-				if (this.Errors.Any(error => error is AlreadyExistsException))
+				IEnumerable<AlreadyExistsException> alreadyExistsExceptions = this.Errors.OfType<AlreadyExistsException>();
+				if (alreadyExistsExceptions.Any())
 				{
 					ErrorViewModel model = new ErrorViewModel()
 					{
-						Errors = this.Errors.Where(error => error is AlreadyExistsException).Select(error => error.Message)
+						Errors = alreadyExistsExceptions.Select(error => error.Message)
 					};
 
 					return this.Controller.Conflict(model);
@@ -125,7 +127,7 @@
 
 				return this.Controller.UnprocessableEntity(new ErrorViewModel()
 				{
-					Errors = this.Errors.Where(error => error is ValidationException).Select(error => (error as ValidationException).Message)
+					Errors = this.Errors.OfType<ValidationException>().Select(error => error.Message)
 				});
 			}
 
