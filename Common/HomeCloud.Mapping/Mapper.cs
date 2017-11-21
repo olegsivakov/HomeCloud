@@ -67,7 +67,7 @@
 				ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;
 				if (converter == null)
 				{
-					NullReferenceException exception = new NullReferenceException(string.Format("Unable to resolve dependency for {0}", typeof(ITypeConverter<TSource, TTarget>).FullName));
+					NullReferenceException exception = new NullReferenceException($"Unable to resolve dependency for {typeof(ITypeConverter<TSource, TTarget>).FullName}");
 					throw new TypeInitializationException(typeof(Mapper).FullName, exception);
 				}
 

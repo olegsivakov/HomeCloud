@@ -16,6 +16,16 @@
 	using HomeCloud.Mapping;
 
 	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Mvc.Filters;
+	using Microsoft.AspNetCore.Mvc.ModelBinding;
+	using System.Linq;
+	using System.IO;
+	using HomeCloud.DataStorage.Api.Helpers;
+	using Microsoft.AspNetCore.WebUtilities;
+	using HomeCloud.DataStorage.Api.Filters;
+	using Microsoft.AspNetCore.Http.Features;
+	using Microsoft.Net.Http.Headers;
+	using System.Text;
 
 	#endregion
 
@@ -31,6 +41,10 @@
 		/// The <see cref="ICatalogService"/> service.
 		/// </summary>
 		private readonly ICatalogService catalogService = null;
+
+		// Get the default form options so that we can use them to set the default limits for
+		// request body data
+		private static readonly FormOptions _defaultFormOptions = new FormOptions();
 
 		#endregion
 
@@ -103,6 +117,11 @@
 		[HttpPost("v1/[controller]/{parentID}")]
 		public async Task<IActionResult> Post(Guid parentID, [FromBody] DataViewModel model)
 		{
+			if (MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+			{
+				return await this.Upload(parentID);
+			}
+
 			return await this.HttpPost(
 				model,
 				async () =>
@@ -158,6 +177,83 @@
 
 					return await this.HttpDeleteResult(result);
 				});
+		}
+
+		//[DisableFormValueModelBinding]
+		//[ValidateAntiForgeryToken]
+		//[HttpPost("v1/[controller]/{parentID}")]
+		private async Task<IActionResult> Upload(Guid parentID)
+		{
+			// Used to accumulate all the form url encoded key value pairs in the 
+			// request.
+			var formAccumulator = new KeyValueAccumulator();
+			string targetFilePath = @"D:\";
+
+			var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), _defaultFormOptions.MultipartBoundaryLengthLimit);
+			var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+
+			var section = await reader.ReadNextSectionAsync();
+			while (section != null)
+			{
+				ContentDispositionHeaderValue contentDisposition;
+				var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition);
+
+				if (hasContentDispositionHeader)
+				{
+					if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
+					{
+						using (var targetStream = System.IO.File.Create(Path.Combine(targetFilePath, contentDisposition.FileName.Value.Replace("\"", string.Empty))))
+						{
+							await section.Body.CopyToAsync(targetStream);
+						}
+					}
+					else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
+					{
+						// Content-Disposition: form-data; name="key"
+						//
+						// value
+
+						// Do not limit the key name length here because the 
+						// multipart headers length limit is already in effect.
+						var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name);
+						var encoding = GetEncoding(section);
+						using (var streamReader = new StreamReader(section.Body, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
+						{
+							// The value length limit is enforced by MultipartBodyLengthLimit
+							var value = await streamReader.ReadToEndAsync();
+							if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
+							{
+								value = String.Empty;
+							}
+							formAccumulator.Append(key.Value, value);
+
+							if (formAccumulator.ValueCount > _defaultFormOptions.ValueCountLimit)
+							{
+								throw new InvalidDataException($"Form key count limit {_defaultFormOptions.ValueCountLimit} exceeded.");
+							}
+						}
+					}
+				}
+
+				// Drains any remaining section body that has not been consumed and
+				// reads the headers for the next section.
+				section = await reader.ReadNextSectionAsync();
+			}
+
+			return new EmptyResult();
+		}
+
+		private static Encoding GetEncoding(MultipartSection section)
+		{
+			MediaTypeHeaderValue mediaType;
+			var hasMediaTypeHeader = MediaTypeHeaderValue.TryParse(section.ContentType, out mediaType);
+
+			if (!hasMediaTypeHeader || Encoding.UTF7.Equals(mediaType.Encoding))
+			{
+				return Encoding.UTF8;
+			}
+
+			return mediaType.Encoding;
 		}
 	}
 }

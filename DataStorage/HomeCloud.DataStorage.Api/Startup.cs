@@ -12,6 +12,8 @@
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.AspNetCore.Mvc.Internal;
+	using HomeCloud.DataStorage.Api.Binders;
 
 	#endregion
 
@@ -57,7 +59,14 @@
 			services.AddDependencies();
 			services.Configure(this.Configuration);
 
-			services.AddMvc();
+			services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
+			services.AddMvc()
+				.AddMvcOptions(options =>
+				{
+					IHttpRequestStreamReaderFactory readerFactory = services.BuildServiceProvider().GetRequiredService<IHttpRequestStreamReaderFactory>();
+					options.ModelBinderProviders.Insert(0, new DataModelBinderProvider(options.InputFormatters, readerFactory));
+				});
 
 			return services.BuildServiceProvider();
 		}

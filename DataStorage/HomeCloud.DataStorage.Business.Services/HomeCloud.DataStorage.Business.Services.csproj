@@ -33,6 +33,7 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CatalogEntryService.cs" />
     <Compile Include="CatalogService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageService.cs" />

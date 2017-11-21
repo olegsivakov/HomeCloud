@@ -121,7 +121,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Errors = new List<string>() { exception.InnerException is null ? exception.Message : string.Format("{0}: {1}", exception.Message, exception.InnerException.Message) }
+							Errors = new List<string>() { exception.InnerException is null ? exception.Message : $"{exception.Message}: {exception.InnerException.Message}" }
 						};
 					});
 			}
