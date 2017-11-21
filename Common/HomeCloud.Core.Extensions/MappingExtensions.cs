@@ -40,7 +40,7 @@
 		public static async Task<IEnumerable<TTarget>> MapNewAsync<TSource, TTarget>(this IMapper mapper, IEnumerable<TSource> source)
 			where TTarget : new()
 		{
-			if (source == null || source.Count() == 0)
+			if (source is null || source.Count() == 0)
 			{
 				return Enumerable.Empty<TTarget>();
 			}

@@ -136,7 +136,7 @@
 		/// </returns>
 		protected async virtual Task<IActionResult> HttpPost(IViewModel model, Func<Task<IHttpMethodResult>> action)
 		{
-			if (model == null)
+			if (model is null)
 			{
 				return this.BadRequest("The request body is undefined.");
 			}
@@ -155,7 +155,7 @@
 		/// </returns>
 		protected async virtual Task<IActionResult> HttpPut(Guid id, IViewModel model, Func<Task<IHttpMethodResult>> action)
 		{
-			if (model == null)
+			if (model is null)
 			{
 				return this.BadRequest("The request body is undefined.");
 			}

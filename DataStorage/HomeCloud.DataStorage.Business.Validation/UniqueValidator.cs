@@ -34,9 +34,9 @@
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PresenceValidator" /> class.
+		/// Initializes a new instance of the <see cref="UniqueValidator" /> class.
 		/// </summary>
-		/// <param name="dataProviderFactory">The <see cref="IDataProvider"/> factory.</param>
+		/// <param name="dataProviderFactory">The <see cref="IDataProvider" /> factory.</param>
 		public UniqueValidator(IServiceFactory<IDataProvider> dataProviderFactory)
 			: base()
 		{
@@ -54,14 +54,9 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Storage instance)
 		{
-			if (instance.ID != Guid.Empty)
-			{
-				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(new Storage() { ID = id })).AddError(new AlreadyExistsException("Specified storage already exists."));
-			}
-
 			if (!string.IsNullOrWhiteSpace(instance.DisplayName))
 			{
-				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(new Storage() { DisplayName = instance.DisplayName })).AddError(new AlreadyExistsException("Storage with specified name already exists."));
+				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().StorageExists(instance)).AddError(new AlreadyExistsException("Storage with specified name already exists."));
 			}
 
 			return await this.ValidateAsync(instance.ID);
@@ -74,7 +69,10 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(Catalog instance)
 		{
-			this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("Specified catalog already exists."));
+			if (!string.IsNullOrWhiteSpace(instance.Name))
+			{
+				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(instance)).AddError(new AlreadyExistsException("Catalog with specified name already exists."));
+			}
 
 			return await this.ValidateAsync(instance.ID);
 		}

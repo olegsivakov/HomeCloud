@@ -67,12 +67,13 @@
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
 		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
+			storage.ID = Guid.Empty;
 			storage.Name = Guid.NewGuid().ToString();
 
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 
 			ValidationResult result = await storageValidator.Get<IRequiredValidator>().ValidateAsync(storage);
-			result += result.IsValid ? await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage) : result;
+			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
 
 			if (!result.IsValid)
 			{
@@ -86,8 +87,8 @@
 			Func<IDataProvider, Task> createStorageUndoFunction = async provider => storage = await provider.DeleteStorage(storage);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createStorageFunction, createStorageUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, createStorageUndoFunction);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, createStorageUndoFunction);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, createStorageUndoFunction);
 
 			await this.processor.ProcessAsync();
 
@@ -106,7 +107,7 @@
 			IServiceFactory<IStorageValidator> storageValidator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 
 			ValidationResult result = await storageValidator.Get<IPresenceValidator>().ValidateAsync(storage);
-			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(new Storage() { DisplayName = storage.DisplayName });
+			result += await storageValidator.Get<IUniqueValidator>().ValidateAsync(storage);
 
 			if (!result.IsValid)
 			{

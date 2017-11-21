@@ -82,7 +82,9 @@
 		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> StorageExists(Storage storage)
 		{
-			if (string.IsNullOrWhiteSpace(storage.DisplayName) && storage.ID == Guid.Empty)
+			StorageContract contract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
+
+			if (string.IsNullOrWhiteSpace(contract.Name) && contract.ID == Guid.Empty)
 			{
 				return false;
 			}
@@ -91,17 +93,14 @@
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 
-				StorageContract contract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
 				if (!string.IsNullOrWhiteSpace(contract.Name))
 				{
-					StorageContract result = (await storageRepository.FindAsync(contract, 0, 1)).FirstOrDefault();
-					if (result != null && contract.ID != result.ID)
-					{
-						return true;
-					}
+					StorageContract storageResult = (await storageRepository.FindAsync(contract, 0, 1)).FirstOrDefault();
+
+					return !(storageResult is null || (contract.ID != Guid.Empty && contract.ID == storageResult.ID));
 				}
 
-				return contract.ID != Guid.Empty && await storageRepository.GetAsync(contract.ID) != null;
+				return (await storageRepository.GetAsync(contract.ID)) != null;
 			}
 		}
 
@@ -255,20 +254,25 @@
 		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogExists(Catalog catalog)
 		{
+			CatalogContract contract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
+
+			if (string.IsNullOrWhiteSpace(contract.Name) && contract.ID == Guid.Empty)
+			{
+				return false;
+			}
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
-				CatalogContract contract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
-				if (!string.IsNullOrWhiteSpace(contract.Name) || contract.ParentID.HasValue)
+				if (!string.IsNullOrWhiteSpace(contract.Name))
 				{
-					if ((await catalogRepository.FindAsync(contract, 0, 1)).Any())
-					{
-						return true;
-					}
+					CatalogContract catalogResult = (await catalogRepository.FindAsync(contract, 0, 1)).FirstOrDefault();
+
+					return !(catalogResult is null || (contract.ID != Guid.Empty && contract.ID == catalogResult.ID));
 				}
 
-				return contract.ID != Guid.Empty && await catalogRepository.GetAsync(contract.ID) != null;
+				return (await catalogRepository.GetAsync(contract.ID)) != null;
 			}
 		}
 

@@ -93,9 +93,9 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Contracts.Catalog Convert(Storage target, Contracts.Catalog source)
+		public Contracts.Catalog Convert(Storage source, Contracts.Catalog target)
 		{
-			return this.Convert((CatalogRoot)target, source);
+			return this.Convert((CatalogRoot)source, target);
 		}
 
 		#endregion
@@ -129,9 +129,9 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Contracts.CatalogDocument Convert(Storage target, Contracts.CatalogDocument source)
+		public Contracts.CatalogDocument Convert(Storage source, Contracts.CatalogDocument target)
 		{
-			return this.Convert((CatalogRoot)target, source);
+			return this.Convert((CatalogRoot)source, target);
 		}
 
 		#endregion

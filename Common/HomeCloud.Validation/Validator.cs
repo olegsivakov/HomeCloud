@@ -42,6 +42,7 @@
 			{
 				tasks.Add(rule.IsSatisfiedByAsync(instance));
 			}
+
 			IEnumerable<ValidationResult> ruleResults = await Task.WhenAll(tasks);
 
 			foreach (ValidationResult ruleResult in ruleResults)

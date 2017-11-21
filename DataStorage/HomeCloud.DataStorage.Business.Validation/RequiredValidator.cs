@@ -33,8 +33,9 @@
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RequiredValidator"/> class.
+		/// Initializes a new instance of the <see cref="RequiredValidator" /> class.
 		/// </summary>
+		/// <param name="dataProviderFactory">The <see cref="IDataProvider"/> factory.</param>
 		public RequiredValidator(IServiceFactory<IDataProvider> dataProviderFactory)
 			: base()
 		{

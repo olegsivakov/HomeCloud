@@ -47,7 +47,6 @@
 
 		#region Public Methods
 
-
 		/// <summary>
 		/// Configures and adds services to the container. This method gets called by the runtime.
 		/// </summary>

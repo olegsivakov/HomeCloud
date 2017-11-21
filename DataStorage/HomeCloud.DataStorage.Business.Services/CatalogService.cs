@@ -72,7 +72,7 @@
 			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
 			ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
-			result += result.IsValid ? await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog) : result;
+			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
 
 			if (!result.IsValid)
 			{
@@ -104,28 +104,17 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
-			ServiceResult<Catalog> catalogResult = await this.GetCatalogAsync(catalog.ID);
-			if (!catalogResult.IsSuccess)
+			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+
+			ValidationResult result = await catalogValidator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
+
+			if (!result.IsValid)
 			{
-				return catalogResult;
-			}
-
-			if (catalogResult.Data.CompareTo(catalog) > 0)
-			{
-				catalog.ID = Guid.Empty;
-
-				IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-				ValidationResult result = await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
-
-				catalog.ID = catalogResult.Data.ID;
-
-				if (!result.IsValid)
+				return new ServiceResult<Catalog>(catalog)
 				{
-					return new ServiceResult<Catalog>(catalog)
-					{
-						Errors = result.Errors
-					};
-				}
+					Errors = result.Errors
+				};
 			}
 
 			Func<IDataProvider, Task> updateCatalogFunction = async provider => catalog = await provider.UpdateCatalog(catalog);

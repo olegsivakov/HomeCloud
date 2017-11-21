@@ -39,7 +39,7 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataController" /> class.
 		/// </summary>
-		/// <param name="storageService">The <see cref="ICatalogService" /> service.</param>
+		/// <param name="catalogService">The <see cref="ICatalogService"/> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
 		public DataController(ICatalogService catalogService, IMapper mapper)
 			: base(mapper)
@@ -52,9 +52,12 @@
 		/// <summary>
 		/// Gets the list of data models by their parent id.
 		/// </summary>
+		/// <param name="parentID">The parent model identifier.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="limit">The limit.</param>
-		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the list of instances of <see cref="DataViewModel"/>.</returns>
+		/// <returns>
+		/// The asynchronous result of <see cref="IActionResult" /> containing the list of instances of <see cref="DataViewModel" />.
+		/// </returns>
 		[HttpGet("v1/[controller]/{parentID}")]
 		public async Task<IActionResult> Get(Guid parentID, int offset, int limit)
 		{
@@ -72,7 +75,6 @@
 		/// <summary>
 		/// Gets the data model specified identifier.
 		/// </summary>
-		/// <param name="parentID">The parent model identifier.</param>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
@@ -117,9 +119,12 @@
 		/// <summary>
 		/// Updates the existing storage model with the specified identifier.
 		/// </summary>
+		/// <param name="parentID">The parent model identifier.</param>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="model">The model of <see cref="DataViewModel"/>.</param>
-		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="DataViewModel"/>.</returns>
+		/// <param name="model">The model of <see cref="DataViewModel" />.</param>
+		/// <returns>
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
+		/// </returns>
 		[HttpPut("v1/[controller]/{parentID}/{id}")]
 		public async Task<IActionResult> Put(Guid parentID, Guid id, [FromBody] DataViewModel model)
 		{

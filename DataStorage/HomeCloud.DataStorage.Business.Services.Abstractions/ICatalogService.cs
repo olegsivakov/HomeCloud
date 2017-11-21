@@ -11,7 +11,7 @@
 	#endregion
 
 	/// <summary>
-	/// 
+	/// Defines methods to handle catalogs.
 	/// </summary>
 	public interface ICatalogService
 	{
@@ -52,7 +52,7 @@
 		/// <summary>
 		/// Gets the list of catalogs by specified parent one.
 		/// </summary>
-		/// <param name="parent">The parent catalog identifier.</param>
+		/// <param name="parentID">The parent catalog identifier.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
@@ -61,52 +61,3 @@
 		Task<ServiceResult<IEnumerable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20);
 	}
 }
-
-
-
-//Create Storage
-//Input:
-//	Name:
-
-//Validation:
-//	- validate id does not exist
-//	- validate name is not empty
-//	- generate path by name and validate physical catalog does not exist
-
-//Update Storage
-//Input:
-//	ID, Name, Size, quota
-
-//Validation:
-//	- Validate id exists
-//	- Validate Name is not empty
-
-
-
-//Create catalog/catalog entry
-//Input:
-//	Name, Parent ID
-
-//Prepare:
-//	Get parent catalog by parent id
-
-//Validation:
-//	- validate id does not exist
-//	- validate name is not empty
-//	- validate parent catalog not empty
-//	- generate path by name and validate physical catalog does not exist
-
-//Update Catalog
-//Input:
-//	ID, Name, Parent ID
-
-
-//Preparation:
-//	- Get parent catalog by parent id
-
-//Validation:
-//	- Validate id exists
-//	- validate name is not empty
-//	- validate parent catalog not empty
-//	if parent id is different or name is different
-//	- generate path by name and validate physical catalog does not exist
