@@ -17,7 +17,7 @@
 	/// </summary>
 	/// <typeparam name="T">The <see cref="IViewModel"/> type of the data provided by <see cref="HTTP"/> method </typeparam>
 	/// <seealso cref="HomeCloud.Api.Http.HttpMethodResult" />
-	public class HttpPutResult<T> : HttpMethodResult
+	public sealed class HttpPutResult<T> : HttpMethodResult
 		where T : IViewModel
 	{
 		#region Private Members

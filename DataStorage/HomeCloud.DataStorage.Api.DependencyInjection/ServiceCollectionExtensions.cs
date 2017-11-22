@@ -177,6 +177,7 @@
 		{
 			services.AddScoped<IStorageService, StorageService>();
 			services.AddScoped<ICatalogService, CatalogService>();
+			services.AddScoped<ICatalogEntryService, CatalogEntryService>();
 		}
 
 		#endregion
