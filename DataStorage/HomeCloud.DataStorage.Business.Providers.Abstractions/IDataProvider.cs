@@ -114,5 +114,50 @@
 		Task<Catalog> DeleteCatalog(Catalog catalog);
 
 		#endregion
+
+		#region CatalogEntry Methods
+
+		/// <summary>
+		/// Gets a value indicating whether the specified catalog entry already exists.
+		/// </summary>
+		/// <param name="entry">The catalog entry.</param>
+		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
+		Task<bool> CatalogEntryExists(CatalogEntry entry);
+
+		/// <summary>
+		/// Creates the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
+		Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry);
+
+		/// <summary>
+		/// Gets the list of catalog entries located in specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="CatalogEntry" /> type.
+		/// </returns>
+		Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20);
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry);
+
+		/// <summary>
+		/// Deletes the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to delete.</param>
+		/// <returns>
+		/// The deleted instance of <see cref="CatalogEntry"/> type.
+		/// </returns>
+		Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry);
+
+		#endregion
 	}
 }

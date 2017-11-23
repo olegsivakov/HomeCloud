@@ -21,6 +21,7 @@
 	using Microsoft.Extensions.Options;
 
 	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
+	using FileContract = HomeCloud.DataStorage.DataAccess.Contracts.File;
 	using StorageContract = HomeCloud.DataStorage.DataAccess.Contracts.Storage;
 
 	#endregion
@@ -291,7 +292,7 @@
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
 				catalogContract = await catalogRepository.SaveAsync(catalogContract);
-				if ((catalogContract?.ParentID).HasValue)
+				if (catalogContract.ParentID.HasValue)
 				{
 					parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
 				}
@@ -417,6 +418,142 @@
 			}
 
 			return catalog;
+		}
+
+		#endregion
+
+		#region CatalogEntry Methods
+
+		/// <summary>
+		/// Gets a value indicating whether the specified catalog entry already exists.
+		/// </summary>
+		/// <param name="entry">The catalog entry.</param>
+		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> CatalogEntryExists(CatalogEntry entry)
+		{
+			FileContract contract = await this.mapper.MapNewAsync<CatalogEntry, FileContract>(entry);
+
+			if (string.IsNullOrWhiteSpace(contract.Name) && contract.ID == Guid.Empty)
+			{
+				return false;
+			}
+
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				IFileRepository fileRepository = scope.GetRepository<IFileRepository>();
+
+				if (!string.IsNullOrWhiteSpace(contract.Name))
+				{
+					FileContract fileResult = (await fileRepository.FindAsync(contract, 0, 1)).FirstOrDefault();
+
+					return !(fileResult is null || (contract.ID != Guid.Empty && contract.ID == fileResult.ID));
+				}
+
+				return (await fileRepository.GetAsync(contract.ID)) != null;
+			}
+		}
+
+		/// <summary>
+		/// Creates the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
+		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry)
+		{
+			FileContract fileContract = await this.mapper.MapNewAsync<CatalogEntry, FileContract>(entry);
+			CatalogContract catalogContract = null;
+
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				IFileRepository fileRepository = scope.GetRepository<IFileRepository>();
+				fileContract = await fileRepository.SaveAsync(fileContract);
+
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				catalogContract = await catalogRepository.GetAsync(fileContract.DirectoryID);
+
+				scope.Commit();
+			}
+
+			entry = await this.mapper.MapAsync(fileContract, entry);
+			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog as Catalog);
+
+			return entry;
+		}
+
+		/// <summary>
+		/// Gets the list of catalog entries located in specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="CatalogEntry" /> type.
+		/// </returns>
+		public async Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
+		{
+			if (limit == 0)
+			{
+				return await Task.FromResult(Enumerable.Empty<CatalogEntry>());
+			}
+
+			IEnumerable<FileContract> data = null;
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				IFileRepository fileRepository = scope.GetRepository<IFileRepository>();
+				data = await fileRepository.FindAsync(new FileContract() { DirectoryID = catalog.ID }, offset, limit);
+			}
+
+			return (await this.mapper.MapNewAsync<FileContract, CatalogEntry>(data)).Select(entry =>
+			{
+				entry.Catalog = catalog;
+
+				return entry;
+			});
+		}
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		public async Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry)
+		{
+			FileContract fileContract = null;
+			CatalogContract catalogContract = null;
+
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
+			{
+				IFileRepository fileRepository = scope.GetRepository<IFileRepository>();
+				fileContract = await fileRepository.GetAsync(entry.ID);
+
+				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
+				catalogContract = await catalogRepository.GetAsync(fileContract.DirectoryID);
+			}
+
+			entry = await this.mapper.MapAsync(fileContract, entry);
+			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog as Catalog);
+
+			return entry;
+		}
+
+		/// <summary>
+		/// Deletes the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to delete.</param>
+		/// <returns>
+		/// The deleted instance of <see cref="CatalogEntry"/> type.
+		/// </returns>
+		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
+		{
+			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, true))
+			{
+				IFileRepository fileRepository = scope.GetRepository<IFileRepository>();
+				await fileRepository.DeleteAsync(entry.ID);
+
+				scope.Commit();
+			}
+
+			return entry;
 		}
 
 		#endregion

@@ -21,6 +21,7 @@
 	using Microsoft.Extensions.Options;
 
 	using CatalogDocument = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
+	using FileDocument = HomeCloud.DataStorage.DataAccess.Contracts.FileDocument;
 
 	#endregion
 
@@ -197,9 +198,8 @@
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-				CatalogDocument catalogDocument = await repository.GetAsync(catalog.ID);
 
-				return catalogDocument != null;
+				return (await repository.GetAsync(catalog.ID) != null);
 			}
 		}
 
@@ -210,14 +210,12 @@
 		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
-			CatalogDocument catalogDocument = null;
+			CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(catalog);
 			CatalogDocument parentCatalogDocument = null;
 
 			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
 			{
 				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-
-				catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(catalog);
 				catalogDocument = await repository.SaveAsync(catalogDocument);
 
 				if ((catalog.Parent?.ID).HasValue)
@@ -324,6 +322,114 @@
 			}
 
 			return catalog;
+		}
+
+		#endregion
+
+		#region CatalogEntry Methods
+
+		/// <summary>
+		/// Gets a value indicating whether the specified catalog entry already exists.
+		/// </summary>
+		/// <param name="entry">The catalog entry.</param>
+		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> CatalogEntryExists(CatalogEntry entry)
+		{
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				IFileDocumentRepository repository = scope.GetRepository<IFileDocumentRepository>();
+
+				return (await repository.GetAsync(entry.ID)) != null;
+			}
+		}
+
+		/// <summary>
+		/// Creates the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
+		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry)
+		{
+			FileDocument fileDocument = await this.mapper.MapNewAsync<CatalogEntry, FileDocument>(entry);
+			CatalogDocument catalogDocument = null;
+
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				IFileDocumentRepository fileRepository = scope.GetRepository<IFileDocumentRepository>();
+				fileDocument = await fileRepository.SaveAsync(fileDocument);
+
+				if ((entry.Catalog?.ID).HasValue)
+				{
+					ICatalogDocumentRepository catalogRepository = scope.GetRepository<ICatalogDocumentRepository>();
+					catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
+				}
+			}
+
+			entry = await this.mapper.MapAsync(fileDocument, entry);
+			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog as Catalog);
+
+			return entry;
+		}
+
+		/// <summary>
+		/// Gets the list of catalog entries located in specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="CatalogEntry" /> type.
+		/// </returns>
+		public async Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
+		{
+			return await Task.FromException<IEnumerable<CatalogEntry>>(new NotSupportedException());
+		}
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		public async Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry)
+		{
+			FileDocument fileDocument = null;
+			CatalogDocument catalogDocument = null;
+
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				IFileDocumentRepository fileRepository = scope.GetRepository<IFileDocumentRepository>();
+				fileDocument = await fileRepository.GetAsync(entry.ID);
+
+				if ((entry.Catalog?.ID).HasValue)
+				{
+					ICatalogDocumentRepository catalogRepository = scope.GetRepository<ICatalogDocumentRepository>();
+					catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
+				}
+			}
+
+			entry = await this.mapper.MapAsync(fileDocument, entry);
+			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog as Catalog);
+
+			return entry;
+		}
+
+		/// <summary>
+		/// Deletes the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to delete.</param>
+		/// <returns>
+		/// The deleted instance of <see cref="CatalogEntry"/> type.
+		/// </returns>
+		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
+		{
+			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			{
+				IFileDocumentRepository repository = scope.GetRepository<IFileDocumentRepository>();
+
+				await repository.DeleteAsync(entry.ID);
+			}
+
+			return entry;
 		}
 
 		#endregion

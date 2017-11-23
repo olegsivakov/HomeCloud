@@ -176,7 +176,7 @@
 		{
 			return await Task.Run(() =>
 			{
-				catalog.ValidateCatalogPath();
+				catalog.ValidatePath();
 
 				string path = catalog.GeneratePath();
 
@@ -193,7 +193,7 @@
 		{
 			return await Task.Run(() =>
 			{
-				catalog.ValidateCatalogPath();
+				catalog.ValidatePath();
 
 				catalog.Path = catalog.GeneratePath(true);
 				if (!Directory.Exists(catalog.Path))
@@ -214,7 +214,7 @@
 		{
 			return await Task.Run(() =>
 			{
-				catalog.ValidateCatalogPath();
+				catalog.ValidatePath();
 
 				string path = catalog.GeneratePath(true);
 				if (!Directory.Exists(path))
@@ -258,7 +258,7 @@
 		{
 			return await Task.Run(() =>
 			{
-				catalog.ValidateCatalogPath();
+				catalog.ValidatePath();
 
 				catalog.Path = catalog.GeneratePath();
 				if (Directory.Exists(catalog.Path))
@@ -281,7 +281,7 @@
 		{
 			return await Task.Run(() =>
 			{
-				catalog.ValidateCatalogPath();
+				catalog.ValidatePath();
 
 				catalog.Path = catalog.GeneratePath();
 				if (Directory.Exists(catalog.Path))
@@ -290,6 +290,111 @@
 				}
 
 				return catalog;
+			});
+		}
+
+		#endregion
+
+		#region CatalogEntry Methods
+
+		/// <summary>
+		/// Gets a value indicating whether the specified catalog entry already exists.
+		/// </summary>
+		/// <param name="entry">The catalog entry.</param>
+		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
+		public async Task<bool> CatalogEntryExists(CatalogEntry entry)
+		{
+			return await Task.Run(() =>
+			{
+				entry.ValidatePath();
+
+				string path = entry.GeneratePath();
+
+				return Directory.Exists(path);
+			});
+		}
+
+		/// <summary>
+		/// Creates the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
+		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
+		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry)
+		{
+			return await Task.Run(() =>
+			{
+				entry.ValidatePath();
+
+				entry.Path = entry.GeneratePath(true);
+				if (!File.Exists(entry.Path))
+				{
+					using (FileStream stream = File.Create(entry.Path))
+					{
+					}
+				}
+
+				return entry;
+			});
+		}
+
+		/// <summary>
+		/// Gets the list of catalog entries located in specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The list of instances of <see cref="CatalogEntry" /> type.
+		/// </returns>
+		public async Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
+		{
+			return await Task.FromException<IEnumerable<CatalogEntry>>(new NotSupportedException());
+		}
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		public async Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry)
+		{
+			return await Task.Run(() =>
+			{
+				entry.ValidatePath();
+
+				entry.Path = entry.GeneratePath();
+				if (File.Exists(entry.Path))
+				{
+					using (FileStream stream = File.OpenRead(entry.Path))
+					{
+						entry.Size = stream.Length;
+					}
+				}
+
+				return entry;
+			});
+		}
+
+		/// <summary>
+		/// Deletes the specified catalog entry.
+		/// </summary>
+		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to delete.</param>
+		/// <returns>
+		/// The deleted instance of <see cref="CatalogEntry"/> type.
+		/// </returns>
+		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
+		{
+			return await Task.Run(() =>
+			{
+				entry.ValidatePath();
+
+				entry.Path = entry.GeneratePath();
+				if (File.Exists(entry.Path))
+				{
+					File.Delete(entry.Path);
+				}
+
+				return entry;
 			});
 		}
 
