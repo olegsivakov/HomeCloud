@@ -125,10 +125,18 @@
 					return this.Controller.Conflict(model);
 				}
 
-				return this.Controller.UnprocessableEntity(new ErrorViewModel()
+				IEnumerable<ValidationException> validationExceptions = this.Errors.OfType<ValidationException>();
+				if (validationExceptions.Any())
 				{
-					Errors = this.Errors.OfType<ValidationException>().Select(error => error.Message)
-				});
+					ErrorViewModel model = new ErrorViewModel()
+					{
+						Errors = validationExceptions.Select(error => error.Message)
+					};
+
+					return this.Controller.UnprocessableEntity(model);
+				}
+
+				return new BadRequestResult();
 			}
 
 			return null;

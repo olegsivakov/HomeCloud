@@ -101,28 +101,44 @@
 				return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
 			}
 
+			string fileName = null;
+
 			string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), DefaultFormOptions.MultipartBoundaryLengthLimit);
 			MultipartReader reader = new MultipartReader(boundary, HttpContext.Request.Body);
 
 			MultipartSection section = await reader.ReadNextSectionAsync();
-			while (section != null)
+			if (section != null)
 			{
 				ContentDispositionHeaderValue contentDisposition = null;
-				if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition) && MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
+				if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition) && ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition))
 				{
-					string targetFilePath = Path.Combine(@"D:\", HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString());
-					using (FileStream stream = System.IO.File.Create(targetFilePath))
-					{
-						stream.SetLength(section.Body.Length);
-
-						await section.Body.CopyToAsync(stream);
-					}
+					fileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString();
 				}
-
-				section = await reader.ReadNextSectionAsync();
 			}
 
-			return this.Ok();
+			DataViewModel model = new DataViewModel()
+			{
+				ID = catalogID,
+				IsCatalog = true
+			};
+
+			return await this.HttpPost(
+				model,
+				async () =>
+				{
+					CatalogEntryStream stream = new CatalogEntryStream(
+						new CatalogEntry()
+						{
+							Catalog = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model),
+							Name = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetFileNameWithoutExtension(fileName),
+							Extension = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetExtension(fileName)
+						},
+						section.Body);
+
+					ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
+
+					return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
+				});
 		}
 	}
 }

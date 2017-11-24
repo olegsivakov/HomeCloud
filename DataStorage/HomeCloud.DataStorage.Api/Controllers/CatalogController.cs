@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core.Extensions;
@@ -16,6 +17,7 @@
 	using HomeCloud.Mapping;
 
 	using Microsoft.AspNetCore.Mvc;
+	using HomeCloud.Api.Http;
 
 	#endregion
 
@@ -32,6 +34,11 @@
 		/// </summary>
 		private readonly ICatalogService catalogService = null;
 
+		/// <summary>
+		/// The <see cref="ICatalogEntryService"/> service.
+		/// </summary>
+		private readonly ICatalogEntryService catalogEntryService = null;
+
 		#endregion
 
 		#region Constructors
@@ -39,12 +46,17 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CatalogController" /> class.
 		/// </summary>
-		/// <param name="catalogService">The <see cref="ICatalogService"/> service.</param>
+		/// <param name="catalogService">The <see cref="ICatalogService" /> service.</param>
+		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService"/> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
-		public CatalogController(ICatalogService catalogService, IMapper mapper)
+		public CatalogController(
+			ICatalogService catalogService,
+			ICatalogEntryService catalogEntryService,
+			IMapper mapper)
 			: base(mapper)
 		{
 			this.catalogService = catalogService;
+			this.catalogEntryService = catalogEntryService;
 		}
 
 		#endregion
@@ -66,9 +78,22 @@
 				limit,
 				async () =>
 				{
-					ServiceResult<IEnumerable<Catalog>> result = await this.catalogService.GetCatalogsAsync(parentID, offset, limit);
+					ServiceResult<IEnumerable<Catalog>> catalogResult = await this.catalogService.GetCatalogsAsync(parentID, offset, limit);
+					HttpGetResult<IEnumerable<DataViewModel>> result = await this.HttpGetResult<Catalog, DataViewModel>(catalogResult) as HttpGetResult<IEnumerable<DataViewModel>>;
 
-					return await this.HttpGetResult<Catalog, DataViewModel>(result);
+					int catalogcount = result.Data.Count();
+					if (catalogcount < limit)
+					{
+						int entryCount = limit - catalogcount;
+
+						ServiceResult<IEnumerable<CatalogEntry>> catalogEntryResult = await this.catalogEntryService.GetEntriesAsync(parentID, 0, limit);
+						HttpGetResult<IEnumerable<DataViewModel>> entryResult = await this.HttpGetResult<CatalogEntry, DataViewModel>(catalogEntryResult) as HttpGetResult<IEnumerable<DataViewModel>>;
+
+						result.Data.Union(entryResult.Data);
+						result.Errors.Union(entryResult.Errors);
+					}
+
+					return result;
 				});
 		}
 
