@@ -18,7 +18,7 @@
 		/// <summary>
 		/// Creates the specified catalog entry.
 		/// </summary>
-		/// <param name="entry">The <see cref="CatalogEntryStream" /> content stream of catalog entry.</param>
+		/// <param name="stream">The <see cref="CatalogEntryStream" /> content stream of catalog entry.</param>
 		/// <returns>
 		/// The operation result containing created instance of <see cref="CatalogEntry"/>.
 		/// </returns>
@@ -44,10 +44,12 @@
 		/// Gets the content stream of the catalog entry by specified entry identifier.
 		/// </summary>
 		/// <param name="id">The catalog entry identifier.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="length">The number of bytes from byte array to return.</param>
 		/// <returns>
 		/// The operation result containing the instance of <see cref="CatalogEntryStream" />.
 		/// </returns>
-		Task<CatalogEntryStream> GetEntryStreamAsync(Guid id, int offset = 0, int size = 1024);
+		Task<ServiceResult<CatalogEntryStream>> GetEntryStreamAsync(Guid id, int offset = 0, int length = 1024);
 
 		/// <summary>
 		/// Gets the list of catalog entries that belong to the catalog which identifier is specified.
@@ -58,6 +60,6 @@
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="CatalogEntry" />.
 		/// </returns>
-		Task<IEnumerable<CatalogEntry>> GetEntriesAsync(Guid catalogID, int offset = 0, int limit = 20);
+		Task<ServiceResult<IEnumerable<CatalogEntry>>> GetEntriesAsync(Guid catalogID, int offset = 0, int limit = 20);
 	}
 }

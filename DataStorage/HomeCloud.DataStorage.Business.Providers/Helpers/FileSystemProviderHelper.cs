@@ -160,7 +160,7 @@
 		/// <summary>
 		/// Validates <see cref="Catalog.Parent.Path" /> or <see cref="CatalogEntry.Catalog.Path"/> value not to be empty.
 		/// </summary>
-		/// <param name="catalog">The parent catalog which path should be validated.</param>
+		/// <param name="parent">The parent catalog which path should be validated.</param>
 		/// <exception cref="ArgumentException">The parent catalog path is empty.</exception>
 		/// <exception cref="DirectoryNotFoundException">The parent catalog does not exist by specified path.</exception>
 		private static void ValidateParentPath(CatalogRoot parent)

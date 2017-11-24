@@ -5,7 +5,8 @@
 	/// </summary>
 	/// <seealso cref="HomeCloud.DataStorage.Business.Validation.IStorageValidator" />
 	/// <seealso cref="HomeCloud.DataStorage.Business.Validation.ICatalogValidator" />
-	public interface IRequiredValidator : IStorageValidator, ICatalogValidator
+	/// <seealso cref="HomeCloud.DataStorage.Business.Validation.ICatalogEntryValidator" />
+	public interface IRequiredValidator : IStorageValidator, ICatalogValidator, ICatalogEntryValidator
 	{
 	}
 }

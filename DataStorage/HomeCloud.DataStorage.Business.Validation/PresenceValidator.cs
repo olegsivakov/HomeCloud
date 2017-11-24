@@ -73,6 +73,18 @@
 			return await this.ValidateAsync(instance.ID);
 		}
 
+		/// <summary>
+		/// Validates the specified instance of <see cref="CatalogEntry"/> type.
+		/// </summary>
+		/// <param name="instance">The instance to validate.</param>
+		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
+		public async Task<ValidationResult> ValidateAsync(CatalogEntry instance)
+		{
+			this.If(async id => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogEntryExists(new CatalogEntry() { ID = id })).AddError(new NotFoundException("Specified catalog entry does not exist."));
+
+			return await this.ValidateAsync(instance.ID);
+		}
+
 		#endregion
 	}
 }

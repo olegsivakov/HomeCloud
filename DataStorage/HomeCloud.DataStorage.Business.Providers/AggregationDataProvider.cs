@@ -419,7 +419,11 @@
 		/// Gets the catalog entry by the initial instance set.
 		/// </summary>
 		/// <param name="entry">The initial catalog entry set.</param>
-		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="length">The number of bytes from byte array to return.</param>
+		/// <returns>
+		/// The instance of <see cref="CatalogEntry" /> type.
+		/// </returns>
 		public async Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0)
 		{
 			return await Task.FromException<CatalogEntryStream>(new NotSupportedException());

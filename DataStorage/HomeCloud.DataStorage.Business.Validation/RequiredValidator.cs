@@ -76,6 +76,22 @@
 			return await this.ValidateAsync((object)instance);
 		}
 
+		/// <summary>
+		/// Validates the specified instance of <see cref="CatalogEntry"/> type.
+		/// </summary>
+		/// <param name="instance">The instance to validate.</param>
+		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
+		public async Task<ValidationResult> ValidateAsync(CatalogEntry instance)
+		{
+			Catalog catalog = new Catalog() { ID = (instance.Catalog?.ID).GetValueOrDefault() };
+
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The specified catalog entry name is empty.");
+			this.If(obj => catalog.ID == Guid.Empty).AddError("The specified catalog is empty.");
+			this.If(async obj => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(catalog)).AddError("The specified catalog does not exist.");
+
+			return await this.ValidateAsync((object)instance);
+		}
+
 		#endregion
 	}
 }

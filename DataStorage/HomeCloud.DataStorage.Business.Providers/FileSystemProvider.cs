@@ -26,14 +26,14 @@
 		#region Private Members
 
 		/// <summary>
+		/// The file access synchronization object
+		/// </summary>
+		private static readonly object FileAccessSyncObject = new object();
+
+		/// <summary>
 		/// The file system settings
 		/// </summary>
 		private readonly FileSystem fileSystemSettings = null;
-
-		/// <summary>
-		/// The file access synchronization object
-		/// </summary>
-		private static object fileAccessSyncObject = new object();
 
 		#endregion
 
@@ -320,10 +320,10 @@
 		}
 
 		/// <summary>
-		/// Creates the specified catalog entry.
+		/// Gets the catalog entry by the initial instance set.
 		/// </summary>
-		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
-		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
+		/// <param name="stream">The catalog entry stream to create from.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
 		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream)
 		{
 			return await Task.Run(() =>
@@ -333,7 +333,7 @@
 				stream.Entry.Path = stream.Entry.GeneratePath(true);
 				if (!File.Exists(stream.Entry.Path))
 				{
-					lock (fileAccessSyncObject)
+					lock (FileAccessSyncObject)
 					{
 						if (!File.Exists(stream.Entry.Path))
 						{
@@ -388,36 +388,37 @@
 		/// Gets the catalog entry by the initial instance set.
 		/// </summary>
 		/// <param name="entry">The initial catalog entry set.</param>
-		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="length">The number of bytes from byte array to return.</param>
+		/// <returns>
+		/// The instance of <see cref="CatalogEntry" /> type.
+		/// </returns>
 		public async Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0)
 		{
-			return await Task.Run(() =>
+			entry = await this.GetCatalogEntry(entry);
+
+			if (File.Exists(entry.Path))
 			{
-				entry.ValidatePath();
-
-				entry.Path = entry.GeneratePath();
-				if (File.Exists(entry.Path))
+				lock (FileAccessSyncObject)
 				{
-					lock (fileAccessSyncObject)
+					if (File.Exists(entry.Path))
 					{
-						if (File.Exists(entry.Path))
+						using (FileStream stream = new FileStream(entry.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
 						{
-							using (FileStream stream = new FileStream(entry.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
-							{
-								long count = length == 0 ? stream.Length : length;
+							long count = length == 0 ? stream.Length : length;
 
-								byte[] buffer = new byte[count];
-								stream.Read(buffer, offset, (int)count);
+							byte[] buffer = new byte[count];
+							stream.Read(buffer, offset, (int)count);
 
-								CatalogEntryStream result = new CatalogEntryStream(entry, count);
-								result.Write(buffer, 0, (int)count);
-							}
+							CatalogEntryStream result = new CatalogEntryStream(entry, count);
+
+							result.Write(buffer, 0, (int)count);
 						}
 					}
 				}
+			}
 
-				return new CatalogEntryStream(entry, 0);
-			});
+			return new CatalogEntryStream(entry, 0);
 		}
 
 		/// <summary>
@@ -436,7 +437,7 @@
 				entry.Path = entry.GeneratePath();
 				if (File.Exists(entry.Path))
 				{
-					lock (fileAccessSyncObject)
+					lock (FileAccessSyncObject)
 					{
 						if (File.Exists(entry.Path))
 						{

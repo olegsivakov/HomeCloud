@@ -144,7 +144,7 @@
 		}
 
 		/// <summary>
-		/// Gets the list of entities that match the sepcified one.
+		/// Gets the list of entities that match the specified one.
 		/// </summary>
 		/// <param name="catalog">The catalog to search by.</param>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>

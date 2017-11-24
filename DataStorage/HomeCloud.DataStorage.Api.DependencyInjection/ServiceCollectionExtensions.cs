@@ -103,6 +103,13 @@
 			services.AddSingleton<ITypeConverter<DataContracts.CatalogDocument, Catalog>>(catalogConverter);
 			services.AddSingleton<ITypeConverter<Catalog, DataContracts.CatalogDocument>>(catalogConverter);
 
+			CatalogEntryConverter catalogEntryConverter = new CatalogEntryConverter();
+
+			services.AddSingleton<ITypeConverter<DataContracts.File, CatalogEntry>>(catalogEntryConverter);
+			services.AddSingleton<ITypeConverter<CatalogEntry, DataContracts.File>>(catalogEntryConverter);
+			services.AddSingleton<ITypeConverter<DataContracts.FileDocument, CatalogEntry>>(catalogEntryConverter);
+			services.AddSingleton<ITypeConverter<CatalogEntry, DataContracts.FileDocument>>(catalogEntryConverter);
+
 			ServiceResultConverter serviceResultConverter = new ServiceResultConverter();
 
 			services.AddSingleton<ITypeConverter<ValidationResult, ServiceResult>>(serviceResultConverter);
@@ -123,7 +130,7 @@
 		}
 
 		/// <summary>
-		/// Adds the comand handlers to container.
+		/// Adds the command handlers to container.
 		/// </summary>
 		/// <param name="services">The services.</param>
 		private static void AddComandHandlers(this IServiceCollection services)
@@ -160,6 +167,7 @@
 		private static void AddFactories(this IServiceCollection services)
 		{
 			services.AddFactory<ITypeConverter>();
+			services.AddFactory<ICatalogEntryValidator>();
 			services.AddFactory<ICatalogValidator>();
 			services.AddFactory<IStorageValidator>();
 			services.AddFactory<ICommandHandler>();
