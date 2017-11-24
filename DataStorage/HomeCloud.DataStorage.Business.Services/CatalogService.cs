@@ -69,10 +69,10 @@
 		{
 			catalog.ID = Guid.Empty;
 
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
-			ValidationResult result = await catalogValidator.Get<IRequiredValidator>().ValidateAsync(catalog);
-			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
+			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(catalog);
+			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
 
 			if (!result.IsValid)
 			{
@@ -104,10 +104,10 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
-			ValidationResult result = await catalogValidator.Get<IPresenceValidator>().ValidateAsync(catalog);
-			result += await catalogValidator.Get<IUniqueValidator>().ValidateAsync(catalog);
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
 
 			if (!result.IsValid)
 			{
@@ -140,8 +140,8 @@
 		{
 			Catalog catalog = new Catalog() { ID = id };
 
-			IServiceFactory<ICatalogValidator> catalogValidator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			ValidationResult result = await catalogValidator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
 
 			if (!result.IsValid)
 			{

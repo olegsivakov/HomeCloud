@@ -30,6 +30,11 @@
 		/// </summary>
 		private readonly FileSystem fileSystemSettings = null;
 
+		/// <summary>
+		/// The file access synchronization object
+		/// </summary>
+		private static object fileAccessSyncObject = new object();
+
 		#endregion
 
 		#region Constructors
@@ -310,7 +315,7 @@
 
 				string path = entry.GeneratePath();
 
-				return Directory.Exists(path);
+				return File.Exists(path);
 			});
 		}
 
@@ -319,21 +324,28 @@
 		/// </summary>
 		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
 		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
-		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry)
+		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream)
 		{
 			return await Task.Run(() =>
 			{
-				entry.ValidatePath();
+				stream.Entry.ValidatePath();
 
-				entry.Path = entry.GeneratePath(true);
-				if (!File.Exists(entry.Path))
+				stream.Entry.Path = stream.Entry.GeneratePath(true);
+				if (!File.Exists(stream.Entry.Path))
 				{
-					using (FileStream stream = File.Create(entry.Path))
+					lock (fileAccessSyncObject)
 					{
+						if (!File.Exists(stream.Entry.Path))
+						{
+							using (FileStream fileStream = File.Create(stream.Entry.Path))
+							{
+								stream.CopyTo(fileStream);
+							}
+						}
 					}
 				}
 
-				return entry;
+				return stream.Entry;
 			});
 		}
 
@@ -365,13 +377,46 @@
 				entry.Path = entry.GeneratePath();
 				if (File.Exists(entry.Path))
 				{
-					using (FileStream stream = File.OpenRead(entry.Path))
-					{
-						entry.Size = stream.Length;
-					}
+					entry.Size = new FileInfo(entry.Path).Length;
 				}
 
 				return entry;
+			});
+		}
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		public async Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0)
+		{
+			return await Task.Run(() =>
+			{
+				entry.ValidatePath();
+
+				entry.Path = entry.GeneratePath();
+				if (File.Exists(entry.Path))
+				{
+					lock (fileAccessSyncObject)
+					{
+						if (File.Exists(entry.Path))
+						{
+							using (FileStream stream = new FileStream(entry.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
+							{
+								long count = length == 0 ? stream.Length : length;
+
+								byte[] buffer = new byte[count];
+								stream.Read(buffer, offset, (int)count);
+
+								CatalogEntryStream result = new CatalogEntryStream(entry, count);
+								result.Write(buffer, 0, (int)count);
+							}
+						}
+					}
+				}
+
+				return new CatalogEntryStream(entry, 0);
 			});
 		}
 
@@ -391,7 +436,13 @@
 				entry.Path = entry.GeneratePath();
 				if (File.Exists(entry.Path))
 				{
-					File.Delete(entry.Path);
+					lock (fileAccessSyncObject)
+					{
+						if (File.Exists(entry.Path))
+						{
+							File.Delete(entry.Path);
+						}
+					}
 				}
 
 				return entry;

@@ -127,9 +127,9 @@
 		/// <summary>
 		/// Creates the specified catalog entry.
 		/// </summary>
-		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
+		/// <param name="stream">The stream of <see cref="CatalogEntryStream" /> type to create the entry from.</param>
 		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
-		Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry);
+		Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream);
 
 		/// <summary>
 		/// Gets the list of catalog entries located in specified catalog.
@@ -148,6 +148,13 @@
 		/// <param name="entry">The initial catalog entry set.</param>
 		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
 		Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry);
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0);
 
 		/// <summary>
 		/// Deletes the specified catalog entry.

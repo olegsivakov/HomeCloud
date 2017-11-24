@@ -33,6 +33,7 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ICatalogEntryValidator.cs" />
     <Compile Include="ICatalogValidator.cs" />
     <Compile Include="IRequiredValidator.cs" />
     <Compile Include="IStorageValidator.cs" />

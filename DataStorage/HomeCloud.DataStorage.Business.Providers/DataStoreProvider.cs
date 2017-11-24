@@ -456,10 +456,12 @@
 		/// <summary>
 		/// Creates the specified catalog entry.
 		/// </summary>
-		/// <param name="entry">The instance of <see cref="CatalogEntry" /> type to create.</param>
+		/// <param name="stream">The stream of <see cref="CatalogEntryStream" /> type to create the entry from.</param>
 		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
-		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntry entry)
+		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream)
 		{
+			CatalogEntry entry = stream.Entry;
+
 			FileContract fileContract = await this.mapper.MapNewAsync<CatalogEntry, FileContract>(entry);
 			CatalogContract catalogContract = null;
 
@@ -534,6 +536,16 @@
 			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog as Catalog);
 
 			return entry;
+		}
+
+		/// <summary>
+		/// Gets the catalog entry by the initial instance set.
+		/// </summary>
+		/// <param name="entry">The initial catalog entry set.</param>
+		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
+		public async Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0)
+		{
+			return await Task.FromException<CatalogEntryStream>(new NotSupportedException());
 		}
 
 		/// <summary>
