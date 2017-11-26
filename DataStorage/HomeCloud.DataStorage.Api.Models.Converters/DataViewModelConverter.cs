@@ -75,7 +75,8 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.IsCatalog = false;
-			target.CreationDate = target.CreationDate;
+			target.CreationDate = source.CreationDate;
+			target.Size = source.Size.GetValueOrDefault();
 
 			return target;
 		}
@@ -97,7 +98,6 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.Catalog = new Catalog();
-			target.CreationDate = target.CreationDate;
 
 			return target;
 		}

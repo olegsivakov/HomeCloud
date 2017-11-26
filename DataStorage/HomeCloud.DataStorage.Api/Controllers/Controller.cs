@@ -84,10 +84,30 @@
 		/// The instance of <see cref="IHttpMethodResult" />.
 		/// </returns>
 		[NonAction]
-		public async Task<HttpMethodResult> HttpGetResult<TData, TModel>(ServiceResult<TData> result)
+		public async Task<IHttpMethodResult> HttpGetResult<TData, TModel>(ServiceResult<TData> result)
 			where TModel : class, IViewModel, new()
 		{
 			return new HttpGetResult<TModel>(this)
+			{
+				Errors = result.Errors,
+				Data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null
+			};
+		}
+
+		/// <summary>
+		/// Processes the specified <see cref="ServiceResult{TData}" /> data to <see cref="API" /> understandable <see cref="IActionResult" /> contract identified and supported by <see cref="HTTP HEAD" /> method.
+		/// </summary>
+		/// <typeparam name="TData">The type of the data to process.</typeparam>
+		/// <typeparam name="TModel">The type of the model to expose.</typeparam>
+		/// <param name="result">The instance containing the data.</param>
+		/// <returns>
+		/// The instance of <see cref="IHttpMethodResult" />.
+		/// </returns>
+		[NonAction]
+		public async Task<IHttpMethodResult> HttpHeadResult<TData, TModel>(ServiceResult<TData> result)
+			where TModel : class, IViewModel, new()
+		{
+			return new HttpHeadResult<TModel>(this)
 			{
 				Errors = result.Errors,
 				Data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null
@@ -105,7 +125,7 @@
 		/// The instance of <see cref="IHttpMethodResult" />.
 		/// </returns>
 		[NonAction]
-		public async Task<HttpMethodResult> HttpPostResult<TData, TModel>(Func<Guid, Task<IActionResult>> locationUrlAction, ServiceResult<TData> result)
+		public async Task<IHttpMethodResult> HttpPostResult<TData, TModel>(Func<Guid, Task<IActionResult>> locationUrlAction, ServiceResult<TData> result)
 			where TModel : class, IViewModel, new()
 		{
 			return new HttpPostResult<TModel>(this, locationUrlAction)
@@ -126,7 +146,7 @@
 		/// The instance of <see cref="IHttpMethodResult" />.
 		/// </returns>
 		[NonAction]
-		public async Task<HttpMethodResult> HttpPutResult<TData, TModel>(Func<Guid, Task<IActionResult>> locationUrlAction, ServiceResult<TData> result)
+		public async Task<IHttpMethodResult> HttpPutResult<TData, TModel>(Func<Guid, Task<IActionResult>> locationUrlAction, ServiceResult<TData> result)
 			where TModel : class, IViewModel, new()
 		{
 			return new HttpPutResult<TModel>(this, locationUrlAction)
@@ -144,7 +164,7 @@
 		/// The instance of <see cref="IHttpMethodResult" />.
 		/// </returns>
 		[NonAction]
-		public async Task<HttpMethodResult> HttpDeleteResult(ServiceResult result)
+		public async Task<IHttpMethodResult> HttpDeleteResult(ServiceResult result)
 		{
 			return await Task.FromResult(new HttpDeleteResult(this)
 			{

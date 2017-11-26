@@ -140,5 +140,16 @@
 					return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
 				});
 		}
+
+		[HttpHead("v1/[controller]/{id}")]
+		public async Task<IActionResult> Exists(Guid id)
+		{
+			return await this.HttpGet(
+				id,
+				async () =>
+				{
+					return await this.HttpHeadResult<CatalogEntry, DataViewModel>(new ServiceResult<CatalogEntry>(new CatalogEntry() { ID = Guid.NewGuid(), Name = "HEAD Test", Size = 1024 }));
+				});
+		}
 	}
 }

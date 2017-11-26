@@ -13,7 +13,7 @@
 	/// </summary>
 	/// <typeparam name="T">The type of the data provided by <see cref="HTTP"/> method </typeparam>
 	/// <seealso cref="HomeCloud.Api.Http.HttpMethodResult" />
-	public sealed class HttpGetResult<T> : HttpMethodResult
+	public class HttpGetResult<T> : HttpMethodResult
 	{
 		#region Contstructors
 

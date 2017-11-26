@@ -77,6 +77,7 @@
 			}
 
 			application.UseExceptionHandlerMiddleware();
+
 			application.UseMvc();
 		}
 

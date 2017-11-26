@@ -5,6 +5,8 @@
 	using System;
 
 	using HomeCloud.Api.Mvc;
+	using HomeCloud.Api.Http;
+	using Newtonsoft.Json;
 
 	#endregion
 
@@ -52,5 +54,23 @@
 		///   <c>true</c> if the data exists; otherwise, it returns <c>false</c>.
 		/// </value>
 		public bool IsExists { get; set; }
+
+		[HttpHeader("Accept-Ranges")]
+		[JsonIgnore]
+		public string AcceptRanges
+		{
+			get => "bytes";
+		}
+
+		[HttpHeader("Content-Type")]
+		[JsonIgnore]
+		public string MimeType
+		{
+			get => "image/jpeg";
+		}
+
+		[HttpHeader("Content-Length")]
+		[JsonIgnore]
+		public long Size { get; set; }
 	}
 }

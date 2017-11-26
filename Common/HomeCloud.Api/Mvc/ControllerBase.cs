@@ -127,6 +127,24 @@
 		}
 
 		/// <summary>
+		/// Executes <see cref="HttpHead" /> method against the entry.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <param name="action">The action to execute against entry.</param>
+		/// <returns>
+		/// The asynchronous operation of <see cref="IActionResult" />.
+		/// </returns>
+		protected async virtual Task<IActionResult> HttpHead(Guid id, Func<Task<IHttpMethodResult>> action)
+		{
+			if (id == Guid.Empty)
+			{
+				return this.BadRequest("The specified unique identifier is undefined.");
+			}
+
+			return await action();
+		}
+
+		/// <summary>
 		/// Executes <see cref="HttpPost" /> method against the entry.
 		/// </summary>
 		/// <param name="model">The model.</param>
