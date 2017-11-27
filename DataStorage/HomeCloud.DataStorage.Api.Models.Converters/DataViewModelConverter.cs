@@ -31,7 +31,7 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.IsCatalog = true;
-			target.CreationDate = target.CreationDate;
+			target.CreationDate = source.CreationDate;
 
 			return target;
 		}
@@ -53,7 +53,6 @@
 			target.ID = source.ID;
 			target.Parent = new Catalog();
 			target.Name = source.Name;
-			target.CreationDate = target.CreationDate;
 
 			return target;
 		}

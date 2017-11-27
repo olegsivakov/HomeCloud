@@ -154,7 +154,12 @@
 				throw new ArgumentException("The catalog entry name is empty");
 			}
 
-			return Path.Combine(entry.Catalog.Path, entry.Name);
+			if (string.IsNullOrWhiteSpace(entry.Extension))
+			{
+				throw new ArgumentException("The catalog entry extension is empty");
+			}
+
+			return Path.Combine(entry.Catalog.Path, $"{entry.Name}.{entry.Extension}");
 		}
 
 		/// <summary>

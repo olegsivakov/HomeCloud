@@ -55,22 +55,12 @@
 		/// </value>
 		public bool IsExists { get; set; }
 
-		[HttpHeader("Accept-Ranges")]
-		[JsonIgnore]
-		public string AcceptRanges
-		{
-			get => "bytes";
-		}
-
-		[HttpHeader("Content-Type")]
-		[JsonIgnore]
-		public string MimeType
-		{
-			get => "image/jpeg";
-		}
-
-		[HttpHeader("Content-Length")]
-		[JsonIgnore]
+		/// <summary>
+		/// Gets or sets the size.
+		/// </summary>
+		/// <value>
+		/// The size.
+		/// </value>
 		public long Size { get; set; }
 	}
 }

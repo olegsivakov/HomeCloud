@@ -26,6 +26,7 @@
 	using Microsoft.AspNetCore.Http.Features;
 	using Microsoft.Net.Http.Headers;
 	using System.Text;
+	using Microsoft.AspNetCore.StaticFiles;
 
 	#endregion
 
@@ -57,8 +58,8 @@
 		/// </summary>
 		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService"/> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
-		public DataController(ICatalogEntryService catalogEntryService, IMapper mapper)
-			: base(mapper)
+		public DataController(ICatalogEntryService catalogEntryService, IContentTypeProvider contentTypeProvider, IMapper mapper)
+			: base(mapper, contentTypeProvider)
 		{
 			this.catalogEntryService = catalogEntryService;
 		}
@@ -76,13 +77,13 @@
 		public async Task<IActionResult> Get(Guid id)
 		{
 			return await this.HttpGet(
-				id,
-				async () =>
-				{
-					ServiceResult<Catalog> result = null;
+					id,
+					async () =>
+					{
+						ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
 
-					return await this.HttpGetResult<Catalog, DataViewModel>(result);
-				});
+						return await this.HttpGetStreamResult<CatalogEntry, FileViewModel>(result);
+					});
 		}
 
 		/// <summary>
@@ -101,21 +102,6 @@
 				return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
 			}
 
-			string fileName = null;
-
-			string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), DefaultFormOptions.MultipartBoundaryLengthLimit);
-			MultipartReader reader = new MultipartReader(boundary, HttpContext.Request.Body);
-
-			MultipartSection section = await reader.ReadNextSectionAsync();
-			if (section != null)
-			{
-				ContentDispositionHeaderValue contentDisposition = null;
-				if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition) && ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition))
-				{
-					fileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString();
-				}
-			}
-
 			DataViewModel model = new DataViewModel()
 			{
 				ID = catalogID,
@@ -126,12 +112,27 @@
 				model,
 				async () =>
 				{
+					string fileName = null;
+
+					string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), DefaultFormOptions.MultipartBoundaryLengthLimit);
+					MultipartReader reader = new MultipartReader(boundary, HttpContext.Request.Body);
+
+					MultipartSection section = await reader.ReadNextSectionAsync();
+					if (section != null)
+					{
+						ContentDispositionHeaderValue contentDisposition = null;
+						if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition) && MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
+						{
+							fileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString();
+						}
+					}
+
 					CatalogEntryStream stream = new CatalogEntryStream(
 						new CatalogEntry()
 						{
 							Catalog = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model),
 							Name = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetFileNameWithoutExtension(fileName),
-							Extension = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetExtension(fileName)
+							Extension = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetExtension(fileName),
 						},
 						section.Body);
 
@@ -148,7 +149,9 @@
 				id,
 				async () =>
 				{
-					return await this.HttpHeadResult<CatalogEntry, DataViewModel>(new ServiceResult<CatalogEntry>(new CatalogEntry() { ID = Guid.NewGuid(), Name = "HEAD Test", Size = 1024 }));
+					ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+
+					return await this.HttpHeadResult<CatalogEntry, FileViewModel>(result);
 				});
 		}
 	}

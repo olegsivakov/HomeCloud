@@ -158,7 +158,7 @@
 				{
 					@Name = string.IsNullOrWhiteSpace(file?.Name) ? null : file.Name.Trim().ToLower(),
 					@Extension = string.IsNullOrWhiteSpace(file?.Extension) ? null : file.Extension.Trim().ToLower(),
-					@ParentID = file.DirectoryID,
+					@DirectoryID = file.DirectoryID,
 					@StartIndex = offset,
 					@ChunkSize = limit
 				});

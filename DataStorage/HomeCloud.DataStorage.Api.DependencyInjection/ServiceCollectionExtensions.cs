@@ -27,7 +27,7 @@
 
 	using HomeCloud.Mapping;
 	using HomeCloud.Validation;
-
+	using Microsoft.AspNetCore.StaticFiles;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
@@ -62,6 +62,8 @@
 			AddServices(services);
 
 			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
+
+			services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
 		}
 
 		/// <summary>
@@ -125,6 +127,11 @@
 			services.AddSingleton<ITypeConverter<DataViewModel, Catalog>>(dataViewModelConverter);
 			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>>(dataViewModelConverter);
 			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>>(dataViewModelConverter);
+
+			FileViewModelConverter fileViewModelConverter = new FileViewModelConverter();
+
+			services.AddSingleton<ITypeConverter<CatalogEntry, FileViewModel>>(fileViewModelConverter);
+			services.AddSingleton<ITypeConverter<FileViewModel, CatalogEntry>>(fileViewModelConverter);
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

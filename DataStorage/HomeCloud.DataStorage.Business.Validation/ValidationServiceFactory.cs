@@ -34,10 +34,12 @@
 		/// <param name="catalogValidationFactory">The catalog validation factory.</param>
 		public ValidationServiceFactory(
 			IServiceFactory<IStorageValidator> storageValidationFactory,
-			IServiceFactory<ICatalogValidator> catalogValidationFactory)
+			IServiceFactory<ICatalogValidator> catalogValidationFactory,
+			IServiceFactory<ICatalogEntryValidator> catalogEntryValidationFactory)
 		{
 			this.container.Add(typeof(IServiceFactory<IStorageValidator>), storageValidationFactory);
 			this.container.Add(typeof(IServiceFactory<ICatalogValidator>), catalogValidationFactory);
+			this.container.Add(typeof(IServiceFactory<ICatalogEntryValidator>), catalogEntryValidationFactory);
 		}
 
 		#endregion

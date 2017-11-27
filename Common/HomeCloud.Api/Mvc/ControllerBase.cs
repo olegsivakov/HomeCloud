@@ -89,7 +89,7 @@
 		/// </summary>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return..</param>
-		/// <param name="action">The action to execute against entry.</param>
+		/// <param name="action">The action to execute against the entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
@@ -109,10 +109,28 @@
 		}
 
 		/// <summary>
+		/// Executes <see cref="HttpGet" /> method against the large binary resource.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <param name="action">The action to execute against the resource.</param>
+		/// <returns>
+		/// The asynchronous operation of <see cref="IActionResult" />.
+		/// </returns>
+		protected async virtual Task<IActionResult> HttpGet(Guid id, Func<Task<FileResult>> action)
+		{
+			if (id == Guid.Empty)
+			{
+				return this.BadRequest("The specified unique identifier is undefined.");
+			}
+
+			return await action();
+		}
+
+		/// <summary>
 		/// Executes <see cref="HttpGet" /> method against the entry.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="action">The action to execute against entry.</param>
+		/// <param name="action">The action to execute against the entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
@@ -130,7 +148,7 @@
 		/// Executes <see cref="HttpHead" /> method against the entry.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="action">The action to execute against entry.</param>
+		/// <param name="action">The action to execute against the entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
@@ -148,7 +166,7 @@
 		/// Executes <see cref="HttpPost" /> method against the entry.
 		/// </summary>
 		/// <param name="model">The model.</param>
-		/// <param name="action">The action to execute against entry.</param>
+		/// <param name="action">The action to execute against the entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
@@ -167,7 +185,7 @@
 		/// </summary>
 		/// <param name="id">The entry unique identifier.</param>
 		/// <param name="model">The entry model.</param>
-		/// <param name="action">The action to execute against entry.</param>
+		/// <param name="action">The action to execute against the entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>
@@ -190,7 +208,7 @@
 		/// Executes <see cref="HttpDelete" /> method against the specified identifier.
 		/// </summary>
 		/// <param name="id">The identifier.</param>
-		/// <param name="action">The action to execute against entry.</param>
+		/// <param name="action">The action to execute against the entry.</param>
 		/// <returns>
 		/// The asynchronous operation of <see cref="IActionResult" />.
 		/// </returns>

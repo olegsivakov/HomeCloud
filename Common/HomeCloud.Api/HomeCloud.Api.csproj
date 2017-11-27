@@ -38,6 +38,7 @@
     <Compile Include="Http\ConflictResult.cs" />
     <Compile Include="Http\HttpDeleteResult.cs" />
     <Compile Include="Http\HttpGetResult.cs" />
+    <Compile Include="Http\HttpGetStreamResult.cs" />
     <Compile Include="Http\HttpHeaderAttribute.cs" />
     <Compile Include="Http\HttpHeadResult.cs" />
     <Compile Include="Http\HttpMethodResult.cs" />
@@ -45,10 +46,10 @@
     <Compile Include="Http\HttpPutResult.cs" />
     <Compile Include="Http\IHttpMethodResult.cs" />
     <Compile Include="Http\NoContentAtActionResult.cs" />
-    <Compile Include="Http\PartialContentResult.cs" />
     <Compile Include="Http\UnprocessableEntityResult.cs" />
     <Compile Include="Mvc\ControllerBase.cs" />
     <Compile Include="Mvc\ErrorViewModel.cs" />
+    <Compile Include="Mvc\IFileViewModel.cs" />
     <Compile Include="Mvc\IViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

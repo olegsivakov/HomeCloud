@@ -57,7 +57,7 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.Extension = source.Extension;
-			target.Catalog = new Catalog() { ID = source.ID };
+			target.Catalog = new Catalog() { ID = source.DirectoryID };
 			target.CreationDate = source.CreationDate;
 
 			return target;

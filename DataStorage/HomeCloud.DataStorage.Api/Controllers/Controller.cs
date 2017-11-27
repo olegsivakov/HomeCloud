@@ -18,6 +18,7 @@
 	using Microsoft.AspNetCore.Mvc;
 
 	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
+	using Microsoft.AspNetCore.StaticFiles;
 
 	#endregion
 
@@ -33,9 +34,10 @@
 		/// Initializes a new instance of the <see cref="Controller"/> class.
 		/// </summary>
 		/// <param name="mapper">The type mapper.</param>
-		protected Controller(IMapper mapper)
+		protected Controller(IMapper mapper = null, IContentTypeProvider contentTypeProvider = null)
 		{
 			this.Mapper = mapper;
+			this.ContentTypeProvider = contentTypeProvider;
 		}
 
 		#endregion
@@ -49,6 +51,11 @@
 		/// The type mapper.
 		/// </value>
 		protected IMapper Mapper { get; private set; }
+
+		/// <summary>
+		/// Gets <see cref="IContentTypeProvider"/> provider.
+		/// </summary>
+		protected IContentTypeProvider ContentTypeProvider { get; private set; }
 
 		#endregion
 
@@ -72,6 +79,38 @@
 				Errors = result.Errors,
 				Data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null
 			};
+		}
+
+		/// <summary>
+		/// Processes the specified <see cref="ServiceResult{TData}" /> binary data to <see cref="API" /> understandable <see cref="FileResult" /> contract identified and supported by <see cref="HTTP GET" /> method.
+		/// </summary>
+		/// <typeparam name="TData">The type of the binary data to process.</typeparam>
+		/// <typeparam name="TModel">The type of the model to expose.</typeparam>
+		/// <param name="result">The instance containing the binary exposure.</param>
+		/// <returns>
+		/// The instance of <see cref="FileResult" />.
+		/// </returns>
+		[NonAction]
+		public async Task<IHttpMethodResult> HttpGetStreamResult<TData, TModel>(ServiceResult<TData> result)
+			where TModel : class, IFileViewModel, new()
+		{
+			HttpGetStreamResult<TModel> httpResult = new HttpGetStreamResult<TModel>(this)
+			{
+				Errors = result.Errors
+			};
+
+			if (result.Data != null)
+			{
+				httpResult.Data = await this.Mapper.MapNewAsync<TData, TModel>(result.Data);
+
+				string contentType = null;
+				if ((this.ContentTypeProvider?.TryGetContentType(httpResult.Data.MimeType, out contentType)).GetValueOrDefault())
+				{
+					httpResult.Data.MimeType = contentType;
+				}
+			}
+
+			return httpResult;
 		}
 
 		/// <summary>
@@ -105,13 +144,26 @@
 		/// </returns>
 		[NonAction]
 		public async Task<IHttpMethodResult> HttpHeadResult<TData, TModel>(ServiceResult<TData> result)
-			where TModel : class, IViewModel, new()
+			where TModel : class, IFileViewModel, new()
 		{
-			return new HttpHeadResult<TModel>(this)
+			HttpHeadResult<TModel> httpResult = new HttpHeadResult<TModel>(this)
 			{
 				Errors = result.Errors,
 				Data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null
 			};
+
+			if (result.Data != null)
+			{
+				httpResult.Data = await this.Mapper.MapNewAsync<TData, TModel>(result.Data);
+
+				string contentType = null;
+				if ((this.ContentTypeProvider?.TryGetContentType(httpResult.Data.Path, out contentType)).GetValueOrDefault())
+				{
+					httpResult.Data.MimeType = contentType;
+				}
+			}
+
+			return httpResult;
 		}
 
 		/// <summary>
