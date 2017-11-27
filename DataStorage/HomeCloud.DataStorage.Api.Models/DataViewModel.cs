@@ -5,8 +5,6 @@
 	using System;
 
 	using HomeCloud.Api.Mvc;
-	using HomeCloud.Api.Http;
-	using Newtonsoft.Json;
 
 	#endregion
 

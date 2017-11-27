@@ -86,7 +86,6 @@
 			Catalog catalog = new Catalog() { ID = (instance.Catalog?.ID).GetValueOrDefault() };
 
 			this.If(obj => string.IsNullOrWhiteSpace(instance.Name)).AddError("The specified catalog entry name is empty.");
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Extension)).AddError("The specified catalog entry extension is empty.");
 			this.If(obj => catalog.ID == Guid.Empty).AddError("The specified catalog is empty.");
 			this.If(async obj => !await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogExists(catalog)).AddError("The specified catalog does not exist.");
 

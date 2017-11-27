@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System.IO;
+
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
@@ -72,7 +74,7 @@
 		public DataViewModel Convert(CatalogEntry source, DataViewModel target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
+			target.Name = Path.GetFileNameWithoutExtension(source.Name);
 			target.IsCatalog = false;
 			target.CreationDate = source.CreationDate;
 			target.Size = source.Size.GetValueOrDefault();
@@ -95,7 +97,6 @@
 		public CatalogEntry Convert(DataViewModel source, CatalogEntry target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
 			target.Catalog = new Catalog();
 
 			return target;

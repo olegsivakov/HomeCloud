@@ -18,7 +18,6 @@
 	using Microsoft.AspNetCore.Mvc;
 
 	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
-	using Microsoft.AspNetCore.StaticFiles;
 
 	#endregion
 
@@ -34,10 +33,9 @@
 		/// Initializes a new instance of the <see cref="Controller"/> class.
 		/// </summary>
 		/// <param name="mapper">The type mapper.</param>
-		protected Controller(IMapper mapper = null, IContentTypeProvider contentTypeProvider = null)
+		protected Controller(IMapper mapper)
 		{
 			this.Mapper = mapper;
-			this.ContentTypeProvider = contentTypeProvider;
 		}
 
 		#endregion
@@ -51,11 +49,6 @@
 		/// The type mapper.
 		/// </value>
 		protected IMapper Mapper { get; private set; }
-
-		/// <summary>
-		/// Gets <see cref="IContentTypeProvider"/> provider.
-		/// </summary>
-		protected IContentTypeProvider ContentTypeProvider { get; private set; }
 
 		#endregion
 
@@ -102,12 +95,6 @@
 			if (result.Data != null)
 			{
 				httpResult.Data = await this.Mapper.MapNewAsync<TData, TModel>(result.Data);
-
-				string contentType = null;
-				if ((this.ContentTypeProvider?.TryGetContentType(httpResult.Data.MimeType, out contentType)).GetValueOrDefault())
-				{
-					httpResult.Data.MimeType = contentType;
-				}
 			}
 
 			return httpResult;
@@ -144,7 +131,7 @@
 		/// </returns>
 		[NonAction]
 		public async Task<IHttpMethodResult> HttpHeadResult<TData, TModel>(ServiceResult<TData> result)
-			where TModel : class, IFileViewModel, new()
+			where TModel : class, IViewModel, new()
 		{
 			HttpHeadResult<TModel> httpResult = new HttpHeadResult<TModel>(this)
 			{
@@ -155,12 +142,6 @@
 			if (result.Data != null)
 			{
 				httpResult.Data = await this.Mapper.MapNewAsync<TData, TModel>(result.Data);
-
-				string contentType = null;
-				if ((this.ContentTypeProvider?.TryGetContentType(httpResult.Data.Path, out contentType)).GetValueOrDefault())
-				{
-					httpResult.Data.MimeType = contentType;
-				}
 			}
 
 			return httpResult;

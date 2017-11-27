@@ -28,10 +28,11 @@
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ValidationServiceFactory"/> class.
+		/// Initializes a new instance of the <see cref="ValidationServiceFactory" /> class.
 		/// </summary>
 		/// <param name="storageValidationFactory">The storage validation factory.</param>
 		/// <param name="catalogValidationFactory">The catalog validation factory.</param>
+		/// <param name="catalogEntryValidationFactory">The catalog entry validation factory.</param>
 		public ValidationServiceFactory(
 			IServiceFactory<IStorageValidator> storageValidationFactory,
 			IServiceFactory<ICatalogValidator> catalogValidationFactory,

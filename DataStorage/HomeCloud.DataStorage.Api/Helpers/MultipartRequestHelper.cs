@@ -5,16 +5,24 @@
 	using System;
 	using System.IO;
 
-	using Microsoft.Net.Http.Headers;
 	using Microsoft.Extensions.Primitives;
+	using Microsoft.Net.Http.Headers;
 
 	#endregion
 
+	/// <summary>
+	/// Provides helper methods to handle multipart requests.
+	/// </summary>
 	public static class MultipartRequestHelper
 	{
-		// Content-Type: multipart/form-data; boundary="----WebKitFormBoundarymx2fSWqWSd0OxQqq"
-		// The spec says 70 characters is a reasonable limit.
-		public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
+		/// <summary>
+		/// Gets the multipart request boundary.
+		/// </summary>
+		/// <param name="contentType">Type of the content.</param>
+		/// <param name="limit">The content limit.</param>
+		/// <returns>The string representation of boundary.</returns>
+		/// <exception cref="InvalidDataException">Missing content-type boundary.</exception>
+		public static string GetBoundary(MediaTypeHeaderValue contentType, int limit)
 		{
 			StringSegment boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary);
 			if (StringSegment.IsNullOrEmpty(boundary))
@@ -22,20 +30,34 @@
 				throw new InvalidDataException("Missing content-type boundary.");
 			}
 
-			if (boundary.Length > lengthLimit)
+			if (boundary.Length > limit)
 			{
-				throw new InvalidDataException($"Multipart boundary length limit {lengthLimit} exceeded.");
+				throw new InvalidDataException($"Multipart boundary length limit {limit} exceeded.");
 			}
 
 			return boundary.Value;
 		}
 
+		/// <summary>
+		/// Determines whether the specified content type is multipart one.
+		/// </summary>
+		/// <param name="contentType">The content type string.</param>
+		/// <returns>
+		///   <c>true</c> if the specified content type is multipart one; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool IsMultipartContentType(string contentType)
 		{
 			return !string.IsNullOrEmpty(contentType)
 				&& contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
 		}
 
+		/// <summary>
+		/// Determines whether the specified instance of <see cref="ContentDispositionHeaderValue"/> has form data content disposition.
+		/// </summary>
+		/// <param name="contentDisposition">The content disposition header.</param>
+		/// <returns>
+		/// <c>true</c> if the specified instance of <see cref="ContentDispositionHeaderValue"/> has form data content disposition; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
 		{
 			// Content-Disposition: form-data; name="key";
@@ -45,6 +67,13 @@
 				&& StringSegment.IsNullOrEmpty(contentDisposition.FileNameStar);
 		}
 
+		/// <summary>
+		/// Determines whether the specified instance of <see cref="ContentDispositionHeaderValue"/> has file content disposition.
+		/// </summary>
+		/// <param name="contentDisposition">The content disposition header.</param>
+		/// <returns>
+		/// <c>true</c> if the specified instance of <see cref="ContentDispositionHeaderValue"/> has file content disposition; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
 		{
 			// Content-Disposition: form-data; name="myfile1"; filename="Misc 002.jpg"

@@ -7,6 +7,7 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Api.Http;
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Api.Models;
@@ -17,7 +18,6 @@
 	using HomeCloud.Mapping;
 
 	using Microsoft.AspNetCore.Mvc;
-	using HomeCloud.Api.Http;
 
 	#endregion
 

@@ -7,7 +7,7 @@
 	#endregion
 
 	/// <summary>
-	/// Marks the property to be used in the response of <see cref="<see cref="HttpHeadResult{T}"/> as a header with specified header name.
+	/// Marks the property to be used in the response of <see cref="HttpHeadResult{T}"/> as a header with specified header name.
 	/// </summary>
 	/// <seealso cref="System.Attribute" />
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]

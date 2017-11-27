@@ -4,7 +4,7 @@
 
 	using HomeCloud.Api.Mvc;
 	using Microsoft.AspNetCore.Mvc;
-
+	using System.IO;
 	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
 
 	#endregion
@@ -40,7 +40,9 @@
 		/// </returns>
 		public override IActionResult ToActionResult()
 		{
-			return this.HandleError() ?? ((this.Data == null) ? (IActionResult)this.Controller.NotFound() : this.Controller.PhysicalFile(this.Data.Path, this.Data.MimeType));
+			string name = !string.IsNullOrWhiteSpace(this.Data.Name) ? this.Data.Name : (!string.IsNullOrWhiteSpace(this.Data.Path) ? Path.GetFileName(this.Data.Path) : string.Empty);
+
+			return this.HandleError() ?? ((this.Data == null) ? (IActionResult)this.Controller.NotFound() : this.Controller.PhysicalFile(this.Data.Path, this.Data.MimeType, name));
 		}
 
 		#endregion

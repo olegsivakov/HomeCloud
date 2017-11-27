@@ -35,7 +35,6 @@
 		{
 			this.Entry = entry;
 			this.stream = stream;
-			this.Entry.Size = stream.Length;
 		}
 
 		/// <summary>
@@ -135,10 +134,6 @@
 		public override void SetLength(long value)
 		{
 			this.stream.SetLength(value);
-			if (this.Entry != null)
-			{
-				this.Entry.Size = stream.Length;
-			}
 		}
 
 		/// <summary>

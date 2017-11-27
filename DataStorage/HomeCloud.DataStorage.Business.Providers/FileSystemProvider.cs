@@ -345,6 +345,8 @@
 					}
 				}
 
+				stream.Entry.Size = new FileInfo(stream.Entry.Path).Length;
+
 				return stream.Entry;
 			});
 		}

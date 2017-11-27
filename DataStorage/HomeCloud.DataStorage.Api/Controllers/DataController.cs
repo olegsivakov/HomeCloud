@@ -3,11 +3,12 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core.Extensions;
 
+	using HomeCloud.DataStorage.Api.Filters;
+	using HomeCloud.DataStorage.Api.Helpers;
 	using HomeCloud.DataStorage.Api.Models;
 
 	using HomeCloud.DataStorage.Business.Entities;
@@ -15,18 +16,11 @@
 
 	using HomeCloud.Mapping;
 
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Mvc.Filters;
-	using Microsoft.AspNetCore.Mvc.ModelBinding;
-	using System.Linq;
-	using System.IO;
-	using HomeCloud.DataStorage.Api.Helpers;
-	using Microsoft.AspNetCore.WebUtilities;
-	using HomeCloud.DataStorage.Api.Filters;
 	using Microsoft.AspNetCore.Http.Features;
+	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.WebUtilities;
+
 	using Microsoft.Net.Http.Headers;
-	using System.Text;
-	using Microsoft.AspNetCore.StaticFiles;
 
 	#endregion
 
@@ -39,15 +33,15 @@
 		#region Private Members
 
 		/// <summary>
+		/// The default form options so that we can use them to set the default limits for
+		/// request body data
+		/// </summary>
+		private static readonly FormOptions DefaultFormOptions = new FormOptions();
+
+		/// <summary>
 		/// The <see cref="ICatalogEntryService"/> service.
 		/// </summary>
 		private readonly ICatalogEntryService catalogEntryService = null;
-
-		/// <summary>
-		/// The default form options so that we can use them to set the default limits for
-		// request body data
-		/// </summary>
-		private static readonly FormOptions DefaultFormOptions = new FormOptions();
 
 		#endregion
 
@@ -58,8 +52,8 @@
 		/// </summary>
 		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService"/> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
-		public DataController(ICatalogEntryService catalogEntryService, IContentTypeProvider contentTypeProvider, IMapper mapper)
-			: base(mapper, contentTypeProvider)
+		public DataController(ICatalogEntryService catalogEntryService, IMapper mapper)
+			: base(mapper)
 		{
 			this.catalogEntryService = catalogEntryService;
 		}
@@ -99,7 +93,7 @@
 		{
 			if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
 			{
-				return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
+				return this.BadRequest($"Expected a multipart request, but got {Request.ContentType}");
 			}
 
 			DataViewModel model = new DataViewModel()
@@ -131,8 +125,7 @@
 						new CatalogEntry()
 						{
 							Catalog = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model),
-							Name = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetFileNameWithoutExtension(fileName),
-							Extension = string.IsNullOrWhiteSpace(fileName) ? null : Path.GetExtension(fileName),
+							Name = fileName
 						},
 						section.Body);
 
@@ -142,6 +135,11 @@
 				});
 		}
 
+		/// <summary>
+		/// Checks whether the resource specified by identifier exists.
+		/// </summary>
+		/// <param name="id">The resource identifier.</param>
+		/// <returns><see cref="ControllerBase.Ok"/> if resource exists. Otherwise <see cref="ControllerBase.NotFound"/></returns>
 		[HttpHead("v1/[controller]/{id}")]
 		public async Task<IActionResult> Exists(Guid id)
 		{

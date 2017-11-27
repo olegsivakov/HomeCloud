@@ -157,7 +157,6 @@
 				new
 				{
 					@Name = string.IsNullOrWhiteSpace(file?.Name) ? null : file.Name.Trim().ToLower(),
-					@Extension = string.IsNullOrWhiteSpace(file?.Extension) ? null : file.Extension.Trim().ToLower(),
 					@DirectoryID = file.DirectoryID,
 					@StartIndex = offset,
 					@ChunkSize = limit
@@ -181,8 +180,7 @@
 				{
 					@ID = id,
 					@DirectoryID = entity.DirectoryID,
-					@Name = entity.Name,
-					@Extension = entity.Extension
+					@Name = entity.Name
 				}) > 0)
 			{
 				return await this.GetAsync(id);

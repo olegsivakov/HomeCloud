@@ -128,10 +128,8 @@
 			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>>(dataViewModelConverter);
 			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>>(dataViewModelConverter);
 
-			FileViewModelConverter fileViewModelConverter = new FileViewModelConverter();
-
-			services.AddSingleton<ITypeConverter<CatalogEntry, FileViewModel>>(fileViewModelConverter);
-			services.AddSingleton<ITypeConverter<FileViewModel, CatalogEntry>>(fileViewModelConverter);
+			services.AddScoped<ITypeConverter<CatalogEntry, FileViewModel>, FileViewModelConverter>();
+			services.AddSingleton<ITypeConverter<FileViewModel, CatalogEntry>, FileViewModelConverter>();
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

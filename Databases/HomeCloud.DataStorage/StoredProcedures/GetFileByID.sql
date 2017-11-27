@@ -16,7 +16,6 @@ BEGIN
 		[ID],
 		[DirectoryID],
 		[Name],
-		[Extension],
 		[CreationDate],
 		[UpdatedDate]
 	FROM [dbo].[File] WITH(NOLOCK)

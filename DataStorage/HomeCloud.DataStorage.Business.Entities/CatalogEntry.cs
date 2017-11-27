@@ -28,14 +28,6 @@
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the extension.
-		/// </summary>
-		/// <value>
-		/// The extension.
-		/// </value>
-		public string Extension { get; set; }
-
-		/// <summary>
 		/// Gets or sets the catalog.
 		/// </summary>
 		/// <value>

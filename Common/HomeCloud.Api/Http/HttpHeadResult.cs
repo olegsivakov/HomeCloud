@@ -2,15 +2,22 @@
 {
 	#region Usings
 
-	using Microsoft.AspNetCore.Mvc;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+
+	using Microsoft.AspNetCore.Mvc;
+
 	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
 
 	#endregion
 
+	/// <summary>
+	/// Implements a contract that represents the result of <see cref="Http HEAD" /> method.
+	/// </summary>
+	/// <typeparam name="T">The type of the data provided by <see cref="HTTP"/> method </typeparam>
+	/// <seealso cref="HomeCloud.Api.Http.HttpGetResult{T}" />
 	public class HttpHeadResult<T> : HttpGetResult<T>
 	{
 		#region Contstructors

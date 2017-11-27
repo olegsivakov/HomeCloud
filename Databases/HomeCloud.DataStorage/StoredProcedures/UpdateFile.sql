@@ -7,20 +7,17 @@ GO
 CREATE PROCEDURE [dbo].[UpdateFile]
 	@ID UNIQUEIDENTIFIER,
 	@DirectoryID UNIQUEIDENTIFIER,
-	@Name NVARCHAR(250),
-	@Extension NVARCHAR(10)
+	@Name NVARCHAR(250)
 AS
 BEGIN
 	DECLARE @local_ID UNIQUEIDENTIFIER = @ID,
 			@local_DirectoryID UNIQUEIDENTIFIER = @DirectoryID,
-			@local_Name NVARCHAR(250) = @Name,
-			@local_Extension NVARCHAR(10) = @Extension
+			@local_Name NVARCHAR(250) = @Name
 
 	UPDATE [dbo].[File]
 	SET
 		[DirectoryID] = @local_DirectoryID,
 		[Name] = @local_Name,
-		[Extension] = @local_Extension,
 		[UpdatedDate] = GETDATE()
 	WHERE
 		[ID] = @local_ID

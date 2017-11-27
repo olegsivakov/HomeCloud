@@ -34,7 +34,6 @@
 		{
 			target.ID = source.ID;
 			target.Name = string.IsNullOrWhiteSpace(source.Name) ? target.Name : source.Name.Trim();
-			target.Extension = string.IsNullOrWhiteSpace(source.Extension) ? target.Extension : source.Extension.Trim();
 			target.DirectoryID = (source.Catalog?.ID).GetValueOrDefault();
 
 			return target;
@@ -56,7 +55,6 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
-			target.Extension = source.Extension;
 			target.Catalog = new Catalog() { ID = source.DirectoryID };
 			target.CreationDate = source.CreationDate;
 
