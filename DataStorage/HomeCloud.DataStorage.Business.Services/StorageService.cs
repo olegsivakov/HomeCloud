@@ -136,7 +136,7 @@
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.
 		/// </returns>
-		public async Task<ServiceResult<IEnumerable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20)
+		public async Task<ServicePagedResult<Storage>> GetStoragesAsync(int offset = 0, int limit = 20)
 		{
 			IEnumerable<Storage> storages = null;
 
@@ -145,7 +145,11 @@
 
 			await this.processor.ProcessAsync();
 
-			return new ServiceResult<IEnumerable<Storage>>(storages);
+			return new ServicePagedResult<Storage>(storages)
+			{
+				Offset = 0,
+				TotalCount = 0
+			};
 		}
 
 		/// <summary>
