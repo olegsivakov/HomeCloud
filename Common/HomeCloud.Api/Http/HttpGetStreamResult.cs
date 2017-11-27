@@ -2,9 +2,11 @@
 {
 	#region Usings
 
+	using System.IO;
+
 	using HomeCloud.Api.Mvc;
 	using Microsoft.AspNetCore.Mvc;
-	using System.IO;
+
 	using ControllerBase = HomeCloud.Api.Mvc.ControllerBase;
 
 	#endregion
