@@ -143,13 +143,24 @@
 		[HttpHead("v1/[controller]/{id}")]
 		public async Task<IActionResult> Exists(Guid id)
 		{
-			return await this.HttpGet(
+			return await this.HttpHead(
 				id,
 				async () =>
 				{
 					ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
 
 					return await this.HttpHeadResult<CatalogEntry, FileViewModel>(result);
+				});
+		}
+
+		[HttpGet("v1/[controller]")]
+		public async Task<IActionResult> GetAll()
+		{
+			return await this.HttpGet(
+				Guid.NewGuid(),
+				async () =>
+				{
+					return await this.HttpGetResult<Catalog, DataViewModel>(new ServiceResult<Catalog>(new Catalog() { Size = 2056 }));
 				});
 		}
 	}
