@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Api.Helpers
+﻿namespace HomeCloudApi.Helpers
 {
 	#region Usings
 
@@ -43,7 +43,7 @@
 		/// </summary>
 		/// <param name="contentType">The content type string.</param>
 		/// <returns>
-		///   <c>true</c> if the specified content type is multipart one; otherwise, <c>false</c>.
+		/// <c>true</c> if the specified content type is multipart one; otherwise, <c>false</c>.
 		/// </returns>
 		public static bool IsMultipartContentType(string contentType)
 		{
@@ -60,7 +60,6 @@
 		/// </returns>
 		public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
 		{
-			// Content-Disposition: form-data; name="key";
 			return contentDisposition != null
 				&& contentDisposition.DispositionType.Equals("form-data")
 				&& StringSegment.IsNullOrEmpty(contentDisposition.FileName)
@@ -76,7 +75,6 @@
 		/// </returns>
 		public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
 		{
-			// Content-Disposition: form-data; name="myfile1"; filename="Misc 002.jpg"
 			return contentDisposition != null
 				&& contentDisposition.DispositionType.Equals("form-data")
 				&& (!StringSegment.IsNullOrEmpty(contentDisposition.FileName)

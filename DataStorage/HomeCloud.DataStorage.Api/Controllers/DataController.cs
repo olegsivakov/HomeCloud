@@ -8,7 +8,6 @@
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Api.Filters;
-	using HomeCloud.DataStorage.Api.Helpers;
 	using HomeCloud.DataStorage.Api.Models;
 
 	using HomeCloud.DataStorage.Business.Entities;
@@ -87,53 +86,53 @@
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
 		/// </returns>
-		[HttpPost("v1/[controller]/{catalogID}")]
-		[DisableFormValueModelBinding]
-		public async Task<IActionResult> Post(Guid catalogID)
-		{
-			if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
-			{
-				return this.BadRequest($"Expected a multipart request, but got {Request.ContentType}");
-			}
+		//[HttpPost("v1/[controller]/{catalogID}")]
+		//[DisableFormValueModelBinding]
+		//public async Task<IActionResult> Post(Guid catalogID)
+		//{
+		//	if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+		//	{
+		//		return this.BadRequest($"Expected a multipart request, but got {Request.ContentType}");
+		//	}
 
-			DataViewModel model = new DataViewModel()
-			{
-				ID = catalogID,
-				IsCatalog = true
-			};
+		//	DataViewModel model = new DataViewModel()
+		//	{
+		//		ID = catalogID,
+		//		IsCatalog = true
+		//	};
 
-			return await this.HttpPost(
-				model,
-				async () =>
-				{
-					string fileName = null;
+		//	return await this.HttpPost(
+		//		model,
+		//		async () =>
+		//		{
+		//			string fileName = null;
 
-					string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), DefaultFormOptions.MultipartBoundaryLengthLimit);
-					MultipartReader reader = new MultipartReader(boundary, HttpContext.Request.Body);
+		//			string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), DefaultFormOptions.MultipartBoundaryLengthLimit);
+		//			MultipartReader reader = new MultipartReader(boundary, HttpContext.Request.Body);
 
-					MultipartSection section = await reader.ReadNextSectionAsync();
-					if (section != null)
-					{
-						ContentDispositionHeaderValue contentDisposition = null;
-						if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition) && MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
-						{
-							fileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString();
-						}
-					}
+		//			MultipartSection section = await reader.ReadNextSectionAsync();
+		//			if (section != null)
+		//			{
+		//				ContentDispositionHeaderValue contentDisposition = null;
+		//				if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition) && MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
+		//				{
+		//					fileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString();
+		//				}
+		//			}
 
-					CatalogEntryStream stream = new CatalogEntryStream(
-						new CatalogEntry()
-						{
-							Catalog = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model),
-							Name = fileName
-						},
-						section.Body);
+		//			CatalogEntryStream stream = new CatalogEntryStream(
+		//				new CatalogEntry()
+		//				{
+		//					Catalog = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model),
+		//					Name = fileName
+		//				},
+		//				section.Body);
 
-					ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
+		//			ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
 
-					return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
-				});
-		}
+		//			return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
+		//		});
+		//}
 
 		/// <summary>
 		/// Checks whether the resource specified by identifier exists.

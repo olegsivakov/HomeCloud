@@ -35,7 +35,9 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Formatters\MultipartFormDataInputFormatter.cs" />
     <Compile Include="Formatters\JsonOutputFormatter.cs" />
+    <Compile Include="Helpers\MultipartRequestHelper.cs" />
     <Compile Include="Http\ConflictResult.cs" />
     <Compile Include="Http\HttpDeleteResult.cs" />
     <Compile Include="Http\HttpGetResult.cs" />

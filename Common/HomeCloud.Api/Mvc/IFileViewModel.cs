@@ -1,4 +1,6 @@
-﻿namespace HomeCloud.Api.Mvc
+﻿using System.IO;
+
+namespace HomeCloud.Api.Mvc
 {
 	/// <summary>
 	/// Defines the binary file view model.

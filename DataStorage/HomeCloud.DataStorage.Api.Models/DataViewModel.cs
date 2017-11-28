@@ -5,9 +5,6 @@
 	using System;
 
 	using HomeCloud.Api.Mvc;
-	using Microsoft.AspNetCore.Mvc;
-	using HomeCloud.Api.Http;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -33,12 +30,12 @@
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the data is catalog.
+		/// Gets or sets the MIME type.
 		/// </summary>
 		/// <value>
-		///   <c>true</c> if the data is catalog; otherwise, <c>false</c>.
+		/// The MIME type.
 		/// </value>
-		public bool IsCatalog { get; set; }
+		public string MimeType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation date.

@@ -61,7 +61,7 @@
 
 				if (target == null)
 				{
-					target = (TTarget)typeof(TTarget).GetConstructor(Enumerable.Empty<Type>().ToArray())?.Invoke(null);
+					target = (TTarget)typeof(TTarget).GetConstructor(Type.EmptyTypes)?.Invoke(null);
 				}
 
 				ITypeConverter<TSource, TTarget> converter = this.converterFactory.Get<ITypeConverter<TSource, TTarget>>() as ITypeConverter<TSource, TTarget>;

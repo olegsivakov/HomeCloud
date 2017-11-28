@@ -16,6 +16,7 @@
 	using Microsoft.Extensions.DependencyInjection;
 
 	using HomeCloudJsonOutputFormatter = HomeCloud.Api.Formatters.JsonOutputFormatter;
+	using HomeCloudMultipartFormDataInputFormatter = HomeCloud.Api.Formatters.MultipartFormDataInputFormatter;
 
 	#endregion
 
@@ -71,6 +72,8 @@
 					new HomeCloudJsonOutputFormatter(
 						JsonSerializerSettingsProvider.CreateSerializerSettings(),
 						ArrayPool<char>.Shared));
+
+				options.InputFormatters.Add(new HomeCloudMultipartFormDataInputFormatter());
 			});
 
 			return services.BuildServiceProvider();

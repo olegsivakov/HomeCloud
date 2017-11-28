@@ -32,7 +32,6 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
-			target.IsCatalog = true;
 			target.CreationDate = source.CreationDate;
 			target.Size = source.Size.GetValueOrDefault();
 
@@ -76,7 +75,6 @@
 		{
 			target.ID = source.ID;
 			target.Name = Path.GetFileNameWithoutExtension(source.Name);
-			target.IsCatalog = false;
 			target.CreationDate = source.CreationDate;
 			target.Size = source.Size.GetValueOrDefault();
 
