@@ -41,6 +41,8 @@
 		/// </value>
 		public string Path { get; set; }
 
+		public System.IO.Stream Stream { get; set; }
+
 		/// <summary>
 		/// Gets or sets the MIME type.
 		/// </summary>

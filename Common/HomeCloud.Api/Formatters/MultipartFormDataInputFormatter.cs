@@ -1,26 +1,38 @@
-﻿using HomeCloudApi.Helpers;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HomeCloud.Api.Formatters
+﻿namespace HomeCloud.Api.Formatters
 {
+	#region Usings
+
+	using System;
+	using System.IO;
+	using System.Linq;
+	using System.Reflection;
+	using System.Text;
+	using System.Threading.Tasks;
+
+	using HomeCloudApi.Helpers;
+
+	using Microsoft.AspNetCore.Http.Features;
+	using Microsoft.AspNetCore.Mvc.Formatters;
+	using Microsoft.AspNetCore.WebUtilities;
+
+	using Microsoft.Net.Http.Headers;
+
+	#endregion
+
 	/// <summary>
-	/// Represents the <see cref="MediaTypeFormatter"/> class to handle multipart/form-data. 
+	/// Represents the <see cref="MultipartFormDataInputFormatter"/> class to handle <see cref="multipart/form-data"/> requests.
 	/// </summary>
 	public class MultipartFormDataInputFormatter : InputFormatter
 	{
+		#region Private Constants
+
+		/// <summary>
+		/// The <see cref="multipart/form-data"/> content type
+		/// </summary>
+		private const string MultipartContentType = "multipart/form-data";
+
+		#endregion
+
 		#region Private Members
 
 		/// <summary>
@@ -30,10 +42,24 @@ namespace HomeCloud.Api.Formatters
 
 		#endregion
 
+		#region Constructors
+
 		/// <summary>
+		/// Initializes a new instance of the <see cref="MultipartFormDataInputFormatter"/> class.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <returns></returns>
+		public MultipartFormDataInputFormatter()
+			: base()
+		{
+			this.SupportedMediaTypes.Add(MultipartContentType);
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Indicates whether the current instance of <see cref="InputFormatter"/> can read request.
+		/// </summary>
+		/// <param name="context"><see cref="InputFormatterContext"/> context.</param>
+		/// <returns><c>true</c> if the instance can read request. Otherwise <c>false</c>.</returns>
 		/// <inheritdoc />
 		public override bool CanRead(InputFormatterContext context)
 		{
@@ -49,7 +75,7 @@ namespace HomeCloud.Api.Formatters
 		/// </returns>
 		public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
 		{
-			if (context == null)
+			if (context is null)
 			{
 				throw new ArgumentNullException(nameof(context));
 			}
@@ -58,79 +84,62 @@ namespace HomeCloud.Api.Formatters
 			{
 				var request = context.HttpContext.Request;
 
-				if (!request.Body.CanSeek)
+				if (request.Body.CanSeek)
 				{
 					request.Body.Seek(0L, SeekOrigin.Begin);
 				}
 
-				Dictionary<string, object> formData = new Dictionary<string, object>();
+				object model = context.ModelType.GetConstructor(Type.EmptyTypes).Invoke(null);
 
 				string boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(request.ContentType), DefaultFormOptions.MultipartBoundaryLengthLimit);
 				MultipartReader reader = new MultipartReader(boundary, request.Body);
 
-				MultipartSection section = await reader.ReadNextSectionAsync();
-				if (section != null)
+				bool isSuccess = false;
+
+				MultipartSection section = null;
+				while ((section = await reader.ReadNextSectionAsync()) != null)
 				{
 					if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out ContentDispositionHeaderValue contentDisposition))
 					{
 						if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
 						{
-							formData.Add("FileName", HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString());
-							formData.Add("Stream", section.Body);
-						}
+							SetProperty(model, "FileName", HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString());
+							SetProperty(model, "Stream", section.Body, false);
 
+							isSuccess = true;
+						}
 						else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
 						{
 							string key = HeaderUtilities.RemoveQuotes(contentDisposition.Name).ToString();
 							Encoding encoding = GetEncoding(section);
 
+							string value = null;
+
 							using (StreamReader streamReader = new StreamReader(section.Body, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
 							{
-								string value = await streamReader.ReadToEndAsync();
+								value = await streamReader.ReadToEndAsync();
 
 								if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
 								{
 									value = string.Empty;
 								}
-
-								formData[key] = value;
-
-								if (formData.Count > DefaultFormOptions.ValueCountLimit)
-								{
-									throw new InvalidDataException($"Form key count limit {DefaultFormOptions.ValueCountLimit} exceeded.");
-								}
 							}
+
+							SetProperty(model, key, value);
+
+							isSuccess = true;
 						}
 					}
 				}
 
-				if (!formData.Any() && !context.TreatEmptyInputAsDefaultValue)
+				if (!isSuccess && !context.TreatEmptyInputAsDefaultValue)
 				{
 					return InputFormatterResult.NoValue();
 				}
 
-				Type modelType = context.ModelType;
-				object model = context.ModelType.GetConstructor(Type.EmptyTypes).Invoke(null);
-
-				foreach (KeyValuePair<string, object> item in formData)
-				{
-					PropertyInfo property = modelType.GetProperty(item.Key, BindingFlags.IgnoreCase);
-					if (property != null)
-					{
-						try
-						{
-							object value = Convert.ChangeType(item.Value, property.PropertyType);
-							property.SetValue(value, model);
-						}
-						catch (Exception exception)
-						{
-						}
-					}
-				}
-
 				return InputFormatterResult.Success(model);
 			}
-			catch(Exception exception)
+			catch
 			{
 				return InputFormatterResult.Failure();
 			}
@@ -151,6 +160,33 @@ namespace HomeCloud.Api.Formatters
 			}
 
 			return mediaType.Encoding;
+		}
+
+		/// <summary>
+		/// Sets the specified value to the object property by property name.
+		/// </summary>
+		/// <param name="model">The object model.</param>
+		/// <param name="propertyName">Property name.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="convert">Sets the value indicating whether the conversion to the object property type should be done.</param>
+		private static void SetProperty(object model, string propertyName, object value, bool convert = true)
+		{
+			PropertyInfo property = model.GetType().GetProperties().FirstOrDefault(field => field.Name.ToLower() == propertyName?.ToLower());
+			if (model != null && property != null)
+			{
+				try
+				{
+					if (convert)
+					{
+						value = Convert.ChangeType(value, property.PropertyType);
+					}
+
+					property.SetValue(model, value, null);
+				}
+				catch
+				{
+				}
+			}
 		}
 
 		#endregion
