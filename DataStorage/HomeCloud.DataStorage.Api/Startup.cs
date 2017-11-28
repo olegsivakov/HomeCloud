@@ -3,15 +3,19 @@
 	#region Usings
 
 	using System;
+	using System.Buffers;
 
 	using HomeCloud.DataStorage.Api.DependencyInjection;
 	using HomeCloud.Exceptions;
 
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.AspNetCore.Mvc.Formatters;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
+
+	using HomeCloudJsonOutputFormatter = HomeCloud.Api.Formatters.JsonOutputFormatter;
 
 	#endregion
 
@@ -59,7 +63,15 @@
 
 			services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
 
-			services.AddMvc();
+			services.AddMvc(options =>
+			{
+				options.OutputFormatters.RemoveType<JsonOutputFormatter>();
+				options.OutputFormatters.Insert(
+					0,
+					new HomeCloudJsonOutputFormatter(
+						JsonSerializerSettingsProvider.CreateSerializerSettings(),
+						ArrayPool<char>.Shared));
+			});
 
 			return services.BuildServiceProvider();
 		}

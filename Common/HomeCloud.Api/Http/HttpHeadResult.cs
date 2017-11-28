@@ -32,48 +32,5 @@
 		}
 
 		#endregion
-
-		#region HttpGetResult<T> Implementations
-
-		/// <summary>
-		/// Returns the <see cref="IActionResult" /> that represents the current <see cref="HTTP" /> method.
-		/// </summary>
-		/// <returns>
-		/// The instance of <see cref="IActionResult" />.
-		/// </returns>
-		public override IActionResult ToActionResult()
-		{
-			IActionResult result = null;
-			if ((result = this.HandleError()) != null)
-			{
-				return result;
-			}
-
-			if (this.Data == null)
-			{
-				return this.Controller.NotFound();
-			}
-
-			Type type = this.Data.GetType();
-
-			IEnumerable<PropertyInfo> properties = type.GetProperties().Where(property => property.GetCustomAttribute(typeof(HttpHeaderAttribute), true) != null);
-			foreach (PropertyInfo property in properties)
-			{
-				string key = null;
-				string value = null;
-
-				if ((key = (property.GetCustomAttribute(typeof(HttpHeaderAttribute), true) as HttpHeaderAttribute)?.Name) != null)
-				{
-					if ((value = Convert.ToString(property.GetValue(this.Data))) != null)
-					{
-						this.Controller.HttpContext.Response.Headers[key] = value;
-					}
-				}
-			}
-
-			return this.Controller.Ok();
-		}
-
-		#endregion
 	}
 }

@@ -34,6 +34,7 @@
 			target.Name = source.Name;
 			target.IsCatalog = true;
 			target.CreationDate = source.CreationDate;
+			target.Size = source.Size.GetValueOrDefault();
 
 			return target;
 		}
