@@ -70,7 +70,12 @@
 					{
 						ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
 
-						return await this.HttpGetStreamResult<CatalogEntry, FileViewModel>(result);
+						if (this.HttpContext.Request.ContentType == "application/octet-stream")
+						{
+							return await this.HttpGetStreamResult<CatalogEntry, FileViewModel>(result);
+						}
+
+						return await this.HttpGetResult<CatalogEntry, DataViewModel>(result);
 					});
 		}
 

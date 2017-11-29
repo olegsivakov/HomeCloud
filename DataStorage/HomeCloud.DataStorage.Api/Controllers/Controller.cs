@@ -89,13 +89,9 @@
 		{
 			HttpGetStreamResult<TModel> httpResult = new HttpGetStreamResult<TModel>(this)
 			{
-				Errors = result.Errors
+				Errors = result.Errors,
+				Data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null
 			};
-
-			if (result.Data != null)
-			{
-				httpResult.Data = await this.Mapper.MapNewAsync<TData, TModel>(result.Data);
-			}
 
 			return httpResult;
 		}

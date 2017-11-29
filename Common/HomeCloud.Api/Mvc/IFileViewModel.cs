@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace HomeCloud.Api.Mvc
+﻿namespace HomeCloud.Api.Mvc
 {
 	/// <summary>
 	/// Defines the binary file view model.
@@ -14,7 +12,7 @@ namespace HomeCloud.Api.Mvc
 		/// <value>
 		/// The name.
 		/// </value>
-		string Name { get; set; }
+		string FileName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the physical path to the binary.
