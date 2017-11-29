@@ -72,7 +72,7 @@
 
 						if (this.HttpContext.Request.ContentType == "application/octet-stream")
 						{
-							return await this.HttpGetStreamResult<CatalogEntry, FileViewModel>(result);
+							return await this.HttpGetStreamResult<CatalogEntry, PhysicalFileViewModel>(result);
 						}
 
 						return await this.HttpGetResult<CatalogEntry, DataViewModel>(result);
@@ -84,27 +84,24 @@
 		/// </summary>
 		/// <param name="catalogID">The catalog model identifier.</param>
 		/// <returns>
-		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="FileStreamViewModel" />.
 		/// </returns>
 		[HttpPost("v1/[controller]/{catalogID}")]
 		[DisableFormValueModelBinding]
-		public async Task<IActionResult> Post(Guid catalogID, [FromBody] FileViewModel model)
+		public async Task<IActionResult> Post(Guid catalogID, [FromBody] FileStreamViewModel model)
 		{
 			return await this.HttpPost(
 				model,
 				async () =>
 				{
-					CatalogEntryStream stream = new CatalogEntryStream(
-						new CatalogEntry()
-						{
-							Catalog = new Catalog() { ID = catalogID },
-							Name = model.FileName
-						},
-						model.Stream);
+					CatalogEntryStream stream = new CatalogEntryStream(model.Stream);
+					stream = await this.Mapper.MapAsync(model, stream);
+
+					stream.Entry.Catalog.ID = catalogID;
 
 					ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
 
-					return await this.HttpPostResult<CatalogEntry, FileViewModel>(this.Get, result);
+					return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
 
 				});
 		}
@@ -123,7 +120,7 @@
 				{
 					ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
 
-					return await this.HttpHeadResult<CatalogEntry, FileViewModel>(result);
+					return await this.HttpHeadResult<CatalogEntry, PhysicalFileViewModel>(result);
 				});
 		}
 	}

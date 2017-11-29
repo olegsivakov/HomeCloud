@@ -2,8 +2,6 @@
 {
 	#region Usings
 
-	using System.IO;
-
 	using HomeCloud.Api.Providers;
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
@@ -11,11 +9,11 @@
 	#endregion
 
 	/// <summary>
-	/// Provides converter methods for <see cref="DataViewModel" /> entity.
+	/// Provides converter methods for <see cref="PhysicalFileViewModel" /> entity.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.Api.Models.DataViewModel}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Api.Models.DataViewModel, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
-	public class DataViewModelConverter : ITypeConverter<CatalogEntry, DataViewModel>, ITypeConverter<DataViewModel, CatalogEntry>
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.Api.Models.PhysicalFileViewModel}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Api.Models.PhysicalFileViewModel, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
+	public class PhysicalFileViewModelConverter : ITypeConverter<CatalogEntry, PhysicalFileViewModel>, ITypeConverter<PhysicalFileViewModel, CatalogEntry>
 	{
 		#region Private Members
 
@@ -32,14 +30,14 @@
 		/// Initializes a new instance of the <see cref="PhysicalFileViewModelConverter"/> class.
 		/// </summary>
 		/// <param name="contentTypeProvider">The <see cref="IContentTypeProvider"/> provider.</param>
-		public DataViewModelConverter(IContentTypeProvider contentTypeProvider)
+		public PhysicalFileViewModelConverter(IContentTypeProvider contentTypeProvider)
 		{
 			this.contentTypeProvider = contentTypeProvider;
 		}
 
 		#endregion
 
-		#region ITypeConverter<CatalogEntry, DataViewModel> Implementations
+		#region ITypeConverter<CatalogEntry, PhysicalFileViewModel> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -49,20 +47,20 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public DataViewModel Convert(CatalogEntry source, DataViewModel target)
+		public PhysicalFileViewModel Convert(CatalogEntry source, PhysicalFileViewModel target)
 		{
 			target.ID = source.ID;
-			target.Name = Path.GetFileNameWithoutExtension(source.Name);
-			target.MimeType = this.contentTypeProvider?.GetContentType(source.Path);
-			target.CreationDate = source.CreationDate;
+			target.FileName = source.Name;
 			target.Size = source.Size.GetValueOrDefault();
+			target.Path = source.Path;
+			target.MimeType = this.contentTypeProvider?.GetContentType(source.Path);
 
 			return target;
 		}
 
 		#endregion
 
-		#region ITypeConverter<DataViewModel, CatalogEntry> Implementations
+		#region ITypeConverter<PhysicalFileViewModel, CatalogEntry> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -72,14 +70,11 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public CatalogEntry Convert(DataViewModel source, CatalogEntry target)
+		public CatalogEntry Convert(PhysicalFileViewModel source, CatalogEntry target)
 		{
 			target.ID = source.ID;
-			target.Name = source.Name;
-			target.Size = source.Size;
-			target.CreationDate = source.CreationDate;
-
-			target.Catalog = new Catalog();
+			target.Name = source.FileName;
+			target.Path = source.Path;
 
 			return target;
 		}

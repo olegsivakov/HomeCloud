@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using System;
+
 	using HomeCloud.Api.Http;
 	using HomeCloud.Api.Mvc;
 
@@ -12,9 +14,8 @@
 	/// <summary>
 	/// Represents binary file view model.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Api.Models.DataViewModel" />
 	/// <seealso cref="HomeCloud.Api.Mvc.IFileViewModel" />
-	public class FileViewModel : DataViewModel, IFileViewModel
+	public class FileViewModel : IFileViewModel
 	{
 		#region Constants
 
@@ -25,13 +26,23 @@
 
 		#endregion
 
+		#region Public Properties
+
 		/// <summary>
-		/// Gets or sets the name of the file.
+		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>
-		/// The name of the file.
+		/// The identifier.
 		/// </value>
-		public string FileName { get; set; }
+		public Guid ID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		public virtual string FileName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the physical path to the binary.
@@ -39,9 +50,8 @@
 		/// <value>
 		/// The physical path to the binary.
 		/// </value>
-		public string Path { get; set; }
-
-		public System.IO.Stream Stream { get; set; }
+		[JsonIgnore]
+		public virtual string Path { get; set; }
 
 		/// <summary>
 		/// Gets or sets the MIME type.
@@ -51,7 +61,7 @@
 		/// </value>
 		[HttpHeader("Content-Type")]
 		[JsonIgnore]
-		public string MimeType { get; set; }
+		public virtual string MimeType { get; set; }
 
 		/// <summary>
 		/// Gets the accept ranges.
@@ -61,7 +71,7 @@
 		/// </value>
 		[HttpHeader("Accept-Ranges")]
 		[JsonIgnore]
-		public string AcceptRanges { get; } = BinaryRange;
+		public virtual string AcceptRanges { get; } = BinaryRange;
 
 		/// <summary>
 		/// Gets or sets the size.
@@ -70,10 +80,9 @@
 		/// The size.
 		/// </value>
 		[HttpHeader("Content-Length")]
-		public new long Size
-		{
-			get => base.Size;
-			set => base.Size = value;
-		}
+		[JsonIgnore]
+		public virtual long Size { get; set; }
+
+		#endregion
 	}
 }

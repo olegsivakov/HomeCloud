@@ -2,7 +2,8 @@
 {
 	#region Usings
 
-	using HomeCloud.Api.Mvc;
+	using HomeCloud.Api.Providers;
+
 	using HomeCloud.Core;
 
 	using HomeCloud.DataAccess.Components.Factories;
@@ -27,7 +28,7 @@
 
 	using HomeCloud.Mapping;
 	using HomeCloud.Validation;
-	using Microsoft.AspNetCore.StaticFiles;
+
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
@@ -121,15 +122,19 @@
 			services.AddSingleton<ITypeConverter<Storage, StorageViewModel>>(storageViewModelConverter);
 			services.AddSingleton<ITypeConverter<StorageViewModel, Storage>>(storageViewModelConverter);
 
-			DataViewModelConverter dataViewModelConverter = new DataViewModelConverter();
+			CatalogViewModelConverter catalogViewModelConverter = new CatalogViewModelConverter();
 
-			services.AddSingleton<ITypeConverter<Catalog, DataViewModel>>(dataViewModelConverter);
-			services.AddSingleton<ITypeConverter<DataViewModel, Catalog>>(dataViewModelConverter);
-			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>>(dataViewModelConverter);
-			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>>(dataViewModelConverter);
+			services.AddSingleton<ITypeConverter<Catalog, CatalogViewModel>>(catalogViewModelConverter);
+			services.AddSingleton<ITypeConverter<CatalogViewModel, Catalog>>(catalogViewModelConverter);
 
-			services.AddScoped<ITypeConverter<CatalogEntry, FileViewModel>, FileViewModelConverter>();
-			services.AddSingleton<ITypeConverter<FileViewModel, CatalogEntry>, FileViewModelConverter>();
+			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>, DataViewModelConverter>();
+			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>, DataViewModelConverter>();
+
+			services.AddSingleton<ITypeConverter<CatalogEntry, PhysicalFileViewModel>, PhysicalFileViewModelConverter>();
+			services.AddSingleton<ITypeConverter<PhysicalFileViewModel, CatalogEntry>, PhysicalFileViewModelConverter>();
+
+			services.AddSingleton<ITypeConverter<CatalogEntryStream, FileStreamViewModel>, FileStreamViewModelConverter>();
+			services.AddSingleton<ITypeConverter<FileStreamViewModel, CatalogEntryStream>, FileStreamViewModelConverter>();
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

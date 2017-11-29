@@ -36,13 +36,8 @@
     <Compile Include="CatalogViewModel.cs" />
     <Compile Include="DataViewModel.cs" />
     <Compile Include="FileViewModel.cs" />
-    <Compile Include="New\CatalogEntryViewModel.cs" />
-    <Compile Include="New\CatalogViewModel.cs" />
-    <Compile Include="New\DataViewModel.cs" />
-    <Compile Include="New\FileViewModel.cs" />
-    <Compile Include="New\PhysicalFileViewModel.cs" />
-    <Compile Include="New\StorageViewModel.cs" />
-    <Compile Include="New\StreamFileViewModel.cs" />
+    <Compile Include="PhysicalFileViewModel.cs" />
+    <Compile Include="FileStreamViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageViewModel.cs" />
   </ItemGroup>
@@ -62,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

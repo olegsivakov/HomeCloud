@@ -33,8 +33,10 @@
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CatalogViewModelConverter.cs" />
     <Compile Include="DataViewModelConverter.cs" />
-    <Compile Include="FileViewModelConverter.cs" />
+    <Compile Include="FileStreamViewModelConverter.cs" />
+    <Compile Include="PhysicalFileViewModelConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StorageViewModelConverter.cs" />
   </ItemGroup>
@@ -113,6 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

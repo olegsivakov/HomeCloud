@@ -8,11 +8,11 @@
 	#endregion
 
 	/// <summary>
-	/// Provides converter methods for <see cref="StorageViewModel" /> entity.
+	/// Provides converter methods for <see cref="CatalogViewModel" /> entity.
 	/// </summary>
-	public class StorageViewModelConverter : ITypeConverter<Storage, StorageViewModel>, ITypeConverter<StorageViewModel, Storage>
+	public class CatalogViewModelConverter : ITypeConverter<Catalog, CatalogViewModel>, ITypeConverter<CatalogViewModel, Catalog>
 	{
-		#region  ITypeConverter<Storage, StorageViewModel> Implementations
+		#region  ITypeConverter<Storage, CatalogViewModel> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -22,11 +22,10 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public StorageViewModel Convert(Storage source, StorageViewModel target)
+		public CatalogViewModel Convert(Catalog source, CatalogViewModel target)
 		{
 			target.ID = source.ID;
-			target.Name = source.DisplayName;
-			target.Quota = source.Quota;
+			target.Name = source.Name;
 			target.CreationDate = source.CreationDate;
 			target.Size = source.Size.GetValueOrDefault();
 
@@ -35,7 +34,7 @@
 
 		#endregion
 
-		#region ITypeConverter<StorageViewModel, Storage> Implementations
+		#region ITypeConverter<CatalogViewModel, Storage> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -45,11 +44,10 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Storage Convert(StorageViewModel source, Storage target)
+		public Catalog Convert(CatalogViewModel source, Catalog target)
 		{
 			target.ID = source.ID;
-			target.DisplayName = source.Name;
-			target.Quota = source.Quota;
+			target.Name = source.Name;
 			target.CreationDate = source.CreationDate;
 			target.Size = source.Size;
 

@@ -9,7 +9,7 @@
 	#endregion
 
 	/// <summary>
-	/// Represents catalog/file view model.
+	/// Represents data view model.
 	/// </summary>
 	public class DataViewModel : IViewModel
 	{
@@ -27,15 +27,7 @@
 		/// <value>
 		/// The name.
 		/// </value>
-		public string Name { get; set; }
-
-		/// <summary>
-		/// Gets or sets the MIME type.
-		/// </summary>
-		/// <value>
-		/// The MIME type.
-		/// </value>
-		public string MimeType { get; set; }
+		public virtual string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation date.
@@ -51,7 +43,7 @@
 		/// <value>
 		///   <c>true</c> if the data exists; otherwise, it returns <c>false</c>.
 		/// </value>
-		public bool IsExists { get; set; }
+		public virtual bool IsExists { get; set; }
 
 		/// <summary>
 		/// Gets or sets the size.
@@ -59,6 +51,14 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		public long Size { get; set; }
+		public virtual long Size { get; set; }
+
+		/// <summary>
+		/// Gets or sets the MIME type.
+		/// </summary>
+		/// <value>
+		/// The MIME type.
+		/// </value>
+		public virtual string MimeType { get; set; }
 	}
 }

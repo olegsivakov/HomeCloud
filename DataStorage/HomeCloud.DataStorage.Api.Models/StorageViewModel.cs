@@ -11,6 +11,7 @@
 	/// <summary>
 	/// Represents storage view model.
 	/// </summary>
+	/// <seealso cref="HomeCloud.Api.Mvc.IViewModel" />
 	public class StorageViewModel : IViewModel
 	{
 		/// <summary>
@@ -27,23 +28,7 @@
 		/// <value>
 		/// The name.
 		/// </value>
-		public string Name { get; set; }
-
-		/// <summary>
-		/// Gets or sets the size.
-		/// </summary>
-		/// <value>
-		/// The size.
-		/// </value>
-		public long? Size { get; set; }
-
-		/// <summary>
-		/// Gets or sets the quota.
-		/// </summary>
-		/// <value>
-		/// The quota.
-		/// </value>
-		public long? Quota { get; set; }
+		public virtual string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation date.
@@ -52,5 +37,21 @@
 		/// The creation date.
 		/// </value>
 		public DateTime CreationDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the size.
+		/// </summary>
+		/// <value>
+		/// The size.
+		/// </value>
+		public virtual long Size { get; set; }
+
+		/// <summary>
+		/// Gets or sets the quota.
+		/// </summary>
+		/// <value>
+		/// The quota.
+		/// </value>
+		public long? Quota { get; set; }
 	}
 }

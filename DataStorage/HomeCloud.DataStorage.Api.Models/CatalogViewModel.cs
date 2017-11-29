@@ -4,9 +4,15 @@
 
 	using System;
 
+	using HomeCloud.Api.Mvc;
+
 	#endregion
 
-	public class CatalogViewModel
+	/// <summary>
+	/// Represents catalog view model.
+	/// </summary>
+	/// <seealso cref="HomeCloud.Api.Mvc.IViewModel" />
+	public class CatalogViewModel : IViewModel
 	{
 		/// <summary>
 		/// Gets or sets the identifier.
@@ -22,7 +28,7 @@
 		/// <value>
 		/// The name.
 		/// </value>
-		public string Name { get; set; }
+		public virtual string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation date.
@@ -38,7 +44,7 @@
 		/// <value>
 		///   <c>true</c> if the data exists; otherwise, it returns <c>false</c>.
 		/// </value>
-		public bool IsExists { get; set; }
+		public virtual bool IsExists { get; set; }
 
 		/// <summary>
 		/// Gets or sets the size.
@@ -46,6 +52,6 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		public long Size { get; set; }
+		public virtual long Size { get; set; }
 	}
 }

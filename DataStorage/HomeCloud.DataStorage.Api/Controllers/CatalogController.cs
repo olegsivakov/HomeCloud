@@ -68,7 +68,7 @@
 		/// <param name="offset">The offset.</param>
 		/// <param name="limit">The limit.</param>
 		/// <returns>
-		/// The asynchronous result of <see cref="IActionResult" /> containing the list of instances of <see cref="DataViewModel" />.
+		/// The asynchronous result of <see cref="IActionResult" /> containing the list of instances of <see cref="CatalogViewModel" />.
 		/// </returns>
 		[HttpGet("v1/[controller]s/{parentID}")]
 		public async Task<IActionResult> Get(Guid parentID, int offset, int limit)
@@ -79,21 +79,8 @@
 				async () =>
 				{
 					ServiceResult<IEnumerable<Catalog>> catalogResult = await this.catalogService.GetCatalogsAsync(parentID, offset, limit);
-					HttpGetResult<IEnumerable<DataViewModel>> result = await this.HttpGetResult<Catalog, DataViewModel>(catalogResult) as HttpGetResult<IEnumerable<DataViewModel>>;
 
-					int catalogcount = result.Data.Count();
-					if (catalogcount < limit)
-					{
-						int entryCount = limit - catalogcount;
-
-						ServiceResult<IEnumerable<CatalogEntry>> catalogEntryResult = await this.catalogEntryService.GetEntriesAsync(parentID, 0, limit);
-						HttpGetResult<IEnumerable<DataViewModel>> entryResult = await this.HttpGetResult<CatalogEntry, DataViewModel>(catalogEntryResult) as HttpGetResult<IEnumerable<DataViewModel>>;
-
-						result.Data.Union(entryResult.Data);
-						result.Errors.Union(entryResult.Errors);
-					}
-
-					return result;
+					return await this.HttpGetResult<Catalog, CatalogViewModel>(catalogResult) as HttpGetResult<IEnumerable<CatalogViewModel>>;
 				});
 		}
 
@@ -102,7 +89,7 @@
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>
-		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
 		/// </returns>
 		[HttpGet("v1/[controller]s/{parentID}/{id}")]
 		public async Task<IActionResult> Get(Guid id)
@@ -113,7 +100,7 @@
 				{
 					ServiceResult<Catalog> result = await this.catalogService.GetCatalogAsync(id);
 
-					return await this.HttpGetResult<Catalog, DataViewModel>(result);
+					return await this.HttpGetResult<Catalog, CatalogViewModel>(result);
 				});
 		}
 
@@ -121,23 +108,23 @@
 		/// Creates the specified data model.
 		/// </summary>
 		/// <param name="parentID">The parent model identifier.</param>
-		/// <param name="model">The model of <see cref="DataViewModel" />.</param>
+		/// <param name="model">The model of <see cref="CatalogViewModel" />.</param>
 		/// <returns>
-		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
 		/// </returns>
 		[HttpPost("v1/[controller]s/{parentID}")]
-		public async Task<IActionResult> Post(Guid parentID, [FromBody] DataViewModel model)
+		public async Task<IActionResult> Post(Guid parentID, [FromBody] CatalogViewModel model)
 		{
 			return await this.HttpPost(
 				model,
 				async () =>
 				{
-					Catalog entity = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model);
+					Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
 					entity.Parent.ID = parentID;
 
 					ServiceResult<Catalog> result = await this.catalogService.CreateCatalogAsync(entity);
 
-					return await this.HttpPostResult<Catalog, DataViewModel>(this.Get, result);
+					return await this.HttpPostResult<Catalog, CatalogViewModel>(this.Get, result);
 				});
 		}
 
@@ -146,24 +133,24 @@
 		/// </summary>
 		/// <param name="parentID">The parent model identifier.</param>
 		/// <param name="id">The unique identifier.</param>
-		/// <param name="model">The model of <see cref="DataViewModel" />.</param>
+		/// <param name="model">The model of <see cref="CatalogViewModel" />.</param>
 		/// <returns>
-		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
 		/// </returns>
 		[HttpPut("v1/[controller]s/{parentID}/{id}")]
-		public async Task<IActionResult> Put(Guid parentID, Guid id, [FromBody] DataViewModel model)
+		public async Task<IActionResult> Put(Guid parentID, Guid id, [FromBody] CatalogViewModel model)
 		{
 			return await this.HttpPut(
 				id,
 				model,
 				async () =>
 				{
-					Catalog entity = await this.Mapper.MapNewAsync<DataViewModel, Catalog>(model);
+					Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
 					entity.Parent.ID = parentID;
 
 					ServiceResult<Catalog> result = await this.catalogService.UpdateCatalogAsync(entity);
 
-					return await this.HttpPutResult<Catalog, DataViewModel>(this.Get, result);
+					return await this.HttpPutResult<Catalog, CatalogViewModel>(this.Get, result);
 				});
 		}
 

@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Api.Models.New
+﻿namespace HomeCloud.DataStorage.Api.Models
 {
 	#region Usings
 
@@ -11,8 +11,8 @@
 	/// <summary>
 	/// Represents file stream view model.
 	/// </summary>
-	/// <seealso cref="HomeCloud.DataStorage.Api.Models.New.FileViewModel" />
-	public class StreamFileViewModel : FileViewModel
+	/// <seealso cref="HomeCloud.DataStorage.Api.Models.FileViewModel" />
+	public class FileStreamViewModel : FileViewModel
 	{
 		/// <summary>
 		/// Gets or sets the file stream.
