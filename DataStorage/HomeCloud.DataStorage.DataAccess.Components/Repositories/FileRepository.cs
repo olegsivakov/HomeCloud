@@ -52,6 +52,11 @@
 		/// </summary>
 		private const string GetFileByDirectoryIDStoredProcedure = "[dbo].[GetFileByDirectoryID]";
 
+		/// <summary>
+		/// The <see cref="[dbo].[GetFileCountByDirectoryID]"/> stored procedure name.
+		/// </summary>
+		private const string GetFileCountByDirectoryIDStoredProcedure = "[dbo].[GetFileCountByDirectoryID]";
+
 		#endregion
 
 		#region Private Members
@@ -77,6 +82,22 @@
 		#endregion
 
 		#region IFileRepository Implementations
+
+		/// <summary>
+		/// Gets the number of entities that match the specified one.
+		/// </summary>
+		/// <param name="file">>The file to search by.</param>
+		/// <returns>The number of entities.</returns>
+		public async Task<int> GetCountAsync(File file)
+		{
+			return await this.context.ExecuteScalarAsync<object, int>(
+				GetFileCountByDirectoryIDStoredProcedure,
+				new
+				{
+					@Name = string.IsNullOrWhiteSpace(file?.Name) ? null : file.Name.Trim().ToLower(),
+					@DirectoryID = file.DirectoryID
+				});
+		}
 
 		/// <summary>
 		/// Deletes the entity by specified identifier.

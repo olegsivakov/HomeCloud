@@ -18,6 +18,13 @@
 	public interface ICatalogRepository : IDbRepository<Catalog>
 	{
 		/// <summary>
+		/// Gets the number of entities that match the specified one.
+		/// </summary>
+		/// <param name="catalog">>The catalog to search by.</param>
+		/// <returns>The number of entities.</returns>
+		Task<int> GetCountAsync(Catalog catalog);
+
+		/// <summary>
 		/// Deletes the list of entities by specified identifier of parent entity the list belongs to.
 		/// </summary>
 		/// <param name="id">The parent entity unique identifier.</param>

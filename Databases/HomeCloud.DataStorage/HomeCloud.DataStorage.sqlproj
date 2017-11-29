@@ -114,4 +114,13 @@
   <ItemGroup>
     <None Include="StoredProcedures\DeleteStorageByID.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetFileCountByDirectoryID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetDirectoryCountByParentID.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StoredProcedures\GetStorageCount.sql" />
+  </ItemGroup>
 </Project>

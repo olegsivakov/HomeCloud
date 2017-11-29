@@ -52,6 +52,11 @@
 		/// </summary>
 		private const string GetDirectoryByParentIDStoredProcedure = "[dbo].[GetDirectoryByParentID]";
 
+		/// <summary>
+		/// The <see cref="[dbo].[GetDirectoryCountByParentID]"/> stored procedure name.
+		/// </summary>
+		private const string GetDirectoryCountByParentIDStoredProcedure = "[dbo].[GetDirectoryCountByParentID]";
+
 		#endregion
 
 		#region Private Members
@@ -76,7 +81,23 @@
 
 		#endregion
 
-		#region IDirectoryRepository Implementations
+		#region ICatalogRepository Implementations
+
+		/// <summary>
+		/// Gets the number of entities that match the specified one.
+		/// </summary>
+		/// <param name="catalog">>The catalog to search by.</param>
+		/// <returns>The number of entities.</returns>
+		public async Task<int> GetCountAsync(Catalog catalog)
+		{
+			return await this.context.ExecuteScalarAsync<object, int>(
+				GetDirectoryCountByParentIDStoredProcedure,
+				new
+				{
+					@Name = string.IsNullOrWhiteSpace(catalog?.Name) ? null : catalog.Name.Trim().ToLower(),
+					@ParentID = catalog?.ParentID,
+				});
+		}
 
 		/// <summary>
 		/// Deletes the entity by specified identifier.
