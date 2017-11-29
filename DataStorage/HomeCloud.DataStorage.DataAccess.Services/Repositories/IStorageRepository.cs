@@ -16,6 +16,13 @@
 	public interface IStorageRepository : IDbRepository<Storage>
 	{
 		/// <summary>
+		/// Gets the number of entities that match the specified one.
+		/// </summary>
+		/// <param name="storage">>The storage to search by.</param>
+		/// <returns>The number of entities.</returns>
+		Task<int> GetCountAsync(Storage storage = null);
+
+		/// <summary>
 		/// Gets the list of entities that match the specified one.
 		/// </summary>
 		/// <param name="storage">The storage.</param>

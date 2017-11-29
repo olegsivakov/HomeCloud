@@ -18,6 +18,13 @@
 	public interface IFileRepository : IDbRepository<File>
 	{
 		/// <summary>
+		/// Gets the number of entities that match the specified one.
+		/// </summary>
+		/// <param name="file">>The file to search by.</param>
+		/// <returns>The number of entities.</returns>
+		Task<int> GetCountAsync(File file);
+
+		/// <summary>
 		/// Deletes the list of entities by specified identifier of entity of <see cref="Catalog" /> type the list belongs to.
 		/// </summary>
 		/// <param name="id">The parent entity unique identifier.</param>

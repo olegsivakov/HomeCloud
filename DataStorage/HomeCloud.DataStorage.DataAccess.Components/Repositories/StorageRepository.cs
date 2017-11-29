@@ -43,6 +43,11 @@
 		private const string GetStorageStoredProcedure = "[dbo].[GetStorage]";
 
 		/// <summary>
+		/// The <see cref="[dbo].[GetStorageCount]"/> stored procedure name.
+		/// </summary>
+		private const string GetStorageCountStoredProcedure = "[dbo].[GetStorageCount]";
+
+		/// <summary>
 		/// The <see cref="[dbo].[GetStorageByID]"/> stored procedure name.
 		/// </summary>
 		private const string GetStorageByIDStoredProcedure = "[dbo].[GetStorageByID]";
@@ -72,6 +77,21 @@
 		#endregion
 
 		#region IStorageRepository Implementations
+
+		/// <summary>
+		/// Gets the number of entities that match the specified one.
+		/// </summary>
+		/// <param name="storage">>The storage to search by.</param>
+		/// <returns>The number of entities.</returns>
+		public async Task<int> GetCountAsync(Storage storage = null)
+		{
+			return await this.context.ExecuteScalarAsync<object, int>(
+				GetStorageCountStoredProcedure,
+				new
+				{
+					@Name = string.IsNullOrWhiteSpace(storage?.Name) ? null : storage.Name.Trim().ToLower()
+				});
+		}
 
 		/// <summary>
 		/// Deletes the entity by specified identifier.
