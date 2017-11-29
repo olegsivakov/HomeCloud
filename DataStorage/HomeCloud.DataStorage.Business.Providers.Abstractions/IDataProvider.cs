@@ -2,9 +2,9 @@
 {
 	#region Usings
 
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
 	#endregion
@@ -43,7 +43,7 @@
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
-		Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20);
+		Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets storage by initial instance set.
@@ -95,7 +95,7 @@
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		Task<IEnumerable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20);
+		Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
@@ -140,7 +140,7 @@
 		/// <returns>
 		/// The list of instances of <see cref="CatalogEntry" /> type.
 		/// </returns>
-		Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20);
+		Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the catalog entry by the initial instance set.

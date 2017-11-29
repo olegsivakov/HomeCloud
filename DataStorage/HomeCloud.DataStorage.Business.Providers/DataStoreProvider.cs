@@ -7,6 +7,7 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataAccess.Services;
@@ -174,29 +175,46 @@
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
-		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
 			if (limit == 0)
 			{
-				return await Task.FromResult(Enumerable.Empty<Storage>());
+				return await Task.FromResult(new PagedList<Storage>()
+				{
+					Offset = offset,
+					Limit = limit
+				});
 			}
+
+			IEnumerable<Storage> storages = null;
+			int count = 0;
 
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				IStorageRepository storageRepository = scope.GetRepository<IStorageRepository>();
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
 
-				IEnumerable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
-				IEnumerable<Storage> storages = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
+				count = await storageRepository.GetCountAsync();
 
-				IEnumerable<Task<Storage>> tasks = storages.Select(async storage =>
+				IEnumerable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
+
+				storages = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
+				storages = await Task.WhenAll(storages.Select(async storage =>
 				{
 					CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
-					return await this.mapper.MapAsync(catalogContract, storage);
-				});
 
-				return await Task.WhenAll(tasks);
+					return await this.mapper.MapAsync(catalogContract, storage);
+				}));
+
 			}
+
+			IPaginable<Storage> result = storages.AsPaginable();
+
+			result.Offset = offset;
+			result.Limit = limit;
+			result.TotalCount = count;
+
+			return result;
 		}
 
 		/// <summary>
@@ -351,26 +369,47 @@
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		public async Task<IEnumerable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
+		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
 			if (limit == 0)
 			{
-				return await Task.FromResult(Enumerable.Empty<Catalog>());
+				return await Task.FromResult(new PagedList<Catalog>()
+				{
+					Offset = offset,
+					Limit = limit
+				});
 			}
 
 			IEnumerable<CatalogContract> data = null;
+			int count = 0;
+
+			CatalogContract contract = new CatalogContract()
+			{
+				ParentID = parent?.ID
+			};
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				ICatalogRepository catalogRepository = scope.GetRepository<ICatalogRepository>();
-				data = await catalogRepository.FindAsync(new CatalogContract() { ParentID = parent?.ID }, offset, limit);
+
+				await Task.WhenAll(
+					Task.Run(async () => data = await catalogRepository.FindAsync(contract, offset, limit)),
+					Task.Run(async () => count = await catalogRepository.GetCountAsync(contract))
+				);
 			}
 
-			return (await this.mapper.MapNewAsync<CatalogContract, Catalog>(data)).Select(catalog =>
+			IPaginable<Catalog> result = (await this.mapper.MapNewAsync<CatalogContract, Catalog>(data)).Select(catalog =>
 			{
 				catalog.Parent = parent;
 
 				return catalog;
-			});
+			}).AsPaginable();
+
+			result.Offset = offset;
+			result.Limit = limit;
+			result.TotalCount = count;
+
+			return result;
 		}
 
 		/// <summary>
@@ -491,26 +530,47 @@
 		/// <returns>
 		/// The list of instances of <see cref="CatalogEntry" /> type.
 		/// </returns>
-		public async Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
+		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
 			if (limit == 0)
 			{
-				return await Task.FromResult(Enumerable.Empty<CatalogEntry>());
+				return await Task.FromResult(new PagedList<CatalogEntry>()
+				{
+					Offset = offset,
+					Limit = limit
+				});
 			}
 
 			IEnumerable<FileContract> data = null;
+			int count = 0;
+
+			FileContract contract = new FileContract()
+			{
+				DirectoryID = catalog.ID
+			};
+
 			using (IDbContextScope scope = this.dataContextScopeFactory.CreateDbContextScope(this.connectionStrings.DataStorageDB, false))
 			{
 				IFileRepository fileRepository = scope.GetRepository<IFileRepository>();
-				data = await fileRepository.FindAsync(new FileContract() { DirectoryID = catalog.ID }, offset, limit);
+
+				await Task.WhenAll(
+					Task.Run(async () => data = await fileRepository.FindAsync(contract, offset, limit)),
+					Task.Run(async () => count = await fileRepository.GetCountAsync(contract))
+				);
 			}
 
-			return (await this.mapper.MapNewAsync<FileContract, CatalogEntry>(data)).Select(entry =>
+			IPaginable<CatalogEntry> result = (await this.mapper.MapNewAsync<FileContract, CatalogEntry>(data)).Select(entry =>
 			{
 				entry.Catalog = catalog;
 
 				return entry;
-			});
+			}).AsPaginable();
+
+			result.Offset = offset;
+			result.Limit = limit;
+			result.TotalCount = count;
+
+			return result;
 		}
 
 		/// <summary>

@@ -3,10 +3,11 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
+
+	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Api.Configuration;
 
@@ -119,9 +120,9 @@
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
-		public async Task<IEnumerable<Storage>> GetStorages(int offset = 0, int limit = 20)
+		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
-			return await Task.FromException<IEnumerable<Storage>>(new NotSupportedException());
+			return await Task.FromException<IPaginable<Storage>>(new NotSupportedException());
 		}
 
 		/// <summary>
@@ -249,9 +250,9 @@
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		public async Task<IEnumerable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
+		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
-			return await Task.FromException<IEnumerable<Catalog>>(new NotSupportedException());
+			return await Task.FromException<IPaginable<Catalog>>(new NotSupportedException());
 		}
 
 		/// <summary>
@@ -360,9 +361,9 @@
 		/// <returns>
 		/// The list of instances of <see cref="CatalogEntry" /> type.
 		/// </returns>
-		public async Task<IEnumerable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
+		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
-			return await Task.FromException<IEnumerable<CatalogEntry>>(new NotSupportedException());
+			return await Task.FromException<IPaginable<CatalogEntry>>(new NotSupportedException());
 		}
 
 		/// <summary>

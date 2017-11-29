@@ -3,11 +3,11 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
+	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Extensions;
@@ -171,25 +171,25 @@
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="T:HomeCloud.DataStorage.Business.Entities.Catalog" />.
 		/// </returns>
-		public async Task<ServiceResult<IEnumerable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20)
+		public async Task<ServiceResult<IPaginable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20)
 		{
 			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(parentID);
 			if (!serviceResult.IsSuccess)
 			{
-				return new ServiceResult<IEnumerable<Catalog>>(Enumerable.Empty<Catalog>())
+				return new ServiceResult<IPaginable<Catalog>>(Enumerable.Empty<Catalog>().AsPaginable())
 				{
 					Errors = serviceResult.Errors
 				};
 			}
 
-			IEnumerable<Catalog> catalogs = null;
+			IPaginable<Catalog> catalogs = null;
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => catalogs = await provider.GetCatalogs(serviceResult.Data, offset, limit), null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommandFor<Catalog, IAggregationDataProvider>(catalogs, async (provider, item) => await provider.GetCatalog(item), null);
 
 			await this.processor.ProcessAsync();
 
-			return new ServiceResult<IEnumerable<Catalog>>(catalogs);
+			return new ServiceResult<IPaginable<Catalog>>(catalogs);
 		}
 
 		/// <summary>

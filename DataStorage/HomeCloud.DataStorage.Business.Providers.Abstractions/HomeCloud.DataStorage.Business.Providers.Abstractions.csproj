@@ -40,6 +40,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
+      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
+      <Name>HomeCloud.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
       <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>
       <Name>HomeCloud.DataStorage.Business.Entities</Name>

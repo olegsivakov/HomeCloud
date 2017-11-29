@@ -37,7 +37,6 @@
     <Compile Include="CatalogEntry.cs" />
     <Compile Include="CatalogEntryStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServicePagedResult{T}.cs" />
     <Compile Include="ServiceResult.cs" />
     <Compile Include="ServiceResult{T}.cs" />
     <Compile Include="Storage.cs" />

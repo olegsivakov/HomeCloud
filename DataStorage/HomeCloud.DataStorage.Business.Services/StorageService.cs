@@ -3,7 +3,6 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -136,20 +135,16 @@
 		/// <returns>
 		/// The list of instances of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" /> type.
 		/// </returns>
-		public async Task<ServicePagedResult<Storage>> GetStoragesAsync(int offset = 0, int limit = 20)
+		public async Task<ServiceResult<IPaginable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20)
 		{
-			IEnumerable<Storage> storages = null;
+			IPaginable<Storage> storages = null;
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => storages = await provider.GetStorages(offset, limit), null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommandFor<Storage, IAggregationDataProvider>(storages, async (provider, item) => await provider.GetStorage(item), null);
 
 			await this.processor.ProcessAsync();
 
-			return new ServicePagedResult<Storage>(storages)
-			{
-				Offset = 0,
-				TotalCount = 0
-			};
+			return new ServiceResult<IPaginable<Storage>>(storages);
 		}
 
 		/// <summary>

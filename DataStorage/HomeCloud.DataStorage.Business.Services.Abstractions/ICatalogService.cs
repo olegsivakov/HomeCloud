@@ -3,9 +3,9 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
 	#endregion
@@ -58,6 +58,6 @@
 		/// <returns>
 		/// The operation result containing the list of instances of <see cref="Catalog" />.
 		/// </returns>
-		Task<ServiceResult<IEnumerable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20);
+		Task<ServiceResult<IPaginable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20);
 	}
 }

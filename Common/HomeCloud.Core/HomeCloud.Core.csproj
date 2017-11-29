@@ -35,8 +35,11 @@
     </Compile>
     <Compile Include="ICommand.cs" />
     <Compile Include="ICommandHandler.cs" />
+    <Compile Include="IPaginable.cs" />
+    <Compile Include="IPaginable{T}.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="ITypeConverter.cs" />
+    <Compile Include="PagedList{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

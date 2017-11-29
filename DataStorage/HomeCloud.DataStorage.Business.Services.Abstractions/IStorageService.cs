@@ -3,9 +3,9 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
 	#endregion
@@ -39,7 +39,7 @@
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>The operation result containing the list of instances of <see cref="Storage"/>.</returns>
-		Task<ServicePagedResult<Storage>> GetStoragesAsync(int offset = 0, int limit = 20);
+		Task<ServiceResult<IPaginable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the storage by specified identifier.

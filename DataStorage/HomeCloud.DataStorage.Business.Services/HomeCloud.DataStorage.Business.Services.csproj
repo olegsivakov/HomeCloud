@@ -39,6 +39,10 @@
     <Compile Include="StorageService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj">
+      <Project>{D6491DC7-E589-43AF-9A68-EB52AEEBCE6E}</Project>
+      <Name>HomeCloud.Core.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
       <Project>{c1174732-d61a-4543-9477-52278023fd78}</Project>
       <Name>HomeCloud.Core</Name>
