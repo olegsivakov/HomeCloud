@@ -1,30 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
   </ItemGroup>
-
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Common\HomeCloud.Api\HomeCloud.Api.csproj" />
     <ProjectReference Include="..\..\Common\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj" />
-    <ProjectReference Include="..\HomeCloud.DataStorage.Api.Configuration\HomeCloud.DataStorage.Api.Configuration.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.DependencyInjection\HomeCloud.DataStorage.Api.DependencyInjection.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.Models\HomeCloud.DataStorage.Api.Models.csproj" />
   </ItemGroup>
-
 </Project>

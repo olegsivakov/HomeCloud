@@ -30,16 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\DataStorageAssemblyInfo.cs">
       <Link>Properties\DataStorageAssemblyInfo.cs</Link>
     </Compile>
@@ -50,10 +40,6 @@
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
       <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
       <Name>HomeCloud.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
-      <Project>{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}</Project>
-      <Name>HomeCloud.DataStorage.Business.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj">
       <Project>{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}</Project>
