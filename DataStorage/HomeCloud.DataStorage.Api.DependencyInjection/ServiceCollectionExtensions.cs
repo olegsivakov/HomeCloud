@@ -130,11 +130,8 @@
 			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>, DataViewModelConverter>();
 			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>, DataViewModelConverter>();
 
-			services.AddSingleton<ITypeConverter<CatalogEntry, PhysicalFileViewModel>, PhysicalFileViewModelConverter>();
-			services.AddSingleton<ITypeConverter<PhysicalFileViewModel, CatalogEntry>, PhysicalFileViewModelConverter>();
-
-			services.AddSingleton<ITypeConverter<CatalogEntryStream, FileStreamViewModel>, FileStreamViewModelConverter>();
-			services.AddSingleton<ITypeConverter<FileStreamViewModel, CatalogEntryStream>, FileStreamViewModelConverter>();
+			services.AddSingleton<ITypeConverter<CatalogEntry, FileViewModel>, FileViewModelConverter>();
+			services.AddSingleton<ITypeConverter<FileViewModel, CatalogEntry>, FileViewModelConverter>();
 
 			services.AddSingleton<IMapper, Mapper>();
 		}

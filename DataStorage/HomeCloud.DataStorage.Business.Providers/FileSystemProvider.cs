@@ -338,7 +338,7 @@
 					{
 						if (!File.Exists(stream.Entry.Path))
 						{
-							using (FileStream fileStream = File.Create(stream.Entry.Path))
+							using (FileStream fileStream = File.Create(stream.Entry.Path, 1024, FileOptions.WriteThrough))
 							{
 								stream.CopyTo(fileStream);
 							}
@@ -406,7 +406,7 @@
 				{
 					if (File.Exists(entry.Path))
 					{
-						using (FileStream stream = new FileStream(entry.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
+						using (FileStream stream = new FileStream(entry.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 						{
 							long count = length == 0 ? stream.Length : length;
 

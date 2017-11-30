@@ -67,9 +67,7 @@
 			services.AddMvc(options =>
 			{
 				options.OutputFormatters.RemoveType<JsonOutputFormatter>();
-				options.OutputFormatters.Insert(
-					0,
-					new HomeCloudJsonOutputFormatter(
+				options.OutputFormatters.Add(new HomeCloudJsonOutputFormatter(
 						JsonSerializerSettingsProvider.CreateSerializerSettings(),
 						ArrayPool<char>.Shared));
 

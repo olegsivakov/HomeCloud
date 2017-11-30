@@ -9,8 +9,10 @@
 	using HomeCloud.Api.Http;
 	using HomeCloud.Api.Mvc;
 
+	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
+	using HomeCloud.DataStorage.Api.Models;
 	using HomeCloud.DataStorage.Business.Entities;
 
 	using HomeCloud.Mapping;
@@ -71,6 +73,31 @@
 			{
 				Errors = result.Errors,
 				Data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null
+			};
+		}
+
+		/// <summary>
+		/// Processes the specified <see cref="ServiceResult{IPaginable{TData}}" /> data to <see cref="API" /> understandable <see cref="IActionResult" /> contract identified and supported by <see cref="HTTP GET" /> method.
+		/// </summary>
+		/// <typeparam name="TData">The type of the data which collection of <see cref="IPaginable{TData}" /> type is being processed.</typeparam>
+		/// <typeparam name="TModel">The type of the model to expose.</typeparam>
+		/// <param name="result">The instance containing the collection of data.</param>
+		/// <returns>
+		/// The instance of <see cref="IHttpMethodResult" />.
+		/// </returns>
+		[NonAction]
+		public async Task<IHttpMethodResult> HttpGetResult<TData, TModel>(ServiceResult<IPaginable<TData>> result)
+			where TModel : class, IViewModel, new()
+		{
+			IEnumerable<TModel> data = result.Data != null ? await this.Mapper.MapNewAsync<TData, TModel>(result.Data) : null;
+
+			return new HttpGetResult<IEnumerable<TModel>>(this)
+			{
+				Errors = result.Errors,
+				Data = new PagedListViewModel<TModel>(data)
+				{
+					TotalCount = result.Data.TotalCount
+				}
 			};
 		}
 

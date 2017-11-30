@@ -29,9 +29,9 @@
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PhysicalFileViewModelConverter"/> class.
+		/// Initializes a new instance of the <see cref="DataViewModelConverter" /> class.
 		/// </summary>
-		/// <param name="contentTypeProvider">The <see cref="IContentTypeProvider"/> provider.</param>
+		/// <param name="contentTypeProvider">The <see cref="IContentTypeProvider" /> provider.</param>
 		public DataViewModelConverter(IContentTypeProvider contentTypeProvider)
 		{
 			this.contentTypeProvider = contentTypeProvider;
@@ -79,7 +79,7 @@
 			target.Size = source.Size;
 			target.CreationDate = source.CreationDate;
 
-			target.Catalog = new Catalog();
+			target.Catalog = target.Catalog ?? new Catalog();
 
 			return target;
 		}

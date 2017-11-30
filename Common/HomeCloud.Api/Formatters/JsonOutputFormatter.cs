@@ -47,10 +47,14 @@
 		/// Writes the response body.
 		/// </summary>
 		/// <param name="context">The formatter context associated with the call.</param>
-		/// <returns>A task which can write the response body.</returns>
-		public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
+		/// <param name="selectedEncoding">Encoding.</param>
+		/// <returns>
+		/// A task which can write the response body.
+		/// </returns>
+		/// <inheritdoc />
+		public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
 		{
-			return base.WriteResponseBodyAsync(context, selectedEncoding);
+			await base.WriteResponseBodyAsync(context, selectedEncoding);
 		}
 
 		/// <summary>
@@ -59,12 +63,11 @@
 		/// <param name="context">The formatter context associated with the call.</param>
 		public override void WriteResponseHeaders(OutputFormatterWriteContext context)
 		{
-			HttpResponse response = context.HttpContext.Response;
-			response.Clear();
-
 			base.WriteResponseHeaders(context);
 
-			IEnumerable<PropertyInfo> properties = context.Object.GetType().GetProperties().Where(property => property.GetCustomAttribute(typeof(HttpHeaderAttribute), false) != null);
+			HttpResponse response = context.HttpContext.Response;
+
+			IEnumerable<PropertyInfo> properties = context.Object?.GetType().GetProperties().Where(property => property.GetCustomAttribute(typeof(HttpHeaderAttribute), false) != null) ?? Enumerable.Empty<PropertyInfo>();
 			foreach (PropertyInfo property in properties)
 			{
 				HttpHeaderAttribute headerAttribute = property.GetCustomAttribute(typeof(HttpHeaderAttribute), false) as HttpHeaderAttribute;

@@ -3,11 +3,9 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading.Tasks;
 
-	using HomeCloud.Api.Http;
+	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Api.Models;
@@ -34,11 +32,6 @@
 		/// </summary>
 		private readonly ICatalogService catalogService = null;
 
-		/// <summary>
-		/// The <see cref="ICatalogEntryService"/> service.
-		/// </summary>
-		private readonly ICatalogEntryService catalogEntryService = null;
-
 		#endregion
 
 		#region Constructors
@@ -47,24 +40,21 @@
 		/// Initializes a new instance of the <see cref="CatalogController" /> class.
 		/// </summary>
 		/// <param name="catalogService">The <see cref="ICatalogService" /> service.</param>
-		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService"/> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
 		public CatalogController(
 			ICatalogService catalogService,
-			ICatalogEntryService catalogEntryService,
 			IMapper mapper)
 			: base(mapper)
 		{
 			this.catalogService = catalogService;
-			this.catalogEntryService = catalogEntryService;
 		}
 
 		#endregion
 
 		/// <summary>
-		/// Gets the list of data models by their parent id.
+		/// Gets the list of catalog models by specified parent catalog identifier.
 		/// </summary>
-		/// <param name="parentID">The parent model identifier.</param>
+		/// <param name="parentID">The parent catalog identifier.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="limit">The limit.</param>
 		/// <returns>
@@ -78,14 +68,14 @@
 				limit,
 				async () =>
 				{
-					ServiceResult<IEnumerable<Catalog>> catalogResult = await this.catalogService.GetCatalogsAsync(parentID, offset, limit);
+					ServiceResult<IPaginable<Catalog>> catalogResult = await this.catalogService.GetCatalogsAsync(parentID, offset, limit);
 
-					return await this.HttpGetResult<Catalog, CatalogViewModel>(catalogResult) as HttpGetResult<IEnumerable<CatalogViewModel>>;
+					return await this.HttpGetResult<Catalog, CatalogViewModel>(catalogResult);
 				});
 		}
 
 		/// <summary>
-		/// Gets the data model specified identifier.
+		/// Gets the catalog model specified identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>
@@ -105,9 +95,9 @@
 		}
 
 		/// <summary>
-		/// Creates the specified data model.
+		/// Creates the specified catalog model.
 		/// </summary>
-		/// <param name="parentID">The parent model identifier.</param>
+		/// <param name="parentID">The parent catalog model identifier.</param>
 		/// <param name="model">The model of <see cref="CatalogViewModel" />.</param>
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
@@ -129,9 +119,9 @@
 		}
 
 		/// <summary>
-		/// Updates the existing storage model with the specified identifier.
+		/// Updates the existing catalog model by the specified identifier.
 		/// </summary>
-		/// <param name="parentID">The parent model identifier.</param>
+		/// <param name="parentID">The parent catalog model identifier.</param>
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="model">The model of <see cref="CatalogViewModel" />.</param>
 		/// <returns>
@@ -155,11 +145,11 @@
 		}
 
 		/// <summary>
-		/// Deletes the existing storage model ин specified identifier.
+		/// Deletes the existing catalog model by specified identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/>.</returns>
-		[HttpDelete("v1/[controller]/{id}")]
+		[HttpDelete("v1/[controller]s/{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			return await this.HttpDelete(

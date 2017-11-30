@@ -86,7 +86,7 @@
 			Func<IDataProvider, Task> createCatalogUndoFunction = async provider => catalog = await provider.DeleteCatalog(catalog);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createCatalogFunction, createCatalogUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => catalog.Parent = await provider.GetCatalog(catalog.Parent as Catalog), null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => catalog.Parent = await provider.GetCatalog(catalog.Parent), null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createCatalogFunction, createCatalogUndoFunction);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createCatalogFunction, createCatalogUndoFunction);
 

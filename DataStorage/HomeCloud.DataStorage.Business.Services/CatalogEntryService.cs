@@ -95,7 +95,7 @@
 			Func<IDataProvider, Task> createCatalogEntryUndoFunction = async provider => stream.Entry = await provider.DeleteCatalogEntry(stream.Entry);
 
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createCatalogEntryFunction, createCatalogEntryUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => stream.Entry.Catalog = await provider.GetCatalog(stream.Entry.Catalog as Catalog), null);
+			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => stream.Entry.Catalog = await provider.GetCatalog(stream.Entry.Catalog), null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createCatalogEntryFunction, createCatalogEntryUndoFunction);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createCatalogEntryFunction, createCatalogEntryUndoFunction);
 

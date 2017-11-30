@@ -5,6 +5,9 @@
 	using System;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
+	using HomeCloud.Core.Extensions;
+
 	using HomeCloud.DataStorage.Api.Filters;
 	using HomeCloud.DataStorage.Api.Models;
 
@@ -24,6 +27,15 @@
 	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.Controller" />
 	public class DataController : Controller
 	{
+		#region Constants
+
+		/// <summary>
+		/// The "<see cref="application/octet-stream"/>" content type
+		/// </summary>
+		private const string ApplicationOctetStreamContentType = "application/octet-stream";
+
+		#endregion
+
 		#region Private Members
 
 		/// <summary>
@@ -55,11 +67,11 @@
 		#endregion
 
 		/// <summary>
-		/// Gets the data model specified identifier.
+		/// Gets the data model by specified identifier depending on <see cref="Content-Type" /> of the request..
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>
-		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" />.
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" /> or <see cref="FileViewModel" /> stream.
 		/// </returns>
 		[HttpGet("v1/[controller]/{id}")]
 		public async Task<IActionResult> Get(Guid id)
@@ -70,9 +82,9 @@
 					{
 						ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
 
-						if (this.HttpContext.Request.ContentType == "application/octet-stream")
+						if (this.HttpContext.Request.ContentType == ApplicationOctetStreamContentType)
 						{
-							return await this.HttpGetStreamResult<CatalogEntry, PhysicalFileViewModel>(result);
+							return await this.HttpGetStreamResult<CatalogEntry, FileViewModel>(result);
 						}
 
 						return await this.HttpGetResult<CatalogEntry, DataViewModel>(result);
@@ -80,13 +92,37 @@
 		}
 
 		/// <summary>
+		/// Gets the list of data models by specified parent catalog identifier.
+		/// </summary>
+		/// <param name="catalogID">The parent catalog model identifier.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="limit">The limit.</param>
+		/// <returns>
+		/// The asynchronous result of <see cref="IActionResult" /> containing the list of instances of <see cref="DataViewModel" />.
+		/// </returns>
+		[HttpGet("v1/catalogs/{catalogID}/[controller]")]
+		public async Task<IActionResult> Get(Guid catalogID, int offset, int limit)
+		{
+			return await this.HttpGet(
+				offset,
+				limit,
+				async () =>
+				{
+					ServiceResult<IPaginable<CatalogEntry>> catalogResult = await this.catalogEntryService.GetEntriesAsync(catalogID, offset, limit);
+
+					return await this.HttpGetResult<CatalogEntry, DataViewModel>(catalogResult);
+				});
+		}
+
+		/// <summary>
 		/// Creates the specified data model.
 		/// </summary>
 		/// <param name="catalogID">The catalog model identifier.</param>
+		/// <param name="model">The stream model.</param>
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="FileStreamViewModel" />.
 		/// </returns>
-		[HttpPost("v1/[controller]/{catalogID}")]
+		[HttpPost("v1/catalogs/{catalogID}/[controller]")]
 		[DisableFormValueModelBinding]
 		public async Task<IActionResult> Post(Guid catalogID, [FromBody] FileStreamViewModel model)
 		{
@@ -94,23 +130,44 @@
 				model,
 				async () =>
 				{
-					CatalogEntryStream stream = new CatalogEntryStream(model.Stream);
-					stream = await this.Mapper.MapAsync(model, stream);
+					CatalogEntry entry = await this.Mapper.MapNewAsync<FileViewModel, CatalogEntry>(model);
+					entry.Catalog.ID = catalogID;
 
-					stream.Entry.Catalog.ID = catalogID;
+					CatalogEntryStream stream = new CatalogEntryStream(entry, model.Stream);
 
 					ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
 
 					return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
-
 				});
 		}
 
 		/// <summary>
-		/// Checks whether the resource specified by identifier exists.
+		/// Deletes the existing data model by specified identifier.
 		/// </summary>
-		/// <param name="id">The resource identifier.</param>
-		/// <returns><see cref="ControllerBase.Ok"/> if resource exists. Otherwise <see cref="ControllerBase.NotFound"/></returns>
+		/// <param name="id">The unique identifier.</param>
+		/// <returns>
+		/// The asynchronous result of <see cref="IActionResult" />.
+		/// </returns>
+		[HttpDelete("v1/[controller]/{id}")]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			return await this.HttpDelete(
+				id,
+				async () =>
+				{
+					ServiceResult result = await this.catalogEntryService.DeleteEntryAsync(id);
+
+					return await this.HttpDeleteResult(result);
+				});
+		}
+
+		/// <summary>
+		/// Checks whether the data resource specified by identifier exists.
+		/// </summary>
+		/// <param name="id">The data resource identifier.</param>
+		/// <returns>
+		///   <see cref="ControllerBase.Ok" /> if resource exists. Otherwise <see cref="ControllerBase.NotFound" />
+		/// </returns>
 		[HttpHead("v1/[controller]/{id}")]
 		public async Task<IActionResult> Exists(Guid id)
 		{
@@ -120,7 +177,7 @@
 				{
 					ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
 
-					return await this.HttpHeadResult<CatalogEntry, PhysicalFileViewModel>(result);
+					return await this.HttpHeadResult<CatalogEntry, FileViewModel>(result);
 				});
 		}
 	}

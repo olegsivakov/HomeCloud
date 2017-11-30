@@ -1,5 +1,11 @@
 ﻿namespace HomeCloud.Api.Providers
 {
+	#region Usings
+
+	using System.Diagnostics.CodeAnalysis;
+
+	#endregion
+
 	/// <summary>
 	/// Provides a mapping between file extensions and MIME types.
 	/// </summary>
@@ -21,6 +27,7 @@
 		/// </summary>
 		/// <param name="path">The file path.</param>
 		/// <returns>The MIME type.</returns>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.ReadabilityRules", "SA1126:PrefixCallsCorrectly", Justification = "C# 7.0 syntax not supported")]
 		public string GetContentType(string path)
 		{
 			if (this.TryGetContentType(path, out string contentType))

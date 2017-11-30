@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Diagnostics.CodeAnalysis;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
@@ -30,6 +31,16 @@
 		/// The <see cref="multipart/form-data"/> content type
 		/// </summary>
 		private const string MultipartContentType = "multipart/form-data";
+
+		/// <summary>
+		/// The <see cref="FileName"/> property name
+		/// </summary>
+		private const string FileNamePropertyName = "FileName";
+
+		/// <summary>
+		/// The <see cref="Stream"/> property name
+		/// </summary>
+		private const string StreamPropertyName = "Stream";
 
 		#endregion
 
@@ -73,6 +84,7 @@
 		/// <returns>
 		/// A <see cref="T:System.Threading.Tasks.Task" /> that on completion deserializes the request body.
 		/// </returns>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.ReadabilityRules", "SA1126:PrefixCallsCorrectly", Justification = "C# 7.0 syntax not supported")]
 		public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
 		{
 			if (context is null)
@@ -86,7 +98,7 @@
 
 				if (request.Body.CanSeek)
 				{
-					request.Body.Seek(0L, SeekOrigin.Begin);
+					request.Body.Seek(0, SeekOrigin.Begin);
 				}
 
 				object model = context.ModelType.GetConstructor(Type.EmptyTypes).Invoke(null);
@@ -95,18 +107,23 @@
 				MultipartReader reader = new MultipartReader(boundary, request.Body);
 
 				bool isSuccess = false;
+				bool isReadable = true;
 
-				MultipartSection section = null;
-				while ((section = await reader.ReadNextSectionAsync()) != null)
+				do
 				{
-					if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out ContentDispositionHeaderValue contentDisposition))
+					MultipartSection section = await reader.ReadNextSectionAsync();
+
+					isReadable = section != null;
+					if (isReadable && ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out ContentDispositionHeaderValue contentDisposition))
 					{
 						if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
 						{
-							SetProperty(model, "FileName", HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString());
-							SetProperty(model, "Stream", section.Body, false);
+							SetProperty(model, FileNamePropertyName, HeaderUtilities.RemoveQuotes(contentDisposition.FileName).ToString());
+							SetProperty(model, StreamPropertyName, section.Body, false);
 
 							isSuccess = true;
+
+							isReadable = false;
 						}
 						else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
 						{
@@ -119,7 +136,7 @@
 							{
 								value = await streamReader.ReadToEndAsync();
 
-								if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
+								if (string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
 								{
 									value = string.Empty;
 								}
@@ -131,6 +148,7 @@
 						}
 					}
 				}
+				while (isReadable);
 
 				if (!isSuccess && !context.TreatEmptyInputAsDefaultValue)
 				{
@@ -152,6 +170,7 @@
 		/// </summary>
 		/// <param name="section">The multipart section of <see cref="MultipartSection"/> type.</param>
 		/// <returns>The encoding presented by th einstance of <see cref="Encoding"/>.</returns>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.ReadabilityRules", "SA1126:PrefixCallsCorrectly", Justification = "C# 7.0 syntax not supported")]
 		private static Encoding GetEncoding(MultipartSection section)
 		{
 			if (!MediaTypeHeaderValue.TryParse(section.ContentType, out MediaTypeHeaderValue mediaType) || Encoding.UTF7.Equals(mediaType.Encoding))

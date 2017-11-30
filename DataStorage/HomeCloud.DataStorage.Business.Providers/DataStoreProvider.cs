@@ -205,7 +205,6 @@
 
 					return await this.mapper.MapAsync(catalogContract, storage);
 				}));
-
 			}
 
 			IPaginable<Storage> result = storages.AsPaginable();
@@ -319,7 +318,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent);
 
 			return catalog;
 		}
@@ -355,7 +354,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent);
 
 			return catalog;
 		}
@@ -394,13 +393,12 @@
 
 				await Task.WhenAll(
 					Task.Run(async () => data = await catalogRepository.FindAsync(contract, offset, limit)),
-					Task.Run(async () => count = await catalogRepository.GetCountAsync(contract))
-				);
+					Task.Run(async () => count = await catalogRepository.GetCountAsync(contract)));
 			}
 
 			IPaginable<Catalog> result = (await this.mapper.MapNewAsync<CatalogContract, Catalog>(data)).Select(catalog =>
 			{
-				catalog.Parent = parent;
+				catalog.Parent = (Catalog)parent;
 
 				return catalog;
 			}).AsPaginable();
@@ -434,7 +432,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogContract, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent as Catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent);
 
 			return catalog;
 		}
@@ -516,7 +514,7 @@
 			}
 
 			entry = await this.mapper.MapAsync(fileContract, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog as Catalog);
+			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog);
 
 			return entry;
 		}
@@ -555,13 +553,12 @@
 
 				await Task.WhenAll(
 					Task.Run(async () => data = await fileRepository.FindAsync(contract, offset, limit)),
-					Task.Run(async () => count = await fileRepository.GetCountAsync(contract))
-				);
+					Task.Run(async () => count = await fileRepository.GetCountAsync(contract)));
 			}
 
 			IPaginable<CatalogEntry> result = (await this.mapper.MapNewAsync<FileContract, CatalogEntry>(data)).Select(entry =>
 			{
-				entry.Catalog = catalog;
+				entry.Catalog = (Catalog)catalog;
 
 				return entry;
 			}).AsPaginable();
@@ -593,7 +590,7 @@
 			}
 
 			entry = await this.mapper.MapAsync(fileContract, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog as Catalog);
+			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog);
 
 			return entry;
 		}

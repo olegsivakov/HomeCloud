@@ -21,7 +21,31 @@
 		/// <value>
 		/// The parent catalog.
 		/// </value>
-		public CatalogRoot Parent { get; set; }
+		public Catalog Parent { get; set; }
+
+		#endregion
+
+		#region Public Overloads
+
+		/// <summary>
+		/// Performs an explicit conversion from <see cref="Storage"/> to <see cref="Catalog"/>.
+		/// </summary>
+		/// <param name="storage">The storage.</param>
+		/// <returns>
+		/// The result of the conversion.
+		/// </returns>
+		public static explicit operator Catalog(Storage storage)
+		{
+			return new Catalog()
+			{
+				ID = storage.ID,
+				Name = storage.Name,
+				CreationDate = storage.CreationDate,
+				UpdatedDate = storage.UpdatedDate,
+				Path = storage.Path,
+				Size = storage.Size
+			};
+		}
 
 		#endregion
 
@@ -36,7 +60,7 @@
 		public override object Clone()
 		{
 			Catalog catalog = this.MemberwiseClone() as Catalog;
-			catalog.Parent = this.Parent?.Clone() as CatalogRoot;
+			catalog.Parent = this.Parent?.Clone() as Catalog;
 
 			return catalog;
 		}

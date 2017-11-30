@@ -3,9 +3,9 @@
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Api.Models;
@@ -63,7 +63,7 @@
 				limit,
 				async () =>
 				{
-					ServiceResult<IEnumerable<Storage>> result = await this.storageService.GetStoragesAsync(offset, limit);
+					ServiceResult<IPaginable<Storage>> result = await this.storageService.GetStoragesAsync(offset, limit);
 
 					return await this.HttpGetResult<Storage, StorageViewModel>(result);
 				});

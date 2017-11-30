@@ -42,7 +42,7 @@
 		/// </returns>
 		public override IActionResult ToActionResult()
 		{
-			string name = !string.IsNullOrWhiteSpace(this.Data.Name) ? this.Data.Name : (!string.IsNullOrWhiteSpace(this.Data.Path) ? Path.GetFileName(this.Data.Path) : string.Empty);
+			string name = !string.IsNullOrWhiteSpace(this.Data.FileName) ? this.Data.FileName : (!string.IsNullOrWhiteSpace(this.Data.Path) ? Path.GetFileName(this.Data.Path) : string.Empty);
 
 			return this.HandleError() ?? ((this.Data == null) ? (IActionResult)this.Controller.NotFound() : this.Controller.PhysicalFile(this.Data.Path, this.Data.MimeType, name));
 		}

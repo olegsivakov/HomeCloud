@@ -225,7 +225,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent as Catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent);
 
 			return catalog;
 		}
@@ -259,7 +259,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent as Catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent);
 
 			return catalog;
 		}
@@ -300,7 +300,7 @@
 			}
 
 			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent as Catalog);
+			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent);
 
 			return catalog;
 		}
@@ -368,7 +368,7 @@
 			}
 
 			entry = await this.mapper.MapAsync(fileDocument, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog as Catalog);
+			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog);
 
 			return entry;
 		}
@@ -410,7 +410,7 @@
 			}
 
 			entry = await this.mapper.MapAsync(fileDocument, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog as Catalog);
+			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog);
 
 			return entry;
 		}

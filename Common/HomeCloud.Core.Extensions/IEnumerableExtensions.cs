@@ -17,7 +17,7 @@
 		/// </summary>
 		/// <typeparam name="T">The type of items in the <see cref="IEnumerable{out T}" /> collection.</typeparam>
 		/// <param name="items">The items to convert.</param>
-		/// <returns></returns>
+		/// <returns>The instance of <see cref="IPaginable{T}"/>.</returns>
 		public static IPaginable<T> AsPaginable<T>(this IEnumerable<T> items)
 		{
 			int count = items.Count();

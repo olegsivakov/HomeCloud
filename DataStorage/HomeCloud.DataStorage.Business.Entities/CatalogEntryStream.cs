@@ -28,17 +28,6 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CatalogEntryStream"/> class.
 		/// </summary>
-		/// <param name="stream">The stream the current instance is being built from.</param>
-		public CatalogEntryStream(Stream stream)
-			: base()
-		{
-			this.Entry = new CatalogEntry();
-			this.stream = stream;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CatalogEntryStream"/> class.
-		/// </summary>
 		/// <param name="entry">The catalog entry.</param>
 		/// <param name="stream">The stream the current instance is being built from.</param>
 		public CatalogEntryStream(CatalogEntry entry, Stream stream)

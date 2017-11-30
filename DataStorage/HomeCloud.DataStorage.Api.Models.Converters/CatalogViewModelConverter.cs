@@ -12,7 +12,7 @@
 	/// </summary>
 	public class CatalogViewModelConverter : ITypeConverter<Catalog, CatalogViewModel>, ITypeConverter<CatalogViewModel, Catalog>
 	{
-		#region  ITypeConverter<Storage, CatalogViewModel> Implementations
+		#region  ITypeConverter<Catalog, CatalogViewModel> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -34,7 +34,7 @@
 
 		#endregion
 
-		#region ITypeConverter<CatalogViewModel, Storage> Implementations
+		#region ITypeConverter<CatalogViewModel, Catalog> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -49,6 +49,8 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.CreationDate = source.CreationDate;
+			target.Parent = target.Parent ?? new Catalog();
+
 			target.Size = source.Size;
 
 			return target;

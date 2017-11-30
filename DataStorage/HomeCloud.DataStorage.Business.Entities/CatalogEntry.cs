@@ -33,7 +33,7 @@
 		/// <value>
 		/// The catalog.
 		/// </value>
-		public CatalogRoot Catalog { get; set; }
+		public Catalog Catalog { get; set; }
 
 		/// <summary>
 		/// Gets or sets the file path.
