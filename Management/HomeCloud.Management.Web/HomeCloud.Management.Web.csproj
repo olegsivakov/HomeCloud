@@ -21,16 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\app\components\storage\storage.component.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="ClientApp\app\components\catalog\" />
     <Folder Include="ClientApp\app\assets\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\app\components\storage\storage.component.ts" />
+    <Folder Include="ClientApp\app\components\data-list\" />
+    <Folder Include="ClientApp\app\components\file\" />
+    <Folder Include="ClientApp\app\components\storage-list\" />
+    <Folder Include="ClientApp\app\components\storage\" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
