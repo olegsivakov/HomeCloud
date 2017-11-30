@@ -17,16 +17,30 @@
 
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="ClientApp\app\components\data-list\**" />
     <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\app\components\data-list\**" />
+    <None Remove="ClientApp\app\components\data-list\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\app\components\catalog\" />
+    <None Remove="ClientApp\app\components\catalog\catalog.component.ts" />
+    <None Remove="ClientApp\app\components\data.component.ts" />
+    <None Remove="ClientApp\app\components\file\file.component.ts" />
+    <None Remove="ClientApp\app\components\storage-list\storage-list.component.ts" />
+    <None Remove="ClientApp\app\components\storage\storage.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\app\assets\" />
-    <Folder Include="ClientApp\app\components\data-list\" />
-    <Folder Include="ClientApp\app\components\file\" />
-    <Folder Include="ClientApp\app\components\storage-list\" />
-    <Folder Include="ClientApp\app\components\storage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\catalog\catalog.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\data\data.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\file\file.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\storage-list\storage-list.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\storage\storage.component.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
