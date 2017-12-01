@@ -18,15 +18,23 @@
 					<div class='clearfix'></div>
 					<div class='navbar-collapse collapse'>
 						<div class='nav navbar-nav'>
-							<a [routerLinkActive]="['link-active']" [routerLink]="['/home']">
-								<span class='glyphicon glyphicon-home'></span> Create Storage
-							</a>
-							<a [routerLinkActive]="['link-active']" [routerLink]="['/counter']">
-								<span class='glyphicon glyphicon-education'></span> Create Catalog
-							</a>
-							<a [routerLinkActive]="['link-active']" [routerLink]="['/fetch-data']">
-								<span class='glyphicon glyphicon-th-list'></span> Upload
-							</a>
+							<ul>
+								<li>
+									<a [routerLinkActive]="['link-active']" [routerLink]="['/home']">
+										<span class='glyphicon glyphicon-home'></span> Create Storage
+									</a>
+								</li>
+								<li>
+									<a [routerLinkActive]="['link-active']" [routerLink]="['/counter']">
+										<span class='glyphicon glyphicon-education'></span> Create Catalog
+									</a>
+								</li>
+								<li>
+									<a [routerLinkActive]="['link-active']" [routerLink]="['/fetch-data']">
+										<span class='glyphicon glyphicon-th-list'></span> Upload
+									</a>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>

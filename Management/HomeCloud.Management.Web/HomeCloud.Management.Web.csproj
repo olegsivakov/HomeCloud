@@ -27,6 +27,9 @@
     <None Remove="ClientApp\app\components\catalog\catalog.component.ts" />
     <None Remove="ClientApp\app\components\data.component.ts" />
     <None Remove="ClientApp\app\components\file\file.component.ts" />
+    <None Remove="ClientApp\app\components\shared\catalog.service.ts" />
+    <None Remove="ClientApp\app\components\shared\file.service.ts" />
+    <None Remove="ClientApp\app\components\shared\storage.service.ts" />
     <None Remove="ClientApp\app\components\storage-list\storage-list.component.ts" />
     <None Remove="ClientApp\app\components\storage\storage.component.ts" />
   </ItemGroup>
@@ -39,6 +42,9 @@
     <TypeScriptCompile Include="ClientApp\app\components\catalog\catalog.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\data\data.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\file\file.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\shared\catalog.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\shared\file.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\shared\storage.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\storage-list\storage-list.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\storage\storage.component.ts" />
   </ItemGroup>
