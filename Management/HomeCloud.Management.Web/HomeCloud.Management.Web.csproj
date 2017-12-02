@@ -29,6 +29,10 @@
     <None Remove="ClientApp\app\components\file\file.component.ts" />
     <None Remove="ClientApp\app\components\shared\catalog.service.ts" />
     <None Remove="ClientApp\app\components\shared\file.service.ts" />
+    <None Remove="ClientApp\app\models\Catalog.ts" />
+    <None Remove="ClientApp\app\models\file.ts" />
+    <None Remove="ClientApp\app\models\storage.ts" />
+    <None Remove="ClientApp\app\services\httpBase.service.ts" />
     <None Remove="ClientApp\app\components\shared\storage.service.ts" />
     <None Remove="ClientApp\app\components\storage-list\storage-list.component.ts" />
     <None Remove="ClientApp\app\components\storage\storage.component.ts" />
@@ -36,15 +40,20 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\app\assets\" />
+    <Folder Include="ClientApp\app\components\shared\" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\catalog\catalog.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\data\data.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\file\file.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\shared\catalog.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\shared\file.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\shared\storage.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\catalog.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\file.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\storage.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\catalog.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\file.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\httpBase.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\storage.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\storage-list\storage-list.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\storage\storage.component.ts" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-2 table-bordered">
-			Title
+			Home Cloud
 		</div>
 		<div class="col-sm-7 table-bordered">
 			<div class='main-nav'>
@@ -18,23 +18,7 @@
 					<div class='clearfix'></div>
 					<div class='navbar-collapse collapse'>
 						<div class='nav navbar-nav'>
-							<ul>
-								<li>
-									<a [routerLinkActive]="['link-active']" [routerLink]="['/home']">
-										<span class='glyphicon glyphicon-home'></span> Create Storage
-									</a>
-								</li>
-								<li>
-									<a [routerLinkActive]="['link-active']" [routerLink]="['/counter']">
-										<span class='glyphicon glyphicon-education'></span> Create Catalog
-									</a>
-								</li>
-								<li>
-									<a [routerLinkActive]="['link-active']" [routerLink]="['/fetch-data']">
-										<span class='glyphicon glyphicon-th-list'></span> Upload
-									</a>
-								</li>
-							</ul>
+							<storage-list></storage-list>
 						</div>
 					</div>
 				</div>
@@ -46,11 +30,7 @@
 	</div>
 	<div class="row body-content">
 		<div class="col-sm-2 table-bordered">
-			<ul>
-				<li><a>Storage name</a></li>
-				<li><a>Storage name</a></li>
-				<li><a>Storage name</a></li>
-			</ul>
+			<storage-list></storage-list>
 		</div>
 		<div class="col-sm-8 table-bordered">
 			<div class="content-fluid">
