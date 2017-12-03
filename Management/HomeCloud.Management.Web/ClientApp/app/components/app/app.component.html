@@ -1,115 +1,92 @@
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-2 table-bordered">
-			Home Cloud
-		</div>
-		<div class="col-sm-7 table-bordered">
-			<div class='main-nav'>
-				<div class='navbar navbar-inverse'>
-					<div class='navbar-header'>
-						<span class="visible-sm visible-xs text" style="color: white">Aleh Sivakou</span>
-						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
-							<span class='sr-only'>Toggle navigation</span>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-							<span class='icon-bar'></span>
-						</button>
-					</div>
-					<div class='clearfix'></div>
-					<div class='navbar-collapse collapse'>
-						<div class='nav navbar-nav'>
-							<storage-list></storage-list>
-						</div>
-					</div>
-				</div>
+<div class="body skin-blue">
+	<header class="main-header">
+		<!-- Logo -->
+		<a href="index2.html" class="logo"><b>Admin</b>LTE</a>
+		<!-- Header Navbar: style can be found in header.less -->
+		<nav class="navbar navbar-static-top" role="navigation">
+			<!-- Sidebar toggle button-->
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+				<span class="sr-only">Toggle navigation</span>
+			</a>
+			<div class="navbar-custom-menu">
+				<ul class="nav navbar-nav">
+					<!-- User Account: style can be found in dropdown.less -->
+					<li class="dropdown user user-menu">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<img src="#" class="user-image" alt="User Image" />
+							<span class="hidden-xs">Aleh Sivakou</span>
+						</a>
+						<ul class="dropdown-menu">
+							<!-- User image -->
+							<li class="user-header">
+								<img src="#" class="img-circle" alt="User Image" />
+								<p>
+									Aleh Sivakou
+									<small>Member since Nov. 2012</small>
+								</p>
+							</li>
+							<!-- Menu Footer-->
+							<li class="user-footer">
+								<div class="pull-left">
+									<a href="#" class="btn btn-default btn-flat">Profile</a>
+								</div>
+								<div class="pull-right">
+									<a href="#" class="btn btn-default btn-flat">Sign out</a>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
-		</div>
-		<div class="col-sm-3 text-right table-bordered hidden-sm  hidden-xs">
-			Aleh Sivakou
-		</div>
+		</nav>
+	</header>
+
+	<aside class="main-sidebar">
+		<section class="sidebar">
+			<form action="#" method="get" class="sidebar-form">
+				<div class="input-group">
+					<input type="text" name="q" class="form-control" placeholder="Search..." />
+					<span class="input-group-btn">
+						<button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+					</span>
+				</div>
+			</form>
+			<ul class="sidebar-menu">
+				<li class="header"></li>
+				<li class="active treeview">
+					<a href="#">
+						<i class="fa fa-dashboard"></i> <span>Menu</span> <i class="fa fa-angle-left pull-right"></i>
+					</a>
+					<ul class="treeview-menu">
+						<li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Menu Item</a></li>
+						<li><a href="index2.html"><i class="fa fa-circle-o"></i> <span>Menu Item</span> <small class="label pull-right bg-green">new</small></a></li>
+					</ul>
+				</li>
+			</ul>
+		</section>
+	</aside>
+
+	<div class="content-wrapper">
+		<section class="content-header">
+			<h1>
+				Storage Name
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li class="active">Dashboard</li>
+			</ol>
+			<h1>
+				<small>Catalog Name > Catalog Name</small>
+			</h1>
+		</section>
+		<section class="content">
+		</section>
 	</div>
-	<div class="row body-content">
-		<div class="col-sm-2 table-bordered">
-			<storage-list></storage-list>
+
+	<footer class="main-footer">
+		<div class="pull-right hidden-xs">
+			<b>Version</b> 1.0
 		</div>
-		<div class="col-sm-8 table-bordered">
-			<div class="content-fluid">
-				<div class="row hidden-sm  hidden-xs">
-					<div class="col-sm-9">Storage name > ... > Catalog name > Catalog name</div>
-					<div class="col-sm-3 text-right">
-						415Mb of 1.2Gb used
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12"><hr /></div>
-				</div>
-				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-3">Name</div>
-					<div class="col-sm-3">Created</div>
-					<div class="col-sm-3">Size</div>
-					<div class="col-sm-1"></div>
-				</div>
-				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-3">Catalog name</div>
-					<div class="col-sm-3">15.10.2017</div>
-					<div class="col-sm-3">187.6Mb</div>
-					<div class="col-sm-1"></div>
-				</div>
-				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-3">Catalog name</div>
-					<div class="col-sm-3">15.10.2017</div>
-					<div class="col-sm-3">187.6Mb</div>
-					<div class="col-sm-1"></div>
-				</div>
-				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-3">Catalog name</div>
-					<div class="col-sm-3">15.10.2017</div>
-					<div class="col-sm-3">187.6Mb</div>
-					<div class="col-sm-1"></div>
-				</div>
-				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-3">File name</div>
-					<div class="col-sm-3">15.10.2017</div>
-					<div class="col-sm-3">254Kb</div>
-					<div class="col-sm-1"></div>
-				</div>
-				<div class="row">
-					<div class="col-sm-2"></div>
-					<div class="col-sm-4 pager">1 of 15</div>
-					<div class="col-sm-5 pagination text-right">1 | 2 | 3 | ... | 15</div>
-					<div class="col-sm-1"></div>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-2 table-bordered">
-			<div class="content-fluid">
-				<div class="row">
-					<div class="col-sm-12">Catalog Name</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12">&nbsp;</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-5">Type:</div>
-					<div class="col-sm-7">Catalog</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-5">Created:</div>
-					<div class="col-sm-7">14.10.2017</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-5">Size:</div>
-					<div class="col-sm-7">178Mb</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-12"></div>
-	</div>
+		<strong>Copyright &copy; 2017 <a href="#">Aleh Sivakou</a>.</strong> All rights reserved.
+	</footer>
 </div>

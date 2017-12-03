@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "ClientApp/app/components/app/app.component.css",
+    "inputFile": "ClientApp/app/components/app/app.component.less"
+  },
+  {
+    "outputFile": "ClientApp/app/components/app/app.component.css",
+    "inputFile": "ClientApp/app/components/app/app.component.scss"
+  },
+  {
+    "outputFile": "ClientApp/app/assets/themes/blue.css",
+    "inputFile": "ClientApp/app/assets/themes/blue.scss"
+  }
+]
