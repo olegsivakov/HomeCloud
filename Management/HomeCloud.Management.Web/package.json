@@ -23,7 +23,7 @@
     "aspnet-prerendering": "^3.0.1",
     "aspnet-webpack": "^2.0.1",
     "awesome-typescript-loader": "3.2.1",
-    "bootstrap": "3.3.7",
+    "bootstrap-grid": "2.0.1",
     "css": "2.2.1",
     "css-loader": "0.28.4",
     "es6-shim": "0.35.3",
@@ -46,7 +46,11 @@
     "webpack": "2.5.1",
     "webpack-hot-middleware": "2.18.2",
     "webpack-merge": "4.1.0",
-    "zone.js": "0.8.12"
+			"zone.js": "0.8.12",
+			"ng-sidebar": "6.0.4",
+			"font-awesome": "4.7.0",
+			"ionicons": "3.0.0",
+			"source-sans-pro": "2.0.10"
   },
   "devDependencies": {
     "@types/chai": "4.0.1",
@@ -58,7 +62,6 @@
     "karma-chrome-launcher": "2.2.0",
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.1.0",
-			"karma-webpack": "2.0.3",
-			"material-ui": "0.19.4"
+			"karma-webpack": "2.0.3"
   }
 }

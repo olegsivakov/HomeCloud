@@ -5,30 +5,29 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
-import { NavMenuComponent } from './components/navmenu/navmenu.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { UserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { StorageListComponent } from './components/storage-list/storage-list.component';
+
+import { SidebarModule } from 'ng-sidebar';
 
 @NgModule({
     declarations: [
-        AppComponent,
+		AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
+		UserProfileBarComponent,
 		HomeComponent,
 		StorageListComponent
     ],
     imports: [
         CommonModule,
         HttpModule,
-        FormsModule,
+		FormsModule,
+		SidebarModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

@@ -10,5 +10,13 @@
   {
     "outputFile": "ClientApp/app/assets/themes/blue.css",
     "inputFile": "ClientApp/app/assets/themes/blue.scss"
+  },
+  {
+    "outputFile": "ClientApp/app/components/user-profile-bar/user-profile-bar.component.css",
+    "inputFile": "ClientApp/app/components/user-profile-bar/user-profile-bar.component.scss"
+  },
+  {
+    "outputFile": "ClientApp/app/components/nav-menu/nav-menu.component.css",
+    "inputFile": "ClientApp/app/components/nav-menu/nav-menu.component.scss"
   }
 ]

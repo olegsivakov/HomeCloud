@@ -1,0 +1,18 @@
+﻿@mixin font($size) {
+	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+	font-size: $size;
+}
+
+.logo {
+	background-color: rgba(0,0,0,0.2);
+
+	align-content: center;
+	text-align: center;
+	a {
+		@include font(1.8em);
+
+		color: #fff;
+		line-height: 50px;
+	}
+}
+
