@@ -1,31 +1,19 @@
 ﻿body {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
   font-size: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
-  overflow-x: hidden;
-  overflow-y: auto;
-  min-height: 100%; }
+  font-weight: 400; }
 
 .body {
-  font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-  font-size: 100%;
-  min-height: 100%;
-  position: static;
-  overflow: hidden; }
-  .body :before {
-    display: table; }
-  .body :after {
-    display: table;
-    clear: both; }
+  box-sizing: border-box; }
+  .body .row {
+    margin-right: 0px; }
 
 .header {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
   font-size: 0.875em;
   position: relative;
   max-height: 50px;
-  z-index: 1030;
+  z-index: 1000;
   background-color: #367fa9; }
 
 .content-header {
@@ -34,13 +22,7 @@
 
 .content {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-  font-size: 0.875em;
-  z-index: 820;
-  min-height: 250px;
-  padding: 15px;
-  margin-right: auto;
-  margin-left: auto;
-  box-sizing: border-box; }
+  font-size: 0.875em; }
 
 .footer {
   display: none;

@@ -41,6 +41,7 @@
     <Folder Include="ClientApp\app\assets\images\" />
     <Folder Include="ClientApp\app\assets\fonts\" />
     <Folder Include="ClientApp\app\components\shared\" />
+    <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,6 +86,10 @@
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>
     </ItemGroup>
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
   </Target>
 
 </Project>
