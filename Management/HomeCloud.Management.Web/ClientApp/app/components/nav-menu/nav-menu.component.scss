@@ -40,13 +40,13 @@
 
 	.treeview-container {
 		@extend .skin-blue;
-		@include font(14px);
+		@include font(0.875em);
 		padding: 5px 0px;
 		margin: 0;
 
 		li.treeview-header {
 			@extend .skin-blue;
-			@include font(14px);
+			@include font(0.875em);
 			padding: 10px 25px 10px 15px;
 			font-size: 12px;
 		}
@@ -60,7 +60,7 @@
 .treeview-container > li > a {
 
 	@extend .skin-blue;
-	@include font(14px);
+	@include font(0.875em);
 	border-left: 3px solid transparent;
 	margin-right: 1px;
 	padding: 12px 5px 12px 15px;

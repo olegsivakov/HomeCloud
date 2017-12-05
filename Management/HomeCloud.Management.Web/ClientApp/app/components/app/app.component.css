@@ -14,6 +14,12 @@
   position: relative;
   max-height: 50px;
   z-index: 1000; }
+  .header .user-profile-bar {
+    position: absolute;
+    right: 0px; }
+
+.content-background, .content-header, .content {
+  background-color: #ecf0f5 !important; }
 
 .content-header {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;

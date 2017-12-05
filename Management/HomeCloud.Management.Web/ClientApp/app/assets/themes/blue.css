@@ -1,9 +1,6 @@
 ﻿.skin-blue .header {
   background-color: #3c8dbc; }
 
-.skin-blue .header .nav > li > a {
-  color: #fff; }
-
 .skin-blue .header .nav > li > a:hover, .skin-blue .header .nav > li > a:active, .skin-blue .header .nav > li > a:focus, .skin-blue .header .nav .open > a, .skin-blue .header .nav .open > a:hover, .skin-blue .header .nav .open > a:focus {
   background-color: rgba(0, 0, 0, 0.1);
   color: #f6f6f6; }

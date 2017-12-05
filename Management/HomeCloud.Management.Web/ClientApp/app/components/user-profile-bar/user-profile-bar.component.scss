@@ -1,1 +1,86 @@
-﻿
+﻿@mixin font($size) {
+	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+	font-size: $size;
+}
+
+.user-profile-container {
+	max-width: 17vw;
+	width: 13vw;
+
+	height: 100vh;
+	color: #fff;
+	position: absolute;
+	right: 20px;
+	top: 0;
+
+	@include font(0.875em);
+
+	.user-info {
+		line-height: 50px;
+
+		span {
+			margin: 0px 15px;
+		}
+
+		a, a:active, a:hover {
+			color: #fff;
+			text-decoration: none;
+			font-size: 14px;
+			padding: 0px 5px;
+		}
+
+		.user-photo {
+			max-width: 35px;
+			max-height: 35px;
+			margin: 5px 0px;
+		}
+	}
+
+	.user-info:hover {
+		background-color: rgba(0,0,0,0.2);
+	}
+
+	.user-profile {
+		margin-top: 50px;
+		border-top-width: 0;
+		z-index: 1000;
+		border: 1px solid #FFF;
+		color: #FFF;
+
+		.user-photo {
+			max-width: 90px;
+			max-height: 90px;
+			border: 3px solid rgba(255,255,255,0.2);
+		}
+
+		.user-header {
+			background-color: #3c8dbc;
+
+			.user-photo {
+				margin: 5px 25%;
+			}
+
+			.user-name {
+				@include font(2em);
+			}
+		}
+
+		.user-body {
+			background-color: #fff;
+		}
+
+		.user-footer {
+			background-color: #f9f9f9;
+		}
+
+		.user-header, .user-body, .user-footer {
+			padding: 10px 10px;
+		}
+
+		.btn-default {
+			color: #FFF;
+			border-color: #ccc;
+			background-color: #3c8dbc;
+		}
+	}
+}

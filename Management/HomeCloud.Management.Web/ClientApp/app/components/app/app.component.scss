@@ -17,20 +17,32 @@ body {
 }
 
 .header {
-	@include font(0.875em);
 
+	@include font(0.875em);
 	position: relative;
 	max-height: 50px;
 	z-index: 1000;
+
+	.user-profile-bar {
+		position: absolute;
+		right: 0px;
+	}
+}
+
+.content-background {
+	background-color: #ecf0f5 !important;
 }
 
 .content-header {
+	@extend .content-background;
 	@include font(0.875em);
 }
 
 .content {
+	@extend .content-background;
 	@include font(0.875em);
 }
+
 
 .footer {
 	display: none;

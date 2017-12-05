@@ -1,9 +1,6 @@
 ﻿.skin-blue .header, .logo .header, .logo a:hover .header, .logo a:active .header, .logo a:focus .header, .nav-menu-container .header, .nav-menu-container .treeview-container li.treeview-header .header, .treeview-container > li > a .header, .treeview-menu .header {
   background-color: #3c8dbc; }
 
-.skin-blue .header .nav > li > a, .logo .header .nav > li > a, .nav-menu-container .header .nav > li > a, .treeview-container > li > a .header .nav > li > a, .treeview-menu .header .nav > li > a {
-  color: #fff; }
-
 .skin-blue .header .nav > li > a:hover, .logo .header .nav > li > a:hover, .nav-menu-container .header .nav > li > a:hover, .treeview-container > li > a .header .nav > li > a:hover, .treeview-menu .header .nav > li > a:hover, .skin-blue .header .nav > li > a:active, .logo .header .nav > li > a:active, .nav-menu-container .header .nav > li > a:active, .treeview-container > li > a .header .nav > li > a:active, .treeview-menu .header .nav > li > a:active, .skin-blue .header .nav > li > a:focus, .logo .header .nav > li > a:focus, .nav-menu-container .header .nav > li > a:focus, .treeview-container > li > a .header .nav > li > a:focus, .treeview-menu .header .nav > li > a:focus, .skin-blue .header .nav .open > a, .logo .header .nav .open > a, .nav-menu-container .header .nav .open > a, .treeview-container > li > a .header .nav .open > a, .treeview-menu .header .nav .open > a, .skin-blue .header .nav .open > a:hover, .logo .header .nav .open > a:hover, .nav-menu-container .header .nav .open > a:hover, .treeview-container > li > a .header .nav .open > a:hover, .treeview-menu .header .nav .open > a:hover, .skin-blue .header .nav .open > a:focus, .logo .header .nav .open > a:focus, .nav-menu-container .header .nav .open > a:focus, .treeview-container > li > a .header .nav .open > a:focus, .treeview-menu .header .nav .open > a:focus {
   background-color: rgba(0, 0, 0, 0.1);
   color: #f6f6f6; }
@@ -159,18 +156,18 @@
     z-index: 1000; }
   .nav-menu-container .treeview-container {
     font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-    font-size: 14px;
+    font-size: 0.875em;
     padding: 5px 0px;
     margin: 0; }
     .nav-menu-container .treeview-container li.treeview-header {
       font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-      font-size: 14px;
+      font-size: 0.875em;
       padding: 10px 25px 10px 15px;
       font-size: 12px; }
 
 .treeview-container > li > a {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-  font-size: 14px;
+  font-size: 0.875em;
   border-left: 3px solid transparent;
   margin-right: 1px;
   padding: 12px 5px 12px 15px;
