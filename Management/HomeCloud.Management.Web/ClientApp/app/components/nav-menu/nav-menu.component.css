@@ -156,7 +156,7 @@
     z-index: 1000; }
   .nav-menu-container .treeview-container {
     font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-    font-size: 0.875em;
+    font-size: 1.1em;
     padding: 5px 0px;
     margin: 0; }
     .nav-menu-container .treeview-container li.treeview-header {
@@ -164,6 +164,10 @@
       font-size: 0.875em;
       padding: 10px 25px 10px 15px;
       font-size: 12px; }
+    @media only screen and (max-width: 320px) {
+      .nav-menu-container .treeview-container {
+        font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+        font-size: 0.875em; } }
 
 .treeview-container > li > a {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;

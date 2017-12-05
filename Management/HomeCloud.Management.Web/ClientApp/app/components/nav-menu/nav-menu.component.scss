@@ -40,7 +40,7 @@
 
 	.treeview-container {
 		@extend .skin-blue;
-		@include font(0.875em);
+		@include font(1.1em);
 		padding: 5px 0px;
 		margin: 0;
 
@@ -49,6 +49,10 @@
 			@include font(0.875em);
 			padding: 10px 25px 10px 15px;
 			font-size: 12px;
+		}
+
+		@media only screen and (max-width: 320px) {
+			@include font(0.875em);
 		}
 	}
 
