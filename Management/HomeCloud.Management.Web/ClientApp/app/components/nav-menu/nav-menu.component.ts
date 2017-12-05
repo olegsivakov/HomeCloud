@@ -3,7 +3,7 @@
 @Component({
 	selector: 'nav-menu',
 	templateUrl: './nav-menu.component.html',
-	styleUrls: ['./nav-menu.component.css']
+	styleUrls: ['./../../assets/themes/blue.css', './nav-menu.component.css' ]
 })
 export class NavMenuComponent {
 	public _opened: boolean = false;

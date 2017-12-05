@@ -11,6 +11,7 @@ import { HomeComponent } from './components/home/home.component';
 import { StorageListComponent } from './components/storage-list/storage-list.component';
 
 import { SidebarModule } from 'ng-sidebar';
+import { ExpandableListModule } from 'angular2-expandable-list';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { SidebarModule } from 'ng-sidebar';
         HttpModule,
 		FormsModule,
 		SidebarModule.forRoot(),
+		ExpandableListModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },

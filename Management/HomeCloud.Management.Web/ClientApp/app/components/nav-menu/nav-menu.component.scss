@@ -1,32 +1,99 @@
-﻿@mixin font($size) {
+﻿@import './../../assets/themes/blue.scss';
+
+@mixin font($size) {
 	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
 	font-size: $size;
 }
 
 .logo {
+	@extend .skin-blue;
 	background-color: rgba(0,0,0,0.2);
-
 	align-content: center;
 	text-align: center;
-	a {
-		@include font(1.8em);
 
+	a {
+		@extend .skin-blue;
+
+		@include font(1.8em);
 		color: #fff;
 		line-height: 50px;
 	}
 }
 
-.nav-menu {
+.nav-menu-container {
+	@extend .skin-blue;
 	height: 100vh;
 
-	.nav-menu-container {
+	@media only screen and (max-width: 768px) {
+		width: 50vw;
+	}
+
+	.nav-menu-panel {
+		@extend .skin-blue;
 		top: 0;
 		left: 0;
-		padding: 20px 15px;
-		min-height: 100%;
+		padding: 20px 0px;
+		min-height: 100vh;
 		z-index: 1000;
-		min-width: 100%;
-		background-color: #222d32;
+	}
+
+	.treeview-container {
+		@extend .skin-blue;
+		@include font(14px);
+		padding: 5px 0px;
+		margin: 0;
+
+		li.treeview-header {
+			@extend .skin-blue;
+			@include font(14px);
+			padding: 10px 25px 10px 15px;
+			font-size: 12px;
+		}
+	}
+
+	.treeview {
+		@extend .skin-blue;
 	}
 }
 
+.treeview-container > li > a {
+
+	@extend .skin-blue;
+	@include font(14px);
+	border-left: 3px solid transparent;
+	margin-right: 1px;
+	padding: 12px 5px 12px 15px;
+	display: block;
+}
+
+.treeview-menu {
+	@extend .skin-blue;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	padding-left: 5px;
+
+	.label, .badge {
+		margin-top: 3px;
+		margin-right: 5px;
+	}
+}
+
+.treeview-menu > li {
+	@extend .skin-blue;
+
+	padding: 12px 5px 12px 15px;
+}
+
+.bg-green {
+	background-color: #00a65a !important;
+}
+
+.sidebar-toggle {
+
+	span {
+		font-size: 30px;
+		padding: 10px;
+		color: #FFF;
+	}
+}
