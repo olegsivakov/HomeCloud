@@ -11,12 +11,13 @@
 	align-content: center;
 	text-align: center;
 
-	a {
+	a, a:hover, a:active, a:focus {
 		@extend .skin-blue;
 
 		@include font(1.8em);
 		color: #fff;
 		line-height: 50px;
+		text-decoration: none;
 	}
 }
 

@@ -1,6 +1,6 @@
 ﻿<ng-sidebar-container class="nav-menu-container">
 	<!-- A sidebar -->
-	<ng-sidebar closeOnClickOutside="true" mode="slide" [(opened)]="_opened">
+	<ng-sidebar closeOnClickOutside="true" mode="slide" [(opened)]="opened">
 		<aside class="nav-menu-panel">
 			<section class="nav-menu">
 				<form action="#" method="get" class="search-form">
@@ -30,13 +30,13 @@
 		</aside>
 	</ng-sidebar>
 	<!-- Page content -->
-	<div ng-sidebar-content>
+	<div ng-sidebar-content role="button">
 		<div class="visible-xs sidebar-toggle">
-			<span class="glyphicon glyphicon-menu-hamburger glyphicon-globe" role="button" (click)="_toggleSidebar()"></span>
+			<span class="glyphicon glyphicon-menu-hamburger glyphicon-globe" role="button" (click)="toggleMenu()"></span>
 		</div>
-		<div class="logo" (click)="_toggleSidebar()">
+		<div class="logo" (click)="toggleMenu()">
 			<a class="hidden-xs" role="button">
-				<b>Admin</b>LTE
+				My <b>Title</b> 
 			</a>
 		</div>
 	</div>
