@@ -3,6 +3,7 @@
 	/// <summary>
 	/// Defines methods to map file extensions and MIME types.
 	/// </summary>
+	/// <seealso cref="Microsoft.AspNetCore.StaticFiles.IContentTypeProvider" />
 	public interface IContentTypeProvider : Microsoft.AspNetCore.StaticFiles.IContentTypeProvider
 	{
 		/// <summary>

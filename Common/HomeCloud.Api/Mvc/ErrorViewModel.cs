@@ -1,7 +1,8 @@
 ﻿namespace HomeCloud.Api.Mvc
 {
-	using System.Collections.Generic;
 	#region Usings
+
+	using System.Collections.Generic;
 
 	using HomeCloud.Exceptions;
 
@@ -10,6 +11,7 @@
 	/// <summary>
 	/// Represents error view model.
 	/// </summary>
+	/// <seealso cref="HomeCloud.Exceptions.HttpExceptionResponse" />
 	/// <seealso cref="HomeCloud.Api.Mvc.IViewModel" />
 	public class ErrorViewModel : HttpExceptionResponse, IViewModel
 	{

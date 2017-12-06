@@ -5,7 +5,6 @@
 	using System;
 
 	using HomeCloud.Core;
-	using Microsoft.Extensions.DependencyInjection;
 
 	#endregion
 
