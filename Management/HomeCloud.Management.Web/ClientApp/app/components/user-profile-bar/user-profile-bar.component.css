@@ -27,6 +27,13 @@
       border-top-width: 0;
       border: 1px solid #FFF;
       color: #FFF; }
+      .user-profile-bar .user-profile-container .user-profile .row {
+        margin-left: 0px;
+        margin-right: 0px; }
+        @media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+          .user-profile-bar .user-profile-container .user-profile .row {
+            margin-left: -15px;
+            margin-right: -15px; } }
       @media only screen and (max-width: 768px) {
         .user-profile-bar .user-profile-container .user-profile {
           width: 100vw; } }
@@ -46,8 +53,15 @@
         background-color: #fff; }
       .user-profile-bar .user-profile-container .user-profile .user-footer {
         background-color: #f9f9f9; }
+        @media only screen and (max-width: 768px) {
+          .user-profile-bar .user-profile-container .user-profile .user-footer .pull-left {
+            margin-left: 15px; } }
+        @media only screen and (max-width: 768px) {
+          .user-profile-bar .user-profile-container .user-profile .user-footer .pull-right {
+            margin-right: 15px; } }
       .user-profile-bar .user-profile-container .user-profile .user-header, .user-profile-bar .user-profile-container .user-profile .user-body, .user-profile-bar .user-profile-container .user-profile .user-footer {
-        padding: 10px 10px; }
+        padding: 10px 10px;
+        margin: inherit 0px; }
       .user-profile-bar .user-profile-container .user-profile .btn-default {
         color: #FFF;
         border-color: #ccc;

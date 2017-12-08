@@ -41,6 +41,16 @@
 			border: 1px solid #FFF;
 			color: #FFF;
 
+			.row {
+				margin-left: 0px;
+				margin-right: 0px;
+
+				@media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+					margin-left: -15px;
+					margin-right: -15px;
+				}
+			}
+
 			@media only screen and (max-width: 768px) {
 				width: 100vw;
 			}
@@ -70,10 +80,23 @@
 
 			.user-footer {
 				background-color: #f9f9f9;
+
+				.pull-left {
+					@media only screen and (max-width: 768px) {
+						margin-left: 15px;
+					}
+				}
+
+				.pull-right {
+					@media only screen and (max-width: 768px) {
+						margin-right: 15px;
+					}
+				}
 			}
 
 			.user-header, .user-body, .user-footer {
 				padding: 10px 10px;
+				margin: inherit 0px;
 			}
 
 			.btn-default {
