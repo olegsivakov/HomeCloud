@@ -94,10 +94,7 @@
 			return new HttpGetResult<IEnumerable<TModel>>(this)
 			{
 				Errors = result.Errors,
-				Data = new PagedListViewModel<TModel>(data)
-				{
-					TotalCount = result.Data.TotalCount
-				}
+				Data = data != null ? new PagedListViewModel<TModel>(data) { TotalCount = result.Data.TotalCount } : null
 			};
 		}
 

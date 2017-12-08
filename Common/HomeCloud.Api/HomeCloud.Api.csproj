@@ -39,6 +39,7 @@
     <Compile Include="Formatters\JsonOutputFormatter.cs" />
     <Compile Include="Helpers\MultipartRequestHelper.cs" />
     <Compile Include="Http\ConflictResult.cs" />
+    <Compile Include="Http\ContentTypeAttribute.cs" />
     <Compile Include="Http\HttpDeleteResult.cs" />
     <Compile Include="Http\HttpGetResult.cs" />
     <Compile Include="Http\HttpGetStreamResult.cs" />
