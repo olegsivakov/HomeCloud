@@ -3,7 +3,8 @@
 	/// <summary>
 	/// Represents the <see cref="T" /> result of service operation execution.
 	/// </summary>
-	/// <typeparam name="T">The type of result instance.</typeparam>
+	/// <typeparam name="T">The type of the result instance.</typeparam>
+	/// <seealso cref="HomeCloud.DataStorage.Business.Entities.ServiceResult" />
 	public class ServiceResult<T> : ServiceResult
 	{
 		#region Constructors

@@ -12,7 +12,7 @@
 	/// <summary>
 	/// Represents the list of <see cref="IViewModel" /> items.
 	/// </summary>
-	/// <typeparam name="T">he <see cref="IViewModel"/> type.</typeparam>
+	/// <typeparam name="T">The <see cref="IViewModel"/> type.</typeparam>
 	/// <seealso cref="System.Collections.Generic.List{T}" />
 	public class PagedListViewModel<T> : List<T>
 		where T : IViewModel

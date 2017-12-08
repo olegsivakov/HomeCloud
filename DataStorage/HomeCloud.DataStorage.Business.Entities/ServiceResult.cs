@@ -9,12 +9,12 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the result of service operation execution.
+	/// Represents the execution result of service operation.
 	/// </summary>
 	public class ServiceResult
 	{
 		/// <summary>
-		/// Gets a value indicating whether the execution result is succeed.
+		/// Gets a value indicating whether the execution result is succeeded.
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if the execution result is succeed; otherwise, <c>false</c>.
