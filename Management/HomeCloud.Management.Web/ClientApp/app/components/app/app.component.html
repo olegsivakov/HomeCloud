@@ -1,29 +1,27 @@
 <div class="body skin-blue content-fluid">
-	<div class="row header">
-		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
-			<nav-menu></nav-menu>
+	<div class="row">
+		<nav-menu></nav-menu>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 header">
+			&nbsp;
 		</div>
-		<div class="col-lg-7 col-md-7 col-sm-7 hidden-xs">
-
-		</div>
-		<div class="col-lg-3 col-md-3 col-sm-2 col-xs-3 user-profile-bar right">
-			<user-profile-bar></user-profile-bar>
-		</div>
+		<user-profile-bar></user-profile-bar>
 	</div>
-	<div class="row content-header">
-		<div class="col-md-9">
-			<h4 class="">
-				<a href="#"><i class=""></i> Catalog name</a>
-				<a href="#"><i class=""></i> Catalog name</a>
-			</h4>
+	<div style="position: absolute; top:50px; left:0; z-index:100; width:100%;">
+		<div class="row content-header">
+			<div class="col-md-9">
+				<h4 class="">
+					<a href="#"><i class=""></i> Catalog name</a>
+					<a href="#"><i class=""></i> Catalog name</a>
+				</h4>
+			</div>
+			<div class="col-md-3">
+				<span><small>416Mb of 1.2Gb used</small></span>
+			</div>
 		</div>
-		<div class="col-md-3">
-			<span><small>416Mb of 1.2Gb used</small></span>
-		</div>
-	</div>
-	<div class="row content">
-		<div class="col-md-12">
-			<router-outlet></router-outlet>
+		<div class="row content">
+			<div class="col-md-12">
+				<router-outlet></router-outlet>
+			</div>
 		</div>
 	</div>
 	<div class="row footer text-center bottom">

@@ -10,6 +10,7 @@
 	background-color: rgba(0,0,0,0.2);
 	align-content: center;
 	text-align: center;
+	margin-left: -15px;
 
 	a, a:hover, a:active, a:focus {
 		@extend .skin-blue;
@@ -21,84 +22,93 @@
 	}
 }
 
-.nav-menu-container {
-	@extend .skin-blue;
-	height: 100vh;
+.nav-sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1000;
 
-	@media only screen and (max-width: 768px) {
-		width: 50vw;
-	}
-
-	.nav-menu-panel {
+	.nav-menu-container {
 		@extend .skin-blue;
-		top: 0;
-		left: 0;
-		padding: 20px 0px;
-		min-height: 100vh;
-		z-index: 1000;
-	}
+		height: 100vh;
+		margin-left: -15px;
 
-	.treeview-container {
-		@extend .skin-blue;
-		@include font(1.1em);
-		padding: 5px 0px;
-		margin: 0;
+		@media only screen and (max-width: 768px) {
+			width: 50vw;
+		}
 
-		li.treeview-header {
+		@media only screen and (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1.5) {
+			width: 30vw;
+		}
+
+		.nav-menu-panel {
 			@extend .skin-blue;
-			@include font(0.875em);
-			padding: 10px 25px 10px 15px;
-			font-size: 12px;
-		}
+			padding: 20px 0px;
+			min-height: 100vh;
+			z-index: 1000;
 
-		@media only screen and (max-width: 320px) {
-			@include font(0.875em);
+			.treeview-container {
+				@extend .skin-blue;
+				@include font(1.1em);
+				padding: 5px 0px;
+				margin: 0;
+
+				li.treeview-header {
+					@extend .skin-blue;
+					@include font(0.875em);
+					padding: 10px 25px 10px 15px;
+					font-size: 12px;
+				}
+
+				@media only screen and (max-width: 375px) {
+					@include font(0.875em);
+				}
+			}
+
+			.treeview {
+				@extend .skin-blue;
+			}
 		}
 	}
 
-	.treeview {
+	.treeview-container > li > a {
+
 		@extend .skin-blue;
+		@include font(0.875em);
+		border-left: 3px solid transparent;
+		margin-right: 1px;
+		padding: 12px 5px 12px 15px;
+		display: block;
 	}
-}
 
-.treeview-container > li > a {
+	.treeview-menu {
+		@extend .skin-blue;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		padding-left: 5px;
 
-	@extend .skin-blue;
-	@include font(0.875em);
-	border-left: 3px solid transparent;
-	margin-right: 1px;
-	padding: 12px 5px 12px 15px;
-	display: block;
-}
-
-.treeview-menu {
-	@extend .skin-blue;
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	padding-left: 5px;
-
-	.label, .badge {
-		margin-top: 3px;
-		margin-right: 5px;
+		.label, .badge {
+			margin-top: 3px;
+			margin-right: 5px;
+		}
 	}
-}
 
-.treeview-menu > li {
-	@extend .skin-blue;
+	.treeview-menu > li {
+		@extend .skin-blue;
+		padding: 12px 5px 12px 15px;
+	}
 
-	padding: 12px 5px 12px 15px;
-}
+	.bg-green {
+		background-color: #00a65a !important;
+	}
 
-.bg-green {
-	background-color: #00a65a !important;
-}
+	.sidebar-toggle {
 
-.sidebar-toggle {
-
-	span {
-		font-size: 30px;
-		padding: 10px;
-		color: #FFF;
+		span {
+			font-size: 30px;
+			padding: 10px;
+			color: #FFF;
+		}
 	}
 }

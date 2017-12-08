@@ -1,4 +1,6 @@
-﻿@mixin font($size) {
+﻿@import './../../assets/themes/blue.scss';
+
+@mixin font($size) {
 	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
 	font-size: $size;
 }
@@ -17,16 +19,9 @@ body {
 }
 
 .header {
-
+	@extend .skin-blue;
 	@include font(0.875em);
-	position: relative;
-	max-height: 50px;
-	z-index: 1000;
-
-	.user-profile-bar {
-		position: absolute;
-		right: 0px;
-	}
+	line-height: 50px;
 }
 
 .content-background {

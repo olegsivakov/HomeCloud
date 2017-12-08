@@ -1,43 +1,45 @@
-﻿<ng-sidebar-container class="nav-menu-container">
-	<!-- A sidebar -->
-	<ng-sidebar closeOnClickOutside="true" mode="slide" [(opened)]="opened">
-		<aside class="nav-menu-panel">
-			<section class="nav-menu">
-				<form action="#" method="get" class="search-form">
-					<div class="input-group">
-						<input type="text" name="txtSearch" class="form-control" placeholder="Search..." />
-						<span class="input-group-btn">
-							<button type="submit" name="search" id="btnSearch" class="btn btn-flat"><i class="fa fa-search"></i></button>
-						</span>
-					</div>
-				</form>
-				<ul class="treeview-container" id="nav-menu-container" role="tablist" aria-multiselectable="false">
-					<li class="treeview-header">MAIN NAVIGATION</li>
-					<li class="treeview">
-						<a role="tab" id="nav-menu-heading" data-toggle="collapse" data-parent="#nav-menu-container" href="#nav-menu-items" aria-expanded="true" aria-controls="nav-menu-items">
-							<i class="glyphicon glyphicon-floppy-open"></i> <span>NAS</span>
-						</a>
-						<div>
-							<ul class="treeview-menu collapse" id="nav-menu-items" role="tabpanel" aria-labelledby="nav-menu-heading">
-								<li class="active"> <a href="/storages"><i class="glyphicon glyphicon-hdd"></i> Storages</a></li>
-								<li><a href="/catalogs"><i class="glyphicon glyphicon-folder-open"></i> <span>Catalogs</span> <small class="label pull-right bg-green">new</small></a></li>
-								<li><a href="/catalogs"><i class="glyphicon glyphicon-file"></i> <span>Files</span> <small class="label pull-right bg-green">new</small></a></li>
-							</ul>
+﻿<div class="col-lg-2 col-md-3 col-sm-3 col-xs-6 nav-sidebar">
+	<ng-sidebar-container class="nav-menu-container">
+		<!-- A sidebar -->
+		<ng-sidebar closeOnClickOutside="true" mode="slide" [(opened)]="opened">
+			<aside class="nav-menu-panel">
+				<section class="nav-menu">
+					<form action="#" method="get" class="search-form">
+						<div class="input-group">
+							<input type="text" name="txtSearch" class="form-control" placeholder="Search..." />
+							<span class="input-group-btn">
+								<button type="submit" name="search" id="btnSearch" class="btn btn-flat"><i class="glyphicon glyphicon-search"></i></button>
+							</span>
 						</div>
-					</li>
-				</ul>
-			</section>
-		</aside>
-	</ng-sidebar>
-	<!-- Page content -->
-	<div ng-sidebar-content role="button">
-		<div class="visible-xs sidebar-toggle">
-			<span class="glyphicon glyphicon-menu-hamburger glyphicon-globe" role="button" (click)="toggleMenu()"></span>
+					</form>
+					<ul class="treeview-container" id="nav-menu-container" role="tablist" aria-multiselectable="false">
+						<li class="treeview-header">MAIN NAVIGATION</li>
+						<li class="treeview">
+							<a role="tab" id="nav-menu-heading" data-toggle="collapse" data-parent="#nav-menu-container" href="#nav-menu-items" aria-expanded="true" aria-controls="nav-menu-items">
+								<i class="glyphicon glyphicon-floppy-open"></i> <span>NAS</span>
+							</a>
+							<div>
+								<ul class="treeview-menu collapse" id="nav-menu-items" role="tabpanel" aria-labelledby="nav-menu-heading">
+									<li class="active"> <a href="/storages"><i class="glyphicon glyphicon-hdd"></i> Storages</a></li>
+									<li><a href="/catalogs"><i class="glyphicon glyphicon-folder-open"></i> <span>Catalogs</span> <small class="label pull-right bg-green">new</small></a></li>
+									<li><a href="/catalogs"><i class="glyphicon glyphicon-file"></i> <span>Files</span> <small class="label pull-right bg-green">new</small></a></li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</section>
+			</aside>
+		</ng-sidebar>
+		<!-- Page content -->
+		<div ng-sidebar-content role="button" class="sidebar-toggle">
+			<div class="visible-xs">
+				<span class="glyphicon glyphicon-menu-hamburger glyphicon-globe" role="button" (click)="toggleMenu()"></span>
+			</div>
+			<div class="logo" (click)="toggleMenu()">
+				<a class="hidden-xs" role="button">
+					My <b>Title</b>
+				</a>
+			</div>
 		</div>
-		<div class="logo" (click)="toggleMenu()">
-			<a class="hidden-xs" role="button">
-				My <b>Title</b> 
-			</a>
-		</div>
-	</div>
-</ng-sidebar-container>
+	</ng-sidebar-container>
+</div>
