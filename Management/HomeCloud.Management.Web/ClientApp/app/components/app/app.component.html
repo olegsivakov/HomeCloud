@@ -6,22 +6,20 @@
 		</div>
 		<user-profile-bar></user-profile-bar>
 	</div>
-	<div style="position: absolute; top:50px; left:0; z-index:100; width:100%;">
-		<div class="row content-header">
-			<div class="col-md-9">
-				<h4 class="">
-					<a href="#"><i class=""></i> Catalog name</a>
-					<a href="#"><i class=""></i> Catalog name</a>
-				</h4>
-			</div>
-			<div class="col-md-3">
-				<span><small>416Mb of 1.2Gb used</small></span>
-			</div>
+	<div class="row content-header bottom">
+		<div class="col-md-9">
+			<h4>
+				<a href="#"><i class=""></i> Catalog name</a>
+				<a href="#"><i class=""></i><small> Catalog name</small></a>
+			</h4>
 		</div>
-		<div class="row content">
-			<div class="col-md-12">
-				<router-outlet></router-outlet>
-			</div>
+		<div class="col-md-3">
+			<span><small>416Mb of 1.2Gb used</small></span>
+		</div>
+	</div>
+	<div class="row content">
+		<div class="col-md-12">
+			<router-outlet></router-outlet>
 		</div>
 	</div>
 	<div class="row footer text-center bottom">
