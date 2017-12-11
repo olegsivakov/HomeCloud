@@ -11,7 +11,6 @@ body {
 }
 
 .body {
-	box-sizing: border-box;
 
 	.row {
 		margin-right: 0px;
@@ -24,20 +23,15 @@ body {
 	line-height: 50px;
 }
 
-.content-background {
-	background-color: #ecf0f5 !important;
-}
-
 .content-header {
-	@extend .content-background;
 	@include font(0.875em);
-
 	position: relative;
 	padding: 0px 15px;
 
 	div {
-		line-height: 35px;
+		line-height: 39px;
 	}
+
 	h4 {
 		small {
 			font-size: 15px;
@@ -49,7 +43,6 @@ body {
 }
 
 .content {
-	@extend .content-background;
 	@include font(0.875em);
 }
 
@@ -70,3 +63,31 @@ body {
 	}
 }
 
+ul.breadcrumb {
+	padding: 10px 16px;
+	list-style: none;
+	background-color: transparent;
+
+	li {
+		display: inline;
+		font-size: 18px;
+		font-weight: 500;
+		line-height: 1.1;
+		color: #337ab7;
+
+		a {
+			color: #333;
+			text-decoration: none;
+
+			:hover {
+				color: #337ab7;
+				text-decoration: underline;
+			}
+		}
+	}
+
+	li:last-child {
+		color: #333;
+		text-decoration: none !important;
+	}
+}

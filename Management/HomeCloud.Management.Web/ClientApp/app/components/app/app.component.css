@@ -137,18 +137,13 @@ body {
   font-size: 100%;
   font-weight: 400; }
 
-.body {
-  box-sizing: border-box; }
-  .body .row {
-    margin-right: 0px; }
+.body .row {
+  margin-right: 0px; }
 
 .header {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
   font-size: 0.875em;
   line-height: 50px; }
-
-.content-background, .content-header, .content {
-  background-color: #ecf0f5 !important; }
 
 .content-header {
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -156,7 +151,7 @@ body {
   position: relative;
   padding: 0px 15px; }
   .content-header div {
-    line-height: 35px; }
+    line-height: 39px; }
   .content-header h4 small {
     font-size: 15px;
     display: inline-block;
@@ -179,4 +174,24 @@ body {
   @media only screen and (min-width: 768px) {
     .footer {
       display: block; } }
+
+ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+  background-color: transparent; }
+  ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: #337ab7; }
+    ul.breadcrumb li a {
+      color: #333;
+      text-decoration: none; }
+      ul.breadcrumb li a :hover {
+        color: #337ab7;
+        text-decoration: underline; }
+  ul.breadcrumb li:last-child {
+    color: #333;
+    text-decoration: none !important; }
 

@@ -30,7 +30,7 @@
 
 	.nav-menu-container {
 		@extend .skin-blue;
-		height: 100vh;
+		height: 51px;
 		margin-left: -15px;
 
 		@media only screen and (max-width: 768px) {
@@ -43,7 +43,7 @@
 
 		.nav-menu-panel {
 			@extend .skin-blue;
-			padding: 20px 0px;
+			padding: 0px 0px;
 			min-height: 100vh;
 			z-index: 1000;
 
@@ -69,6 +69,10 @@
 				@extend .skin-blue;
 			}
 		}
+	}
+
+	.nav-menu-container.expanded {
+		height: 100vh;
 	}
 
 	.treeview-container > li > a {

@@ -150,7 +150,7 @@
   left: 0;
   z-index: 1000; }
   .nav-sidebar .nav-menu-container {
-    height: 100vh;
+    height: 51px;
     margin-left: -15px; }
     @media only screen and (max-width: 768px) {
       .nav-sidebar .nav-menu-container {
@@ -159,7 +159,7 @@
       .nav-sidebar .nav-menu-container {
         width: 30vw; } }
     .nav-sidebar .nav-menu-container .nav-menu-panel {
-      padding: 20px 0px;
+      padding: 0px 0px;
       min-height: 100vh;
       z-index: 1000; }
       .nav-sidebar .nav-menu-container .nav-menu-panel .treeview-container {
@@ -176,6 +176,8 @@
           .nav-sidebar .nav-menu-container .nav-menu-panel .treeview-container {
             font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
             font-size: 0.875em; } }
+  .nav-sidebar .nav-menu-container.expanded {
+    height: 100vh; }
   .nav-sidebar .treeview-container > li > a {
     font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
     font-size: 0.875em;

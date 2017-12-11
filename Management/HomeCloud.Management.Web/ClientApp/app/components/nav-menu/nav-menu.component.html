@@ -1,9 +1,14 @@
 ﻿<div class="col-lg-2 col-md-3 col-sm-3 col-xs-6 nav-sidebar">
-	<ng-sidebar-container class="nav-menu-container">
+	<ng-sidebar-container [ngClass]="{'nav-menu-container': true, 'expanded': opened}">
 		<!-- A sidebar -->
 		<ng-sidebar closeOnClickOutside="true" mode="slide" [(opened)]="opened">
 			<aside class="nav-menu-panel">
 				<section class="nav-menu">
+					<div class="logo" (click)="toggleMenu()">
+						<a role="button">
+							Home <b>Cloud</b>
+						</a>
+					</div>
 					<form action="#" method="get" class="search-form">
 						<div class="input-group">
 							<input type="text" name="txtSearch" class="form-control" placeholder="Search..." />
@@ -37,7 +42,7 @@
 			</div>
 			<div class="logo" (click)="toggleMenu()">
 				<a class="hidden-xs" role="button">
-					My <b>Title</b>
+					Home <b>Cloud</b>
 				</a>
 			</div>
 		</div>
