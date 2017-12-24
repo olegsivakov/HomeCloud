@@ -18,5 +18,9 @@
   {
     "outputFile": "ClientApp/app/components/nav-menu/nav-menu.component.css",
     "inputFile": "ClientApp/app/components/nav-menu/nav-menu.component.scss"
+  },
+  {
+    "outputFile": "ClientApp/app/components/storage-list/storage-list.component.css",
+    "inputFile": "ClientApp/app/components/storage-list/storage-list.component.scss"
   }
 ]
