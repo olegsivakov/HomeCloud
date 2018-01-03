@@ -1,93 +1,10 @@
-﻿@import './../../assets/themes/blue.scss';
-
-@mixin font($size) {
-	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-	font-size: $size;
-}
-
-body {
-	@include font(100%);
-	font-weight: 400;
-}
+﻿@import '../../assets/sass/layout/_header.scss';
+@import '../../assets/sass/layout/_content.scss';
+@import '../../assets/sass/layout/_footer.scss';
+@import '../../assets/sass/variables/_sizes.scss';
+@import '../../assets/sass/helpers/positions.scss';
 
 .body {
-
-	.row {
-		margin-right: 0px;
-	}
-}
-
-.header {
-	@extend .skin-blue;
-	@include font(0.875em);
-	line-height: 50px;
-}
-
-.content-header {
-	@include font(0.875em);
-	position: relative;
-	padding: 0px 15px;
-
-	div {
-		line-height: 39px;
-	}
-
-	h4 {
-		small {
-			font-size: 15px;
-			display: inline-block;
-			padding-left: 4px;
-			font-weight: 300;
-		}
-	}
-}
-
-.content {
-	@include font(0.875em);
-}
-
-
-.footer {
-	display: none;
-
-	@include font(0.75em);
-
-	z-index: 820;
-	text-align: center;
-	min-width: 100%;
-	position: absolute;
-	bottom: 15px;
-
-	@media only screen and (min-width: 768px) {
-		display: block;
-	}
-}
-
-ul.breadcrumb {
-	padding: 10px 16px;
-	list-style: none;
-	background-color: transparent;
-
-	li {
-		display: inline;
-		font-size: 18px;
-		font-weight: 500;
-		line-height: 1.1;
-		color: #337ab7;
-
-		a {
-			color: #333;
-			text-decoration: none;
-
-			:hover {
-				color: #337ab7;
-				text-decoration: underline;
-			}
-		}
-	}
-
-	li:last-child {
-		color: #333;
-		text-decoration: none !important;
-	}
+	max-width: $full-size-percentage;
+	min-height: $full-size-vh;
 }

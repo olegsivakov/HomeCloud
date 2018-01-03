@@ -9,6 +9,7 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { UserProfileBarComponent } from './components/user-profile-bar/user-profile-bar.component';
 import { HomeComponent } from './components/home/home.component';
 import { StorageListComponent } from './components/storage-list/storage-list.component';
+import { DataComponent } from './components/data/data.component';
 
 import { SidebarModule } from 'ng-sidebar';
 import { ExpandableListModule } from 'angular2-expandable-list';
@@ -19,7 +20,8 @@ import { ExpandableListModule } from 'angular2-expandable-list';
         NavMenuComponent,
 		UserProfileBarComponent,
 		HomeComponent,
-		StorageListComponent
+		StorageListComponent,
+		DataComponent
     ],
     imports: [
         CommonModule,
@@ -29,7 +31,8 @@ import { ExpandableListModule } from 'angular2-expandable-list';
 		ExpandableListModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
+			{ path: 'home', component: HomeComponent },
+			{ path: 'catalogs', component: DataComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

@@ -22,5 +22,9 @@
   {
     "outputFile": "ClientApp/app/components/storage-list/storage-list.component.css",
     "inputFile": "ClientApp/app/components/storage-list/storage-list.component.scss"
+  },
+  {
+    "outputFile": "ClientApp/app/components/data/data.component.css",
+    "inputFile": "ClientApp/app/components/data/data.component.less"
   }
 ]
