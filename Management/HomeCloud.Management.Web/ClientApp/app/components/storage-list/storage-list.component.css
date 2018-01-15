@@ -1,1 +1,46 @@
-﻿
+﻿.bold, .grid .header {
+  font-weight: bold; }
+
+.italic {
+  font-style: italic; }
+
+.capitalize {
+  text-transform: capitalize; }
+
+.uppercase {
+  text-transform: uppercase; }
+
+.lowecase {
+  text-transform: lowercase; }
+
+.grid {
+  min-width: 100%; }
+  .grid .row {
+    min-width: 100%; }
+    .grid .row .column {
+      float: left; }
+      .grid .row .column.col-1 {
+        min-width: 8.33333%; }
+      .grid .row .column.col-2 {
+        min-width: 16.66667%; }
+      .grid .row .column.col-3 {
+        min-width: 25%; }
+      .grid .row .column.col-4 {
+        min-width: 33.33333%; }
+      .grid .row .column.col-5 {
+        min-width: 41.66667%; }
+      .grid .row .column.col-6 {
+        min-width: 50%; }
+      .grid .row .column.col-7 {
+        min-width: 58.30904%; }
+      .grid .row .column.col-8 {
+        min-width: 66.66667%; }
+      .grid .row .column.col-9 {
+        min-width: 74.96252%; }
+      .grid .row .column.col-10 {
+        min-width: 75.01875%; }
+      .grid .row .column.col-11 {
+        min-width: 83.33333%; }
+      .grid .row .column.col-12 {
+        min-width: 100%; }
+

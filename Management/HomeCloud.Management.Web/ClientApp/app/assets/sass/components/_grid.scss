@@ -1,0 +1,66 @@
+﻿@import '../variables/_sizes.scss';
+@import '../helpers/_fonts.scss';
+
+.grid {
+	min-width: $full-size-percentage;
+
+	.header {
+		@extend .bold;
+	}
+
+	.row {
+		min-width: $full-size-percentage;
+
+		.column {
+			float: left;
+
+			&.col-1 {
+				min-width: ($full-size-percentage/12);
+			}
+
+			&.col-2 {
+				min-width: ($full-size-percentage/6);
+			}
+
+			&.col-3 {
+				min-width: ($full-size-percentage/4);
+			}
+
+			&.col-4 {
+				min-width: ($full-size-percentage/3);
+			}
+
+			&.col-5 {
+				min-width: ($full-size-percentage/2.4);
+			}
+
+			&.col-6 {
+				min-width: ($full-size-percentage/2);
+			}
+
+			&.col-7 {
+				min-width: ($full-size-percentage/1.715);
+			}
+
+			&.col-8 {
+				min-width: ($full-size-percentage/1.5);
+			}
+
+			&.col-9 {
+				min-width: ($full-size-percentage/1.334);
+			}
+
+			&.col-10 {
+				min-width: ($full-size-percentage/1.333);
+			}
+
+			&.col-11 {
+				min-width: ($full-size-percentage/1.2);
+			}
+
+			&.col-12 {
+				min-width: $full-size-percentage;
+			}
+		}
+	}
+}
