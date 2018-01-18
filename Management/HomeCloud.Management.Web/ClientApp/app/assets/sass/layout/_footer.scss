@@ -4,10 +4,8 @@
 
 .footer {
 	font-size: $small;
-	position: absolute;
 	bottom: 15px;
+	display: block;
 	z-index: 820;
-	min-width: $full-size-percentage;
-
 	@extend .text-center;
 }

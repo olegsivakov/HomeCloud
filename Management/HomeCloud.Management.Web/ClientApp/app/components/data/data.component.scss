@@ -1,1 +1,8 @@
-﻿
+﻿@import '../../assets/sass/components/_grid.scss';
+@import '../../assets/sass/helpers/positions.scss';
+@import '../../assets/sass/layout/_catalog.scss';
+
+.catalog-container {
+	border-top: 1px solid #000;
+	padding-top: 15px;
+}

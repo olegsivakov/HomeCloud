@@ -26,5 +26,9 @@
   {
     "outputFile": "ClientApp/app/components/data/data.component.css",
     "inputFile": "ClientApp/app/components/data/data.component.less"
+  },
+  {
+    "outputFile": "ClientApp/app/components/data/data.component.css",
+    "inputFile": "ClientApp/app/components/data/data.component.scss"
   }
 ]

@@ -1,6 +1,6 @@
 <ng-sidebar-container class="body">
-	<div ng-sidebar-content class="body">
-		<div class="header">
+	<div ng-sidebar-content class="body grid">
+		<div class="row header">
 			<div class="sidebar-toogle left" role="button" (click)="toggleSideBar()">
 				<button role="button" class="hamburger">&#9776;</button>
 			</div>
@@ -18,25 +18,26 @@
 				</div>
 			</div>
 		</div>
-		<div class="content">
-			<div class="content-header text-right">
+		<div class="content row">
+			<div class="content-header text-right col-12">
 				<span>999.9Mb of 500.2Gb used</span>
 			</div>
-			<div class="content-body">
+			<div class="content-body col-12">
 				<router-outlet></router-outlet>
 			</div>
 		</div>
-		<div class="footer">
-			<div>
+		<div class="spacer"></div>
+		<div class="footer row">
+			<div class="col-12">
 				<b>Version</b> 1.0
 			</div>
-			<strong class="">Copyright &copy; 2017 <a href="#">Aleh Sivakou</a>.</strong> All rights reserved.
+			<strong class="">Copyright &copy; 2018 <a href="#">Aleh Sivakou</a>.</strong> All rights reserved.
 		</div>
 	</div>
-	<ng-sidebar closeOnClickOutside="true" mode="over" [(opened)]="sideBarOpened">
+	<ng-sidebar closeOnClickOutside="true" mode="over" [(opened)]="sideBarOpened" sidebarClass="nav-menu" showBackdrop="true" keyClose="true">
 		<nav-menu></nav-menu>
 	</ng-sidebar>
-	<ng-sidebar closeOnClickOutside="true" mode="over" [(opened)]="userBarOpened">
+	<ng-sidebar closeOnClickOutside="true" mode="over" [(opened)]="userBarOpened" keyClose="true">
 		<div>User Profile</div>
 	</ng-sidebar>
 </ng-sidebar-container>

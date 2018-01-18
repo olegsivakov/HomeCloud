@@ -1,8 +1,8 @@
 ﻿@import '../variables/_typography.scss';
+@import '../components/_grid.scss';
 
 .content {
 	padding: 20px 35px;
-
 	.content-header {
 		font-size: $extra-small;
 	}

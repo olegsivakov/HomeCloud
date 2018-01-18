@@ -2,35 +2,38 @@
 @import '../../assets/sass/variables/_colors.scss';
 @import '../../assets/sass/helpers/_fonts.scss';
 @import '../../assets/sass/helpers/positions.scss';
+@import '../../assets/sass/components/_grid.scss';
 @import '../../assets/sass/components/_logo.scss';
 @import '../../assets/sass/components/_textbox.scss';
 @import '../../assets/sass/components/_button.scss';
 @import '../../assets/sass/components/_accordion.scss';
 
+
 .sidebar {
-	min-width: ($sidebar-width);
-	min-height: 100vh;
-	overflow: auto;
+	top: $header-height;
+	bottom: 0px;
+	min-width: $sidebar-width;
 	z-index: 1000;
+	color: #FFF;
 
 	.logo {
-		min-width: ($sidebar-width - 30px);
-		height: ($header-height - 10px);
-		line-height: ($header-height - 10px);
+		min-width: $sidebar-width;
+		height: $header-height;
+		line-height: $header-height;
 	}
 
 	.search {
-		min-width: ($sidebar-width - 30px);
+		min-width: $sidebar-width;
 		min-height: $textbox-height;
 		padding: 0px 15px;
 	}
 
 	.nav-menu-container {
-		min-width: ($sidebar-width);
+		min-width: $sidebar-width;
 		padding: 15px 0px;
 
 		.accordion {
-			width: ($sidebar-width);
+			width: $sidebar-width;
 
 			.accordion-header {
 				@extend .text-center;

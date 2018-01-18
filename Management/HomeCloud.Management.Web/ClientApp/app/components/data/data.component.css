@@ -1,1 +1,115 @@
-﻿
+﻿.bold, .grid .header {
+  font-weight: bold; }
+
+.italic {
+  font-style: italic; }
+
+.capitalize {
+  text-transform: capitalize; }
+
+.uppercase {
+  text-transform: uppercase; }
+
+.lowecase {
+  text-transform: lowercase; }
+
+* {
+  box-sizing: border-box; }
+
+.grid {
+  min-width: 100%; }
+  .grid .row {
+    width: 100%; }
+    .grid .row::after {
+      content: "";
+      clear: both;
+      display: table; }
+    .grid .row [class*="col-"] {
+      float: left; }
+    .grid .row .col-1 {
+      width: 8.33333%; }
+    .grid .row .col-2 {
+      width: 16.66667%; }
+    .grid .row .col-3 {
+      width: 25%; }
+    .grid .row .col-4 {
+      width: 33.33333%; }
+    .grid .row .col-5 {
+      width: 41.66667%; }
+    .grid .row .col-6 {
+      width: 50%; }
+    .grid .row .col-7 {
+      width: 58.33333%; }
+    .grid .row .col-8 {
+      width: 66.66667%; }
+    .grid .row .col-9 {
+      width: 75%; }
+    .grid .row .col-10 {
+      width: 83.33333%; }
+    .grid .row .col-11 {
+      width: 91.66667%; }
+    .grid .row .col-12 {
+      width: 100%; }
+
+.left {
+  float: left; }
+
+.right {
+  float: right; }
+
+.text-left {
+  text-align: left; }
+
+.text-right {
+  text-align: right; }
+
+.text-center {
+  text-align: center; }
+
+.text-justify {
+  text-align: justify; }
+
+.catalog, .file {
+  position: relative;
+  width: 95%;
+  height: 170px;
+  margin: 10px auto;
+  color: #FFF; }
+  .catalog *, .file * {
+    position: absolute; }
+  .catalog .background, .file .background {
+    background-color: lightgray;
+    width: 100%;
+    height: 100%; }
+    .catalog .background img, .file .background img {
+      width: 100%;
+      height: 100%; }
+  .catalog .align, .file .align, .catalog .title, .file .title, .catalog .count, .file .count {
+    padding: 7px 10px; }
+  .catalog .info, .file .info {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    background-color: darkblue; }
+  .catalog .count, .file .count {
+    font-size: 16px;
+    right: 0; }
+
+.file .background {
+  height: 80%;
+  background-color: #FFF; }
+  .file .background img {
+    min-width: 50px;
+    max-width: 30%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: unset;
+    margin: auto auto; }
+
+.catalog-container {
+  border-top: 1px solid #000;
+  padding-top: 15px; }
+
