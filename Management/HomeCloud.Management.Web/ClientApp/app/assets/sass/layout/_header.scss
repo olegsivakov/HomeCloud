@@ -10,9 +10,12 @@
 	min-height: $header-height;
 	max-height: $header-height;
 	font-size: $medium;
+	background-color: #161616;
+	color: #FFF;
 
 	.hamburger {
 		@extend .hamburger;
+		color: #FFF;
 		line-height: ($header-height - 10px);
 	}
 

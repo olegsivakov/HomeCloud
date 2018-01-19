@@ -13,11 +13,37 @@
 .lowecase {
   text-transform: lowercase; }
 
-.left {
+.float-left {
   float: left; }
 
-.right {
+.float-right {
   float: right; }
+
+.left, .top-left, .bottom-left, .wide {
+  position: absolute;
+  left: 0; }
+
+.right, .top-right, .bottom-right, .wide {
+  position: absolute;
+  right: 0; }
+
+.top, .top-left, .top-right, .wide {
+  position: absolute;
+  top: 0; }
+
+.bottom, .bottom-left, .bottom-right, .wide {
+  position: absolute;
+  bottom: 0; }
+
+.horizontal-center, .center, .wide {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto; }
+
+.vertical-center, .center, .wide {
+  position: relative;
+  margin-top: auto;
+  margin-bottom: auto; }
 
 .text-left {
   text-align: left; }
@@ -84,11 +110,37 @@
     .grid .row .col-12 {
       width: 100%; }
 
-.left {
+.float-left {
   float: left; }
 
-.right {
+.float-right {
   float: right; }
+
+.left, .top-left, .bottom-left, .wide {
+  position: absolute;
+  left: 0; }
+
+.right, .top-right, .bottom-right, .wide {
+  position: absolute;
+  right: 0; }
+
+.top, .top-left, .top-right, .wide {
+  position: absolute;
+  top: 0; }
+
+.bottom, .bottom-left, .bottom-right, .wide {
+  position: absolute;
+  bottom: 0; }
+
+.horizontal-center, .center, .wide {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto; }
+
+.vertical-center, .center, .wide {
+  position: relative;
+  margin-top: auto;
+  margin-bottom: auto; }
 
 .text-left {
   text-align: left; }
@@ -135,11 +187,37 @@
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #FF0000;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #FF0000; }
 
-.left {
+.float-left {
   float: left; }
 
-.right {
+.float-right {
   float: right; }
+
+.left, .top-left, .bottom-left, .wide {
+  position: absolute;
+  left: 0; }
+
+.right, .top-right, .bottom-right, .wide {
+  position: absolute;
+  right: 0; }
+
+.top, .top-left, .top-right, .wide {
+  position: absolute;
+  top: 0; }
+
+.bottom, .bottom-left, .bottom-right, .wide {
+  position: absolute;
+  bottom: 0; }
+
+.horizontal-center, .center, .wide {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto; }
+
+.vertical-center, .center, .wide {
+  position: relative;
+  margin-top: auto;
+  margin-bottom: auto; }
 
 .text-left {
   text-align: left; }

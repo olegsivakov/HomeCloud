@@ -1,10 +1,77 @@
-﻿.left {
+﻿.float-left {
 	float: left;
 }
 
-.right {
+.float-right {
 	float: right;
 }
+
+.left {
+	position: absolute;
+	left: 0;
+}
+
+.right {
+	position: absolute;
+	right: 0;
+}
+
+.top {
+	position: absolute;
+	top: 0;
+}
+
+.bottom {
+	position: absolute;
+	bottom: 0;
+}
+
+.top-left {
+	@extend .top;
+	@extend .left;
+}
+
+.top-right {
+	@extend .top;
+	@extend .right;
+}
+
+.bottom-left {
+	@extend .bottom;
+	@extend .left;
+}
+
+.bottom-right {
+	@extend .bottom;
+	@extend .right;
+}
+
+.horizontal-center {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.vertical-center {
+	position: relative;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.center {
+	@extend .horizontal-center;
+	@extend .vertical-center;
+}
+
+.wide {
+	@extend .top;
+	@extend .bottom;
+	@extend .left;
+	@extend .right;
+	@extend .vertical-center;
+	@extend .horizontal-center;
+}
+
 
 .text-left {
 	text-align: left;

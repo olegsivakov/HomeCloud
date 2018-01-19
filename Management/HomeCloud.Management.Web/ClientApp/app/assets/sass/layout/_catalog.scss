@@ -1,8 +1,13 @@
-﻿.catalog {
-	position: relative;
-	width: 95%;
+﻿@import '../variables/_sizes.scss';
+@import '../variables/_typography.scss';
+@import '../helpers/positions.scss';
+
+.catalog {
+	width: ($full-size-percentage - 5%);
 	height: 170px;
-	margin: 10px auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	@extend .horizontal-center;
 	color: #FFF;
 
 	* {
@@ -11,12 +16,12 @@
 
 	.background {
 		background-color: lightgray;
-		width: 100%;
-		height: 100%;
+		width: $full-size-percentage;
+		height: $full-size-percentage;
 
 		img {
-			width: 100%;
-			height: 100%;
+			width: $full-size-percentage;
+			height: $full-size-percentage;
 		}
 	}
 
@@ -25,9 +30,8 @@
 	}
 
 	.info {
-		left: 0;
-		bottom: 0;
-		width: 100%;
+		@extend .bottom-left;
+		width: $full-size-percentage;
 		height: 20%;
 		background-color: darkblue;
 	}
@@ -37,8 +41,8 @@
 	}
 
 	.count {
-		font-size: 16px;
-		right: 0;
+		font-size: $medium;
+		@extend .right;
 		@extend .align;
 	}
 }
@@ -47,18 +51,15 @@
 	@extend .catalog;
 
 	.background {
-		height: 80%;
+		height: ($full-size-percentage - 20%);
 		background-color: #FFF;
 
 		img {
+			position: absolute;
 			min-width: 50px;
-			max-width: 30%;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
+			max-width: ($full-size-percentage - 70%);
+			@extend .wide;
 			height: unset;
-			margin: auto auto;
 		}
 	}
 }
