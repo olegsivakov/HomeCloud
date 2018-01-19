@@ -1,4 +1,4 @@
-<ng-sidebar-container class="body">
+﻿<ng-sidebar-container class="body">
 	<div ng-sidebar-content class="body grid">
 		<div class="row header">
 			<div class="sidebar-toogle float-left" role="button" (click)="toggleSideBar()">
@@ -19,8 +19,13 @@
 			</div>
 		</div>
 		<div class="content row">
-			<div class="content-header text-right col-12">
-				<span>999.9Mb of 500.2Gb used</span>
+			<div class="content-header">
+				<div class="float-left col-8">
+					<a class="button"><span class="fa fa-plus-circle"></span> New</a>
+				</div>
+				<div class="text-right col-4">
+					<span>999.9Mb of 500.2Gb used</span>
+				</div>
 			</div>
 			<div class="content-body col-12">
 				<router-outlet></router-outlet>
