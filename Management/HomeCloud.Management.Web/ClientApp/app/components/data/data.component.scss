@@ -1,8 +1,45 @@
 ﻿@import '../../assets/sass/components/_grid.scss';
+@import '../../assets/sass/components/_button.scss';
 @import '../../assets/sass/helpers/positions.scss';
 @import '../../assets/sass/layout/_catalog.scss';
+@import '../../assets/sass/layout/_file.scss';
 
 .catalog-container {
-	border-top: 1px solid #000;
-	padding-top: 15px;
+	.content-header {
+		border-bottom: 1px solid #000;
+
+		span {
+			font-size: $small;
+		}
+
+		.command-bar {
+			a {
+				padding-right: 25px;
+
+				span {
+					font-size: $medium;
+				}
+			}
+		}
+	}
+
+	.content-body {
+		.file-uploader {
+			margin-top: 15px;
+			margin-bottom: 15px;
+			border: dotted 3px lightgray;
+			color: gray;
+
+			span {
+				line-height: 50px;
+			}
+		}
+
+		.catalog {
+			.selection {
+				margin: 7px 7px;
+				z-index: 860;
+			}
+		}
+	}
 }

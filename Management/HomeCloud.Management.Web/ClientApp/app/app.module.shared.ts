@@ -13,6 +13,8 @@ import { DataComponent } from './components/data/data.component';
 
 import { SidebarModule } from 'ng-sidebar';
 import { ExpandableListModule } from 'angular2-expandable-list';
+import { FileUploadModule } from 'ng2-file-upload';
+import { ContextmenuModule  } from 'ng2-contextmenu';
 
 @NgModule({
     declarations: [
@@ -29,6 +31,8 @@ import { ExpandableListModule } from 'angular2-expandable-list';
 		FormsModule,
 		SidebarModule.forRoot(),
 		ExpandableListModule,
+		FileUploadModule,
+		ContextmenuModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
 			{ path: 'home', component: HomeComponent },

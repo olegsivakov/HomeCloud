@@ -1,4 +1,5 @@
 ﻿@import '../variables/_sizes.scss';
+@import '../variables/_colors.scss';
 @import '../variables/_typography.scss';
 @import '../helpers/positions.scss';
 
@@ -8,20 +9,30 @@
 	margin-top: 10px;
 	margin-bottom: 10px;
 	@extend .horizontal-center;
-	color: #FFF;
+	color: $white;
 
 	* {
 		position: absolute;
 	}
 
-	.background {
-		background-color: lightgray;
+	.layout {
 		width: $full-size-percentage;
 		height: $full-size-percentage;
 
-		img {
-			width: $full-size-percentage;
-			height: $full-size-percentage;
+		.background {
+			background-color: $light-gray;
+			@extend .layout;
+
+			img {
+				@extend .layout;
+			}
+		}
+
+		.bottom-panel {
+			@extend .bottom-left;
+			@extend .layout;
+			height: 20% !important;
+			background-color: darkblue;
 		}
 	}
 
@@ -29,14 +40,8 @@
 		padding: 7px 10px;
 	}
 
-	.info {
-		@extend .bottom-left;
-		width: $full-size-percentage;
-		height: 20%;
-		background-color: darkblue;
-	}
-
 	.title {
+		color: $white;
 		@extend .align;
 	}
 
@@ -44,22 +49,5 @@
 		font-size: $medium;
 		@extend .right;
 		@extend .align;
-	}
-}
-
-.file {
-	@extend .catalog;
-
-	.background {
-		height: ($full-size-percentage - 20%);
-		background-color: #FFF;
-
-		img {
-			position: absolute;
-			min-width: 50px;
-			max-width: ($full-size-percentage - 70%);
-			@extend .wide;
-			height: unset;
-		}
 	}
 }

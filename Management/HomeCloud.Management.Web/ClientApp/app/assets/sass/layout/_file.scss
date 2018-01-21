@@ -1,0 +1,20 @@
+﻿@import '_catalog.scss';
+
+.file {
+	@extend .catalog;
+
+	.layout {
+		.background {
+			height: ($full-size-percentage - 20%);
+			background-color: $white;
+
+			img {
+				position: absolute;
+				min-width: 50px;
+				max-width: ($full-size-percentage - 70%);
+				@extend .wide;
+				height: unset;
+			}
+		}
+	}
+}

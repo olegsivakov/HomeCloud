@@ -1,169 +1,52 @@
-﻿<div class="grid catalog-container">
-	<div class="row">
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://image.freepik.com/free-psd/abstract-background-design_1297-87.jpg" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
+﻿
+<contextmenu #contextmenu>
+	<div style="background-color: #FFF">
+		<div style="border-bottom: 1px solid #000">
+			<a ng-click="rename({contextmenu.get('item.label'))">Rename</a>
+		</div>
+		<div>
+			<a ng-click="delete({contextmenu.get('item.label'))">Delete</a>
+		</div>
+	</div>
+</contextmenu>
+<div class="grid catalog-container">
+	<div class="row content-header">
+		<div class="col-8 command-bar">
+			<a><span class="fa fa-plus-circle"></span>&nbsp;New</a>
+			<a *ngIf="showRenameCommand"><span class="fa fa-edit"></span>&nbsp;Rename</a>
+			<a *ngIf="showDeleteCommand"><span class="fa fa-remove"></span>&nbsp;Delete</a>
+			<a *ngIf="showDownloadCommand"><span class="fa fa-download"></span>&nbsp;Download</a>
+		</div>
+		<div class="text-right col-4">
+			<span>999.9Mb of 500.2Gb used</span>
+		</div>
+	</div>
+	<div class="content-body row">
+		<div ng2FileDrop
+			 [ngClass]="{'text-center': true, 'file-uploader': true, 'nv-file-over': hasBaseDropZoneOver}"
+			 (fileOver)="fileOverBase($event)"
+			 [uploader]="uploader">
+			<span>Drag-n-drop files here</span>
+		</div>
+	</div>
+	<div class="content-body row">
+		<div *ngFor="let item of data">
+			<div class="col-2">
+				<div [ngClass]="{'catalog': item.isDirectory, 'file': !item.isDirectory}">
+					<a [routerLink]="['/storages']" class="layout">
+						<div class="background">
+							<img src="{{item.imageUrl}}" />
 						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbpj2iRoAPe0-WwYkUgUddhBiZfEzYkFa5_T1ONgkgSMtbV7lL" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
+						<div class="bottom-panel">
+							<div [ngClass]="{'title': true, 'fa': item.isDirectory, 'fa-folder-open': item.isDirectory}">
+								{{item.name}}
+							</div>
 						</div>
-					</div>
-					<div class="count">10</div>
+					</a>
+					<input type="checkbox" class="selection" (click)="select(item)" />
+					<div *ngIf="item.isDirectory" class="count">{{item.count}}</div>
 				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://image.freepik.com/free-psd/abstract-background-design_1297-87.jpg" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbpj2iRoAPe0-WwYkUgUddhBiZfEzYkFa5_T1ONgkgSMtbV7lL" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://image.freepik.com/free-psd/abstract-background-design_1297-87.jpg" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://image.freepik.com/free-psd/abstract-background-design_1297-87.jpg" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbpj2iRoAPe0-WwYkUgUddhBiZfEzYkFa5_T1ONgkgSMtbV7lL" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://image.freepik.com/free-psd/abstract-background-design_1297-87.jpg" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="catalog">
-					<img class="background" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeYXqyn-JTNUGcOFYO-I3FbJlQyX9PTP_5cdYZqmvzqqVKS5Qa" />
-					<div class="info">
-						<div class="title fa fa-folder-open">
-							Catalog Name
-						</div>
-					</div>
-					<div class="count">10</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="file">
-					<div class="background">
-						<img src="https://www.shareicon.net/download/2016/06/24/618239_word_2000x2000.png" />
-					</div>
-					<div class="info">
-						<div class="title">File_Name.docx</div>
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="file">
-					<div class="background">
-						<img src="https://www.shareicon.net/data/2016/06/24/618244_excel_2000x2000.png" />
-					</div>
-					<div class="info">
-						<div class="title">File_Name.docx</div>
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="file">
-					<div class="background">
-						<img src="https://fthmb.tqn.com/f46ov4VEeFniR3Ju78z6oK6cHZk=/735x0/itunes-music-file-icon-56a150345f9b58b7d0be2a12.PNG" />
-					</div>
-					<div class="info">
-						<div class="title">File_Name.docx</div>
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-2">
-			<a [routerLink]="['/storages']">
-				<div class="file">
-					<div class="background">
-						<img src="http://icons.iconarchive.com/icons/custom-icon-design/pretty-office-2/256/video-file-icon.png" />
-					</div>
-					<div class="info">
-						<div class="title">File_Name.docx</div>
-					</div>
-				</div>
-			</a>
+			</div>
 		</div>
 	</div>
 </div>
