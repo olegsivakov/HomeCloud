@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
@@ -14,32 +15,33 @@ import { DataComponent } from './components/data/data.component';
 import { SidebarModule } from 'ng-sidebar';
 import { ExpandableListModule } from 'angular2-expandable-list';
 import { FileUploadModule } from 'ng2-file-upload';
-import { ContextmenuModule  } from 'ng2-contextmenu';
+import { ContextmenuModule } from 'ng2-contextmenu';
 
 @NgModule({
-    declarations: [
+	declarations: [
 		AppComponent,
-        NavMenuComponent,
+		NavMenuComponent,
 		UserProfileBarComponent,
 		HomeComponent,
 		StorageListComponent,
 		DataComponent
-    ],
-    imports: [
-        CommonModule,
-        HttpModule,
+	],
+	imports: [
+		CommonModule,
+		HttpModule,
 		FormsModule,
+		NoopAnimationsModule,
 		SidebarModule.forRoot(),
 		ExpandableListModule,
 		FileUploadModule,
 		ContextmenuModule,
-        RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
+		RouterModule.forRoot([
+			{ path: '', redirectTo: 'home', pathMatch: 'full' },
 			{ path: 'home', component: HomeComponent },
 			{ path: 'catalogs', component: DataComponent },
-            { path: '**', redirectTo: 'home' }
-        ])
-    ]
+			{ path: '**', redirectTo: 'home' }
+		])
+	]
 })
 export class AppModuleShared {
 }

@@ -308,9 +308,11 @@
   border-bottom: 1px solid #000; }
   .catalog-container .content-header span {
     font-size: 12px; }
-  .catalog-container .content-header .command-bar a {
-    padding-right: 25px; }
-    .catalog-container .content-header .command-bar a span {
+  .catalog-container .content-header .command-bar .command {
+    padding-right: 25px;
+    font-size: 14px;
+    cursor: pointer; }
+    .catalog-container .content-header .command-bar .command span {
       font-size: 14px; }
 
 .catalog-container .content-body .file-uploader {

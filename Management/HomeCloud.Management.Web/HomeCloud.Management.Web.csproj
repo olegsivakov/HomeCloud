@@ -25,7 +25,9 @@
 
   <ItemGroup>
     <None Remove="ClientApp\app\components\data.component.ts" />
+    <None Remove="ClientApp\app\components\data\data.model.ts" />
     <None Remove="ClientApp\app\components\nav-menu\nav-menu.component.ts" />
+    <None Remove="ClientApp\app\components\notification\notification.component.ts" />
     <None Remove="ClientApp\app\components\shared\catalog.service.ts" />
     <None Remove="ClientApp\app\components\shared\file.service.ts" />
     <None Remove="ClientApp\app\components\user-profile-bar\user-profile-bar.component.ts" />
@@ -47,7 +49,9 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\data\data.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\data\data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\nav-menu\nav-menu.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\notification\notification.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\user-profile-bar\user-profile-bar.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\catalog.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\file.ts" />

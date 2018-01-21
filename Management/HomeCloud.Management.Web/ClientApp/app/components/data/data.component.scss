@@ -13,9 +13,10 @@
 		}
 
 		.command-bar {
-			a {
+			.command {
 				padding-right: 25px;
-
+				font-size: $medium;
+				cursor: pointer;
 				span {
 					font-size: $medium;
 				}

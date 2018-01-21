@@ -30,5 +30,9 @@
   {
     "outputFile": "ClientApp/app/components/data/data.component.css",
     "inputFile": "ClientApp/app/components/data/data.component.scss"
+  },
+  {
+    "outputFile": "ClientApp/app/components/notification/notification.component.css",
+    "inputFile": "ClientApp/app/components/notification/notification.component.scss"
   }
 ]

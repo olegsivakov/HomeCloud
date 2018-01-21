@@ -1,5 +1,4 @@
-﻿
-<contextmenu #contextmenu>
+﻿<contextmenu #contextmenu>
 	<div style="background-color: #FFF">
 		<div style="border-bottom: 1px solid #000">
 			<a ng-click="rename({contextmenu.get('item.label'))">Rename</a>
@@ -12,10 +11,10 @@
 <div class="grid catalog-container">
 	<div class="row content-header">
 		<div class="col-8 command-bar">
-			<a><span class="fa fa-plus-circle"></span>&nbsp;New</a>
-			<a *ngIf="showRenameCommand"><span class="fa fa-edit"></span>&nbsp;Rename</a>
-			<a *ngIf="showDeleteCommand"><span class="fa fa-remove"></span>&nbsp;Delete</a>
-			<a *ngIf="showDownloadCommand"><span class="fa fa-download"></span>&nbsp;Download</a>
+			<a class="command"><span class="fa fa-plus-circle"></span>&nbsp;New</a>
+			<a class="command" *ngIf="showRenameCommand" (click)="rename()"><span class="fa fa-edit"></span>&nbsp;Rename</a>
+			<a class="command" *ngIf="showDeleteCommand"><span class="fa fa-remove"></span>&nbsp;Delete</a>
+			<a class="command" *ngIf="showDownloadCommand"><span class="fa fa-download"></span>&nbsp;Download</a>
 		</div>
 		<div class="text-right col-4">
 			<span>999.9Mb of 500.2Gb used</span>

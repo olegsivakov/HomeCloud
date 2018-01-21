@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
+
 import { DataModel } from './data.model';
 
 @Component({
@@ -58,15 +59,15 @@ export class DataComponent implements OnInit {
 	}
 
 	public get showRenameCommand(): boolean {
-		return this.data.filter(item => item.isSelected).length == 1;
+		return this.getSelectedModels().length == 1;
 	}
 
 	public get showDeleteCommand(): boolean {
-		return this.data.filter(item => item.isSelected).length > 0;
+		return this.getSelectedModels().length > 0;
 	}
 
 	public get showDownloadCommand(): boolean {
-		return this.data.filter(item => item.isSelected).length == 1;
+		return this.getSelectedModels().length == 1;
 	}
 
 	public fileOverBase(e: any): void {
@@ -80,11 +81,15 @@ export class DataComponent implements OnInit {
 		}
 	}
 
-	public rename(model: DataModel): void {
-
+	public rename(): void {
+		let models: Array<DataModel> = this.getSelectedModels();
 	}
 
 	public delete(model: DataModel): void {
 
+	}
+
+	private getSelectedModels(): Array<DataModel> {
+		return this.data.filter(item => item.isSelected);
 	}
 }
