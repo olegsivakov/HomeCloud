@@ -2,6 +2,8 @@
 import { FileUploader } from 'ng2-file-upload';
 
 import { DataModel } from './data.model';
+import { Notification, NotificationType } from './../notification/notification.model';
+import { ToasterService } from 'angular2-toaster';
 
 @Component({
 	selector: 'data',
@@ -16,7 +18,7 @@ export class DataComponent implements OnInit {
 
 	public data: Array<DataModel> = new Array<DataModel>();
 
-	constructor() {
+	constructor(private toasterService: ToasterService) {
 	}
 
 	ngOnInit() {
@@ -83,6 +85,10 @@ export class DataComponent implements OnInit {
 
 	public rename(): void {
 		let models: Array<DataModel> = this.getSelectedModels();
+
+		let notification: Notification = new Notification(NotificationType.Success, "Renamed successfully", "The item has been renamed successfully.");
+
+		this.toasterService.pop(notification);
 	}
 
 	public delete(model: DataModel): void {

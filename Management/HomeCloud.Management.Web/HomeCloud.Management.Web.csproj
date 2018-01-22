@@ -27,7 +27,7 @@
     <None Remove="ClientApp\app\components\data.component.ts" />
     <None Remove="ClientApp\app\components\data\data.model.ts" />
     <None Remove="ClientApp\app\components\nav-menu\nav-menu.component.ts" />
-    <None Remove="ClientApp\app\components\notification\notification.component.ts" />
+    <None Remove="ClientApp\app\components\notification\notification.model.ts" />
     <None Remove="ClientApp\app\components\shared\catalog.service.ts" />
     <None Remove="ClientApp\app\components\shared\file.service.ts" />
     <None Remove="ClientApp\app\components\user-profile-bar\user-profile-bar.component.ts" />
@@ -43,7 +43,8 @@
     <Folder Include="ClientApp\app\assets\images\" />
     <Folder Include="ClientApp\app\assets\fonts\" />
     <Folder Include="ClientApp\app\assets\sass\functions\" />
-    <Folder Include="ClientApp\app\components\shared\" />
+    <Folder Include="ClientApp\app\components\shared\progress-bar\" />
+    <Folder Include="ClientApp\app\components\shared\notification-bar\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 
@@ -51,7 +52,7 @@
     <TypeScriptCompile Include="ClientApp\app\components\data\data.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\data\data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\nav-menu\nav-menu.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\notification\notification.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\notification\notification.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\user-profile-bar\user-profile-bar.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\catalog.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\file.ts" />

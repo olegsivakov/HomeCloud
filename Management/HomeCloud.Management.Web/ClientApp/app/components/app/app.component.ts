@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ToasterConfig } from 'angular2-toaster';
 
 @Component({
     selector: 'app',
@@ -8,6 +9,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
 	public sideBarOpened: boolean = false;
 	public userBarOpened: boolean = false;
+
+	public toasterConfig: ToasterConfig = new ToasterConfig({
+		limit: 5
+	});
 
 	public toggleSideBar() {
 		this.sideBarOpened = !this.sideBarOpened;
