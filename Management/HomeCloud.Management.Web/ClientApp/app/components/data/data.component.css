@@ -304,6 +304,11 @@
     max-width: 30%;
     height: unset; }
 
+.toast-top-right {
+  position: absolute;
+  top: 0;
+  right: 0; }
+
 .catalog-container .content-header {
   border-bottom: 1px solid #000; }
   .catalog-container .content-header span {
