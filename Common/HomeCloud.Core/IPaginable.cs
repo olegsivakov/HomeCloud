@@ -7,7 +7,7 @@
 	#endregion
 
 	/// <summary>
-	/// Exposes the enumerator that support a simple iteration over the subset of a non-generic collection.
+	/// Exposes the enumerator that supports a simple iteration over the subset of a non-generic collection.
 	/// </summary>
 	/// <seealso cref="System.Collections.IEnumerable" />
 	public interface IPaginable : IEnumerable

@@ -43,7 +43,7 @@
 		/// <value>
 		/// The offset index.
 		/// </value>
-		public int Offset { get; set; }
+		public virtual int Offset { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of items to be presented in the collection.
@@ -51,7 +51,7 @@
 		/// <value>
 		/// The number of items to be presented in the collection.
 		/// </value>
-		public int Limit { get; set; }
+		public virtual int Limit { get; set; }
 
 		/// <summary>
 		/// Gets or sets the total number of items.
@@ -59,7 +59,7 @@
 		/// <value>
 		/// The total count.
 		/// </value>
-		public int TotalCount { get; set; }
+		public virtual int TotalCount { get; set; }
 
 		#endregion
 	}
