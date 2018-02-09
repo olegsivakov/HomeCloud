@@ -1,4 +1,14 @@
-﻿<div class="grid storage-container">
+﻿<div class="grid content-header">
+	<div class="row">
+		<div class="col-8 command-bar">
+			<a class="command"><span class="fa fa-plus-circle"></span>&nbsp;Create</a>
+			<a class="command" *ngIf="showRenameCommand" (click)="rename()"><span class="fa fa-edit"></span>&nbsp;Rename</a>
+			<a class="command" *ngIf="showDeleteCommand"><span class="fa fa-remove"></span>&nbsp;Delete</a>
+			<a class="command" *ngIf="showDownloadCommand"><span class="fa fa-download"></span>&nbsp;Download</a>
+		</div>
+	</div>
+</div>
+<div class="grid table storage-container">
 	<div class="row header">
 		<div class="column col-5">Storage Name</div>
 		<div class="column col-6">Used space</div>

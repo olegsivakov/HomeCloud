@@ -1,5 +1,5 @@
-﻿<div class="grid catalog-container">
-	<div class="row content-header">
+﻿<div class="grid content-header">
+	<div class="row">
 		<div class="col-8 command-bar">
 			<a class="command"><span class="fa fa-plus-circle"></span>&nbsp;New</a>
 			<a class="command" *ngIf="showRenameCommand" (click)="rename()"><span class="fa fa-edit"></span>&nbsp;Rename</a>
@@ -10,7 +10,10 @@
 			<span>999.9Mb of 500.2Gb used</span>
 		</div>
 	</div>
-	<div class="content-body row">
+</div>
+
+<div class="grid catalog-container">
+	<div class="row">
 		<div ng2FileDrop
 			 [ngClass]="{'text-center': true, 'file-uploader': true, 'nv-file-over': hasBaseDropZoneOver}"
 			 (fileOver)="fileOverBase($event)"
@@ -18,7 +21,7 @@
 			<span>Drag-n-drop files here</span>
 		</div>
 	</div>
-	<div class="content-body row">
+	<div class="row">
 		<div *ngFor="let item of data">
 			<div class="col-2">
 				<div [ngClass]="{'catalog': item.isDirectory, 'file': !item.isDirectory}">

@@ -4,7 +4,13 @@
 
 .content {
 	padding: 20px 35px;
+}
 
-	.content-body {
+.content-header {
+	border-bottom: 1px solid #000;
+	margin-bottom: 10px;
+
+	span {
+		font-size: $small !important;
 	}
 }

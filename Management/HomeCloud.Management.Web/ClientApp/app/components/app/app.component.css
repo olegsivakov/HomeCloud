@@ -82,13 +82,13 @@
     margin: 5px 5px; }
     .header .userbar-toggle .photo {
       max-height: 40px;
-      border: 1px solid #b5b5b5; }
+      border: 1px solid #e9e9e9; }
     .header .userbar-toggle span {
       height: 40px;
       max-height: 40px;
       margin: 5px 5px; }
 
-.bold, .grid .header {
+.bold, .grid .row.header {
   font-weight: bold; }
 
 .italic {
@@ -209,6 +209,12 @@
 
 .content {
   padding: 20px 35px; }
+
+.content-header {
+  border-bottom: 1px solid #000;
+  margin-bottom: 10px; }
+  .content-header span {
+    font-size: 12px !important; }
 
 .float-left {
   float: left; }

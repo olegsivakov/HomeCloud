@@ -1,0 +1,13 @@
+﻿@import '../variables/_typography.scss';
+
+.command-bar {
+	.command {
+		padding-right: 25px;
+		font-size: $medium;
+		cursor: pointer;
+
+		span {
+			font-size: $medium;
+		}
+	}
+}

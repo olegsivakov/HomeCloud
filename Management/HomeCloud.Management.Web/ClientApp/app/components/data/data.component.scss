@@ -1,51 +1,29 @@
 ﻿@import '../../assets/sass/components/_grid.scss';
 @import '../../assets/sass/components/_button.scss';
 @import '../../assets/sass/helpers/positions.scss';
+@import '../../assets/sass/layout/_content.scss';
+@import '../../assets/sass/layout/_command-bar.scss';
 @import '../../assets/sass/layout/_catalog.scss';
 @import '../../assets/sass/layout/_file.scss';
 
-.toast-top-right {
-	position: absolute;
-	top: 0;
-	right: 0;
-}
+
 .catalog-container {
-	.content-header {
-		border-bottom: 1px solid #000;
+
+	.file-uploader {
+		margin-top: 15px;
+		margin-bottom: 15px;
+		border: dotted 3px lightgray;
+		color: gray;
 
 		span {
-			font-size: $small;
-		}
-
-		.command-bar {
-			.command {
-				padding-right: 25px;
-				font-size: $medium;
-				cursor: pointer;
-				span {
-					font-size: $medium;
-				}
-			}
+			line-height: 50px;
 		}
 	}
 
-	.content-body {
-		.file-uploader {
-			margin-top: 15px;
-			margin-bottom: 15px;
-			border: dotted 3px lightgray;
-			color: gray;
-
-			span {
-				line-height: 50px;
-			}
-		}
-
-		.catalog {
-			.selection {
-				margin: 7px 7px;
-				z-index: 860;
-			}
+	.catalog {
+		.selection {
+			margin: 7px 7px;
+			z-index: 860;
 		}
 	}
 }

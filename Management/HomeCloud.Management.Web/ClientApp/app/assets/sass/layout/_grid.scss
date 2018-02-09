@@ -1,0 +1,40 @@
+﻿@import '../variables/_colors.scss';
+@import '../variables/_typography.scss';
+@import '../helpers/_fonts.scss';
+@import '../components/_grid.scss';
+
+.grid {
+	&.table {
+		.row {
+
+			&.header {
+				@extend .uppercase;
+
+				[class*="col-"] {
+					background-color: $dark-blue;
+					color: $white;
+					padding: 10px 10px;
+				}
+			}
+
+			[class*="col-"] {
+				padding: 5px 10px;
+				font-size: $medium;
+				color: $black;
+
+				a {
+					@extend .bold;
+					color: $black;
+				}
+			}
+
+			&:nth-child(odd) {
+				background: $light-gray;
+			}
+
+			&:nth-child(even) {
+				background: $white;
+			}
+		}
+	}
+}

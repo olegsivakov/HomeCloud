@@ -1,4 +1,4 @@
-﻿.bold, .grid .header {
+﻿.bold, .grid .row.header {
   font-weight: bold; }
 
 .italic {
@@ -57,7 +57,7 @@
 .text-justify {
   text-align: justify; }
 
-.bold, .grid .header {
+.bold, .grid .row.header {
   font-weight: bold; }
 
 .italic {

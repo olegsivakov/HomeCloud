@@ -8,12 +8,12 @@
 .grid {
 	min-width: $full-size-percentage;
 
-	.header {
-		@extend .bold;
-	}
-
 	.row {
 		width: $full-size-percentage;
+
+		&.header {
+			@extend .bold;
+		}
 
 		&::after {
 			content: "";
