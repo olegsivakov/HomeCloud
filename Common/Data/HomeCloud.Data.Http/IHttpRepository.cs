@@ -1,11 +1,10 @@
 ﻿namespace HomeCloud.Data.Http
 {
 	/// <summary>
-	/// Defines methods to handle the data of <see cref="T"/> type located on the remote <see cref="Http/HTTPS"/> resource.
+	/// Marks the repository implementation to be <see cref="IHttpRepository" />.
 	/// </summary>
-	/// <typeparam name="T">The type of data/</typeparam>
-	/// <seealso cref="HomeCloud.Data.IRepository{T}" />
-	public interface IHttpRepository<T> : IRepository<T>
-    {
-    }
+	/// <seealso cref="HomeCloud.Data.IRepository" />
+	public interface IHttpRepository : IRepository
+	{
+	}
 }

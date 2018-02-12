@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 
@@ -15,6 +16,20 @@
 	/// <seealso cref="System.IDisposable" />
 	public interface ISqlServerDBContext : IDisposable
 	{
+		/// <summary>
+		/// Gets or sets the database connection.
+		/// </summary>
+		/// <value>
+		/// The database connection.
+		/// </value>
+		IDbConnection Connection { get; }
+
+		/// <summary>
+		/// Creates the database transaction for <see cref="ISqlServerDBContext.Connection"/>.
+		/// </summary>
+		/// <returns>The instance of <see cref="IDbTransaction"/>.</returns>
+		IDbTransaction CreateTransaction();
+
 		/// <summary>
 		/// Queries data by the specified SQL query.
 		/// </summary>

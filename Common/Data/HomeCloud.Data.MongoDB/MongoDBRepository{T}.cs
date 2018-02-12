@@ -38,7 +38,7 @@
 
 		#endregion
 
-		#region Protected Methods
+		#region Protected Properties
 
 		/// <summary>
 		/// Gets the data context.
@@ -48,8 +48,6 @@
 		/// </value>
 		protected IMongoDBContext Context { get; private set; }
 
-		#endregion
-
 		/// <summary>
 		/// Gets the <see cref="MongoDB"/> collection within the current repository instance.
 		/// </summary>
@@ -57,6 +55,8 @@
 		/// The collection.
 		/// </value>
 		protected IMongoCollection<T> CurrentCollection { get; private set; }
+
+		#endregion
 
 		#region IRepository<T> Implementations
 

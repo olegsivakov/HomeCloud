@@ -16,7 +16,7 @@
 	#endregion
 
 	/// <summary>
-	/// Provides methods to query data from <see cref="SqlServer"/> database.
+	/// Provides methods to query data from <see cref="SqlServer" /> database.
 	/// </summary>
 	/// <seealso cref="HomeCloud.Data.SqlServer.ISqlServerDBContext" />
 	public class SqlServerDBContext : ISqlServerDBContext
@@ -26,17 +26,22 @@
 		/// <summary>
 		/// The database connection member.
 		/// </summary>
-		private readonly IDbConnection connection = null;
+		private IDbConnection connection = null;
 
 		/// <summary>
-		/// The database transaction member.
+		/// The database transaction.
 		/// </summary>
-		private readonly IDbTransaction transaction = null;
+		private IDbTransaction transaction = null;
 
 		/// <summary>
-		/// The member indicating whether transaction commit is failed. It's considered the initial state of context as not committed and marked as failed. 
+		/// The member indicating whether transaction commit is failed. It's considered the initial state of context as not committed and marked as failed.
 		/// </summary>
 		private bool isCommitFailed = true;
+
+		/// <summary>
+		/// The configuration optionsю
+		/// </summary>
+		private readonly SqlServerDBOptions options = null;
 
 		#endregion
 
@@ -46,21 +51,43 @@
 		/// Initializes a new instance of the <see cref="DbContext" /> class.
 		/// </summary>
 		/// <param name="connectionString">The connection string.</param>
-		/// <param name="isTransactional">The database transaction.</param>
-		public SqlServerDBContext(string connectionString, bool isTransactional = false)
+		public SqlServerDBContext(SqlServerDBOptions options)
 		{
-			this.connection = new SqlConnection(connectionString);
-			this.connection.Open();
-
-			if (isTransactional)
+			if (options is null)
 			{
-				this.transaction = this.connection.BeginTransaction();
+				throw new ArgumentNullException(nameof(options));
 			}
+
+			if (options.ConnectionString is null)
+			{
+				throw new ArgumentNullException(nameof(options.ConnectionString));
+			}
+
+			this.options = options;
 		}
 
 		#endregion
 
 		#region IDataContext Implementations
+
+		/// <summary>
+		/// Gets or sets the database connection.
+		/// </summary>
+		/// <value>
+		/// The database connection.
+		/// </value>
+		public IDbConnection Connection => this.connection ?? (this.connection = this.ConfigureConnection());
+
+		/// <summary>
+		/// Creates the database transaction for <see cref="ISqlServerDBContext.Connection"/>.
+		/// </summary>
+		/// <returns>The instance of <see cref="IDbTransaction"/>.</returns>
+		public IDbTransaction CreateTransaction()
+		{
+			this.transaction = this.Connection.BeginTransaction();
+
+			return this.transaction;
+		}
 
 		/// <summary>
 		/// Queries data by the specified SQL query.
@@ -73,7 +100,7 @@
 		/// </returns>
 		public async Task<IEnumerable<T>> QueryAsync<T>(string sqlQuery, object parameter = null)
 		{
-			return await this.connection.QueryAsync<T>(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.Connection.QueryAsync<T>(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -86,7 +113,7 @@
 		/// </returns>
 		public async Task<int> ExecuteAsync(string sqlQuery, object parameter = null)
 		{
-			return await this.connection.ExecuteAsync(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.Connection.ExecuteAsync(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -102,7 +129,7 @@
 		{
 			if (parameters == null)
 			{
-				return await this.connection.ExecuteScalarAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+				return await this.Connection.ExecuteScalarAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 			}
 
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
@@ -115,7 +142,7 @@
 				}
 			}
 
-			return await this.connection.ExecuteScalarAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.Connection.ExecuteScalarAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -131,7 +158,7 @@
 		{
 			if (parameters == null)
 			{
-				return await this.connection.QueryAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+				return await this.Connection.QueryAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 			}
 
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
@@ -144,7 +171,7 @@
 				}
 			}
 
-			return await this.connection.QueryAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.Connection.QueryAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -169,7 +196,7 @@
 				}
 			}
 
-			return await this.connection.ExecuteAsync(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.connection.ConnectionTimeout);
+			return await this.Connection.ExecuteAsync(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		#endregion
@@ -221,10 +248,30 @@
 				}
 			}
 
-			if (this.connection.State != ConnectionState.Closed)
+			if (this.Connection.State != ConnectionState.Closed)
 			{
-				this.connection.Close();
+				this.Connection.Close();
 			}
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Configures the connection to database.
+		/// </summary>
+		/// <param name="connection">The database connection.</param>
+		/// <returns>The instance of <see cref="IDbConnection"/>.</returns>
+		private IDbConnection ConfigureConnection()
+		{
+			if (this.connection is null)
+			{
+				this.connection = new SqlConnection(this.options.ConnectionString);
+				this.connection.Open();
+			}
+
+			return this.connection;
 		}
 
 		#endregion

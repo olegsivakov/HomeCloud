@@ -41,7 +41,7 @@
 		/// <value>
 		/// The <see cref="HttpClient"/>.
 		/// </value>
-		private HttpClient Client => this.httpClient ?? (this.httpClient = this.ConfigureHttpClient(new HttpClient()));
+		private HttpClient Client => this.httpClient ?? (this.httpClient = this.ConfigureHttpClient());
 
 		#endregion
 
@@ -207,15 +207,20 @@
 		/// </summary>
 		/// <param name="client">The instance of <see cref="HttpClient"/> to configure.</param>
 		/// <returns>The configured instance of <see cref="HttpClient"/>.</returns>
-		private HttpClient ConfigureHttpClient(HttpClient client)
+		private HttpClient ConfigureHttpClient()
 		{
-			client.BaseAddress = new Uri(this.options.BaseAddress);
-			client.Timeout = this.options.Timeout.HasValue ? this.options.Timeout.Value : client.Timeout;
+			if (this.httpClient is null)
+			{
+				this.httpClient = new HttpClient();
+			}
 
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MimeTypes.Application.Json));
+			this.httpClient.BaseAddress = new Uri(this.options.BaseAddress);
+			this.httpClient.Timeout = this.options.Timeout.HasValue ? this.options.Timeout.Value : this.httpClient.Timeout;
 
-			return client;
+			this.httpClient.DefaultRequestHeaders.Accept.Clear();
+			this.httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MimeTypes.Application.Json));
+
+			return this.httpClient;
 		}
 
 		#endregion
