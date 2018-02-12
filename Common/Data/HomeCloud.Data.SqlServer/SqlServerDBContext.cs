@@ -64,6 +64,8 @@
 			}
 
 			this.options = options;
+
+			this.Initialize();
 		}
 
 		#endregion
@@ -248,10 +250,12 @@
 				}
 			}
 
-			if (this.Connection.State != ConnectionState.Closed)
+			if (this.connection != null && this.Connection.State != ConnectionState.Closed)
 			{
 				this.Connection.Close();
 			}
+
+			this.Initialize();
 		}
 
 		#endregion
@@ -272,6 +276,16 @@
 			}
 
 			return this.connection;
+		}
+
+		/// <summary>
+		/// Initializes current instance.
+		/// </summary>
+		private void Initialize()
+		{
+			this.isCommitFailed = true;
+			this.connection = null;
+			this.transaction = null;
 		}
 
 		#endregion

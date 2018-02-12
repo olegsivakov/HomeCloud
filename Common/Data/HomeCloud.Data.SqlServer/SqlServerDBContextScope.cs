@@ -66,9 +66,11 @@ namespace HomeCloud.Data.SqlServer
 		/// </summary>
 		public void Commit()
 		{
-			if (!isTransactionCreated)
+			if (isTransactionCreated)
 			{
 				this.context.Commit();
+
+				this.isTransactionCreated = false;
 			}
 		}
 
