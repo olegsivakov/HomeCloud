@@ -9,6 +9,8 @@
 	using global::MongoDB.Driver;
 	using global::MongoDB.Bson;
 
+	using Microsoft.Extensions.Options;
+
 	#endregion
 
 	/// <summary>
@@ -31,21 +33,26 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MongoDBContext" /> class.
 		/// </summary>
-		/// <param name="options">The configuration options.</param>
-		/// <exception cref="System.ArgumentNullException">connectionString</exception>
-		public MongoDBContext(MongoDBOptions options)
+		/// <param name="accessor">The configuration options accessor.</param>
+		/// <exception cref="System.ArgumentNullException">accessor or Value or <see cref="MongoDBOptions.ConnectionString"/>.</exception>
+		public MongoDBContext(IOptionsSnapshot<MongoDBOptions> accessor)
 		{
-			if (options is null)
+			if (accessor is null)
 			{
-				throw new ArgumentNullException(nameof(options));
+				throw new ArgumentNullException(nameof(accessor));
 			}
 
-			if (options.ConnectionString is null)
+			if (accessor.Value is null)
 			{
-				throw new ArgumentNullException(nameof(options.ConnectionString));
+				throw new ArgumentNullException(nameof(accessor.Value));
 			}
 
-			this._database = this._database ?? new MongoClient(options.ConnectionString).GetDatabase(MongoUrl.Create(options.ConnectionString).DatabaseName);
+			if (string.IsNullOrWhiteSpace(accessor.Value.ConnectionString))
+			{
+				throw new ArgumentNullException(nameof(accessor.Value.ConnectionString));
+			}
+
+			this._database = this._database ?? new MongoClient(accessor.Value.ConnectionString).GetDatabase(MongoUrl.Create(accessor.Value.ConnectionString).DatabaseName);
 		}
 
 		#endregion

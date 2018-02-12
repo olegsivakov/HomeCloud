@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\HomeCloud.DependencyInjection\HomeCloud.DependencyInjection.csproj" />
+    <ProjectReference Include="..\HomeCloud.Data.Http\HomeCloud.Data.Http.csproj" />
+    <ProjectReference Include="..\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\HomeCloud.Data.SqlServer\HomeCloud.Data.SqlServer.csproj" />
+  </ItemGroup>
+
+</Project>

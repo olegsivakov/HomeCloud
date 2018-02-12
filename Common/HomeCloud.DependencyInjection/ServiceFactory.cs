@@ -48,7 +48,19 @@
 		/// </returns>
 		public T Get<TService>() where TService : T
 		{
-			return (T)this.provider.GetService(typeof(TService));
+			return this.GetService<TService>();
+		}
+
+		/// <summary>
+		/// Gets the specified service which type is derived from the type specified in the factory.
+		/// </summary>
+		/// <typeparam name="TService">The type of the service derived from <see cref="!:T" />.</typeparam>
+		/// <returns>
+		/// The instance of <see cref="!:TService" />.
+		/// </returns>
+		public TService GetService<TService>() where TService : T
+		{
+			return (TService)this.provider.GetService(typeof(TService));
 		}
 
 		#endregion

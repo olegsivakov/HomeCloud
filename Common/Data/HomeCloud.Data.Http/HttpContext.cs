@@ -11,6 +11,8 @@
 	using HomeCloud.Http;
 	using HomeCloud.Http.Extensions;
 
+	using Microsoft.Extensions.Options;
+
 	#endregion
 
 	/// <summary>
@@ -50,21 +52,26 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HttpContext" /> class.
 		/// </summary>
-		/// <param name="options">The configuration options.</param>
-		/// <exception cref="System.ArgumentNullException">baseAddress</exception>
-		public HttpContext(HttpOptions options)
+		/// <param name="accessor">The configuration options accessor.</param>
+		/// <exception cref="System.ArgumentNullException">accessor or Value or <see cref="HttpOptions.BaseAddress"/>.</exception>
+		public HttpContext(IOptionsSnapshot<HttpOptions> accessor)
 		{
-			if (options is null)
+			if (accessor is null)
 			{
-				throw new ArgumentNullException(nameof(options));
+				throw new ArgumentNullException(nameof(accessor));
 			}
 
-			if (string.IsNullOrWhiteSpace(options.BaseAddress))
+			if (accessor.Value is null)
 			{
-				throw new ArgumentNullException(nameof(options.BaseAddress));
+				throw new ArgumentNullException(nameof(accessor.Value));
 			}
 
-			this.options = options;
+			if (string.IsNullOrWhiteSpace(accessor.Value.BaseAddress))
+			{
+				throw new ArgumentNullException(nameof(accessor.Value.BaseAddress));
+			}
+
+			this.options = accessor.Value;
 		}
 
 		#endregion

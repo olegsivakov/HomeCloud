@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Data.MongoDB", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Data.SqlServer", "Data\HomeCloud.Data.SqlServer\HomeCloud.Data.SqlServer.csproj", "{A3BE1A57-C150-413C-8323-755E80202154}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Data.DependencyInjection", "Data\HomeCloud.Data.DependencyInjection\HomeCloud.Data.DependencyInjection.csproj", "{97EBD62D-4A5C-45CA-B669-9870C5645D74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DependencyInjection", "HomeCloud.DependencyInjection\HomeCloud.DependencyInjection.csproj", "{1ECFFE32-E4CB-4AE0-965F-D50911916D26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,14 @@ Global
 		{A3BE1A57-C150-413C-8323-755E80202154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3BE1A57-C150-413C-8323-755E80202154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3BE1A57-C150-413C-8323-755E80202154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97EBD62D-4A5C-45CA-B669-9870C5645D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97EBD62D-4A5C-45CA-B669-9870C5645D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97EBD62D-4A5C-45CA-B669-9870C5645D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97EBD62D-4A5C-45CA-B669-9870C5645D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ECFFE32-E4CB-4AE0-965F-D50911916D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ECFFE32-E4CB-4AE0-965F-D50911916D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ECFFE32-E4CB-4AE0-965F-D50911916D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ECFFE32-E4CB-4AE0-965F-D50911916D26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +82,7 @@ Global
 		{F1B48E03-3491-4332-8FDE-E534DB308211} = {8DDC541E-38F3-411C-BF4B-34D2191D6419}
 		{36B2A750-CE8A-4E01-BCF6-69DC13E6DA67} = {9824EC56-16FC-42B6-8031-CA71028F20A9}
 		{A3BE1A57-C150-413C-8323-755E80202154} = {9824EC56-16FC-42B6-8031-CA71028F20A9}
+		{97EBD62D-4A5C-45CA-B669-9870C5645D74} = {9824EC56-16FC-42B6-8031-CA71028F20A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6066761-5217-45AD-B4C1-67B00E03DE1C}

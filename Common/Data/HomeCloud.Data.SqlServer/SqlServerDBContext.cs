@@ -13,6 +13,8 @@
 
 	using Dapper;
 
+	using Microsoft.Extensions.Options;
+
 	#endregion
 
 	/// <summary>
@@ -50,20 +52,26 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DbContext" /> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public SqlServerDBContext(SqlServerDBOptions options)
+		/// <param name="accessor">The configuration options accessor.</param>
+		/// <exception cref="System.ArgumentNullException">accessor or <see cref="IOptionsSnapshot{SqlServerDBOptions}.Value"/> or <see cref="SqlServerDBOptions.ConnectionString"/>.</exception>
+		public SqlServerDBContext(IOptionsSnapshot<SqlServerDBOptions> accessor)
 		{
-			if (options is null)
+			if (accessor is null)
 			{
-				throw new ArgumentNullException(nameof(options));
+				throw new ArgumentNullException(nameof(accessor));
 			}
 
-			if (options.ConnectionString is null)
+			if (accessor.Value is null)
 			{
-				throw new ArgumentNullException(nameof(options.ConnectionString));
+				throw new ArgumentNullException(nameof(accessor.Value));
 			}
 
-			this.options = options;
+			if (string.IsNullOrWhiteSpace(accessor.Value.ConnectionString))
+			{
+				throw new ArgumentNullException(nameof(accessor.Value.ConnectionString));
+			}
+
+			this.options = accessor.Value;
 
 			this.Initialize();
 		}
