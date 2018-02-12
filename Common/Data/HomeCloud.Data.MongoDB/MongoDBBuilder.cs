@@ -1,8 +1,6 @@
-﻿namespace HomeCloud.Data.DependencyInjection.Builders
+﻿namespace HomeCloud.Data.MongoDB
 {
 	#region Usings
-
-	using HomeCloud.Data.MongoDB;
 
 	using Microsoft.Extensions.DependencyInjection;
 

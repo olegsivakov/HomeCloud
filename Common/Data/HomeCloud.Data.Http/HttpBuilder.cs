@@ -1,8 +1,6 @@
-﻿namespace HomeCloud.Data.DependencyInjection.Builders
+﻿namespace HomeCloud.Data.Http
 {
 	#region Usings
-
-	using HomeCloud.Data.Http;
 
 	using Microsoft.Extensions.DependencyInjection;
 

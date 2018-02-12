@@ -1,8 +1,6 @@
-﻿namespace HomeCloud.Data.DependencyInjection.Builders
+﻿namespace HomeCloud.Data.SqlServer
 {
 	#region Usings
-
-	using HomeCloud.Data.SqlServer;
 
 	using Microsoft.Extensions.DependencyInjection;
 

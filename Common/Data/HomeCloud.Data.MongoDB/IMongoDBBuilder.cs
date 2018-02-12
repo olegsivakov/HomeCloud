@@ -1,11 +1,5 @@
-﻿namespace HomeCloud.Data.DependencyInjection.Builders
+﻿namespace HomeCloud.Data.MongoDB
 {
-	#region Usings
-
-	using HomeCloud.Data.MongoDB;
-
-	#endregion
-
 	/// <summary>
 	/// Defines methods to add <see cref="MongoDB"/> database services to service collection.
 	/// </summary>

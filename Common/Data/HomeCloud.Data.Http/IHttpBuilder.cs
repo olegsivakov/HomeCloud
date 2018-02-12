@@ -1,11 +1,5 @@
-﻿namespace HomeCloud.Data.DependencyInjection.Builders
+﻿namespace HomeCloud.Data.Http
 {
-	#region Usings
-
-	using HomeCloud.Data.Http;
-
-	#endregion
-
 	/// <summary>
 	/// Defines methods to add <see cref="Http"/> resource access services to service collection.
 	/// </summary>

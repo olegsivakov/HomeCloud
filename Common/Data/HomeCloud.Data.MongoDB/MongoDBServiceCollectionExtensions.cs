@@ -1,11 +1,9 @@
-﻿namespace HomeCloud.Data.DependencyInjection
+﻿namespace HomeCloud.Data.MongoDB
 {
 	#region Usings
 
 	using System;
 
-	using HomeCloud.Data.DependencyInjection.Builders;
-	using HomeCloud.Data.MongoDB;
 	using HomeCloud.DependencyInjection;
 
 	using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +25,14 @@
 		{
 			services.AddFactory<IMongoDBRepository>();
 
-			services.Configure(setupAction);
+			if (setupAction is null)
+			{
+				services.Configure<MongoDBOptions>(options => { });
+			}
+			else
+			{
+				services.Configure(setupAction);
+			}
 
 			return new MongoDBBuilder(services);
 		}

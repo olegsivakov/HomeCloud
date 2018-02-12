@@ -1,11 +1,9 @@
-﻿namespace HomeCloud.Data.DependencyInjection
+﻿namespace HomeCloud.Data.SqlServer
 {
 	#region Usings
 
 	using System;
 
-	using HomeCloud.Data.DependencyInjection.Builders;
-	using HomeCloud.Data.SqlServer;
 	using HomeCloud.DependencyInjection;
 
 	using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +25,14 @@
 		{
 			services.AddFactory<ISqlServerDBRepository>();
 
-			services.Configure(setupAction);
+			if (setupAction is null)
+			{
+				services.Configure<SqlServerDBOptions>(options => { });
+			}
+			else
+			{
+				services.Configure(setupAction);
+			}
 
 			return new SqlServerDBBuilder(services);
 		}

@@ -1,11 +1,5 @@
-﻿namespace HomeCloud.Data.DependencyInjection.Builders
+﻿namespace HomeCloud.Data.SqlServer
 {
-	#region Usings
-
-	using HomeCloud.Data.SqlServer;
-
-	#endregion
-
 	/// <summary>
 	/// Defines methods to add <see cref="SqlServer"/> database services to service collection.
 	/// </summary>

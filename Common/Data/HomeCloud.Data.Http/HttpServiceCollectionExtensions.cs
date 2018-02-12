@@ -1,11 +1,9 @@
-﻿namespace HomeCloud.Data.DependencyInjection
+﻿namespace HomeCloud.Data.Http
 {
 	#region Usings
 
 	using System;
 
-	using HomeCloud.Data.DependencyInjection.Builders;
-	using HomeCloud.Data.Http;
 	using HomeCloud.DependencyInjection;
 
 	using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +25,14 @@
 		{
 			services.AddFactory<IHttpRepository>();
 
-			services.Configure(setupAction);
+			if (setupAction is null)
+			{
+				services.Configure<HttpOptions>(options => { });
+			}
+			else
+			{
+				services.Configure(setupAction);
+			}
 
 			return new HttpBuilder(services);
 		}

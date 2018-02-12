@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\HomeCloud.Core\HomeCloud.Core.csproj" />
+    <ProjectReference Include="..\..\HomeCloud.DependencyInjection\HomeCloud.DependencyInjection.csproj" />
     <ProjectReference Include="..\HomeCloud.Data.Abstractions\HomeCloud.Data.Abstractions.csproj" />
   </ItemGroup>
 
