@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HomeCloud.Mvc.Formatters\HomeCloud.Mvc.Formatters.csproj" />
+    <ProjectReference Include="..\HomeCloud.Mvc.Models\HomeCloud.Mvc.Models.csproj" />
+    <ProjectReference Include="..\HomeCloud.Mvc.Providers\HomeCloud.Mvc.Providers.csproj" />
+    <ProjectReference Include="..\HomeCloud.Mvc.Validation\HomeCloud.Mvc.Validation.csproj" />
+  </ItemGroup>
+
+</Project>
