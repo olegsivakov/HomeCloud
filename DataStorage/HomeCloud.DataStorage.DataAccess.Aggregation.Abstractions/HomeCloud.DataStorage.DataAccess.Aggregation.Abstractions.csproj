@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>HomeCloud.DataStorage.DataAccess.Aggregation</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -13,6 +13,7 @@
 	using HomeCloud.Core;
 
 	using global::MongoDB.Driver;
+	using global::MongoDB.Driver.Linq;
 
 	#endregion
 
@@ -83,7 +84,9 @@
 		{
 			return await Task.Run(() =>
 			{
-				IEnumerable<T> data = this.CurrentCollection.AsQueryable().Where(selector.Compile());
+				IMongoQueryable<T> query = this.CurrentCollection.AsQueryable();
+
+				IEnumerable<T> data = selector is null ? query : query.Where(selector.Compile());
 
 				return new PagedList<T>(data.Skip(offset).Take(limit))
 				{
@@ -92,6 +95,19 @@
 					TotalCount = data.Count()
 				};
 			});
+		}
+
+		/// <summary>
+		/// Gets the records of <see cref="!:T" /> type by specified expression asynchronously.
+		/// </summary>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The <see cref="T:HomeCloud.Core.IPaginable" /> list of instances of <see cref="!:T" /> type.
+		/// </returns>
+		public async Task<IPaginable<T>> FindAsync(int offset = 0, int limit = 20)
+		{
+			return await this.FindAsync(null, offset, limit);
 		}
 
 		/// <summary>

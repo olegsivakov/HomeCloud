@@ -46,16 +46,20 @@
       <Name>HomeCloud.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj">
-      <Project>{51D11D70-099D-449E-BBF1-ACACDAD110FF}</Project>
+      <Project>{d022900b-47b1-41d4-b74b-47a76e55c905}</Project>
       <Name>HomeCloud.Validation</Name>
     </ProjectReference>
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
       <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>
       <Name>HomeCloud.DataStorage.Business.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Contracts\HomeCloud.DataStorage.DataAccess.Contracts.csproj">
-      <Project>{77DF87C3-0B2B-4A14-9B4F-C86B2761FCF2}</Project>
-      <Name>HomeCloud.DataStorage.DataAccess.Contracts</Name>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj">
+      <Project>{e8e4f64e-9617-4247-859c-cc39472c2a9f}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Aggregation.Objects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Objects\HomeCloud.DataStorage.DataAccess.Objects.csproj">
+      <Project>{fbcc958b-218b-4dfc-90f2-3f4f2718c824}</Project>
+      <Name>HomeCloud.DataStorage.DataAccess.Objects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

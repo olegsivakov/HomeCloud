@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Extensions\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Abstractions\HomeCloud.DataStorage.DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Objects\HomeCloud.DataStorage.DataAccess.Objects.csproj" />
+  </ItemGroup>
+
+</Project>

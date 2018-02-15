@@ -5,9 +5,9 @@
 	using System;
 
 	using HomeCloud.Core;
+	using HomeCloud.DataStorage.DataAccess.Aggregation.Objects;
 
-	using CatalogContract = HomeCloud.DataStorage.DataAccess.Contracts.Catalog;
-	using CatalogDocument = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
+	using Contracts = HomeCloud.DataStorage.DataAccess.Objects;
 
 	#endregion
 
@@ -16,21 +16,21 @@
 	/// </summary>
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, CatalogContract}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{CatalogContract, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
-	public class CatalogRootConverter : ITypeConverter<CatalogRoot, CatalogContract>, ITypeConverter<CatalogContract, CatalogRoot>, ITypeConverter<CatalogRoot, CatalogDocument>, ITypeConverter<CatalogDocument, CatalogRoot>
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.DataAccess.Aggregation.Objects.CatalogDocument}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Aggregation.Objects.CatalogDocument, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
+	public class CatalogRootConverter : ITypeConverter<CatalogRoot, Contracts.Catalog>, ITypeConverter<Contracts.Catalog, CatalogRoot>, ITypeConverter<CatalogRoot, CatalogDocument>, ITypeConverter<CatalogDocument, CatalogRoot>
 	{
-		#region ITypeConverter<CatalogRoot, CatalogContract> Implementations
+		#region ITypeConverter<CatalogRoot, Contracts.Catalog> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="CatalogRoot" /> type to the instance of <see cref="CatalogContract" />.
 		/// </summary>
 		/// <param name="source">The instance of <see cref="CatalogRoot" />.</param>
-		/// <param name="target">The instance of <see cref="CatalogContract" />.</param>
+		/// <param name="target">The instance of <see cref="Contracts.Catalog" />.</param>
 		/// <returns>
-		/// The converted instance of <see cref="CatalogContract" />.
+		/// The converted instance of <see cref="Contracts.Catalog" />.
 		/// </returns>
-		public CatalogContract Convert(CatalogRoot source, CatalogContract target)
+		public Contracts.Catalog Convert(CatalogRoot source, Contracts.Catalog target)
 		{
 			target.ID = source.ID;
 			target.Name = string.IsNullOrWhiteSpace(source.Name) ? target.Name : source.Name.Trim();
@@ -42,17 +42,17 @@
 
 		#endregion
 
-		#region ITypeConverter<CatalogContract, CatalogRoot> Implementations
+		#region ITypeConverter<Contracts.Catalog, CatalogRoot> Implementations
 
 		/// <summary>
-		/// Converts the instance of <see cref="CatalogContract" /> type to the instance of <see cref="CatalogRoot" />.
+		/// Converts the instance of <see cref="Contracts.Catalog" /> type to the instance of <see cref="CatalogRoot" />.
 		/// </summary>
-		/// <param name="source">The instance of <see cref="CatalogContract" />.</param>
+		/// <param name="source">The instance of <see cref="Contracts.Catalog" />.</param>
 		/// <param name="target">The instance of <see cref="CatalogRoot" />.</param>
 		/// <returns>
 		/// The converted instance of <see cref="CatalogRoot" />.
 		/// </returns>
-		public CatalogRoot Convert(CatalogContract source, CatalogRoot target)
+		public CatalogRoot Convert(Contracts.Catalog source, CatalogRoot target)
 		{
 			if (target.ID == Guid.Empty)
 			{

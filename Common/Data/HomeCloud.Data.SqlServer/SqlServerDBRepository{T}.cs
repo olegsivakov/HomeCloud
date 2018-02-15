@@ -47,15 +47,6 @@
 		#region ISqlServerDBRepository<T> Implementations
 
 		/// <summary>
-		/// Deletes the records of <see cref="!:T" /> type by specified expression asynchronously.
-		/// </summary>
-		/// <param name="selector">The data expression.</param>
-		/// <returns>
-		/// The asynchronous operation.
-		/// </returns>
-		public abstract Task DeleteAsync(Expression<Func<T, bool>> selector);
-
-		/// <summary>
 		/// Deletes the record by specified unique identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
@@ -68,22 +59,11 @@
 		/// Searches for all records of <see cref="!:T" /> type.
 		/// </summary>
 		/// <param name="offset">The index of the first record that should appear in the list.</param>
-		/// <param name="limit">The number of records to select.</param>
+		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The list of instances of <see cref="!:T" /> type.
 		/// </returns>
-		public abstract Task<IEnumerable<T>> FindAsync(int offset = 0, int limit = 20);
-
-		/// <summary>
-		/// Gets the records of <see cref="!:T" /> type by specified expression asynchronously.
-		/// </summary>
-		/// <param name="selector">The data expression.</param>
-		/// <param name="offset">The offset index.</param>
-		/// <param name="limit">The number of records to return.</param>
-		/// <returns>
-		/// The <see cref="T:HomeCloud.Core.IPaginable" /> list of instances of <see cref="!:T" /> type.
-		/// </returns>
-		public abstract Task<IPaginable<T>> FindAsync(Expression<Func<T, bool>> selector, int offset = 0, int limit = 20);
+		public abstract Task<IPaginable<T>> FindAsync(int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the entity of <see cref="!:T" /> by specified unique identifier asynchronously.

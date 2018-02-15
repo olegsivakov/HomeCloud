@@ -18,22 +18,14 @@
 	public interface IRepository<T> : IRepository
 	{
 		/// <summary>
-		/// Deletes the records of <see cref="T" /> type by specified expression asynchronously.
-		/// </summary>
-		/// <param name="selector">The data expression.</param>
-		/// <returns>The asynchronous operation.</returns>
-		Task DeleteAsync(Expression<Func<T, bool>> selector);
-
-		/// <summary>
 		/// Gets the records of <see cref="T" /> type by specified expression asynchronously.
 		/// </summary>
-		/// <param name="selector">The data expression.</param>
 		/// <param name="offset">The offset index.</param>
 		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The <see cref="IPaginable"/> list of instances of <see cref="T" /> type.
 		/// </returns>
-		Task<IPaginable<T>> FindAsync(Expression<Func<T, bool>> selector, int offset = 0, int limit = 20);
+		Task<IPaginable<T>> FindAsync(int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the entity of <see cref="T"/> by specified unique identifier asynchronously.

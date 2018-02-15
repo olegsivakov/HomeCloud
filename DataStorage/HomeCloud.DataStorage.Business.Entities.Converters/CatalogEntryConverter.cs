@@ -5,19 +5,20 @@
 	using System;
 
 	using HomeCloud.Core;
+	using HomeCloud.DataStorage.DataAccess.Aggregation.Objects;
+	using HomeCloud.DataStorage.DataAccess.Objects;
 
-	using File = HomeCloud.DataStorage.DataAccess.Contracts.File;
-	using FileDocument = HomeCloud.DataStorage.DataAccess.Contracts.FileDocument;
+	using Catalog = HomeCloud.DataStorage.Business.Entities.Catalog;
 
 	#endregion
 
 	/// <summary>
 	/// Provides converter methods for <see cref="CatalogEntry" /> entity.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.DataAccess.Contracts.File}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.File, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.DataAccess.Contracts.FileDocument}" />
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Contracts.FileDocument, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.DataAccess.Objects.File}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Objects.File, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.DataAccess.Aggregation.Objects.FileDocument}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Aggregation.Objects.FileDocument, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
 	public class CatalogEntryConverter : ITypeConverter<CatalogEntry, File>, ITypeConverter<File, CatalogEntry>, ITypeConverter<CatalogEntry, FileDocument>, ITypeConverter<FileDocument, CatalogEntry>
 	{
 		#region ITypeConverter<CatalogEntry, File> Implementations
