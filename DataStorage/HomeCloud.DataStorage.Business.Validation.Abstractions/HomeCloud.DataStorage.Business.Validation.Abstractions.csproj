@@ -1,60 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>HomeCloud.DataStorage.Business.Validation</RootNamespace>
-    <AssemblyName>HomeCloud.DataStorage.Business.Validation.Abstractions</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\DataStorageAssemblyInfo.cs">
-      <Link>Properties\DataStorageAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ICatalogEntryValidator.cs" />
-    <Compile Include="ICatalogValidator.cs" />
-    <Compile Include="IRequiredValidator.cs" />
-    <Compile Include="IStorageValidator.cs" />
-    <Compile Include="IUniqueValidator.cs" />
-    <Compile Include="IPresenceValidator.cs" />
-    <Compile Include="IValidationServiceFactory.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
-      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
-      <Name>HomeCloud.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj">
-      <Project>{51D11D70-099D-449E-BBF1-ACACDAD110FF}</Project>
-      <Name>HomeCloud.Validation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
-      <Project>{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}</Project>
-      <Name>HomeCloud.DataStorage.Business.Entities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
