@@ -7,21 +7,15 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-	using HomeCloud.Core.Extensions;
 
-	using HomeCloud.DataAccess.Services;
-	using HomeCloud.DataAccess.Services.Factories;
+	using HomeCloud.Data.MongoDB;
 
-	using HomeCloud.DataStorage.Api.Configuration;
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.DataAccess.Services.Repositories;
+	using HomeCloud.DataStorage.DataAccess.Aggregation;
+	using HomeCloud.DataStorage.DataAccess.Aggregation.Objects;
 
 	using HomeCloud.Mapping;
-
-	using Microsoft.Extensions.Options;
-
-	using CatalogDocument = HomeCloud.DataStorage.DataAccess.Contracts.CatalogDocument;
-	using FileDocument = HomeCloud.DataStorage.DataAccess.Contracts.FileDocument;
+	using HomeCloud.Mapping.Extensions;
 
 	#endregion
 
@@ -36,12 +30,7 @@
 		/// <summary>
 		/// The data context scope factory.
 		/// </summary>
-		private readonly IDataContextScopeFactory dataContextScopeFactory = null;
-
-		/// <summary>
-		/// The connection strings.
-		/// </summary>
-		private readonly ConnectionStrings connectionStrings = null;
+		private readonly IServiceFactory<IMongoDBRepository> repositoryFactory = null;
 
 		/// <summary>
 		/// The object mapper.
@@ -59,13 +48,10 @@
 		/// <param name="connectionStrings">The connection strings.</param>
 		/// <param name="mapper">The mapper.</param>
 		public AggregationDataProvider(
-			IDataContextScopeFactory dataContextScopeFactory,
-			IOptionsSnapshot<ConnectionStrings> connectionStrings,
+			IServiceFactory<IMongoDBRepository> repositoryFactory,
 			IMapper mapper)
 		{
-			this.dataContextScopeFactory = dataContextScopeFactory;
-			this.connectionStrings = connectionStrings?.Value;
-
+			this.repositoryFactory = repositoryFactory;
 			this.mapper = mapper;
 		}
 
@@ -82,13 +68,10 @@
 		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> StorageExists(Storage storage)
 		{
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-				CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
 
-				return catalogDocument != null;
-			}
+			return catalogDocument != null;
 		}
 
 		/// <summary>
@@ -98,15 +81,10 @@
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
-			CatalogDocument catalogDocument = null;
+			CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Storage, CatalogDocument>(storage);
 
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-
-				catalogDocument = await this.mapper.MapNewAsync<Storage, CatalogDocument>(storage);
-				catalogDocument = await repository.SaveAsync(catalogDocument);
-			}
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			catalogDocument = await repository.SaveAsync(catalogDocument);
 
 			return await this.mapper.MapAsync(catalogDocument, storage);
 		}
@@ -118,19 +96,14 @@
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
-			CatalogDocument catalogDocument = null;
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
+			catalogDocument = await this.mapper.MapAsync(storage, catalogDocument);
+
+			if (catalogDocument.IsChanged)
 			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-
-				catalogDocument = await repository.GetAsync(storage.ID);
-				catalogDocument = await this.mapper.MapAsync(storage, catalogDocument);
-
-				if (catalogDocument.IsChanged)
-				{
-					catalogDocument = await repository.SaveAsync(catalogDocument);
-				}
+				catalogDocument = await repository.SaveAsync(catalogDocument);
 			}
 
 			return await this.mapper.MapAsync(catalogDocument, storage);
@@ -154,13 +127,8 @@
 		/// <returns>The instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> GetStorage(Storage storage)
 		{
-			CatalogDocument catalogDocument = null;
-
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-				catalogDocument = await repository.GetAsync(storage.ID);
-			}
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
 
 			return await this.mapper.MapAsync(catalogDocument, storage);
 		}
@@ -174,12 +142,9 @@
 		/// </returns>
 		public async Task<Storage> DeleteStorage(Storage storage)
 		{
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 
-				await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(storage.Path));
-			}
+			await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(storage.Path));
 
 			return storage;
 		}
@@ -195,12 +160,10 @@
 		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogExists(Catalog catalog)
 		{
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			CatalogDocument catalogDocument = await repository.GetAsync(catalog.ID);
 
-				return (await repository.GetAsync(catalog.ID) != null);
-			}
+			return catalogDocument != null;
 		}
 
 		/// <summary>
@@ -211,17 +174,14 @@
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
 			CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(catalog);
+
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			catalogDocument = await repository.SaveAsync(catalogDocument);
+
 			CatalogDocument parentCatalogDocument = null;
-
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			if ((catalog.Parent?.ID).HasValue)
 			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-				catalogDocument = await repository.SaveAsync(catalogDocument);
-
-				if ((catalog.Parent?.ID).HasValue)
-				{
-					parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
-				}
+				parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 			}
 
 			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
@@ -237,25 +197,20 @@
 		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
-			CatalogDocument catalogDocument = null;
-			CatalogDocument parentCatalogDocument = null;
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			CatalogDocument catalogDocument = await repository.GetAsync(catalog.ID);
+			catalogDocument = await this.mapper.MapAsync(catalog, catalogDocument);
+
+			if (catalogDocument.IsChanged)
 			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+				catalogDocument = await repository.SaveAsync(catalogDocument);
+			}
 
-				catalogDocument = await repository.GetAsync(catalog.ID);
-				catalogDocument = await this.mapper.MapAsync(catalog, catalogDocument);
-
-				if (catalogDocument.IsChanged)
-				{
-					catalogDocument = await repository.SaveAsync(catalogDocument);
-				}
-
-				if ((catalog.Parent?.ID).HasValue)
-				{
-					parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
-				}
+			CatalogDocument parentCatalogDocument = null;
+			if ((catalog.Parent?.ID).HasValue)
+			{
+				parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 			}
 
 			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
@@ -285,18 +240,13 @@
 		/// <returns>The instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> GetCatalog(Catalog catalog)
 		{
-			CatalogDocument catalogDocument = null;
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			CatalogDocument catalogDocument = await repository.GetAsync(catalog.ID);
+
 			CatalogDocument parentCatalogDocument = null;
-
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			if ((catalog.Parent?.ID).HasValue)
 			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
-				catalogDocument = await repository.GetAsync(catalog.ID);
-
-				if ((catalog.Parent?.ID).HasValue)
-				{
-					parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
-				}
+				parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 			}
 
 			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
@@ -314,12 +264,9 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				ICatalogDocumentRepository repository = scope.GetRepository<ICatalogDocumentRepository>();
+			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 
-				await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
-			}
+			await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
 
 			return catalog;
 		}
@@ -335,12 +282,11 @@
 		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogEntryExists(CatalogEntry entry)
 		{
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				IFileDocumentRepository repository = scope.GetRepository<IFileDocumentRepository>();
+			IFileDocumentRepository repository = this.repositoryFactory.GetService<IFileDocumentRepository>();
 
-				return (await repository.GetAsync(entry.ID)) != null;
-			}
+			FileDocument file = await repository.GetAsync(entry.ID);
+
+			return file != null;
 		}
 
 		/// <summary>
@@ -355,16 +301,13 @@
 			FileDocument fileDocument = await this.mapper.MapNewAsync<CatalogEntry, FileDocument>(entry);
 			CatalogDocument catalogDocument = null;
 
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				IFileDocumentRepository fileRepository = scope.GetRepository<IFileDocumentRepository>();
-				fileDocument = await fileRepository.SaveAsync(fileDocument);
+			IFileDocumentRepository fileRepository = this.repositoryFactory.GetService<IFileDocumentRepository>();
+			fileDocument = await fileRepository.SaveAsync(fileDocument);
 
-				if ((entry.Catalog?.ID).HasValue)
-				{
-					ICatalogDocumentRepository catalogRepository = scope.GetRepository<ICatalogDocumentRepository>();
-					catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
-				}
+			if ((entry.Catalog?.ID).HasValue)
+			{
+				ICatalogDocumentRepository catalogRepository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+				catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
 			}
 
 			entry = await this.mapper.MapAsync(fileDocument, entry);
@@ -394,19 +337,14 @@
 		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
 		public async Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry)
 		{
-			FileDocument fileDocument = null;
+			IFileDocumentRepository fileRepository = this.repositoryFactory.GetService<IFileDocumentRepository>();
+			FileDocument fileDocument = await fileRepository.GetAsync(entry.ID);
+
 			CatalogDocument catalogDocument = null;
-
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
+			if ((entry.Catalog?.ID).HasValue)
 			{
-				IFileDocumentRepository fileRepository = scope.GetRepository<IFileDocumentRepository>();
-				fileDocument = await fileRepository.GetAsync(entry.ID);
-
-				if ((entry.Catalog?.ID).HasValue)
-				{
-					ICatalogDocumentRepository catalogRepository = scope.GetRepository<ICatalogDocumentRepository>();
-					catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
-				}
+				ICatalogDocumentRepository catalogRepository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+				catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
 			}
 
 			entry = await this.mapper.MapAsync(fileDocument, entry);
@@ -438,12 +376,9 @@
 		/// </returns>
 		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
 		{
-			using (IDocumentContextScope scope = this.dataContextScopeFactory.CreateDocumentContextScope(this.connectionStrings.DataAggregationDB))
-			{
-				IFileDocumentRepository repository = scope.GetRepository<IFileDocumentRepository>();
+			IFileDocumentRepository repository = this.repositoryFactory.GetService<IFileDocumentRepository>();
 
-				await repository.DeleteAsync(entry.ID);
-			}
+			await repository.DeleteAsync(entry.ID);
 
 			return entry;
 		}

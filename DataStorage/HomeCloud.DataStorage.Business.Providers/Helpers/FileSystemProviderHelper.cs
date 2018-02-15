@@ -5,9 +5,8 @@
 	using System;
 	using System.IO;
 
-	using HomeCloud.DataStorage.Api.Configuration;
-
 	using HomeCloud.DataStorage.Business.Entities;
+	using HomeCloud.DataStorage.Configuration;
 
 	#endregion
 

@@ -31,19 +31,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.DataA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Core.Extensions", "..\Common\Extensions\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj", "{3ACF87D2-FD4D-4EA4-BB1F-C0271ED47EE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions", "HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions\HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions.csproj", "{8FD399EC-EDC0-4031-B162-1EB949E41E92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions", "HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions\HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions.csproj", "{8FD399EC-EDC0-4031-B162-1EB949E41E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.DataAccess.Aggregation", "HomeCloud.DataStorage.DataAccess.Aggregation\HomeCloud.DataStorage.DataAccess.Aggregation.csproj", "{42C9D40C-2FC6-48EA-96AF-21AD5ED9B25C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.DataAccess.Aggregation", "HomeCloud.DataStorage.DataAccess.Aggregation\HomeCloud.DataStorage.DataAccess.Aggregation.csproj", "{42C9D40C-2FC6-48EA-96AF-21AD5ED9B25C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.DataAccess.Aggregation.Objects", "HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj", "{E8E4F64E-9617-4247-859C-CC39472C2A9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.DataAccess.Aggregation.Objects", "HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj", "{E8E4F64E-9617-4247-859C-CC39472C2A9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Entities", "HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj", "{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Entities", "HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj", "{9B91EE48-B9A2-49BE-82A7-7349BCAA414D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Entities.Converters", "HomeCloud.DataStorage.Business.Entities.Converters\HomeCloud.DataStorage.Business.Entities.Converters.csproj", "{E9B4C4CA-59D3-4A92-82A8-FCF28C2EC028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Entities.Converters", "HomeCloud.DataStorage.Business.Entities.Converters\HomeCloud.DataStorage.Business.Entities.Converters.csproj", "{E9B4C4CA-59D3-4A92-82A8-FCF28C2EC028}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Validation", "..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj", "{D022900B-47B1-41D4-B74B-47A76E55C905}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Exceptions", "..\Common\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj", "{1FD35CF9-4D54-4866-B73E-F0B0ABDA9849}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Providers.Abstractions", "HomeCloud.DataStorage.Business.Providers.Abstractions\HomeCloud.DataStorage.Business.Providers.Abstractions.csproj", "{5D3E908C-07F8-420D-BE94-9D831152CA2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Providers", "HomeCloud.DataStorage.Business.Providers\HomeCloud.DataStorage.Business.Providers.csproj", "{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mapping", "..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj", "{315AC189-A1C1-4FC1-9893-E64CE7F9246F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Configuration", "HomeCloud.DataStorage.Configuration\HomeCloud.DataStorage.Configuration.csproj", "{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -121,6 +129,22 @@ Global
 		{1FD35CF9-4D54-4866-B73E-F0B0ABDA9849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FD35CF9-4D54-4866-B73E-F0B0ABDA9849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FD35CF9-4D54-4866-B73E-F0B0ABDA9849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{315AC189-A1C1-4FC1-9893-E64CE7F9246F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{315AC189-A1C1-4FC1-9893-E64CE7F9246F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{315AC189-A1C1-4FC1-9893-E64CE7F9246F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{315AC189-A1C1-4FC1-9893-E64CE7F9246F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +167,10 @@ Global
 		{E9B4C4CA-59D3-4A92-82A8-FCF28C2EC028} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{D022900B-47B1-41D4-B74B-47A76E55C905} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
 		{1FD35CF9-4D54-4866-B73E-F0B0ABDA9849} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
+		{5D3E908C-07F8-420D-BE94-9D831152CA2E} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
+		{9C7D63E0-297D-4C62-9B00-CFE8D0288A02} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
+		{315AC189-A1C1-4FC1-9893-E64CE7F9246F} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
+		{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88883B2F-2D2D-4999-8236-EEB3FCB5D249}

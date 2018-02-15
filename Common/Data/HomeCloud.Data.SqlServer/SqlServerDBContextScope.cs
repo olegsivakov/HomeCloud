@@ -1,11 +1,15 @@
-﻿using HomeCloud.Core;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-
-namespace HomeCloud.Data.SqlServer
+﻿namespace HomeCloud.Data.SqlServer
 {
+	#region Usings
+
+	using HomeCloud.Core;
+
+	#endregion
+
+	/// <summary>
+	/// Provides execution of operations against the <see cref="SqlServer"/> database in a single scope.
+	/// </summary>
+	/// <seealso cref="HomeCloud.Data.SqlServer.ISqlServerDBContextScope" />
 	public class SqlServerDBContextScope : ISqlServerDBContextScope
 	{
 		#region Private Members
@@ -78,6 +82,9 @@ namespace HomeCloud.Data.SqlServer
 
 		#region IDisposable Implementations
 
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
 		public void Dispose()
 		{
 			this.context.Dispose();

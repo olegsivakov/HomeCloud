@@ -9,10 +9,9 @@
 
 	using HomeCloud.Core;
 
-	using HomeCloud.DataStorage.Api.Configuration;
-
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Providers.Helpers;
+	using HomeCloud.DataStorage.Configuration;
 
 	using Microsoft.Extensions.Options;
 

@@ -1,66 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9B4C4CA-59D3-4A92-82A8-FCF28C2EC028}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HomeCloud.DataStorage.Business.Entities.Converters</RootNamespace>
-    <AssemblyName>HomeCloud.DataStorage.Business.Entities.Converters</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\DataStorageAssemblyInfo.cs">
-      <Link>Properties\DataStorageAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="CatalogConverter.cs" />
-    <Compile Include="CatalogEntryConverter.cs" />
-    <Compile Include="CatalogRootConverter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceResultConverter.cs" />
-    <Compile Include="StorageConverter.cs" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Objects\HomeCloud.DataStorage.DataAccess.Objects.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj">
-      <Project>{C1174732-D61A-4543-9477-52278023FD78}</Project>
-      <Name>HomeCloud.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj">
-      <Project>{d022900b-47b1-41d4-b74b-47a76e55c905}</Project>
-      <Name>HomeCloud.Validation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj">
-      <Project>{9b91ee48-b9a2-49be-82a7-7349bcaa414d}</Project>
-      <Name>HomeCloud.DataStorage.Business.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj">
-      <Project>{e8e4f64e-9617-4247-859c-cc39472c2a9f}</Project>
-      <Name>HomeCloud.DataStorage.DataAccess.Aggregation.Objects</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Objects\HomeCloud.DataStorage.DataAccess.Objects.csproj">
-      <Project>{fbcc958b-218b-4dfc-90f2-3f4f2718c824}</Project>
-      <Name>HomeCloud.DataStorage.DataAccess.Objects</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
