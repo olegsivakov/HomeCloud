@@ -8,8 +8,10 @@
 	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.Business.Extensions;
+
 	using HomeCloud.DataStorage.Business.Handlers;
+	using HomeCloud.DataStorage.Business.Handlers.Extensions;
+
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 

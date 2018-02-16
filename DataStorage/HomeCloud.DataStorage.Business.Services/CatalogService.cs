@@ -7,11 +7,12 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.Business.Extensions;
+
 	using HomeCloud.DataStorage.Business.Handlers;
+	using HomeCloud.DataStorage.Business.Handlers.Extensions;
+
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 
@@ -176,7 +177,7 @@
 			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(parentID);
 			if (!serviceResult.IsSuccess)
 			{
-				return new ServiceResult<IPaginable<Catalog>>(Enumerable.Empty<Catalog>().AsPaginable())
+				return new ServiceResult<IPaginable<Catalog>>(new PagedList<Catalog>())
 				{
 					Errors = serviceResult.Errors
 				};

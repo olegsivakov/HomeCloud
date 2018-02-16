@@ -61,9 +61,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Busin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Commands", "HomeCloud.DataStorage.Business.Commands\HomeCloud.DataStorage.Business.Commands.csproj", "{58EE6BB1-8F76-4F4D-B26F-856091C1474C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Handlers.Abstractions", "HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj", "{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Handlers.Abstractions", "HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj", "{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Handlers", "HomeCloud.DataStorage.Business.Handlers\HomeCloud.DataStorage.Business.Handlers.csproj", "{7E36375B-AC01-474E-878E-272620C6BC1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Handlers", "HomeCloud.DataStorage.Business.Handlers\HomeCloud.DataStorage.Business.Handlers.csproj", "{7E36375B-AC01-474E-878E-272620C6BC1E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Services.Abstractions", "HomeCloud.DataStorage.Business.Services.Abstractions\HomeCloud.DataStorage.Business.Services.Abstractions.csproj", "{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Services", "HomeCloud.DataStorage.Business.Services\HomeCloud.DataStorage.Business.Services.csproj", "{5D3E601C-979E-43F1-B3C6-EC6A780112BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Business.Handlers.Extensions", "HomeCloud.DataStorage.Business.Handlers.Extensions\HomeCloud.DataStorage.Business.Handlers.Extensions.csproj", "{B1A18727-82AA-48B1-AD05-412D9978DB6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +187,18 @@ Global
 		{7E36375B-AC01-474E-878E-272620C6BC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E36375B-AC01-474E-878E-272620C6BC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E36375B-AC01-474E-878E-272620C6BC1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -213,6 +231,9 @@ Global
 		{58EE6BB1-8F76-4F4D-B26F-856091C1474C} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{7E36375B-AC01-474E-878E-272620C6BC1E} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
+		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
+		{5D3E601C-979E-43F1-B3C6-EC6A780112BD} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
+		{B1A18727-82AA-48B1-AD05-412D9978DB6E} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88883B2F-2D2D-4999-8236-EEB3FCB5D249}
