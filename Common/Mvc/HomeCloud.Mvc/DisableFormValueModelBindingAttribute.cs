@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.DataStorage.Api.Filters
+﻿namespace HomeCloud.Mvc
 {
 	#region Usings
 

@@ -5,9 +5,6 @@
 	using System;
 	using System.Buffers;
 
-	using HomeCloud.DataStorage.Api.DependencyInjection;
-	using HomeCloud.Exceptions;
-
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.AspNetCore.Mvc.Formatters;
@@ -15,8 +12,10 @@
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
-	using HomeCloudJsonOutputFormatter = HomeCloud.Api.Formatters.JsonOutputFormatter;
-	using HomeCloudMultipartFormDataInputFormatter = HomeCloud.Api.Formatters.MultipartFormDataInputFormatter;
+	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.Hypermedia;
+	using HomeCloud.Mvc.Exceptions;
+	using HomeCloud.DataStorage.Api.DependencyInjection;
 
 	#endregion
 
@@ -59,20 +58,19 @@
 		/// <returns>The instance of <see cref="IServiceProvider"/>.</returns>
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-			services.AddDependencies();
-			services.Configure(this.Configuration);
+			services
+				.AddDatabases(this.Configuration)
+				.AddFileStorage(this.Configuration)
+				.AddMappings()
+				.AddDataStorageServices();
 
 			services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
 
-			services.AddMvc(options =>
-			{
-				options.OutputFormatters.RemoveType<JsonOutputFormatter>();
-				options.OutputFormatters.Add(new HomeCloudJsonOutputFormatter(
-						JsonSerializerSettingsProvider.CreateSerializerSettings(),
-						ArrayPool<char>.Shared));
-
-				options.InputFormatters.Add(new HomeCloudMultipartFormDataInputFormatter());
-			});
+			services.AddMvc()
+				.Extend()
+				.AddInputValidation()
+				.AddMultipartFormData()
+				.AddHypermedia();
 
 			return services.BuildServiceProvider();
 		}
@@ -89,7 +87,11 @@
 				application.UseDeveloperExceptionPage();
 			}
 
-			application.UseExceptionHandlerMiddleware();
+			application.UseExceptionHandling();
+			application.UseHypermedia(routes =>
+			{
+
+			});
 
 			application.UseMvc();
 		}

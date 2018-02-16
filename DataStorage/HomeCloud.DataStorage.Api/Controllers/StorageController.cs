@@ -3,17 +3,23 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-	using HomeCloud.Core.Extensions;
 
 	using HomeCloud.DataStorage.Api.Models;
-
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Services;
 
+	using HomeCloud.Http;
+
 	using HomeCloud.Mapping;
+	using HomeCloud.Mapping.Extensions;
+
+	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.DataAnnotations;
 
 	using Microsoft.AspNetCore.Mvc;
 
@@ -39,9 +45,9 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageController" /> class.
 		/// </summary>
-		/// <param name="storageService">The <see cref="IStorageService" /> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
-		public StorageController(IStorageService storageService, IMapper mapper)
+		/// <param name="storageService">The <see cref="IStorageService" /> service.</param>
+		public StorageController(IMapper mapper, IStorageService storageService)
 			: base(mapper)
 		{
 			this.storageService = storageService;
@@ -55,18 +61,23 @@
 		/// <param name="offset">The offset.</param>
 		/// <param name="limit">The limit.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the list of instances of <see cref="StorageViewModel"/>.</returns>
-		[HttpGet("v1/[controller]s")]
-		public async Task<IActionResult> Get(int offset, int limit)
+		[HttpGet("v1/[controller]s", Name = nameof(StorageController.GetStorageList))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> GetStorageList(
+			[Range(0, int.MaxValue, ErrorMessage = "The offset parameter should be positive number.")] int offset,
+			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
-			return await this.HttpGet(
-				offset,
-				limit,
-				async () =>
-				{
-					ServiceResult<IPaginable<Storage>> result = await this.storageService.GetStoragesAsync(offset, limit);
+			ServiceResult<IPaginable<Storage>> result = await this.storageService.GetStoragesAsync(offset, limit);
+			IEnumerable<StorageViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
 
-					return await this.HttpGetResult<Storage, StorageViewModel>(result);
-				});
+			return this.HttpResult(
+				new PagedListViewModel<StorageViewModel>(data)
+				{
+					Offset = result.Data?.Offset ?? offset,
+					Size = result.Data?.Limit ?? limit,
+					TotalCount = result.Data?.TotalCount ?? 0
+				},
+				result.Errors);
 		}
 
 		/// <summary>
@@ -74,17 +85,15 @@
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
-		[HttpGet("v1/[controller]s/{id}")]
-		public async Task<IActionResult> Get(Guid id)
+		[HttpGet("v1/[controller]s/{id}", Name = nameof(StorageController.GetStorageByID))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> GetStorageByID(
+			[RequireNonDefault(ErrorMessage = "The storage unique identifier is empty")] Guid id)
 		{
-			return await this.HttpGet(
-				id,
-				async () =>
-				{
-					ServiceResult<Storage> result = await this.storageService.GetStorageAsync(id);
+			ServiceResult<Storage> result = await this.storageService.GetStorageAsync(id);
+			StorageViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
 
-					return await this.HttpGetResult<Storage, StorageViewModel>(result);
-				});
+			return this.HttpResult(data, result.Errors);
 		}
 
 		/// <summary>
@@ -92,18 +101,17 @@
 		/// </summary>
 		/// <param name="model">The model of <see cref="StorageViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
-		[HttpPost("v1/[controller]s")]
-		public async Task<IActionResult> Post([FromBody] StorageViewModel model)
+		[HttpPost("v1/[controller]s", Name = nameof(StorageController.CreateStorage))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> CreateStorage(
+			[Required(ErrorMessage = "The model is undefined")] [FromBody] StorageViewModel model)
 		{
-			return await this.HttpPost(
-				model,
-				async () =>
-				{
-					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
-					ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
+			Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
+			ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
 
-					return await this.HttpPostResult<Storage, StorageViewModel>(this.Get, result);
-				});
+			StorageViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
+
+			return this.HttpResult(data, result.Errors);
 		}
 
 		/// <summary>
@@ -112,19 +120,20 @@
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="model">The model of <see cref="StorageViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="StorageViewModel"/>.</returns>
-		[HttpPut("v1/[controller]s/{id}")]
-		public async Task<IActionResult> Put(Guid id, [FromBody] StorageViewModel model)
+		[HttpPut("v1/[controller]s/{id}", Name = nameof(StorageController.UpdateStorage))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> UpdateStorage(
+			[RequireNonDefault(ErrorMessage = "The storage unique identifier is empty")] Guid id,
+			[Required(ErrorMessage = "The model is undefined")] [FromBody] StorageViewModel model)
 		{
-			return await this.HttpPut(
-				id,
-				model,
-				async () =>
-				{
-					Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
-					ServiceResult<Storage> result = await this.storageService.UpdateStorageAsync(entity);
+			model.ID = id;
 
-					return await this.HttpPutResult<Storage, StorageViewModel>(this.Get, result);
-				});
+			Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
+			ServiceResult<Storage> result = await this.storageService.UpdateStorageAsync(entity);
+
+			StorageViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
+
+			return this.HttpResult(data, result.Errors);
 		}
 
 		/// <summary>
@@ -132,17 +141,14 @@
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/>.</returns>
-		[HttpDelete("v1/[controller]s/{id}")]
-		public async Task<IActionResult> Delete(Guid id)
+		[HttpDelete("v1/[controller]s/{id}", Name = nameof(StorageController.DeleteStorage))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> DeleteStorage(
+			[RequireNonDefault(ErrorMessage = "The storage unique identifier is empty")] Guid id)
 		{
-			return await this.HttpDelete(
-				id,
-				async () =>
-				{
-					ServiceResult result = await this.storageService.DeleteStorageAsync(id);
+			ServiceResult result = await this.storageService.DeleteStorageAsync(id);
 
-					return await this.HttpDeleteResult(result);
-				});
+			return this.HttpResult(null, result.Errors);
 		}
 	}
 }

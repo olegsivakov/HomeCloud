@@ -23,12 +23,11 @@
 	public static class MvcServiceCollectionExtensions
 	{
 		/// <summary>
-		/// Adds the MVC extended.
+		/// Extends <see cref="Aspnet.Core Mvc"/>.
 		/// </summary>
 		/// <param name="builder">The <see cref="Mvc"/> builder.</param>
-		/// <param name="setupAction">The setup action.</param>
 		/// <returns>The instance of <see cref="IMvcBuilder"/></returns>
-		public static IMvcBuilder AddMvcExtended(this IMvcBuilder builder, Action<MvcOptions> setupAction)
+		public static IMvcBuilder Extend(this IMvcBuilder builder)
 		{
 			builder.Services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
 

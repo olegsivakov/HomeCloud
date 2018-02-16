@@ -11,7 +11,8 @@
 	/// <summary>
 	/// Represents file stream view model.
 	/// </summary>
-	public class FileStreamViewModel
+	/// <seealso cref="HomeCloud.DataStorage.Api.Models.FileViewModel" />
+	public class FileStreamViewModel : FileViewModel
 	{
 		/// <summary>
 		/// Gets or sets the file stream.

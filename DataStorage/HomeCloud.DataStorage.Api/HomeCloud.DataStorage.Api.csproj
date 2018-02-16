@@ -1,23 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
   </ItemGroup>
+
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\HomeCloud.Api\HomeCloud.Api.csproj" />
-    <ProjectReference Include="..\..\Common\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Http\HomeCloud.Http.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.DataAnnotations\HomeCloud.Mvc.DataAnnotations.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Exceptions\HomeCloud.Mvc.Exceptions.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Hypermedia\HomeCloud.Mvc.Hypermedia.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc\HomeCloud.Mvc.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.DependencyInjection\HomeCloud.DataStorage.Api.DependencyInjection.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Api.Models\HomeCloud.DataStorage.Api.Models.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj" />
+    <ProjectReference Include="..\HomeCloud.DataStorage.Business.Services.Abstractions\HomeCloud.DataStorage.Business.Services.Abstractions.csproj" />
   </ItemGroup>
+
 </Project>

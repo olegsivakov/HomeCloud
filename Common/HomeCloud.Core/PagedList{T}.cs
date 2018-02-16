@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System.Collections.Generic;
+	using System.Linq;
 
 	#endregion
 
@@ -29,7 +30,7 @@
 		/// </summary>
 		/// <param name="items">The items.</param>
 		public PagedList(IEnumerable<T> items)
-			: base(items)
+			: base(items ?? Enumerable.Empty<T>())
 		{
 		}
 

@@ -6,6 +6,9 @@
 
 	using HomeCloud.Http;
 
+	using Newtonsoft.Json;
+	using System.Linq;
+
 	#endregion
 
 	/// <summary>
@@ -30,13 +33,31 @@
 		/// </summary>
 		/// <param name="items">The items.</param>
 		public PagedListViewModel(IEnumerable<T> items)
-			: base(items)
+			: base(items ?? Enumerable.Empty<T>())
 		{
 		}
 
 		#endregion
 
 		#region Public Properties
+
+		/// <summary>
+		/// Gets or sets the offset.
+		/// </summary>
+		/// <value>
+		/// The offset.
+		/// </value>
+		[JsonIgnore]
+		public int Offset { get; set; }
+
+		/// <summary>
+		/// Gets or sets the size.
+		/// </summary>
+		/// <value>
+		/// The size.
+		/// </value>
+		[JsonIgnore]
+		public int Size { get; set; }
 
 		/// <summary>
 		/// Gets or sets the total count.

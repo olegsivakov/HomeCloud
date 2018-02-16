@@ -3,18 +3,23 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-	using HomeCloud.Core.Extensions;
 
-	using HomeCloud.DataStorage.Api.Filters;
 	using HomeCloud.DataStorage.Api.Models;
-
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Services;
 
+	using HomeCloud.Http;
+
 	using HomeCloud.Mapping;
+	using HomeCloud.Mapping.Extensions;
+
+	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.DataAnnotations;
 
 	using Microsoft.AspNetCore.Http.Features;
 	using Microsoft.AspNetCore.Mvc;
@@ -27,15 +32,6 @@
 	/// <seealso cref="HomeCloud.DataStorage.Api.Controllers.Controller" />
 	public class DataController : Controller
 	{
-		#region Constants
-
-		/// <summary>
-		/// The "<see cref="application/octet-stream"/>" content type
-		/// </summary>
-		private const string ApplicationOctetStreamContentType = "application/octet-stream";
-
-		#endregion
-
 		#region Private Members
 
 		/// <summary>
@@ -56,9 +52,9 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataController" /> class.
 		/// </summary>
-		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService"/> service.</param>
 		/// <param name="mapper">The model type mapper.</param>
-		public DataController(ICatalogEntryService catalogEntryService, IMapper mapper)
+		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService" /> service.</param>
+		public DataController(IMapper mapper, ICatalogEntryService catalogEntryService)
 			: base(mapper)
 		{
 			this.catalogEntryService = catalogEntryService;
@@ -73,22 +69,35 @@
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" /> or <see cref="FileViewModel" /> stream.
 		/// </returns>
-		[HttpGet("v1/[controller]/{id}")]
-		public async Task<IActionResult> Get(Guid id)
+		[HttpGet("v1/[controller]/{id}", Name = nameof(DataController.GetDataByID))]
+		[ContentType(
+			MimeTypes.Application.Json,
+			MimeTypes.Application.OctetStream)]
+		public async Task<IActionResult> GetDataByID(
+			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
-			return await this.HttpGet(
-					id,
-					async () =>
+			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+
+			object data = null;
+
+			switch (this.HttpContext.Request.ContentType)
+			{
+				case MimeTypes.Application.OctetStream:
 					{
-						ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+						data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileViewModel>(result.Data) : null;
 
-						if (this.HttpContext.Request.ContentType == ApplicationOctetStreamContentType)
-						{
-							return await this.HttpGetStreamResult<CatalogEntry, FileViewModel>(result);
-						}
+						break;
+					}
 
-						return await this.HttpGetResult<CatalogEntry, DataViewModel>(result);
-					});
+				case MimeTypes.Application.Json:
+					{
+						data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
+
+						break;
+					}
+			}
+
+			return this.HttpResult(data, result.Errors);
 		}
 
 		/// <summary>
@@ -100,18 +109,24 @@
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the list of instances of <see cref="DataViewModel" />.
 		/// </returns>
-		[HttpGet("v1/catalogs/{catalogID}/[controller]")]
-		public async Task<IActionResult> Get(Guid catalogID, int offset, int limit)
+		[HttpGet("v1/catalogs/{catalogID}/[controller]", Name = nameof(DataController.GetDataList))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> GetDataList(
+			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid catalogID,
+			[Range(0, int.MaxValue, ErrorMessage = "The offset parameter should be positive number.")] int offset,
+			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
-			return await this.HttpGet(
-				offset,
-				limit,
-				async () =>
-				{
-					ServiceResult<IPaginable<CatalogEntry>> catalogResult = await this.catalogEntryService.GetEntriesAsync(catalogID, offset, limit);
+			ServiceResult<IPaginable<CatalogEntry>> result = await this.catalogEntryService.GetEntriesAsync(catalogID, offset, limit);
+			IEnumerable<DataViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
 
-					return await this.HttpGetResult<CatalogEntry, DataViewModel>(catalogResult);
-				});
+			return this.HttpResult(
+				new PagedListViewModel<DataViewModel>(data)
+				{
+					Offset = result.Data?.Offset ?? offset,
+					Size = result.Data?.Limit ?? limit,
+					TotalCount = result.Data?.TotalCount ?? 0
+				},
+				result.Errors);
 		}
 
 		/// <summary>
@@ -122,23 +137,22 @@
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="FileStreamViewModel" />.
 		/// </returns>
-		[HttpPost("v1/catalogs/{catalogID}/[controller]")]
+		[HttpPost("v1/catalogs/{catalogID}/[controller]", Name = nameof(DataController.CreateData))]
+		[ContentType(MimeTypes.Multipart.FormData)]
 		[DisableFormValueModelBinding]
-		public async Task<IActionResult> Post(Guid catalogID, [FromBody] FileStreamViewModel model)
+		public async Task<IActionResult> CreateData(
+			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid catalogID,
+			[Required(ErrorMessage = "The model is undefined")] [FromBody] FileStreamViewModel model)
 		{
-			return await this.HttpPost(
-				model,
-				async () =>
-				{
-					CatalogEntry entry = await this.Mapper.MapNewAsync<FileViewModel, CatalogEntry>(model);
-					entry.Catalog.ID = catalogID;
+			CatalogEntry entry = await this.Mapper.MapNewAsync<FileViewModel, CatalogEntry>(model);
+			entry.Catalog.ID = catalogID;
 
-					CatalogEntryStream stream = new CatalogEntryStream(entry, model.Stream);
+			CatalogEntryStream stream = new CatalogEntryStream(entry, model.Stream);
 
-					ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
+			ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
+			DataViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
 
-					return await this.HttpPostResult<CatalogEntry, DataViewModel>(this.Get, result);
-				});
+			return this.HttpResult(data, result.Errors);
 		}
 
 		/// <summary>
@@ -148,17 +162,14 @@
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" />.
 		/// </returns>
-		[HttpDelete("v1/[controller]/{id}")]
-		public async Task<IActionResult> Delete(Guid id)
+		[HttpDelete("v1/[controller]/{id}", Name = nameof(DataController.DeleteData))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> DeleteData(
+			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
-			return await this.HttpDelete(
-				id,
-				async () =>
-				{
-					ServiceResult result = await this.catalogEntryService.DeleteEntryAsync(id);
+			ServiceResult result = await this.catalogEntryService.DeleteEntryAsync(id);
 
-					return await this.HttpDeleteResult(result);
-				});
+			return this.HttpResult(null, result.Errors);
 		}
 
 		/// <summary>
@@ -168,17 +179,15 @@
 		/// <returns>
 		///   <see cref="ControllerBase.Ok" /> if resource exists. Otherwise <see cref="ControllerBase.NotFound" />
 		/// </returns>
-		[HttpHead("v1/[controller]/{id}")]
-		public async Task<IActionResult> Exists(Guid id)
+		[HttpHead("v1/[controller]/{id}", Name = nameof(DataController.DataExists))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> DataExists(
+			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
-			return await this.HttpHead(
-				id,
-				async () =>
-				{
-					ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+			DataViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
 
-					return await this.HttpHeadResult<CatalogEntry, FileViewModel>(result);
-				});
+			return this.HttpResult(data, result.Errors);
 		}
 	}
 }
