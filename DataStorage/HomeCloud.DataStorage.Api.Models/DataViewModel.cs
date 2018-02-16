@@ -4,14 +4,12 @@
 
 	using System;
 
-	using HomeCloud.Api.Mvc;
-
 	#endregion
 
 	/// <summary>
 	/// Represents data view model.
 	/// </summary>
-	public class DataViewModel : IViewModel
+	public class DataViewModel
 	{
 		/// <summary>
 		/// Gets or sets the identifier.

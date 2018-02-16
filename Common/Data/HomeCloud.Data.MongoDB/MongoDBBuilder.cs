@@ -66,16 +66,15 @@
 		}
 
 		/// <summary>
-		/// Adds the specified <see cref="T:HomeCloud.Data.MongoDB.IMongoDBRepository`1" /> repository to the service collection.
+		/// Adds the specified <see cref="T:HomeCloud.Data.MongoDB.IMongoDBRepository" /> repository to the service collection.
 		/// </summary>
-		/// <typeparam name="TRepository">The type of the repository derived from <see cref="T:HomeCloud.Data.MongoDB.IMongoDBRepository`1" />.</typeparam>
-		/// <typeparam name="TContract">The type of the contract handled by the repository.</typeparam>
-		/// <typeparam name="TImplementation">The type of the <see cref="T:HomeCloud.Data.MongoDB.IMongoDBRepository`1" /> implementation.</typeparam>
+		/// <typeparam name="TRepository">The type of the repository derived from <see cref="T:HomeCloud.Data.MongoDB.IMongoDBRepository" />.</typeparam>
+		/// <typeparam name="TImplementation">The type of the <see cref="T:HomeCloud.Data.MongoDB.IMongoDBRepository" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.Data.DependencyInjection.Builders.IMongoDBBuilder" />.
 		/// </returns>
-		public IMongoDBBuilder AddRepository<TRepository, TContract, TImplementation>()
-			where TRepository : class, IMongoDBRepository<TContract>
+		public IMongoDBBuilder AddRepository<TRepository, TImplementation>()
+			where TRepository : class, IMongoDBRepository
 			where TImplementation : class, TRepository
 		{
 			services.AddSingleton<TRepository, TImplementation>();

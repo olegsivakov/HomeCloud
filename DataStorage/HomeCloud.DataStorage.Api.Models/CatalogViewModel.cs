@@ -4,15 +4,12 @@
 
 	using System;
 
-	using HomeCloud.Api.Mvc;
-
 	#endregion
 
 	/// <summary>
 	/// Represents catalog view model.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Api.Mvc.IViewModel" />
-	public class CatalogViewModel : IViewModel
+	public class CatalogViewModel
 	{
 		/// <summary>
 		/// Gets or sets the identifier.

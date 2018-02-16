@@ -97,16 +97,15 @@
 		}
 
 		/// <summary>
-		/// Adds the specified <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBRepository`1" /> repository to the service collection.
+		/// Adds the specified <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBRepository" /> repository to the service collection.
 		/// </summary>
-		/// <typeparam name="TRepository">The type of the repository derived from <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBRepository`1" />.</typeparam>
-		/// <typeparam name="TContract">The type of the contract handled by the repository.</typeparam>
-		/// <typeparam name="TImplementation">The type of the <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBRepository`1" /> implementation.</typeparam>
+		/// <typeparam name="TRepository">The type of the repository derived from <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBRepository" />.</typeparam>
+		/// <typeparam name="TImplementation">The type of the <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBRepository" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.Data.DependencyInjection.Builders.ISqlServerDBBuilder" />.
 		/// </returns>
-		public ISqlServerDBBuilder AddRepository<TRepository, TContract, TImplementation>()
-			where TRepository : class, ISqlServerDBRepository<TContract>
+		public ISqlServerDBBuilder AddRepository<TRepository, TImplementation>()
+			where TRepository : class, ISqlServerDBRepository
 			where TImplementation : class, TRepository
 		{
 			services.AddScoped<TRepository, TImplementation>();

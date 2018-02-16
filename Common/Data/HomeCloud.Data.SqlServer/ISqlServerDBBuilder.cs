@@ -46,16 +46,16 @@
 			where TImplementation : SqlServerDBContextScope, TContextScope;
 
 		/// <summary>
-		/// Adds the specified <see cref="ISqlServerDBRepository{TContract}" /> repository to the service collection.
+		/// Adds the specified <see cref="ISqlServerDBRepository" /> repository to the service collection.
 		/// </summary>
-		/// <typeparam name="TRepository">The type of the repository derived from <see cref="ISqlServerDBRepository{TContract}" />.</typeparam>
+		/// <typeparam name="TRepository">The type of the repository derived from <see cref="ISqlServerDBRepository" />.</typeparam>
 		/// <typeparam name="TContract">The type of the contract handled by the repository.</typeparam>
-		/// <typeparam name="TImplementation">The type of the <see cref="ISqlServerDBRepository{TContract}" /> implementation.</typeparam>
+		/// <typeparam name="TImplementation">The type of the <see cref="ISqlServerDBRepository" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="ISqlServerDBBuilder" />.
 		/// </returns>
-		ISqlServerDBBuilder AddRepository<TRepository, TContract, TImplementation>()
-			where TRepository : class, ISqlServerDBRepository<TContract>
+		ISqlServerDBBuilder AddRepository<TRepository, TImplementation>()
+			where TRepository : class, ISqlServerDBRepository
 			where TImplementation : class, TRepository;
 	}
 }

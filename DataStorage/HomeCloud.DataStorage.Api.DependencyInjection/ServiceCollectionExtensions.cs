@@ -2,14 +2,11 @@
 {
 	#region Usings
 
-	using HomeCloud.Api.Providers;
-
 	using HomeCloud.Core;
 
-	using HomeCloud.DataAccess.Components.Factories;
-	using HomeCloud.DataAccess.Services.Factories;
+	using HomeCloud.Data.MongoDB;
+	using HomeCloud.Data.SqlServer;
 
-	using HomeCloud.DataStorage.Api.Configuration;
 	using HomeCloud.DataStorage.Api.Models;
 	using HomeCloud.DataStorage.Api.Models.Converters;
 
@@ -17,22 +14,25 @@
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Entities.Converters;
+
 	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Services;
 	using HomeCloud.DataStorage.Business.Validation;
+	using HomeCloud.DataStorage.Configuration;
 
-	using HomeCloud.DataStorage.DataAccess.Components.Factories;
+	using HomeCloud.DataStorage.DataAccess;
+	using HomeCloud.DataStorage.DataAccess.Aggregation;
+	using HomeCloud.DataStorage.DataAccess.Aggregation.Objects;
 
 	using HomeCloud.DependencyInjection;
-
 	using HomeCloud.Mapping;
 	using HomeCloud.Validation;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
-	using DataContracts = HomeCloud.DataStorage.DataAccess.Contracts;
+	using DataContracts = HomeCloud.DataStorage.DataAccess.Objects;
 
 	#endregion
 
@@ -44,155 +44,122 @@
 		#region Public Methods
 
 		/// <summary>
-		/// Adds the dependencies to container.
-		/// </summary>
-		/// <param name="services">The collection of services.</param>
-		public static void AddDependencies(this IServiceCollection services)
-		{
-			services.AddSingleton<IDbRepositoryFactory, DataStorageRepositoryFactory>();
-			services.AddSingleton<IDocumentRepositoryFactory, DocumentDataRepositoryFactory>();
-			services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
-
-			services.AddSingleton<IDataContextScopeFactory, DataContextScopeFactory>();
-
-			AddConverters(services);
-			AddDataProviders(services);
-			AddComandHandlers(services);
-			AddValidators(services);
-			AddFactories(services);
-			AddServices(services);
-
-			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
-
-			services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
-		}
-
-		/// <summary>
-		/// Adds application configuration settings to container.
-		/// </summary>
-		/// <param name="services">The collection of services.</param>
-		/// <param name="configuration">A set of configuration properties.</param>
-		public static void Configure(this IServiceCollection services, IConfiguration configuration)
-		{
-			services.Configure<Database>(configuration.GetSection(nameof(Database)));
-			services.Configure<ConnectionStrings>(configuration.GetSection(nameof(Database)).GetSection(nameof(ConnectionStrings)));
-
-			services.Configure<FileSystem>(configuration.GetSection(nameof(FileSystem)));
-		}
-
-		#endregion
-
-		#region Private Methods
-
-		/// <summary>
-		/// Adds the converters to container.
+		/// Adds the database services to the service collection.
 		/// </summary>
 		/// <param name="services">The services.</param>
-		private static void AddConverters(this IServiceCollection services)
+		/// <param name="configuration">The configuration.</param>
+		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
+		public static IServiceCollection AddDatabases(this IServiceCollection services, IConfiguration configuration)
 		{
-			StorageConverter storageConverter = new StorageConverter();
+			services.AddSqlServerDB(options =>
+			{
+				options.ConnectionString = configuration.GetSection("ConnectionStrings").GetSection("DataStorageDB").Value;
+			})
+			.AddContext()
+			.AddContextScope()
+			.AddRepository<IStorageRepository, StorageRepository>()
+			.AddRepository<ICatalogRepository, CatalogRepository>()
+			.AddRepository<IFileRepository, FileRepository>();
 
-			services.AddSingleton<ITypeConverter<DataContracts.Storage, Storage>>(storageConverter);
-			services.AddSingleton<ITypeConverter<Storage, DataContracts.Storage>>(storageConverter);
-			services.AddSingleton<ITypeConverter<DataContracts.Catalog, Storage>>(storageConverter);
-			services.AddSingleton<ITypeConverter<Storage, DataContracts.Catalog>>(storageConverter);
-			services.AddSingleton<ITypeConverter<DataContracts.CatalogDocument, Storage>>(storageConverter);
-			services.AddSingleton<ITypeConverter<Storage, DataContracts.CatalogDocument>>(storageConverter);
+			services.AddMongoDB(options =>
+			{
+				options.ConnectionString = configuration.GetSection("ConnectionStrings").GetSection("AggregationDB").Value;
+			})
+			.AddContext()
+			.AddRepository<IFileDocumentRepository, FileDocumentRepository>()
+			.AddRepository<ICatalogDocumentRepository, CatalogDocumentRepository>();
 
-			CatalogConverter catalogConverter = new CatalogConverter();
-
-			services.AddSingleton<ITypeConverter<DataContracts.Catalog, Catalog>>(catalogConverter);
-			services.AddSingleton<ITypeConverter<Catalog, DataContracts.Catalog>>(catalogConverter);
-			services.AddSingleton<ITypeConverter<DataContracts.CatalogDocument, Catalog>>(catalogConverter);
-			services.AddSingleton<ITypeConverter<Catalog, DataContracts.CatalogDocument>>(catalogConverter);
-
-			CatalogEntryConverter catalogEntryConverter = new CatalogEntryConverter();
-
-			services.AddSingleton<ITypeConverter<DataContracts.File, CatalogEntry>>(catalogEntryConverter);
-			services.AddSingleton<ITypeConverter<CatalogEntry, DataContracts.File>>(catalogEntryConverter);
-			services.AddSingleton<ITypeConverter<DataContracts.FileDocument, CatalogEntry>>(catalogEntryConverter);
-			services.AddSingleton<ITypeConverter<CatalogEntry, DataContracts.FileDocument>>(catalogEntryConverter);
-
-			ServiceResultConverter serviceResultConverter = new ServiceResultConverter();
-
-			services.AddSingleton<ITypeConverter<ValidationResult, ServiceResult>>(serviceResultConverter);
-
-			StorageViewModelConverter storageViewModelConverter = new StorageViewModelConverter();
-
-			services.AddSingleton<ITypeConverter<Storage, StorageViewModel>>(storageViewModelConverter);
-			services.AddSingleton<ITypeConverter<StorageViewModel, Storage>>(storageViewModelConverter);
-
-			CatalogViewModelConverter catalogViewModelConverter = new CatalogViewModelConverter();
-
-			services.AddSingleton<ITypeConverter<Catalog, CatalogViewModel>>(catalogViewModelConverter);
-			services.AddSingleton<ITypeConverter<CatalogViewModel, Catalog>>(catalogViewModelConverter);
-
-			services.AddSingleton<ITypeConverter<CatalogEntry, DataViewModel>, DataViewModelConverter>();
-			services.AddSingleton<ITypeConverter<DataViewModel, CatalogEntry>, DataViewModelConverter>();
-
-			services.AddSingleton<ITypeConverter<CatalogEntry, FileViewModel>, FileViewModelConverter>();
-			services.AddSingleton<ITypeConverter<FileViewModel, CatalogEntry>, FileViewModelConverter>();
-
-			services.AddSingleton<IMapper, Mapper>();
+			return services;
 		}
 
 		/// <summary>
-		/// Adds the command handlers to container.
+		/// Adds the file storage configuration to service collection.
 		/// </summary>
 		/// <param name="services">The services.</param>
-		private static void AddComandHandlers(this IServiceCollection services)
+		/// <param name="configuration">The configuration.</param>
+		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
+		public static IServiceCollection AddFileStorage(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddTransient<IDataCommandHandler, DataCommandHandler>();
+			services.Configure<FileSystem>(configuration);
+
+			return services;
 		}
 
 		/// <summary>
-		/// Adds the data providers to container.
+		/// Adds the type mappings to the service collection.
 		/// </summary>
 		/// <param name="services">The services.</param>
-		private static void AddDataProviders(this IServiceCollection services)
+		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
+		public static IServiceCollection AddMappings(this IServiceCollection services)
 		{
-			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
-			services.AddSingleton<IFileSystemProvider, FileSystemProvider>();
-			services.AddSingleton<IAggregationDataProvider, AggregationDataProvider>();
+			services.AddMapper();
+
+			services.AddTypeConverter<ITypeConverter<DataContracts.Storage, Storage>, StorageConverter>();
+			services.AddTypeConverter<ITypeConverter<Storage, DataContracts.Storage>, StorageConverter>();
+			services.AddTypeConverter<ITypeConverter<DataContracts.Catalog, Storage>, StorageConverter>();
+			services.AddTypeConverter<ITypeConverter<Storage, DataContracts.Catalog>, StorageConverter>();
+			services.AddTypeConverter<ITypeConverter<CatalogDocument, Storage>, StorageConverter>();
+			services.AddTypeConverter<ITypeConverter<Storage,CatalogDocument>, StorageConverter>();
+
+			services.AddTypeConverter<ITypeConverter<DataContracts.Catalog, Catalog>, CatalogConverter>();
+			services.AddTypeConverter<ITypeConverter<Catalog, DataContracts.Catalog>, CatalogConverter>();
+			services.AddTypeConverter<ITypeConverter<CatalogDocument, Catalog>, CatalogConverter>();
+			services.AddTypeConverter<ITypeConverter<Catalog, CatalogDocument>, CatalogConverter>();
+
+			services.AddTypeConverter<ITypeConverter<DataContracts.File, CatalogEntry>, CatalogEntryConverter>();
+			services.AddTypeConverter<ITypeConverter<CatalogEntry, DataContracts.File>, CatalogEntryConverter>();
+			services.AddTypeConverter<ITypeConverter<FileDocument, CatalogEntry>, CatalogEntryConverter>();
+			services.AddTypeConverter<ITypeConverter<CatalogEntry, FileDocument>, CatalogEntryConverter>();
+
+			services.AddTypeConverter<ITypeConverter<ValidationResult, ServiceResult>, ServiceResultConverter>();
+
+			services.AddTypeConverter<ITypeConverter<Storage, StorageViewModel>, StorageViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<StorageViewModel, Storage>, StorageViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<Catalog, CatalogViewModel>, CatalogViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<CatalogViewModel, Catalog>, CatalogViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<CatalogEntry, DataViewModel>, DataViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<DataViewModel, CatalogEntry>, DataViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<CatalogEntry, FileViewModel>, FileViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<FileViewModel, CatalogEntry>, FileViewModelConverter>();
+
+			return services;
 		}
 
 		/// <summary>
-		/// Adds the data providers to container.
+		/// Adds the data storage services.
 		/// </summary>
 		/// <param name="services">The services.</param>
-		private static void AddValidators(this IServiceCollection services)
+		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
+		public static IServiceCollection AddDataStorageServices(this IServiceCollection services)
 		{
 			services.AddTransient<IPresenceValidator, PresenceValidator>();
 			services.AddTransient<IUniqueValidator, UniqueValidator>();
 			services.AddTransient<IRequiredValidator, RequiredValidator>();
-		}
 
-		/// <summary>
-		/// Adds the factories to the container.
-		/// </summary>
-		/// <param name="services">The services.</param>
-		private static void AddFactories(this IServiceCollection services)
-		{
-			services.AddFactory<ITypeConverter>();
 			services.AddFactory<ICatalogEntryValidator>();
 			services.AddFactory<ICatalogValidator>();
 			services.AddFactory<IStorageValidator>();
-			services.AddFactory<ICommandHandler>();
+
+			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
+
+			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
+			services.AddSingleton<IFileSystemProvider, FileSystemProvider>();
+			services.AddSingleton<IAggregationDataProvider, AggregationDataProvider>();
 			services.AddFactory<IDataProvider>();
 
 			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
-			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
-		}
+			services.AddTransient<IDataCommandHandler, DataCommandHandler>();
+			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
+			services.AddFactory<ICommandHandler>();
 
-		/// <summary>
-		/// Adds the services to the container.
-		/// </summary>
-		/// <param name="services">The services.</param>
-		private static void AddServices(this IServiceCollection services)
-		{
 			services.AddScoped<IStorageService, StorageService>();
 			services.AddScoped<ICatalogService, CatalogService>();
 			services.AddScoped<ICatalogEntryService, CatalogEntryService>();
+
+			return services;
 		}
 
 		#endregion

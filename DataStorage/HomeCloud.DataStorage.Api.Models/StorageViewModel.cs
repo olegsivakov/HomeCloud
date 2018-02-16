@@ -4,15 +4,12 @@
 
 	using System;
 
-	using HomeCloud.Api.Mvc;
-
 	#endregion
 
 	/// <summary>
 	/// Represents storage view model.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Api.Mvc.IViewModel" />
-	public class StorageViewModel : IViewModel
+	public class StorageViewModel
 	{
 		/// <summary>
 		/// Gets or sets the identifier.

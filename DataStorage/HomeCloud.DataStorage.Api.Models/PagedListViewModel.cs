@@ -4,18 +4,16 @@
 
 	using System.Collections.Generic;
 
-	using HomeCloud.Api.Http;
-	using HomeCloud.Api.Mvc;
+	using HomeCloud.Http;
 
 	#endregion
 
 	/// <summary>
-	/// Represents the list of <see cref="IViewModel" /> items.
+	/// Represents the list of view model items.
 	/// </summary>
-	/// <typeparam name="T">The <see cref="IViewModel"/> type.</typeparam>
+	/// <typeparam name="T">The model type.</typeparam>
 	/// <seealso cref="System.Collections.Generic.List{T}" />
 	public class PagedListViewModel<T> : List<T>
-		where T : IViewModel
 	{
 		#region Constructors
 

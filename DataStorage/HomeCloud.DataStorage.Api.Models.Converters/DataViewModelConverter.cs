@@ -4,9 +4,10 @@
 
 	using System.IO;
 
-	using HomeCloud.Api.Providers;
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
+
+	using HomeCloud.Mvc.Providers;
 
 	#endregion
 

@@ -26,16 +26,15 @@
 			where TImplementation : HttpContext, TContext;
 
 		/// <summary>
-		/// Adds the specified <see cref="IHttpRepository{TContract}" /> repository to the service collection.
+		/// Adds the specified <see cref="IHttpRepository" /> repository to the service collection.
 		/// </summary>
-		/// <typeparam name="TRepository">The type of the repository derived from <see cref="IHttpRepository{TContract}" />.</typeparam>
-		/// <typeparam name="TContract">The type of the contract handled by the repository.</typeparam>
-		/// <typeparam name="TImplementation">The type of the <see cref="IHttpRepository{TContract}" /> implementation.</typeparam>
+		/// <typeparam name="TRepository">The type of the repository derived from <see cref="IHttpRepository" />.</typeparam>
+		/// <typeparam name="TImplementation">The type of the <see cref="IHttpRepository" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="IHttpBuilder" />.
 		/// </returns>
-		IHttpBuilder AddRepository<TRepository, TContract, TImplementation>()
-			where TRepository : class, IHttpRepository<TContract>
+		IHttpBuilder AddRepository<TRepository, TImplementation>()
+			where TRepository : class, IHttpRepository
 			where TImplementation : class, TRepository;
 	}
 }

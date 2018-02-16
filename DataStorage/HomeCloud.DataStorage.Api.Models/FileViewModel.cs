@@ -4,8 +4,7 @@
 
 	using System;
 
-	using HomeCloud.Api.Http;
-	using HomeCloud.Api.Mvc;
+	using HomeCloud.Http;
 
 	using Newtonsoft.Json;
 
@@ -14,8 +13,7 @@
 	/// <summary>
 	/// Represents binary file view model.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Api.Mvc.IFileViewModel" />
-	public class FileViewModel : IFileViewModel
+	public class FileViewModel
 	{
 		#region Constants
 
