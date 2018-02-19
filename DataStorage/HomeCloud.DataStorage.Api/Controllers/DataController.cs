@@ -70,9 +70,9 @@
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" /> or <see cref="FileViewModel" /> stream.
 		/// </returns>
 		[HttpGet("v1/[controller]/{id}", Name = nameof(DataController.GetDataByID))]
-		[ContentType(
-			MimeTypes.Application.Json,
-			MimeTypes.Application.OctetStream)]
+		//[ContentType(
+		//	MimeTypes.Application.Json,
+		//	MimeTypes.Application.OctetStream)]
 		public async Task<IActionResult> GetDataByID(
 			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
@@ -185,7 +185,7 @@
 			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
-			DataViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
+			FileViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}

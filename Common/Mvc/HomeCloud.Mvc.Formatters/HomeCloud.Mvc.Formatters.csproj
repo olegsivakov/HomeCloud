@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Extensions\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj" />
     <ProjectReference Include="..\..\HomeCloud.Http\HomeCloud.Http.csproj" />
   </ItemGroup>
 

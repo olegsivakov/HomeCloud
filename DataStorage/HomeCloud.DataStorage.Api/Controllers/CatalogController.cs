@@ -75,7 +75,7 @@
 			IEnumerable<CatalogViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;
 
 			return this.HttpResult(
-				new PagedListViewModel<CatalogViewModel>(data)
+				new CatalogListViewModel(data, parentID)
 				{
 					Offset = result.Data?.Offset ?? offset,
 					Size = result.Data?.Limit ?? limit,
@@ -142,6 +142,7 @@
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] CatalogViewModel model)
 		{
 			Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
+			entity.ID = id;
 			entity.Parent.ID = parentID;
 
 			ServiceResult<Catalog> result = await this.catalogService.UpdateCatalogAsync(entity);

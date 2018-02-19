@@ -15,6 +15,7 @@
 
 	using Newtonsoft.Json;
 
+	using HomeCloud.Core.Extensions;
 	using HomeCloud.Http;
 
 	#endregion
@@ -74,7 +75,7 @@
 
 		private static void WriteResponseHeaders(HttpResponse response, object obj)
 		{
-			IEnumerable<PropertyInfo> properties = obj?.GetType().GetProperties().Where(property => !property.PropertyType.Equals(typeof(object)) && (property.GetIndexParameters()?.Length).GetValueOrDefault() == 0) ?? Enumerable.Empty<PropertyInfo>();
+			IEnumerable<PropertyInfo> properties = obj?.GetType().GetProperties().Where(property => (property.GetIndexParameters()?.Length).GetValueOrDefault() == 0) ?? Enumerable.Empty<PropertyInfo>();
 			foreach (PropertyInfo property in properties)
 			{
 				HttpHeaderAttribute headerAttribute = property.GetCustomAttribute(typeof(HttpHeaderAttribute), true) as HttpHeaderAttribute;
@@ -83,8 +84,11 @@
 					response.Headers[headerAttribute.Name] = Convert.ToString(property.GetValue(obj));
 				}
 
-				object propertyValue = property.GetValue(obj);
-				WriteResponseHeaders(response, propertyValue);
+				if (!property.PropertyType.IsPrimitive())
+				{
+					object propertyValue = property.GetValue(obj);
+					WriteResponseHeaders(response, propertyValue);
+				}
 			}
 		}
 

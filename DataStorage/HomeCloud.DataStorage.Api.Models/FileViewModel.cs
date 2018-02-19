@@ -5,6 +5,7 @@
 	using System;
 
 	using HomeCloud.Http;
+	using HomeCloud.Mvc.Models;
 
 	using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@
 	/// <summary>
 	/// Represents binary file view model.
 	/// </summary>
-	public class FileViewModel
+	public class FileViewModel : IFileModel
 	{
 		#region Constants
 
@@ -57,7 +58,7 @@
 		/// <value>
 		/// The MIME type.
 		/// </value>
-		[HttpHeader("Content-Type")]
+		[HttpHeader("Content-Type", HttpMethods.Head, HttpMethods.Get)]
 		[JsonIgnore]
 		public virtual string MimeType { get; set; }
 
@@ -67,7 +68,7 @@
 		/// <value>
 		/// The accept ranges.
 		/// </value>
-		[HttpHeader("Accept-Ranges")]
+		[HttpHeader("Accept-Ranges", HttpMethods.Head, HttpMethods.Get)]
 		[JsonIgnore]
 		public virtual string AcceptRanges { get; } = BinaryRange;
 
@@ -77,7 +78,7 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		[HttpHeader("Content-Length")]
+		[HttpHeader("Content-Length", HttpMethods.Head, HttpMethods.Get)]
 		[JsonIgnore]
 		public virtual long Size { get; set; }
 

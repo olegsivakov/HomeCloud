@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\HomeCloud.Http\HomeCloud.Http.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Models\HomeCloud.Mvc.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -79,7 +79,7 @@
 			if (!request.Headers.ContainsKey(ContentTypeHeaderName))
 				return false;
 
-			return this.contentTypes.Any(contentType => string.Equals(request.Headers[ContentTypeHeaderName], contentType, StringComparison.OrdinalIgnoreCase));
+			return this.contentTypes.Any(contentType => (request.Headers[ContentTypeHeaderName].ToString()).ToLower().Contains(contentType.ToLower()));
 		}
 
 		#endregion

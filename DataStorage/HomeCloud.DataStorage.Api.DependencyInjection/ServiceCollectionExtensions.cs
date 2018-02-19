@@ -80,7 +80,7 @@
 		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
 		public static IServiceCollection AddFileStorage(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<FileSystem>(configuration);
+			services.Configure<FileSystem>(configuration.GetSection(nameof(FileSystem)));
 
 			return services;
 		}

@@ -1,5 +1,6 @@
 ﻿namespace HomeCloud.DataStorage.Api.Models
 {
+	using Newtonsoft.Json;
 	#region Usings
 
 	using System;

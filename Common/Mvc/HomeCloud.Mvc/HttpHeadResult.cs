@@ -15,11 +15,12 @@
 		#region Contstructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="HttpHeadResult"/> class.
+		/// Initializes a new instance of the <see cref="HttpHeadResult" /> class.
 		/// </summary>
 		/// <param name="controller">The controller.</param>
-		public HttpHeadResult(Controller controller)
-			: base(controller)
+		/// <param name="value">The value to override <see cref="!:HTTP" /> body. Can be set to <see cref="T:System.Nullable" /> as default.</param>
+		public HttpHeadResult(Controller controller, object value)
+			: base(controller, value)
 		{
 		}
 

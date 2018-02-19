@@ -45,16 +45,16 @@
 			Type implementationType = typeof(TImplementation);
 
 			ServiceDescriptor descriptor = services.FirstOrDefault(item => item.ImplementationType == implementationType && item.Lifetime == ServiceLifetime.Singleton);
-			if (descriptor != null)
+			if (descriptor?.ImplementationInstance != null)
 			{
-				services.AddSingleton<TConverter>((TImplementation)descriptor.ImplementationInstance);
+				services.AddSingleton<TConverter>((TImplementation)descriptor?.ImplementationInstance);
 
 				return services;
 			}
 
 			if (implementationType.GetConstructor(Type.EmptyTypes) != null)
 			{
-				services.AddSingleton<TConverter, TImplementation>();
+				services.AddSingleton<TConverter>(Activator.CreateInstance<TImplementation>());
 			}
 			else
 			{

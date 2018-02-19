@@ -45,16 +45,19 @@
 		/// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext" />.</param>
 		public override void OnActionExecuted(ActionExecutedContext context)
 		{
-			ObjectResult result = context.Result as ObjectResult;
-			if (result != null && result.Value != null)
+			if (context.HttpContext.Response.ContentType == "application/json")
 			{
-				IEnumerable<Link> links = this.linkService.GetLinks(result.Value, context.ActionDescriptor.AttributeRouteInfo.Name);
-				result.Value = new HypermediaResponse(result.Value)
+				ObjectResult result = context.Result as ObjectResult;
+				if (result != null && result.Value != null)
 				{
-					Links = links
-				};
+					IEnumerable<Link> links = this.linkService.GetLinks(result.Value, context.ActionDescriptor.AttributeRouteInfo.Name);
+					result.Value = new HypermediaResponse(result.Value)
+					{
+						Links = links
+					};
 
-				context.Result = result;
+					context.Result = result;
+				}
 			}
 		}
 

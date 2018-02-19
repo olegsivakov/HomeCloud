@@ -105,7 +105,7 @@
 
 				case HttpMethods.Head:
 					{
-						return new HttpHeadResult(controller)
+						return new HttpHeadResult(controller, value)
 						{
 							Errors = errors
 						};
