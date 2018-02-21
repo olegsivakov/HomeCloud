@@ -21,7 +21,7 @@
 		/// <param name="services">The service collection.</param>
 		/// <param name="setupAction">The setup action.</param>
 		/// <returns>The instance of <see cref="IHttpBuilder"/>.</returns>
-		public static IHttpBuilder AddMongoDB(this IServiceCollection services, Action<HttpOptions> setupAction)
+		public static IHttpBuilder AddHttp(this IServiceCollection services, Action<HttpOptions> setupAction)
 		{
 			services.AddFactory<IHttpRepository>();
 
