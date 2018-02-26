@@ -1,9 +1,0 @@
-﻿@mixin color($background-color, $font-color) {
-	@if ($background-color) {
-		background-color: $background-color;
-	}
-
-	@if ($font-color) {
-		color: $font-color;
-	}
-}
