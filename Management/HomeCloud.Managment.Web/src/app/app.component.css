@@ -1,0 +1,27 @@
+.header {
+    background: #1c1c1c;
+}
+
+.nav-menu {
+    background-color: #252525 !important;
+
+    -moz-box-shadow: 4px 4px 7px #d0d0d0;
+    -webkit-box-shadow: 4px 4px 7px #d0d0d0;
+    -box-shadow: 4px 4px 7px #d0d0d0;
+}
+
+.search {
+    background: #3d3d3d;
+    height: 30px;
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.search label {
+    padding-left: 10px;
+}
+
+.search input:focus {
+    border-bottom: none;
+}

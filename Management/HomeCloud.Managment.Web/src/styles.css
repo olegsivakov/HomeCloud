@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+    font-family: "Segoe UI","Segoe WP",Tahoma,Arial,sans-serif;
+    font-size: 13px;
+}
+
+.nav-menu .nav-trigger-icon {
+    color: #fafafa;
+}
+.nav-menu .nav-group * {
+    color: #fafafa;
+}
+
+.nav-menu .nav-group .nav-group-content .nav-group-trigger:hover {
+    background: #3d3d3d;
+}
+
+.nav-menu .nav-group .nav-group-children {
+    background: #000000;
+}
+
+.nav-menu .nav-group.is-expanded .nav-group-content .nav-group-trigger,
+.nav-menu .nav-group.is-expanded .nav-group-content .nav-group-trigger:hover {
+    background: #3d3d3d;
+}
+
+.details-nav > .nav-trigger {
+    display: none !important;
+}
+
+.modal-title {
+    border-bottom: 2px solid rgba(86,86,86,.2);
+}
