@@ -1,10 +1,36 @@
 .notification-container {
     position: absolute;
     right:10px;
-    top: 10px;
+    top: 40px;
     z-index: 1000;
+    width: 20%;
 }
 
 .notification-container .alert {
     margin-bottom: 5px;
+    background-color: #fafafa !important;
+    border: none;
+
+    -moz-box-shadow: 0px 0px 10px #3b3b3b;
+    -webkit-box-shadow: 0px 0px 10px #3b3b3b;
+    -box-shadow: 0px 0px 10px #3b3b3b;
+}
+
+.notification-container .alert .alert-icon {
+    height: 17px;
+}
+
+.notification-container .alert.alert-warning .alert-icon {
+    color: #b43900;
+}
+
+.notification-container .alert .alert-items {
+    padding: 10px 10px;
+}
+
+.notification-container .alert .alert-description {
+    font-size: 13px;
+}
+.notification-container .alert .alert-description {
+    font-size: 12px;
 }

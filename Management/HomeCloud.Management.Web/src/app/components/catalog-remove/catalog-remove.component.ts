@@ -25,7 +25,7 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
     });
 
     this.catalogRemovedSubscription = this.catalogService.catalogRemoved$.subscribe(catalog => {
-      this.notificationService.success("Remove Catalog", "Catalog has been removed successfully");
+      this.notificationService.warning("Catalog removed", "Catalog" + catalog.Name + " has been removed successfully");
 
       this.catalog = null;
     });

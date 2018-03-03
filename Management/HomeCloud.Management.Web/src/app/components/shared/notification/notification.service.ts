@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Notification } from '../../../models/notification';
 import { NotificationType } from '../../../models/notification-type';
 
-const NotificationLifetime: number = 50000;
+const NotificationLifetime: number = 60000;
 
 @Injectable()
 export class NotificationService {
