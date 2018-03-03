@@ -18,6 +18,11 @@ import { CatalogListComponent } from './components/catalog-list/catalog-list.com
 import { FileComponent } from './components/file/file.component';
 import { CatalogEditComponent } from './components/catalog-edit/catalog-edit.component';
 import { CatalogRemoveComponent } from './components/catalog-remove/catalog-remove.component';
+import { NotificationService } from './components/shared/notification/notification.service';
+import { NotificationComponent } from './components/shared/notification/notification.component';
+
+import { ProgressBarService } from './components/shared/progress-bar/progress-bar.service';
+import { ProgressBarComponent } from './components/shared/progress-bar/progress-bar.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +40,11 @@ import { CatalogRemoveComponent } from './components/catalog-remove/catalog-remo
 
     CatalogEditComponent,
 
-    CatalogRemoveComponent
+    CatalogRemoveComponent,
+
+    NotificationComponent,
+
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +54,9 @@ import { CatalogRemoveComponent } from './components/catalog-remove/catalog-remo
   ],
   providers: [
     RightPanelService,
-    CatalogService
+    CatalogService,
+    NotificationService,
+    ProgressBarService
   ],
   bootstrap: [AppComponent]
 })

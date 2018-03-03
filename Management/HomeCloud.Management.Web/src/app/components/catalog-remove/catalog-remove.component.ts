@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { Catalog } from '../../models/catalog';
 import { CatalogService } from '../catalog/catalog.service';
+import { NotificationService } from '../shared/notification/notification.service';
 
 @Component({
   selector: 'app-catalog-remove',
@@ -16,7 +17,7 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
 
   public catalog: Catalog = null;
 
-  constructor(private catalogService: CatalogService) { }
+  constructor(private catalogService: CatalogService, private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.removeRequestedSubscription = this.catalogService.removeRequested$.subscribe(catalog => {
@@ -24,6 +25,8 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
     });
 
     this.catalogRemovedSubscription = this.catalogService.catalogRemoved$.subscribe(catalog => {
+      this.notificationService.success("Remove Catalog", "Catalog has been removed successfully");
+
       this.catalog = null;
     });
 

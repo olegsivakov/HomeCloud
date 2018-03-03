@@ -1,0 +1,14 @@
+<div class="notification-container">
+  <div [ngClass]="{'alert':true, 'alert-sm':true, 'alert-info':notification.type == 'info', 'alert-success':notification.type == 'success', 'alert-warning':notification.type == 'warning', 'alert-danger':notification.type == 'danger'}" *ngFor="let notification of notifications">
+      <div class="alert-items">
+          <div class="alert-item static">
+              <div class="alert-icon-wrapper">
+                  <clr-icon class="alert-icon" shape="exclamation-triangle"></clr-icon>
+              </div>
+              <div class="alert-text">
+                  {{notification.message}}
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

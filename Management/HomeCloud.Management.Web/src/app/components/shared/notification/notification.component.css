@@ -1,0 +1,10 @@
+.notification-container {
+    position: absolute;
+    right:10px;
+    top: 10px;
+    z-index: 1000;
+}
+
+.notification-container .alert {
+    margin-bottom: 5px;
+}
