@@ -24,7 +24,7 @@ export class CatalogComponent implements OnInit {
   }
 
   public edit(): void {
-    this.catalogService.requestUpdate(this.catalog);
+    this.catalogService.requestUpdate(Object.assign({}, this.catalog));
   }
 
   public remove(): void {

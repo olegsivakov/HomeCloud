@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 import { ClarityModule } from 'clarity-angular';
 
 import { AppComponent } from './app.component';
@@ -45,6 +47,7 @@ import { CatalogService } from './services/catalog/catalog.service';
     NotificationComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     ROUTING,

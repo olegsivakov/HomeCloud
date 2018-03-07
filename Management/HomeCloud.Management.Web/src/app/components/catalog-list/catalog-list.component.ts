@@ -25,14 +25,16 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.catalogSavedSubscription = this.catalogService.catalogSaved$.subscribe(catalog => {
       let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
-
-      item = catalog;
+      let index: number = this.data.indexOf(item);
+      if (index >= 0) {
+        this.data.splice(index, 1, catalog);
+      }
     });
 
     this.catalogRemovedSubscription = this.catalogService.catalogRemoved$.subscribe(catalog => {
       let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
 
-      let index = this.data.indexOf(item);
+      let index: number = this.data.indexOf(item);
       if (index >= 0) {
         this.data.splice(index, 1);
       }

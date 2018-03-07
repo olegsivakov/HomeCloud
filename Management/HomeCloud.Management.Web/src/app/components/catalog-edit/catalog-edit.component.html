@@ -1,17 +1,30 @@
-<clr-modal [(clrModalOpen)]="catalog"[clrModalClosable]="false">
+<clr-modal [(clrModalOpen)]="catalog"[clrModalClosable]="false" *ngIf="catalog">
     <h3 class="modal-title">Edit Catalog</h3>
     <div class="modal-body">
-        <div class="form-group">
-            <label for="txtCatalogName" aria-haspopup="true" role="tooltip" class="tooltip tooltip-validation invalid tooltip-md" required minlength="1">
-                <input id="txtCatalogName" *ngIf="catalog" type="text" [value]="catalog.Name" (input)="catalog.Name = $event.target.value" placeholder="Catalog name" class="required" />
-                <span class="tooltip-content">
-                    Please enter catalog name
-                </span>
-            </label>
-        </div>
+            <div class="alert alert-danger" *ngIf="catalogForm.invalid">
+                    <div class="alert-items">
+                        <div class="alert-item static">
+                            <div class="alert-icon-wrapper">
+                                <clr-icon class="alert-icon" shape="exclamation-triangle"></clr-icon>
+                            </div>
+                            <span class="alert-text">The catalog name is required</span>
+                        </div>
+                    </div>
+                </div>
+        <form class="form-group" #catalogForm="ngForm">
+            <input
+                id="catalogName"
+                name="catalogName"
+                type="text"
+                placeholder="Catalog name"
+                class="form-control invalid"
+                [(ngModel)]="catalog.Name"
+                #name="ngModel"
+                required />
+        </form>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="confirm()">Save</button>
+        <button type="button" class="btn btn-primary" (click)="confirm()" [disabled]="catalogForm.invalid">Save</button>
     </div>
 </clr-modal>
