@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { Notification } from '../../../models/notification';
-import { NotificationService } from './notification.service';
+import { NotificationService } from '../../../services/shared/notification/notification.service';
 
 @Component({
   selector: 'app-notification',
@@ -12,7 +12,7 @@ import { NotificationService } from './notification.service';
 export class NotificationComponent implements OnInit, OnDestroy {
 
   private notificationCreatedSubscription: ISubscription = null;
-  private notificationRemovingSubscription: ISubscription = null;
+  private notificationRemovedSubscription: ISubscription = null;
 
   public notifications: Array<Notification> = new Array<Notification>();
 
@@ -23,14 +23,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
       this.notifications.push(notification);
     });
 
-    this.notificationRemovingSubscription = this.notificationService.notificationRemoving$.subscribe(() => {
-      let date = new Date();
-
-      for (let notification of this.notifications) {
-        if (notification.timeExpired <= date) {
-          this.removeNotification(notification);
-        }
-      }
+    this.notificationRemovedSubscription = this.notificationService.notificationRemoved$.subscribe(notification => {
+      this.removeNotification(notification);
     });
   }
 
@@ -40,20 +34,16 @@ export class NotificationComponent implements OnInit, OnDestroy {
       this.notificationCreatedSubscription = null;
     }
 
-    if (this.notificationRemovingSubscription) {
-      this.notificationRemovingSubscription.unsubscribe();
-      this.notificationRemovingSubscription = null;
+    if (this.notificationRemovedSubscription) {
+      this.notificationRemovedSubscription.unsubscribe();
+      this.notificationRemovedSubscription = null;
     }
   }  
 
-  private removeNotification(notification: Notification): boolean {
+  private removeNotification(notification: Notification): void {
     let index = this.notifications.indexOf(notification);
     if (index >= 0) {
       this.notifications.splice(index, 1);
-      
-      return true;
     }
-
-    return false;
   }
 }

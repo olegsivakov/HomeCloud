@@ -5,12 +5,11 @@ import { ClarityModule } from 'clarity-angular';
 
 import { AppComponent } from './app.component';
 import { ROUTING } from './app.routes';
-import { FooterComponent } from './components/footer/footer.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
-import { RightPanelService } from './components/shared/right-panel/right-panel.service';
-import { RightPanelComponent } from './components/shared/right-panel/right-panel.component';
 
-import { CatalogService } from './components/catalog/catalog.service';
+import { FooterComponent } from './components/footer/footer.component';
+import { RightPanelComponent } from './components/shared/right-panel/right-panel.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { CatalogDetailsComponent } from './components/catalog-details/catalog-details.component';
 import { CatalogListComponent } from './components/catalog-list/catalog-list.component';
@@ -18,11 +17,13 @@ import { CatalogListComponent } from './components/catalog-list/catalog-list.com
 import { FileComponent } from './components/file/file.component';
 import { CatalogEditComponent } from './components/catalog-edit/catalog-edit.component';
 import { CatalogRemoveComponent } from './components/catalog-remove/catalog-remove.component';
-import { NotificationService } from './components/shared/notification/notification.service';
 import { NotificationComponent } from './components/shared/notification/notification.component';
 
-import { ProgressBarService } from './components/shared/progress-bar/progress-bar.service';
-import { ProgressBarComponent } from './components/shared/progress-bar/progress-bar.component';
+import { RightPanelService } from './services/shared/right-panel/right-panel.service';
+import { NotificationService } from './services/shared/notification/notification.service';
+import { NotificationStateService } from './services/shared/notification-state/notification-state.service';
+
+import { CatalogService } from './services/catalog/catalog.service';
 
 @NgModule({
   declarations: [
@@ -39,12 +40,9 @@ import { ProgressBarComponent } from './components/shared/progress-bar/progress-
     FileComponent,
 
     CatalogEditComponent,
-
     CatalogRemoveComponent,
 
-    NotificationComponent,
-
-    ProgressBarComponent
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +54,7 @@ import { ProgressBarComponent } from './components/shared/progress-bar/progress-
     RightPanelService,
     CatalogService,
     NotificationService,
-    ProgressBarService
+    NotificationStateService
   ],
   bootstrap: [AppComponent]
 })

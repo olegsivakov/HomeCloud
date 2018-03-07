@@ -1,9 +1,13 @@
 <div class="notification-container">
-  <div [ngClass]="{'alert':true, 'alert-lg':true, 'alert-info':notification.type == 'info', 'alert-success':notification.type == 'success', 'alert-warning':notification.type == 'warning', 'alert-danger':notification.type == 'danger'}" *ngFor="let notification of notifications">
+  <div [ngClass]="{'alert':true, 'alert-lg':true, 'alert-info':notification.type == 'info', 'alert-success':notification.type == 'success', 'alert-warning':notification.type == 'warning', 'alert-danger':notification.type == 'danger'}" *ngFor="let notification of notifications">      
+        <div class="progress success top loop" *ngIf="false"><progress></progress></div>
         <div class="alert-items">
             <div class="alert-item static">
                 <div class="alert-icon-wrapper">
                     <clr-icon *ngIf="notification.type == 'info'" class="alert-icon" shape="info-standard"></clr-icon>
+                    <span class="spinner spinner-inline" *ngIf="notification.type == 'progress'">
+                            Loading...
+                        </span>
                     <clr-icon *ngIf="notification.type == 'success'" class="alert-icon" shape="success-standard"></clr-icon>
                     <clr-icon *ngIf="notification.type == 'warning'" class="alert-icon" shape="warning-standard"></clr-icon>
                     <clr-icon *ngIf="notification.type == 'danger'" class="alert-icon" shape="error-standard"></clr-icon>

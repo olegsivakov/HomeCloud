@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { RightPanelService } from './right-panel.service';
+import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
 
 @Component({
   selector: 'app-right-panel',
@@ -13,7 +13,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
   private visibilityChangedSubscription: Subscription = null;
   public isCollapsed: boolean = false;
 
-  constructor(private rightPanelService:RightPanelService) { }
+  constructor(private rightPanelService: RightPanelService) { }
 
   ngOnInit() {
     this.isCollapsed = true;

@@ -16,6 +16,10 @@
     -box-shadow: 0px 0px 10px #3b3b3b;
 }
 
+.notification-container .alert {
+    display: block;
+}
+
 .notification-container .alert .alert-icon {
     height: 17px;
 }
@@ -24,13 +28,11 @@
     color: #b43900;
 }
 
-.notification-container .alert .alert-items {
-    padding: 10px 10px;
+.notification-container .alert .alert-description {
+    font-size: 11px;
 }
 
-.notification-container .alert .alert-description {
-    font-size: 13px;
-}
-.notification-container .alert .alert-description {
-    font-size: 12px;
+.progress {
+    height: 0;
+    border-radius: .125rem;
 }

@@ -6,11 +6,11 @@
 
     padding-top: 0px;
 
-    background: #ffffff;
-    border-left: 1px solid rgba(86,86,86,.2) !important;
-    -moz-box-shadow: 4px 4px 7px #d0d0d0;
-    -webkit-box-shadow: 4px 4px 7px #d0d0d0;
-    -box-shadow: 4px 4px 7px #d0d0d0;
+    background: #3d3d3d;
+    color: #ffffff;
+    -moz-box-shadow: -4px 4px 7px #d0d0d0;
+    -webkit-box-shadow: -4px 4px 7px #d0d0d0;
+    -box-shadow: -4px 4px 7px #d0d0d0;
 }
 
 .details-nav.is-collapsed {
@@ -20,4 +20,15 @@
 
 .details-nav .nav-content {
     padding: 5px 5px;
+    background: #ffffff;
+    color: #000000;
+}
+
+.details-nav .nav-trigger {
+    color: #ffffff;
+}
+
+.details-nav .nav-trigger-icon {
+    margin-left: 5px;
+    margin-top: 3px;
 }

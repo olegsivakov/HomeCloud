@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
+
 import { Catalog } from '../../models/catalog';
-import { CatalogService } from '../catalog/catalog.service';
-import { NotificationService } from '../shared/notification/notification.service';
+import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-remove',
@@ -12,25 +12,14 @@ import { NotificationService } from '../shared/notification/notification.service
 export class CatalogRemoveComponent implements OnInit, OnDestroy {
 
   private removeRequestedSubscription: ISubscription = null;
-  private catalogRemovedSubscription: ISubscription = null;
-  private catalogRemoveFailedSubscription: ISubscription = null;
 
   public catalog: Catalog = null;
 
-  constructor(private catalogService: CatalogService, private notificationService: NotificationService) { }
+  constructor(
+    private catalogService: CatalogService) { }
 
   ngOnInit() {
     this.removeRequestedSubscription = this.catalogService.removeRequested$.subscribe(catalog => {
-      this.catalog = catalog;
-    });
-
-    this.catalogRemovedSubscription = this.catalogService.catalogRemoved$.subscribe(catalog => {
-      this.notificationService.warning("Catalog removed", "Catalog" + catalog.Name + " has been removed successfully");
-
-      this.catalog = null;
-    });
-
-    this.catalogRemoveFailedSubscription = this.catalogService.catalogRemovedFailed$.subscribe(catalog => {
       this.catalog = catalog;
     });
   }
@@ -41,22 +30,13 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
       this.removeRequestedSubscription = null;
     }
 
-    if (this.catalogRemovedSubscription) {
-      this.catalogRemovedSubscription.unsubscribe();
-      this.catalogRemovedSubscription = null;
-    }
-
-    if (this.catalogRemoveFailedSubscription) {
-      this.catalogRemoveFailedSubscription.unsubscribe();
-      this.catalogRemoveFailedSubscription = null;
-    }
-
-    this.catalog = null;
+    this.cancel();
   }
 
   public confirm() {
     this.catalogService.remove(this.catalog);
 
+    this.cancel();
   }
 
   public cancel() {

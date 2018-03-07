@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Catalog } from '../../models/catalog';
-import { CatalogService } from './catalog.service';
+import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({  
   selector: 'app-catalog',

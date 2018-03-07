@@ -2,8 +2,9 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../models/catalog';
-import { CatalogService } from '../catalog/catalog.service';
-import { RightPanelService } from '../shared/right-panel/right-panel.service';
+
+import { RightPanelService } from '../../services/shared/right-panel/right-panel.service';
+import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-details',

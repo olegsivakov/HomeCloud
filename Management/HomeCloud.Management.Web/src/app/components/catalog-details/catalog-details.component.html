@@ -1,13 +1,20 @@
 
 <app-right-panel>
-  <div *ngIf="catalog">
-    <div>Name:</div>
-    <div>{{catalog.Name}}</div>
-
-    <div>Size:</div>
-    <div>{{catalog.Size}}</div>
-
-    <div>Created at:</div>
-    <div>{{catalog.CreationDate}}</div>
-</div>
+  <div *ngIf="catalog" class="catalog-group-header">
+    Information
+  </div>
+  <div *ngIf="catalog" class="catalog-details">
+      <div class="catalog-details-item">
+        <div class="title">Name</div>
+        <div class="description">{{catalog.Name}}</div>
+      </div>
+      <div class="catalog-details-item">
+        <div class="title">Size</div>
+        <div class="description">{{catalog.Size}}</div>
+      </div>
+      <div class="catalog-details-item">
+        <div class="title">Created at</div>
+        <div class="description">{{catalog.CreationDate | date:'fullDate'}}</div>
+      </div>
+  </div>
 </app-right-panel>
