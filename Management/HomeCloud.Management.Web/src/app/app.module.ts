@@ -26,6 +26,7 @@ import { NotificationService } from './services/shared/notification/notification
 import { NotificationStateService } from './services/shared/notification-state/notification-state.service';
 
 import { CatalogService } from './services/catalog/catalog.service';
+import { AlertComponent } from './components/shared/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { CatalogService } from './services/catalog/catalog.service';
     CatalogEditComponent,
     CatalogRemoveComponent,
 
-    NotificationComponent
+    NotificationComponent,
+    AlertComponent
   ],
   imports: [
     FormsModule,

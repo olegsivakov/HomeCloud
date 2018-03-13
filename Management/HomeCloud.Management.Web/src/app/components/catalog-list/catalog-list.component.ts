@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { StorageData } from '../../models/storage-data';
@@ -13,10 +13,11 @@ import { CatalogService } from '../../services/catalog/catalog.service';
 })
 export class CatalogListComponent implements OnInit, OnDestroy {
 
+  public catalog: Catalog = null;
+
   private catalogSavedSubscription: ISubscription = null;
   private catalogRemovedSubscription: ISubscription = null;
 
-  public catalog: Catalog = null;
   public data: Array<StorageData> = new Array<StorageData>();
 
   constructor(private catalogService: CatalogService) {    

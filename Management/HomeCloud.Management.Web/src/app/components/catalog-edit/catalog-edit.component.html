@@ -1,16 +1,7 @@
 <clr-modal [(clrModalOpen)]="catalog"[clrModalClosable]="false" *ngIf="catalog">
     <h3 class="modal-title">Edit Catalog</h3>
     <div class="modal-body">
-            <div class="alert alert-danger" *ngIf="catalogForm.invalid">
-                    <div class="alert-items">
-                        <div class="alert-item static">
-                            <div class="alert-icon-wrapper">
-                                <clr-icon class="alert-icon" shape="exclamation-triangle"></clr-icon>
-                            </div>
-                            <span class="alert-text">The catalog name is required</span>
-                        </div>
-                    </div>
-                </div>
+        <app-alert *ngIf="catalogForm.invalid" message="The catalog name is required"></app-alert>
         <form class="form-group" #catalogForm="ngForm">
             <input
                 id="catalogName"
