@@ -1,0 +1,22 @@
+.loader {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    z-index: 3000;
+}
+
+.loader .spinner {
+    float: left;
+}
+.loader .loader-text {
+    float: right;
+    padding: 5px;
+
+    color: #cfcfcf;
+    font-size: 16px;
+}
+
+.modal-backdrop {
+    position: absolute;
+    opacity: .65;
+}

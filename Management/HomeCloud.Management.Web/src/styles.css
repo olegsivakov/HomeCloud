@@ -31,3 +31,29 @@
 .modal-title {
     border-bottom: 2px solid rgba(86,86,86,.2);
 }
+
+.textbox {
+	position: relative;
+	width: 50%;
+}
+.textbox input[type=text]{
+	width: 100%;
+	outline: none;
+	border:none;
+	border-bottom: 1px solid #777;
+}
+.textbox input[type=text]:invalid {
+	box-shadow: none !important;
+}
+.textbox .placeholder {
+	position: absolute;
+	pointer-events: none;
+	top: 22px;
+	transition: 0.2s ease all;
+}
+.textbox input:focus ~ .placeholder,
+.textbox input:not(:focus):valid ~ .placeholder{
+	top: 0px;
+	font-size: 13px;
+	opacity: 1;
+}

@@ -30,10 +30,10 @@ export class NotificationState {
 
         return this;
     }
-    public setExpired(): NotificationState {
+    public setExpired(timeout?: number): NotificationState {
         if (!this.timeExpired) {
             let date = new Date();
-            date.setMilliseconds(date.getMilliseconds() + NotificationLifetime);
+            date.setMilliseconds(date.getMilliseconds() + (timeout == null ? NotificationLifetime : timeout));
 
             this.timeExpired = date;
         }

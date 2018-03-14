@@ -15,15 +15,28 @@ export class CatalogListComponent implements OnInit, OnDestroy {
 
   private catalog: Catalog = null;
 
+  private openingSubscription: ISubscription = null;
+  private openedSubscription: ISubscription = null;
   private savedSubscription: ISubscription = null;
   private removedSubscription: ISubscription = null;
 
   private data: Array<StorageData> = new Array<StorageData>();
 
-  constructor(private catalogService: CatalogService) {    
-  }
+  constructor(
+    private catalogService: CatalogService) { }
 
   ngOnInit() {
+    this.openingSubscription = this.catalogService.opening$.subscribe(command => {
+      this.catalog = command.catalog;
+      this.data.splice(0, this.data.length);
+      
+      this.catalogService.executeOpenCommand(command);
+    });
+
+    this.openedSubscription = this.catalogService.opened$.subscribe(data => {
+      this.data = data;
+    });
+
     this.savedSubscription = this.catalogService.saved$.subscribe(catalog => {
       let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
 
@@ -42,7 +55,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.Initialize();
+    this.catalogService.createOpenCommand(null);
   }
 
   ngOnDestroy(): void {
@@ -57,28 +70,5 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     }
 
     this.data.splice(0);
-  }
-
-  private Initialize(): void {
-    this.catalog = new Catalog();
-
-    this.catalog.ID = "0";
-    this.catalog.Name = "Parent Catalog";
-
-    let data1: Catalog = new Catalog();
-    data1.ID = "1";
-    data1.Name = "Catalog 1";
-    data1.CreationDate = new Date();
-    data1.Size = "15Mb";
-
-    this.data.push(data1);
-
-    let data2: Catalog = new Catalog();
-    data2.ID = "1";
-    data2.Name = "Catalog 2";
-    data2.CreationDate = new Date();
-    data2.Size = "20Mb";
-
-    this.data.push(data2);
   }
 }

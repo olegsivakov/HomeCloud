@@ -19,6 +19,10 @@ export class CatalogComponent implements OnInit {
   ngOnInit() {
   }
 
+  public open(): void {
+    this.catalogService.createOpenCommand(this.catalog);
+  }
+
   public detail(): void {
     this.catalogService.createExpandCommand(this.catalog);
   }

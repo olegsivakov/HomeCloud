@@ -19,14 +19,17 @@ import { CatalogListComponent } from './components/catalog-list/catalog-list.com
 import { FileComponent } from './components/file/file.component';
 import { CatalogEditComponent } from './components/catalog-edit/catalog-edit.component';
 import { CatalogRemoveComponent } from './components/catalog-remove/catalog-remove.component';
+
+import { ProgressComponent } from './components/shared/progress/progress.component';
 import { NotificationComponent } from './components/shared/notification/notification.component';
+import { AlertComponent } from './components/shared/alert/alert.component';
 
 import { RightPanelService } from './services/shared/right-panel/right-panel.service';
 import { NotificationService } from './services/shared/notification/notification.service';
 import { NotificationStateService } from './services/shared/notification-state/notification-state.service';
+import { ProgressService } from './services/shared/progress/progress.service';
 
 import { CatalogService } from './services/catalog/catalog.service';
-import { AlertComponent } from './components/shared/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,8 @@ import { AlertComponent } from './components/shared/alert/alert.component';
     CatalogRemoveComponent,
 
     NotificationComponent,
-    AlertComponent
+    AlertComponent,
+    ProgressComponent
   ],
   imports: [
     FormsModule,
@@ -59,7 +63,8 @@ import { AlertComponent } from './components/shared/alert/alert.component';
     RightPanelService,
     CatalogService,
     NotificationService,
-    NotificationStateService
+    NotificationStateService,
+    ProgressService
   ],
   bootstrap: [AppComponent]
 })
