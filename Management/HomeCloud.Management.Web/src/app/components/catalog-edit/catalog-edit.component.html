@@ -1,4 +1,4 @@
-<clr-modal [(clrModalOpen)]="catalog"[clrModalClosable]="false" *ngIf="catalog">
+<clr-modal [(clrModalOpen)]="isVisible" [clrModalClosable]="false" *ngIf="isVisible">
     <h3 class="modal-title">Edit Catalog</h3>
     <div class="modal-body">
         <app-alert *ngIf="catalogForm.invalid" message="The catalog name is required"></app-alert>

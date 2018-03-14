@@ -13,47 +13,47 @@ import { CatalogService } from '../../services/catalog/catalog.service';
 })
 export class CatalogListComponent implements OnInit, OnDestroy {
 
-  public catalog: Catalog = null;
+  private catalog: Catalog = null;
 
-  private catalogSavedSubscription: ISubscription = null;
-  private catalogRemovedSubscription: ISubscription = null;
+  private savedSubscription: ISubscription = null;
+  private removedSubscription: ISubscription = null;
 
-  public data: Array<StorageData> = new Array<StorageData>();
+  private data: Array<StorageData> = new Array<StorageData>();
 
   constructor(private catalogService: CatalogService) {    
   }
 
   ngOnInit() {
-    this.catalogSavedSubscription = this.catalogService.catalogSaved$.subscribe(catalog => {
+    this.savedSubscription = this.catalogService.saved$.subscribe(catalog => {
       let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
+
       let index: number = this.data.indexOf(item);
       if (index >= 0) {
         this.data.splice(index, 1, catalog);
       }
     });
 
-    this.catalogRemovedSubscription = this.catalogService.catalogRemoved$.subscribe(catalog => {
+    this.removedSubscription = this.catalogService.removed$.subscribe(catalog => {
       let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
 
       let index: number = this.data.indexOf(item);
       if (index >= 0) {
         this.data.splice(index, 1);
       }
-
     });
 
     this.Initialize();
   }
 
   ngOnDestroy(): void {
-    if (this.catalogSavedSubscription) {
-      this.catalogSavedSubscription.unsubscribe();
-      this.catalogSavedSubscription = null;
+    if (this.savedSubscription) {
+      this.savedSubscription.unsubscribe();
+      this.savedSubscription = null;
     }
 
-    if (this.catalogRemovedSubscription) {
-      this.catalogRemovedSubscription.unsubscribe();
-      this.catalogRemovedSubscription = null;
+    if (this.removedSubscription) {
+      this.removedSubscription.unsubscribe();
+      this.removedSubscription = null;
     }
 
     this.data.splice(0);

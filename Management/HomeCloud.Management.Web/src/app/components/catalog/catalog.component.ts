@@ -19,15 +19,15 @@ export class CatalogComponent implements OnInit {
   ngOnInit() {
   }
 
-  public showDetails(): void {
-    this.catalogService.requestDetails(this.catalog);
+  public detail(): void {
+    this.catalogService.createExpandCommand(this.catalog);
   }
 
   public edit(): void {
-    this.catalogService.requestUpdate(Object.assign({}, this.catalog));
+    this.catalogService.createSaveCommand(Object.assign({}, this.catalog));
   }
 
   public remove(): void {
-    this.catalogService.requestRemove(this.catalog);
+    this.catalogService.createRemoveCommand(this.catalog);
   }
 }

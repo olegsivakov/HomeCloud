@@ -4,14 +4,14 @@
     </div>
     <div class="card-block">
       <div class="card-title">
-          <a *ngIf="!isEditable">{{catalog.Name}}</a>
+          <span>{{catalog.Name}}</span>
           <div class="commands">
             <clr-dropdown>
                 <button class="nav-icon" clrDropdownTrigger>
                     <clr-icon shape="ellipsis-horizontal"></clr-icon>
                 </button>
                 <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                  <a clrDropdownItem (click)="showDetails()">View Details</a>
+                  <a clrDropdownItem (click)="detail()">View Details</a>
                   <div class="command-group">
                     <a clrDropdownItem (click)="edit()">Rename</a>
                     <a clrDropdownItem (click)="remove()">Remove</a>

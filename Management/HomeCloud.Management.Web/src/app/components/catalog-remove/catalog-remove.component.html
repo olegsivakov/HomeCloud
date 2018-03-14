@@ -1,4 +1,4 @@
-<clr-modal [(clrModalOpen)]="catalog"[clrModalClosable]="false">
+<clr-modal [(clrModalOpen)]="isVisible" [clrModalClosable]="false" *ngIf="isVisible">
     <h3 class="modal-title">Remove Catalog</h3>
     <div class="modal-body">
         <span *ngIf="catalog">Are you sure you want to remove catalog "{{catalog.Name}}"</span>

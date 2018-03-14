@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../models/catalog';
+import { CatalogCommand } from '../../models/commands/catalog-command';
 import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({
@@ -11,35 +12,42 @@ import { CatalogService } from '../../services/catalog/catalog.service';
 })
 export class CatalogEditComponent implements OnInit, OnDestroy {
 
-  private updateRequestedSubscription: ISubscription = null;
+  private savingSubscription: ISubscription = null;
 
-  public catalog: Catalog = null;
+  private command: CatalogCommand = null;
   
   constructor(private catalogService: CatalogService) { }
 
+  public get isVisible(): boolean {
+    return this.catalog != null;
+  }
+
+  public get catalog(): Catalog {
+    return this.command != null ? this.command.catalog : null;
+  }
+
+  public confirm() {
+    this.catalogService.executeSaveCommand(this.command);
+
+    this.cancel();
+  }
+
+  public cancel() {  
+    this.command = null;
+  }
+
   ngOnInit() {
-    this.updateRequestedSubscription = this.catalogService.updateRequested$.subscribe(catalog => {
-      this.catalog = catalog;
+    this.savingSubscription = this.catalogService.saving$.subscribe(command => {
+      this.command = command;
     });
   }
 
   ngOnDestroy(): void {
-    if (this.updateRequestedSubscription) {
-      this.updateRequestedSubscription.unsubscribe();
-      this.updateRequestedSubscription = null;
+    if (this.savingSubscription) {
+      this.savingSubscription.unsubscribe();
+      this.savingSubscription = null;
     }
 
     this.cancel();
-  }
-
-  public confirm() {
-    this.catalogService.save(this.catalog);
-
-    this.cancel();
-
-  }
-
-  public cancel() {
-    this.catalog = null;
   }
 }

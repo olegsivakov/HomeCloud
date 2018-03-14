@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../models/catalog';
+import { CatalogCommand } from '../../models/commands/catalog-command';
 import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({
@@ -11,35 +12,41 @@ import { CatalogService } from '../../services/catalog/catalog.service';
 })
 export class CatalogRemoveComponent implements OnInit, OnDestroy {
 
-  private removeRequestedSubscription: ISubscription = null;
+  private removingSubscription: ISubscription = null;
+  private command: CatalogCommand = null;
 
-  public catalog: Catalog = null;
+  constructor(private catalogService: CatalogService) { }
 
-  constructor(
-    private catalogService: CatalogService) { }
+    public get isVisible(): boolean {
+      return this.catalog != null;
+    }
+  
+    public get catalog(): Catalog {
+      return this.command != null ? this.command.catalog : null;
+    }
 
   ngOnInit() {
-    this.removeRequestedSubscription = this.catalogService.removeRequested$.subscribe(catalog => {
-      this.catalog = catalog;
+    this.removingSubscription = this.catalogService.removing$.subscribe(command => {
+      this.command = command;
     });
   }
 
   ngOnDestroy(): void {
-    if (this.removeRequestedSubscription) {
-      this.removeRequestedSubscription.unsubscribe();
-      this.removeRequestedSubscription = null;
+    if (this.removingSubscription) {
+      this.removingSubscription.unsubscribe();
+      this.removingSubscription = null;
     }
 
     this.cancel();
   }
 
   public confirm() {
-    this.catalogService.remove(this.catalog);
+    this.catalogService.executeRemoveCommand(this.command);
 
     this.cancel();
   }
 
   public cancel() {
-    this.catalog = null;
+    this.command = null;
   }
 }
