@@ -18,5 +18,8 @@
 
 .modal-backdrop {
     position: absolute;
-    opacity: .65;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    opacity: .55;
 }

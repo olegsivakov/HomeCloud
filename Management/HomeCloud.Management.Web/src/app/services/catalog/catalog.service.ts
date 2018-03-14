@@ -62,7 +62,6 @@ export class CatalogService {
 
       setTimeout(() => {
         let data: Array<StorageData> = this.Initialize(catalog);
-
         this.openedSource.next(data);
 
         this.progressService.hide();
@@ -142,6 +141,26 @@ export class CatalogService {
         data1.CreationDate = new Date();
         data1.Size = "15Mb";
     
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
+        data.push(data1);
         data.push(data1);
     
         let data2: Catalog = new Catalog();
