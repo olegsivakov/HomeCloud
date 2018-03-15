@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
-import { Catalog } from '../../models/catalog';
-import { CatalogService } from '../../services/catalog/catalog.service';
-import { Breadcrumb } from '../../models/breadcrumb';
-import { CatalogBreadcrumb } from '../../models/catalog-breadcrumb';
+import { Catalog } from '../../../models/catalog';
+import { CatalogService } from '../../../services/catalog/catalog.service';
+import { Breadcrumb } from '../../../models/breadcrumbs/breadcrumb';
+import { CatalogBreadcrumb } from '../../../models/breadcrumbs/catalog-breadcrumb';
 
 @Component({
   selector: 'app-catalog-breadcrumb',
@@ -20,9 +20,7 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
     private catalogService: CatalogService
   ) {
     this.catalogOpeningSubscription = this.catalogService.opening$.subscribe(command => {
-      let catalog: Catalog = command.catalog;
-
-      this.handleCatalog(catalog);
+      this.handleCatalog(command.catalog);
     });
    }
 

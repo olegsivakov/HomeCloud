@@ -1,5 +1,5 @@
 import { Breadcrumb } from "./breadcrumb";
-import { Catalog } from "./catalog";
+import { Catalog } from "../catalog";
 
 export class CatalogBreadcrumb extends Breadcrumb {
 

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
-import { Catalog } from '../../models/catalog';
-import { CatalogCommand } from '../../models/commands/catalog-command';
-import { CatalogService } from '../../services/catalog/catalog.service';
+import { Catalog } from '../../../models/catalog';
+import { CatalogCommand } from '../../../models/commands/catalog-command';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-edit',
@@ -13,7 +13,6 @@ import { CatalogService } from '../../services/catalog/catalog.service';
 export class CatalogEditComponent implements OnInit, OnDestroy {
 
   private savingSubscription: ISubscription = null;
-
   private command: CatalogCommand = null;
   
   constructor(private catalogService: CatalogService) { }

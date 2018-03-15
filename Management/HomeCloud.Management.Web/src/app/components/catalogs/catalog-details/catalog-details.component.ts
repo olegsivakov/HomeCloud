@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
-import { Catalog } from '../../models/catalog';
-import { CatalogCommand } from '../../models/commands/catalog-command';
-import { CatalogService } from '../../services/catalog/catalog.service';
+import { Catalog } from '../../../models/catalog';
+import { CatalogCommand } from '../../../models/commands/catalog-command';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
-import { RightPanelService } from '../../services/shared/right-panel/right-panel.service';
+import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
 
 @Component({
   selector: 'app-catalog-details',

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
-import { StorageData } from '../../models/storage-data';
-import { Catalog } from '../../models/catalog';
+import { StorageData } from '../../../models/storage-data';
+import { Catalog } from '../../../models/catalog';
 
-import { CatalogService } from '../../services/catalog/catalog.service';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-list',

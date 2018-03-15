@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { NotificationState } from '../../../models/notification-state';
-import { Notification } from '../../../models/notification';
+import { NotificationState } from '../../../models/notifications/notification-state';
+import { Notification } from '../../../models/notifications/notification';
 
 import { NotificationService } from '../notification/notification.service';
 
