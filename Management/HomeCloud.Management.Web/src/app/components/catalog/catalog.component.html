@@ -1,4 +1,4 @@
-<div class="card clickable" (click)="open()">
+<div class="card" (click)="open()">
     <div class="card-img">
         <img src="https://www.planwallpaper.com/static/images/general-night-golden-gate-bridge-hd-wallpapers-golden-gate-bridge-wallpaper.jpg">
     </div>
@@ -12,10 +12,9 @@
                 </button>
                 <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
                   <a clrDropdownItem (click)="detail()">View Details</a>
-                  <div class="command-group">
-                    <a clrDropdownItem (click)="edit()">Rename</a>
-                    <a clrDropdownItem (click)="remove()">Remove</a>
-                </div>
+                  <div class="dropdown-divider"></div>
+                  <a clrDropdownItem (click)="edit()">Rename</a>
+                  <a clrDropdownItem (click)="remove()">Remove</a>
                 </clr-dropdown-menu>
             </clr-dropdown>
           </div>
