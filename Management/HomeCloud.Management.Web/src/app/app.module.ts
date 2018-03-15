@@ -30,6 +30,7 @@ import { NotificationStateService } from './services/shared/notification-state/n
 import { ProgressService } from './services/shared/progress/progress.service';
 
 import { CatalogService } from './services/catalog/catalog.service';
+import { CatalogBreadcrumbComponent } from './components/catalog-breadcrumb/catalog-breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { CatalogService } from './services/catalog/catalog.service';
 
     NotificationComponent,
     AlertComponent,
-    ProgressComponent
+    ProgressComponent,
+    CatalogBreadcrumbComponent
   ],
   imports: [
     FormsModule,

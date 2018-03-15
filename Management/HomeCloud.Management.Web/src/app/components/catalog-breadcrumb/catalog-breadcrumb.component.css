@@ -1,0 +1,17 @@
+.breadcrumb {
+    padding-top: 50px;
+}
+
+.breadcrumb a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.breadcrumb .separator {
+    margin: 0px 0px 3px 0px;
+    width: 24px;
+}
+
+.breadcrumb * {
+    font-size: 20px;
+}
