@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { ClarityModule } from 'clarity-angular';
@@ -36,6 +37,8 @@ import { NotificationStateService } from './services/shared/notification-state/n
 import { ProgressService } from './services/shared/progress/progress.service';
 
 import { CatalogService } from './services/catalog/catalog.service';
+import { ResourceService } from './services/resource/resource.service';
+import { CatalogDataService } from './services/catalog/catalog-data.service';
 
 @NgModule({
   declarations: [
@@ -62,6 +65,7 @@ import { CatalogService } from './services/catalog/catalog.service';
   imports: [
     FormsModule,
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     ROUTING,
     ClarityModule.forRoot()
@@ -69,9 +73,12 @@ import { CatalogService } from './services/catalog/catalog.service';
   providers: [
     RightPanelService,
     CatalogService,
+    CatalogDataService,
     NotificationService,
     NotificationStateService,
-    ProgressService
+    ProgressService,
+
+    ResourceService
   ],
   bootstrap: [AppComponent]
 })

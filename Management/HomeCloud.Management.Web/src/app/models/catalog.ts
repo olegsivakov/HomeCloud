@@ -1,6 +1,9 @@
 import { StorageData } from "./storage-data";
+import { Resource } from "./http/resource";
 
-export class Catalog implements StorageData {
+export class Catalog
+    extends Resource
+    implements StorageData {
 
     public ID: string = "";
     public Name: string = "";
@@ -8,7 +11,8 @@ export class Catalog implements StorageData {
     public readonly IsCatalog: boolean = true;
     public CreationDate: Date = new Date();
 
-    constructor() {        
+    constructor() {
+      super();
     }
   }
   
