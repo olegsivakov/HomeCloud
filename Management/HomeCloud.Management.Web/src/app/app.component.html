@@ -3,7 +3,7 @@
   <clr-header class="header-1">
       <div class="branding">
           <a href="#" class="nav-link">
-            <span class="title">my Title</span>
+            <span class="title">{{title}}</span>
           </a>
         </div>
         <div class="header-actions">
@@ -40,7 +40,7 @@
       <router-outlet></router-outlet>
       <app-progress></app-progress>
     </div>
-    <clr-vertical-nav class="nav-menu" [clrVerticalNavCollapsible]="true" [clr-nav-level]="1">
+    <clr-vertical-nav class="nav-menu" [clrVerticalNavCollapsible]="true" [clr-nav-level]="1" [clrVerticalNavCollapsed]="isNavCollapsed">
         <app-navigation></app-navigation>
     </clr-vertical-nav>
   </div>

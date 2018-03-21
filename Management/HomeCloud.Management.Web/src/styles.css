@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 * {
     font-family: "Segoe UI","Segoe WP",Tahoma,Arial,sans-serif;
-    font-size: 13px;
+	font-size: 13px;
+	
+	outline: none !important;
 }
 
 .nav-menu .nav-trigger-icon {
@@ -56,4 +58,17 @@
 	top: 0px;
 	font-size: 13px;
 	opacity: 1;
+}
+
+a.disabled, a:hover.disabled {
+    color: gray !important;
+    cursor: not-allowed !important;
+    text-decoration: none !important;
+}
+
+.nav-link, .nav-link:hover, .nav-link.active,
+.nav-link:hover .nav-icon, .nav-link.active .nav-icon,
+.nav-group-content:hover .nav-icon {
+    fill: #fafafa !important;
+    color: #fafafa !important;
 }

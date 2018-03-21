@@ -14,9 +14,6 @@ import { CatalogDataService } from '../../../services/catalog/catalog-data.servi
 })
 export class CatalogDetailsComponent implements OnInit, OnDestroy {
 
-  @Output('hide')
-  hideEmitter = new EventEmitter<Catalog>();
-
   private rightPanelVisibilityChangedSubscription: ISubscription = null;
   private stateChangedSubscription: ISubscription = null;
 
@@ -34,13 +31,12 @@ export class CatalogDetailsComponent implements OnInit, OnDestroy {
       this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
         if (args.state == CatalogState.detail) {
           this.catalog = args.catalog;
+          this.rightPanelService.show();
+        }
+        else if (this.catalog) {          
+          this.rightPanelService.hide();
         }
       });
-  }
-
-  private onHide() {
-    this.hideEmitter.emit(this.catalog);
-    this.catalog = null;
   }
 
   ngOnInit() {

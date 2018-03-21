@@ -2,6 +2,10 @@
     background: #1c1c1c;
 }
 
+.header .title {
+    font-size: 1rem;
+}
+
 .nav-menu {
     background-color: #252525 !important;
 

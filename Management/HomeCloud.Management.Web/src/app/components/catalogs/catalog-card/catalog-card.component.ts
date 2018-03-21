@@ -49,8 +49,7 @@ export class CatalogCardComponent implements OnInit {
   }
 
   private get canEdit(): boolean {
-    //return this.catalog.hasUpdate();
-    return true;
+    return this.catalog.hasUpdate();
   }
 
   private onEdit(): void {

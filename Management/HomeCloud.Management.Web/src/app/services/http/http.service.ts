@@ -60,6 +60,10 @@ export class HttpService<T extends Resource> {
     return this.resourceService.relation(entity, relation, data);
   }
 
+  public hasCreate(): boolean {
+    return this.resourceArray.hasCreate();
+  }
+
   public create(entity: T): Observable<T> {
     return this.resourceService.create(this.resourceArray, entity);
   }

@@ -4,6 +4,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { StorageData } from '../../../models/storage-data';
 import { Catalog } from '../../../models/catalog';
 import { CatalogState } from '../../../models/catalog-state';
+import { CatalogStateChanged } from '../../../models/catalog-state-changed';
 
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
@@ -13,9 +14,7 @@ import { CatalogDataService } from '../../../services/catalog/catalog-data.servi
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
-
-import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
-import { CatalogStateChanged } from '../../../models/catalog-state-changed';
+import { PagedArray } from '../../../models/paged-array';
 
 @Component({
   selector: 'app-catalog-list',
@@ -26,19 +25,16 @@ export class CatalogListComponent implements OnInit, OnDestroy {
 
   private catalog: Catalog = null;
 
-  private data: Array<StorageData> = new Array<StorageData>();
+  private data: PagedArray<StorageData> = new PagedArray<StorageData>();
 
   private loadSubscription: ISubscription = null;
   private updateSubscription: ISubscription = null;
   private removeSubscription: ISubscription = null;
 
-  private rightPanelVisibilityChangedSubscription: ISubscription = null;
-
   constructor(
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService,
     private progressService: ProgressService,
-    private rightPanelService: RightPanelService,
     private catalogService: CatalogDataService) {
   }
 
@@ -47,30 +43,49 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     this.catalog.ID = "0";
     this.catalog.Name = "Root";
 
-    this.loadSubscription = this.catalogService.load(this.catalog).subscribe(data => {
+    this.open(this.catalog);
+  }
+
+  private open(catalog: Catalog) {
+    this.progressService.show();
+
+    this.loadSubscription = this.catalogService.load(catalog).subscribe(data => {
+      this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.open));
+
       this.data = data;
+    }, error => {
+    }, () => {
+      this.progressService.hide();
     });
   }
 
-  public edit(catalog: Catalog) {
+  private get canCreate(): boolean {
+    return this.catalogService.hasCreate();
+  }
+
+  private create() {
+    if (this.canCreate) {
+      this.catalogService.onStateChanged(new CatalogStateChanged(new Catalog(), CatalogState.edit));
+    }
+  }
+  private edit(catalog: Catalog) {
     this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.edit));
   }
 
-  public remove(catalog: Catalog) {
+  private remove(catalog: Catalog) {
     this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.remove));
   }
 
-  public detail(catalog: Catalog) { 
+  private detail(catalog: Catalog) { 
     this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.detail));
-    this.rightPanelService.show();
   }
 
-  public cancel(catalog: Catalog) {
+  private cancel(catalog: Catalog) {
     this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.view));
   }
 
-  public save(catalog: Catalog) {
-    let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to save  catalog '" + catalog.Name + "'.");
+  private save(catalog: Catalog) {
+    let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to save catalog '" + catalog.Name + "'.");
     let state: NotificationState = this.notificationStateService.addNotification(notification);    
 
     this.updateSubscription = this.catalogService.update(catalog).subscribe(catalog => {
@@ -87,7 +102,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     })
   }
 
-  public delete(catalog: Catalog) {
+  private delete(catalog: Catalog) {
     let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to remove catalog '" + catalog.Name + "'.");
     let state: NotificationState = this.notificationStateService.addNotification(notification);    
 

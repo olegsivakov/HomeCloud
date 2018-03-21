@@ -1,0 +1,8 @@
+.command-container {
+    text-align: right;
+}
+
+.command-container a {
+    cursor: pointer;
+    text-decoration: none;
+}

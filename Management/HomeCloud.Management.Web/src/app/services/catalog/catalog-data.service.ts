@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../http/http.service';
-import { Catalog } from '../../models/catalog';
-import { ResourceService } from '../resource/resource.service';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+
+import { PagedArray } from '../../models/paged-array';
+import { Catalog } from '../../models/catalog';
 import { StorageData } from '../../models/storage-data';
 import { CatalogStateChanged } from '../../models/catalog-state-changed';
+
+import { ResourceService } from '../resource/resource.service';
+import { HttpService } from '../http/http.service';
 
 const url: string = "http://localhost/catalogs/";
 
@@ -20,9 +23,12 @@ export class CatalogDataService extends HttpService<Catalog> {
     super(resourceService, url);
   }
 
-  public load(catalog: Catalog): Observable<Array<StorageData>> {
+  public load(catalog: Catalog): Observable<PagedArray<StorageData>> {
     return Observable.create(observer => {
-      observer.next(this.Initialize(catalog));
+      let data = this.Initialize(catalog);
+
+      observer.next(data);
+      observer.complete();
     });
   }
 
@@ -30,8 +36,8 @@ export class CatalogDataService extends HttpService<Catalog> {
     this.stateChangedSource.next(args);
   }
 
-  private Initialize(parent: Catalog): Array<StorageData> {
-    let data: Array<StorageData> = new Array<StorageData>();
+  private Initialize(parent: Catalog): PagedArray<StorageData> {
+    let data: PagedArray<StorageData> = new PagedArray<StorageData>();
 
     if (parent.ID == "0") {
 

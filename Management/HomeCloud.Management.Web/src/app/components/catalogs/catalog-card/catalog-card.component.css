@@ -17,10 +17,3 @@
 .card .commands {
     float: right;
 }
-
-.card .commands .dropdown-item.disabled {
-    color: gray;
-    cursor: not-allowed;
-    text-decoration: none;
-}
-

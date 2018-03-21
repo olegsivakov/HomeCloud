@@ -1,4 +1,5 @@
-<span *ngFor="let breadcrumb of breadcrumbs;" class="breadcrumb">
+<span *ngIf="!breadcrumbs || breadcrumbs.length == 0">&nbsp;</span>
+<span *ngFor="let breadcrumb of breadcrumbs" class="breadcrumb">
   <span *ngIf="breadcrumb.isLast">{{breadcrumb.text}}</span>
   <span *ngIf="!breadcrumb.isLast">
     <a (click)="open(breadcrumb)">{{breadcrumb.text}}</a>

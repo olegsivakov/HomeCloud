@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../../models/catalog';
-import { CatalogService } from '../../../services/catalog/catalog.service';
+import { CatalogState } from '../../../models/catalog-state';
 import { Breadcrumb } from '../../../models/breadcrumbs/breadcrumb';
 import { CatalogBreadcrumb } from '../../../models/breadcrumbs/catalog-breadcrumb';
+
+import { CatalogDataService } from '../../../services/catalog/catalog-data.service';
 
 @Component({
   selector: 'app-catalog-breadcrumb',
@@ -13,13 +15,22 @@ import { CatalogBreadcrumb } from '../../../models/breadcrumbs/catalog-breadcrum
 })
 export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
 
-  private catalogOpeningSubscription: ISubscription = null;
-  private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
+  @Output('navigate')
+  navigateEmitter = new EventEmitter<Catalog>();
 
-  constructor(private catalogService: CatalogService) { }
+  private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
+  private stateChangedSubscription: ISubscription = null;
+
+  constructor(private catalogService: CatalogDataService) {
+    this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
+      if (args.state == CatalogState.open) {
+        this.handleCatalog(args.catalog);
+      }
+    });
+  }
 
   private open(breadcrumb: CatalogBreadcrumb) {
-    
+    this.navigateEmitter.emit(breadcrumb.catalog);
   }
 
   private handleCatalog(catalog: Catalog) {
