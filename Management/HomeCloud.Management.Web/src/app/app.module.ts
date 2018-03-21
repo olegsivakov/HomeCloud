@@ -16,6 +16,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 
 // -------------------- Catalog Components --------------------
 import { CatalogBreadcrumbComponent } from './components/catalogs/catalog-breadcrumb/catalog-breadcrumb.component';
+import { CatalogCardComponent } from './components//catalogs/catalog-card/catalog-card.component';
 import { CatalogComponent } from './components/catalogs/catalog/catalog.component';
 import { CatalogDetailsComponent } from './components/catalogs/catalog-details/catalog-details.component';
 import { CatalogEditComponent } from './components/catalogs/catalog-edit/catalog-edit.component';
@@ -60,7 +61,8 @@ import { CatalogDataService } from './services/catalog/catalog-data.service';
     NotificationComponent,
     AlertComponent,
     ProgressComponent,
-    CatalogBreadcrumbComponent
+    CatalogBreadcrumbComponent,
+    CatalogCardComponent
   ],
   imports: [
     FormsModule,

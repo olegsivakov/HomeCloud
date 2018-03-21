@@ -5,8 +5,8 @@ import { Catalog } from '../../models/catalog';
 import { CatalogCommand } from '../../models/commands/catalog-command';
 import { StorageData } from '../../models/storage-data';
 
-import { Notification } from '../../models/notification';
-import { NotificationState } from '../../models/notification-state';
+import { Notification } from '../../models/notifications/notification';
+import { NotificationState } from '../../models/notifications/notification-state';
 import { NotificationService } from '../shared/notification/notification.service';
 import { NotificationStateService } from '../shared/notification-state/notification-state.service';
 import { ProgressService } from '../shared/progress/progress.service';

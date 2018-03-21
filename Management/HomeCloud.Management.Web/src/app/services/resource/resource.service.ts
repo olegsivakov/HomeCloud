@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http/src/client';
 import { Observable } from 'rxjs/Observable';
 
 import { Link } from '../../models/http/link';
 import { HttpMethod } from '../../models/http/http-method';
 import { Resource, IResource } from '../../models/http/resource';
 import { ResourceArray } from '../../models/http/resource-array';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpClient } from '@angular/common/http';
 import { PagedArray } from '../../models/paged-array';
 
 @Injectable()

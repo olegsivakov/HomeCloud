@@ -1,0 +1,20 @@
+.card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 47, 255, 0.2), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 47, 255, 0.2), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 47, 255, 0.2), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    cursor: pointer;
+}
+
+.card .card-title {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.card .card-block {
+    min-height: 40px;
+}
+
+.card .commands {
+    float: right;
+}
+

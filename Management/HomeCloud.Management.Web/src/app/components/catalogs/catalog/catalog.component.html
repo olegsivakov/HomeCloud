@@ -1,23 +1,9 @@
-<div class="card" (click)="open()">
-    <div class="card-img">
-        <img src="https://www.planwallpaper.com/static/images/general-night-golden-gate-bridge-hd-wallpapers-golden-gate-bridge-wallpaper.jpg">
-    </div>
-    <div class="card-block">
-      <div class="card-title">
-          <span>{{catalog.Name}}</span>
-          <div class="commands" (click)="$event.stopPropagation()">
-            <clr-dropdown>
-                <button class="nav-icon" clrDropdownTrigger>
-                    <clr-icon shape="ellipsis-horizontal"></clr-icon>
-                </button>
-                <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                  <a clrDropdownItem (click)="detail()">View Details</a>
-                  <div class="dropdown-divider"></div>
-                  <a clrDropdownItem (click)="edit()">Rename</a>
-                  <a clrDropdownItem (click)="remove()">Remove</a>
-                </clr-dropdown-menu>
-            </clr-dropdown>
-          </div>
-        </div>
-      </div>
-</div>
+<app-catalog-card
+    [catalog]="catalog"
+    (edit)="setEditable($event)"
+    (remove)="setRemovable($event)"
+    (detail)="setDetailed($event)">
+</app-catalog-card>
+<app-catalog-details *ngIf="isDetailed" [catalog]="catalog"></app-catalog-details>
+<app-catalog-edit *ngIf="isEditable" [catalog]="catalog" (save)="save($event)" (cancel)="cancel($event)"></app-catalog-edit>
+<app-catalog-remove *ngIf="isRemovable" [catalog]="catalog" (remove)="remove($event)"(cancel)="cancel($event)"></app-catalog-remove>

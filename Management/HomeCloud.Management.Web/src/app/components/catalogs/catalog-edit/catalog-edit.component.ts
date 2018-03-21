@@ -1,9 +1,6 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ISubscription } from 'rxjs/Subscription';
+import { Component, Input, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 
 import { Catalog } from '../../../models/catalog';
-import { CatalogCommand } from '../../../models/commands/catalog-command';
-import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-edit',
@@ -11,42 +8,45 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
   styleUrls: ['./catalog-edit.component.css']
 })
 export class CatalogEditComponent implements OnInit, OnDestroy {
-
-  private savingSubscription: ISubscription = null;
-  private command: CatalogCommand = null;
   
-  constructor(private catalogService: CatalogService) { }
+  private _source: Catalog = null;
+  private _catalog: Catalog = null;
 
-  public get isVisible(): boolean {
-    return this.catalog != null;
+  @Input('catalog')
+  public set catalog(value: Catalog) {
+    this._source = value;
+    this._catalog = Object.create(this._source);
   }
 
   public get catalog(): Catalog {
-    return this.command != null ? this.command.catalog : null;
+    return this._catalog;
   }
 
-  public confirm() {
-    this.catalogService.executeSaveCommand(this.command);
+  public get isVisible(): boolean {
+    return this._source != null && this._catalog != null;
+  }
+  
+  @Output('save')
+  saveEmitter = new EventEmitter<Catalog>();
 
-    this.cancel();
+  @Output('cancel')
+  cancelEmitter = new EventEmitter();
+
+  constructor() { }
+
+  private onSave() {
+    this.saveEmitter.emit(this._catalog);
   }
 
-  public cancel() {  
-    this.command = null;
+  private onCancel() {
+    this.cancelEmitter.emit();
   }
 
   ngOnInit() {
-    this.savingSubscription = this.catalogService.saving$.subscribe(command => {
-      this.command = command;
-    });
   }
 
   ngOnDestroy(): void {
-    if (this.savingSubscription) {
-      this.savingSubscription.unsubscribe();
-      this.savingSubscription = null;
-    }
-
-    this.cancel();
+    this._source = null;
+    this._catalog = null;
   }
 }

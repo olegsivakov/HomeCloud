@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Catalog } from '../../../models/catalog';
-import { CatalogService } from '../../../services/catalog/catalog.service';
+import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
 
 @Component({  
   selector: 'app-catalog',
@@ -13,25 +13,41 @@ export class CatalogComponent implements OnInit {
   @Input()
   public catalog: Catalog = null;
 
-  constructor(private catalogService: CatalogService) {    
-  }
+  private isDetailed: boolean = false;
+  private isEditable: boolean = false;
+  private isRemovable: boolean = false;
+
+  constructor(
+    private rightPanelService: RightPanelService) { }
 
   ngOnInit() {
   }
 
-  public open(): void {
-    this.catalogService.createOpenCommand(this.catalog);
+  private setDetailed(catalog: Catalog) {
+    this.cancel();
+    this.isDetailed = true;
+    this.rightPanelService.show();
   }
 
-  public detail(): void {
-    this.catalogService.createExpandCommand(this.catalog);
+  private setEditable(catalog: Catalog) {
+    this.cancel();
+    this.isEditable = true;
   }
 
-  public edit(): void {
-    this.catalogService.createSaveCommand(Object.assign({}, this.catalog));
+  private setRemovable(catalog: Catalog) {
+    this.cancel();
+    this.isRemovable = true;
   }
 
-  public remove(): void {
-    this.catalogService.createRemoveCommand(this.catalog);
+  private save(catalog: Catalog) {
+    this.catalog = catalog;
+    this.cancel();
+
+  }
+
+  private cancel() {
+    this.isEditable = false;
+    this.isRemovable = false;
+    this.isDetailed = false;
   }
 }

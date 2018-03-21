@@ -1,4 +1,4 @@
-<clr-modal [(clrModalOpen)]="isVisible" [clrModalClosable]="false" *ngIf="isVisible">
+<clr-modal [(clrModalOpen)]="isVisible" [clrModalClosable]="false" *ngIf="catalog">
     <h3 class="modal-title">Edit Catalog</h3>
     <div class="modal-body">
         <app-alert *ngIf="catalogForm.invalid" message="The catalog name is required"></app-alert>
@@ -18,7 +18,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="confirm()" [disabled]="catalogForm.invalid">Save</button>
+        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="catalogForm.invalid">Save</button>
     </div>
 </clr-modal>

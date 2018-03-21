@@ -1,0 +1,23 @@
+<div class="card" (click)="onOpen()">
+  <div class="card-img">
+      <img src="https://www.planwallpaper.com/static/images/general-night-golden-gate-bridge-hd-wallpapers-golden-gate-bridge-wallpaper.jpg">
+  </div>
+  <div class="card-block">
+    <div class="card-title">
+        <span>{{catalog.Name}}</span>
+        <div class="commands" (click)="$event.stopPropagation()">
+          <clr-dropdown>
+              <button class="nav-icon" clrDropdownTrigger>
+                  <clr-icon shape="ellipsis-horizontal"></clr-icon>
+              </button>
+              <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                <a clrDropdownItem (click)="onDetail()">View Details</a>
+                <div class="dropdown-divider"></div>
+                <a clrDropdownItem (click)="onEdit()">Rename</a>
+                <a clrDropdownItem (click)="onRemove()">Remove</a>
+              </clr-dropdown-menu>
+          </clr-dropdown>
+        </div>
+      </div>
+    </div>
+</div>

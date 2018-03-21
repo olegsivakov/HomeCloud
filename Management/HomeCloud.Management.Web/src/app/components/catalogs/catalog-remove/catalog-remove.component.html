@@ -4,7 +4,7 @@
         <span *ngIf="catalog">Are you sure you want to remove catalog "{{catalog.Name}}"</span>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="confirm()">Confirm</button>
+        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onRemove()">Confirm</button>
     </div>
 </clr-modal>
