@@ -8,6 +8,8 @@ import { ResourceArray } from '../../models/http/resource-array';
 import { HttpResponse, HttpClient } from '@angular/common/http';
 import { PagedArray } from '../../models/paged-array';
 
+import 'rxjs/add/observable/throw';
+
 @Injectable()
 export class ResourceService {
 
@@ -20,58 +22,45 @@ export class ResourceService {
   }
 
   public previous<T extends IResource>(resource: ResourceArray<T>): Observable<ResourceArray<T>> {
-    if (resource.hasPrevious()) {
-      return this.request(resource.previous);
-    }
+    return this.request(resource.previous);
   }
 
   public next<T extends IResource>(resource: ResourceArray<T>): Observable<ResourceArray<T>> {
-    if (resource.hasNext()) {
-      return this.request(resource.next);
-    }
+    return this.request(resource.next);
   }
 
   public get<T extends Resource>(resource: Resource): Observable<T> {
-    if (resource.hasGet()) {
-      return this.request(resource.get);
-    }
+    return this.request(resource.get);
   }
 
-  public getRelation<T extends IResource>(resource: IResource, relation: string): Observable<T> {
-    let link: Link = resource._links.find(link => link.rel == relation);
-    if (link) {
-      return this.request(link);
-    }
+  public relation<T extends IResource>(resource: IResource, relation: string, data?: any): Observable<T> {
+    return this.request(resource.relation(relation), data);
   }
 
-  public create<T extends IResource>(resource: Resource | ResourceArray<T>, data: T): Observable<Object> {
-    if (resource.hasCreate()) {
-      return this.request(resource.create);
-    }
+  public create<T extends IResource>(resource: Resource | ResourceArray<T>, data: T): Observable<T> {
+    return this.request(resource.create);
   }
 
-  public update<T extends Resource>(resource: T): Observable<Object> {
-    if (resource.hasUpdate()) {
-      return this.request(resource.update);
-    }
+  public update<T extends Resource>(resource: T): Observable<T> {
+    return this.request(resource.update);
   }
 
-  public delete<T extends Resource>(resource: T): Observable<Object> {
-    if (resource.hasDelete()) {
-      return this.request(resource.delete);
-    }
+  public delete<T extends Resource>(resource: T): Observable<T> {
+    return this.request(resource.delete)
+          .map(response => resource);
   }
 
   public exists<T extends Resource>(resource: T): Observable<boolean> {
-    if (resource.hasExist()) {
-      return this.request(resource.exist)
+    return this.request(resource.exist)
           .map((response: Response) => response.ok);
-    }
   }
 
   public request<T>(link: Link, data?: any): Observable<T> {
     if (!link) {
-      throw new Error("Resource link is undefined");
+      const error: Error = new Error("Resource link is undefined");
+      console.log(error.message);
+
+      return Observable.throw(error);
     }
 
     switch (link.method) {
@@ -116,7 +105,10 @@ export class ResourceService {
       }
 
       default: {
-        throw new Error("HTTP method is undefined");
+        const error: Error = new Error("HTTP method is undefined");
+        console.log(error);
+
+        return Observable.throw(error.message);
       }
     }
   }

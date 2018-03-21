@@ -1,9 +1,0 @@
-<app-catalog-card
-    [catalog]="catalog"
-    (edit)="setEditable($event)"
-    (remove)="setRemovable($event)"
-    (detail)="setDetailed($event)">
-</app-catalog-card>
-<app-catalog-details *ngIf="isDetailed" [catalog]="catalog"></app-catalog-details>
-<app-catalog-edit *ngIf="isEditable" [catalog]="catalog" (save)="save($event)" (cancel)="cancel($event)"></app-catalog-edit>
-<app-catalog-remove *ngIf="isRemovable" [catalog]="catalog" (remove)="remove($event)"(cancel)="cancel($event)"></app-catalog-remove>

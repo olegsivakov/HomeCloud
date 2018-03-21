@@ -28,19 +28,44 @@ export class CatalogCardComponent implements OnInit {
   ngOnInit() {
   }
 
+  private get canOpen(): boolean {
+    return true;
+  }
+
   private onOpen(): void {
-    this.openEmitter.emit(this.catalog);
+    if (this.canOpen) {
+      this.openEmitter.emit(this.catalog);
+    }
+  }
+
+  private get canDetail(): boolean {
+    return true;
   }
 
   private onDetail(): void {
-    this.detailEmitter.emit(this.catalog);
+    if (this.canDetail) {
+      this.detailEmitter.emit(this.catalog);
+    }
+  }
+
+  private get canEdit(): boolean {
+    //return this.catalog.hasUpdate();
+    return true;
   }
 
   private onEdit(): void {
-    this.editEmitter.emit(this.catalog);
+    if (this.canEdit) {
+      this.editEmitter.emit(this.catalog);
+    }
+  }
+
+  private get canRemove(): boolean {
+    return this.catalog.hasDelete();
   }
 
   private onRemove(): void {
-    this.removeEmitter.emit(this.catalog);
+    if (this.canRemove) {
+      this.removeEmitter.emit(this.catalog);
+    }
   }
 }

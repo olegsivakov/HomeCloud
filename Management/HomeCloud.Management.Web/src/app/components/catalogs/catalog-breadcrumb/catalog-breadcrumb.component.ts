@@ -16,16 +16,10 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   private catalogOpeningSubscription: ISubscription = null;
   private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
 
-  constructor(
-    private catalogService: CatalogService
-  ) {
-    this.catalogOpeningSubscription = this.catalogService.opening$.subscribe(command => {
-      this.handleCatalog(command.catalog);
-    });
-   }
+  constructor(private catalogService: CatalogService) { }
 
   private open(breadcrumb: CatalogBreadcrumb) {
-    this.catalogService.createOpenCommand(breadcrumb.catalog);
+    
   }
 
   private handleCatalog(catalog: Catalog) {
@@ -55,9 +49,5 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.catalogOpeningSubscription) {
-      this.catalogOpeningSubscription.unsubscribe();
-      this.catalogOpeningSubscription = null;
-    }
   }
 }

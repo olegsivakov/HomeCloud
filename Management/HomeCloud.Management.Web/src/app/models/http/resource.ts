@@ -4,6 +4,10 @@ import { Relation } from "./relation";
 
 export interface IResource {
     _links: Array<Link>;
+
+    hasRelation(relation: string);
+
+    relation(relation: string);
 }
 
 export class Resource implements IResource {
@@ -47,5 +51,13 @@ export class Resource implements IResource {
 
     public hasExist(): boolean {
         return this.exist != null;
+    }
+
+    public hasRelation(relation: string) {
+        return this.relation(relation) != null;
+    }
+
+    public relation(relation: string) {
+        return this._links.find(link => link.rel == relation);
     }
 }

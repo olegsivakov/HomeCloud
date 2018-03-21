@@ -1,6 +1,6 @@
 import { Observable } from "rxjs/Observable";
 
-import { IResource, Resource } from "./resource";
+import { IResource } from "./resource";
 import { Relation } from "./relation";
 import { Link } from "./link";
 import { PagedArray } from "../paged-array";
@@ -31,5 +31,13 @@ export class ResourceArray<T extends IResource> implements IResource {
 
     public hasCreate(): boolean {
         return this.create != null;
+    }
+
+    public hasRelation(relation: string) {
+        return this.relation(relation) != null;
+    }
+
+    public relation(relation: string) {
+        return this._links.find(link => link.rel == relation);
     }
 }

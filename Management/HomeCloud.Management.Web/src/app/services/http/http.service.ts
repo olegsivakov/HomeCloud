@@ -56,21 +56,19 @@ export class HttpService<T extends Resource> {
     return this.resourceService.get(entity);
   }
 
-  public relation<T extends IResource>(entity: T, relation: string): Observable<T> {
-    return this.resourceService.getRelation(entity, relation);
+  public relation<T extends IResource>(entity: T, relation: string, data?: any): Observable<T> {
+    return this.resourceService.relation(entity, relation, data);
   }
 
   public create(entity: T): Observable<T> {
-    return this.resourceService.create(this.resourceArray, entity)
-      .map((response: T) => response);
+    return this.resourceService.create(this.resourceArray, entity);
   }
 
   public update(entity: T): Observable<T> {
-    return this.resourceService.update(entity)
-      .map((response: T) => response);
+    return this.resourceService.update(entity);
   }
 
-  public delete(entity: T): Observable<Object> {
+  public delete(entity: T): Observable<T> {
     return this.resourceService.delete(entity);
   }
 
