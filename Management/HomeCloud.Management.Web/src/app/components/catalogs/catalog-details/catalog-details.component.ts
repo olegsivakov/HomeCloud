@@ -5,7 +5,7 @@ import { Catalog } from '../../../models/catalog';
 import { CatalogState } from '../../../models/catalog-state';
 
 import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
-import { CatalogDataService } from '../../../services/catalog/catalog-data.service';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-details',
@@ -21,7 +21,7 @@ export class CatalogDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private rightPanelService: RightPanelService,
-    private catalogService: CatalogDataService) {
+    private catalogService: CatalogService) {
       this.rightPanelVisibilityChangedSubscription = this.rightPanelService.visibilityChanged$.subscribe(isVisible => {
         if (!isVisible) {
           this.catalog = null;

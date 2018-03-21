@@ -13,7 +13,7 @@ import { HttpService } from '../http/http.service';
 const url: string = "http://localhost/catalogs/";
 
 @Injectable()
-export class CatalogDataService extends HttpService<Catalog> {
+export class CatalogService extends HttpService<Catalog> {
 
   private stateChangedSource: Subject<CatalogStateChanged> = new Subject<CatalogStateChanged>();
 

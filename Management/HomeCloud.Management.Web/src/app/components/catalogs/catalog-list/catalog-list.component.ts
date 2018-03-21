@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
+import { PagedArray } from '../../../models/paged-array';
 import { StorageData } from '../../../models/storage-data';
 import { Catalog } from '../../../models/catalog';
 import { CatalogState } from '../../../models/catalog-state';
@@ -9,12 +10,11 @@ import { CatalogStateChanged } from '../../../models/catalog-state-changed';
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
 
-import { CatalogDataService } from '../../../services/catalog/catalog-data.service';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
-import { PagedArray } from '../../../models/paged-array';
 
 @Component({
   selector: 'app-catalog-list',
@@ -35,7 +35,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService,
     private progressService: ProgressService,
-    private catalogService: CatalogDataService) {
+    private catalogService: CatalogService) {
   }
 
   ngOnInit() {

@@ -3,7 +3,7 @@ import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../../models/catalog';
 import { CatalogState } from '../../../models/catalog-state';
-import { CatalogDataService } from '../../../services/catalog/catalog-data.service';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-remove',
@@ -21,7 +21,7 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
   @Output('cancel')
   cancelEmitter = new EventEmitter<Catalog>();
 
-  constructor(private catalogService: CatalogDataService) {    
+  constructor(private catalogService: CatalogService) {    
     this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
       if (args.state == CatalogState.remove) {
         this.catalog = args.catalog;

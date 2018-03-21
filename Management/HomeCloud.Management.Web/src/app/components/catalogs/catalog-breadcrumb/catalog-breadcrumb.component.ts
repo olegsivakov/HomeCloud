@@ -6,7 +6,7 @@ import { CatalogState } from '../../../models/catalog-state';
 import { Breadcrumb } from '../../../models/breadcrumbs/breadcrumb';
 import { CatalogBreadcrumb } from '../../../models/breadcrumbs/catalog-breadcrumb';
 
-import { CatalogDataService } from '../../../services/catalog/catalog-data.service';
+import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-breadcrumb',
@@ -21,7 +21,7 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
   private stateChangedSubscription: ISubscription = null;
 
-  constructor(private catalogService: CatalogDataService) {
+  constructor(private catalogService: CatalogService) {
     this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
       if (args.state == CatalogState.open) {
         this.handleCatalog(args.catalog);
