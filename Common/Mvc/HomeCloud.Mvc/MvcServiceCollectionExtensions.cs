@@ -43,7 +43,7 @@
 		{
 			builder.Services.Configure<MvcOptions>(options =>
 			{
-				options.Filters.Add<InputValidationFilter>();
+				options.Filters.Add<InputValidationFilter>(options.Filters.Count);
 			});
 
 			return builder;

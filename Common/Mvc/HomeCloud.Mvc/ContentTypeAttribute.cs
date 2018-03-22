@@ -48,7 +48,6 @@
 			this.contentTypes = contentTypes ?? Enumerable.Empty<string>();
 		}
 
-
 		#endregion
 
 		#region Public Properties

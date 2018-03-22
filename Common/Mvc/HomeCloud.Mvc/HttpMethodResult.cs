@@ -35,6 +35,7 @@
 			: base(value)
 		{
 			this.Controller = controller;
+			this.ContentTypes.Add(this.Controller.Request.ContentType);
 		}
 
 		#endregion

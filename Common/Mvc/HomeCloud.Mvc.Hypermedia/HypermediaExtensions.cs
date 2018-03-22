@@ -70,7 +70,7 @@
 
 			builder.Services.Configure<MvcOptions>(options =>
 			{
-				options.Filters.Add<HypermediaFilter>(2);
+				options.Filters.Add<HypermediaFilter>(options.Filters.Count);
 			});
 
 			return builder;
