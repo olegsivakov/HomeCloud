@@ -11,7 +11,7 @@ export const APP_ROUTES: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'catalogs',
+    path: 'catalogs/:id',
     component: CatalogListComponent,
   }
 ];

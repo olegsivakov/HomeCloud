@@ -18,7 +18,7 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
 
   constructor(
     protected httpClient: HttpClient,
-    private resourceUrl: string) { }
+    protected resourceUrl: string) { }
 
   public list(limit: number): Observable<PagedArray<T>> {
     return this.httpClient.get<ResourceArray<T>>(this.resourceUrl + "?limit=" + limit, {

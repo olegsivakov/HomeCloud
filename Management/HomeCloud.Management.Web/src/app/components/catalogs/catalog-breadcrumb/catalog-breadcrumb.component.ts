@@ -34,7 +34,7 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   private handleCatalog(catalog: Catalog) {
-    let breadcrumb: Breadcrumb = this.breadcrumbs.find(item => item.id == catalog.ID);
+    let breadcrumb: Breadcrumb = this.breadcrumbs.find(item => item.id == catalog.id);
 
     if (breadcrumb) {
       let index: number = this.breadcrumbs.indexOf(breadcrumb);

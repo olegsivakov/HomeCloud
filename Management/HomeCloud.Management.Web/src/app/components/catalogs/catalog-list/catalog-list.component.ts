@@ -10,6 +10,7 @@ import { CatalogStateChanged } from '../../../models/catalog-state-changed';
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
 
+import { StorageStateService } from '../../../services/storage-state/storage-state.service';
 import { CatalogService } from '../../../services/catalog/catalog.service';
 
 import { NotificationService } from '../../../services/shared/notification/notification.service';
@@ -35,22 +36,23 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService,
     private progressService: ProgressService,
+    private storageStateService: StorageStateService,
     private catalogService: CatalogService) {
   }
 
   ngOnInit() {
+ 
     this.catalog = new Catalog();
-    this.catalog.ID = "0";
-    this.catalog.Name = "Root";
+    Object.assign(this.catalog, this.storageStateService.storage);
 
     this.open(this.catalog);
   }
 
   private open(catalog: Catalog) {
     this.progressService.show();
+    this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.open));
 
     this.loadSubscription = this.catalogService.list(20).subscribe(data => {
-      this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.open));
 
       this.data = data;
 
@@ -86,36 +88,36 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   }
 
   private save(catalog: Catalog) {
-    let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to save catalog '" + catalog.Name + "'.");
+    let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to save catalog '" + catalog.name + "'.");
     let state: NotificationState = this.notificationStateService.addNotification(notification);    
 
     this.updateSubscription = this.catalogService.update(catalog).subscribe(catalog => {
-      let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
+      let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
 
       let index: number = this.data.indexOf(item);
       if (index >= 0) {
         this.data.splice(index, 1, catalog);
       }
       
-      state.setSucceded("Operation complete", "Catalog '" + catalog.Name + "' has been saved successfully.").setExpired();
+      state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been saved successfully.").setExpired();
     }, error => {
       state.setFailed("Operation failure", "An error occured while saving catalog.").setExpired();
     })
   }
 
   private delete(catalog: Catalog) {
-    let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to remove catalog '" + catalog.Name + "'.");
+    let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to remove catalog '" + catalog.name + "'.");
     let state: NotificationState = this.notificationStateService.addNotification(notification);    
 
     this.removeSubscription = this.catalogService.delete(catalog).subscribe(catalog => {
-      let item: StorageData = this.data.find(item => item.IsCatalog && item.ID == catalog.ID);
+      let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
 
       let index: number = this.data.indexOf(item);
       if (index >= 0) {
         this.data.splice(index, 1);
       }
 
-      state.setSucceded("Operation complete", "Catalog '" + catalog.Name + "' has been removed successfully.").setExpired();
+      state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been removed successfully.").setExpired();
     }, error => {
       state.setFailed("Operation failure", "An error occured while removing catalog.").setExpired();
     });

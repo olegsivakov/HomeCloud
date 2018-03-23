@@ -6,13 +6,12 @@ export class Catalog
     extends Resource<RelationArray>
     implements StorageData {
 
-  public ID: string = "";
-  public Name: string = "";
-  public Size: string = "";
-  public readonly IsCatalog: boolean = true;
-  public CreationDate: Date = new Date();
+  public id: string = "";
+  public name: string = "";
+  public size: string = "";
+  public readonly isCatalog: boolean = true;
+  public creationDate: Date = new Date();
 
-  public _links: RelationArray = null;
   constructor() {
       super(RelationArray);
   }

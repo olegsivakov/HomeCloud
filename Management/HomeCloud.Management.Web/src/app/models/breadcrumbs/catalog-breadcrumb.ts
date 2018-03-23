@@ -8,22 +8,22 @@ export class CatalogBreadcrumb extends Breadcrumb {
     }
 
     public get id(): string {
-        return this.catalog ? this.catalog.ID : "";
+        return this.catalog ? this.catalog.id : "";
     }
 
     public set id(value: string) {
         if (this.catalog) {
-            this.catalog.ID = value;
+            this.catalog.id = value;
         }
     }
 
     public get text(): string {
-        return this.catalog ? this.catalog.Name : "";
+        return this.catalog ? this.catalog.name : "";
     }
 
     public set text(value: string) {
         if (this.catalog) {
-            this.catalog.Name = value;
+            this.catalog.name = value;
         }
     }
 }

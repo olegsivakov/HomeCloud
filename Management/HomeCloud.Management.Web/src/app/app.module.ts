@@ -36,6 +36,8 @@ import { NotificationService } from './services/shared/notification/notification
 import { NotificationStateService } from './services/shared/notification-state/notification-state.service';
 import { ProgressService } from './services/shared/progress/progress.service';
 
+import { StorageService } from './services/storage/storage.service';
+import { StorageStateService } from './services/storage-state/storage-state.service';
 import { CatalogService } from './services/catalog/catalog.service';
 
 @NgModule({
@@ -70,10 +72,14 @@ import { CatalogService } from './services/catalog/catalog.service';
   ],
   providers: [
     RightPanelService,
-    CatalogService,
+
     NotificationService,
     NotificationStateService,
-    ProgressService
+    ProgressService,
+
+    StorageService,
+    StorageStateService,
+    CatalogService
   ],
   bootstrap: [AppComponent]
 })

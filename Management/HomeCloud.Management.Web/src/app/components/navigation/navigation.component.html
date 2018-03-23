@@ -2,12 +2,11 @@
     <clr-icon shape="cloud-network" clrVerticalNavIcon></clr-icon>
     Storage
 </a>
-<clr-vertical-nav-group routerLinkActive="active">
+<clr-vertical-nav-group>
     <a hidden aria-hidden="true"></a>
-    <clr-icon shape="user" clrVerticalNavIcon></clr-icon>
-    Normal
+    <clr-icon shape="cloud-network" clrVerticalNavIcon></clr-icon>
+    Storages
     <clr-vertical-nav-group-children>
-        <a clrVerticalNavLink>Pidgey</a>
-        <a clrVerticalNavLink>Snorlax</a>
+        <a clrVerticalNavLink *ngFor="let storage of storages" (click)="selectStorage(storage)" [routerLink]="['/catalogs', storage.id]" routerLinkActive="active">{{storage.name}}</a>
     </clr-vertical-nav-group-children>
 </clr-vertical-nav-group>
