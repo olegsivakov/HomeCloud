@@ -49,12 +49,13 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private open(catalog: Catalog) {
     this.progressService.show();
 
-    this.loadSubscription = this.catalogService.load(catalog).subscribe(data => {
+    this.loadSubscription = this.catalogService.list(20).subscribe(data => {
       this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.open));
 
       this.data = data;
+
+      this.progressService.hide();
     }, error => {
-    }, () => {
       this.progressService.hide();
     });
   }

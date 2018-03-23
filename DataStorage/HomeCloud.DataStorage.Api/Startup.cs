@@ -88,6 +88,11 @@
 				application.UseDeveloperExceptionPage();
 			}
 
+			application.UseCors(builder =>
+			{
+				builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+			});
+
 			application.UseExceptionHandling();
 			application.UseHypermedia(routes =>
 			{

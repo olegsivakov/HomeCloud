@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http/src/response';
 import { Observable } from 'rxjs/Observable';
 
@@ -21,9 +21,11 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
     private resourceUrl: string) { }
 
   public list(limit: number): Observable<PagedArray<T>> {
-    return this.httpClient.get<ResourceArray<T>>(this.resourceUrl + "?limit=" + limit)
+    return this.httpClient.get<ResourceArray<T>>(this.resourceUrl + "?limit=" + limit, {
+        headers: new HttpHeaders({"Content-Type": "application/json"})
+      })
       .map(response => {
-        this.resourceArray = response;
+        Object.assign(this.resourceArray, response);
 
         return response.items;
       });
@@ -34,11 +36,12 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
   }
 
   public next(): Observable<PagedArray<T>> {
-    return this.request<ResourceArray<T>>(this.resourceArray.relations.next)
+    return this.request<ResourceArray<T>>(this.resourceArray._links.next)
     .map(response => {
-      this.resourceArray = response;
+      this.resourceArray.items = response.items;
+        Object.assign(this.resourceArray, response);
 
-      return response.items;
+        return response.items;
   });;
   }
 
@@ -47,11 +50,11 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
   }
 
   public previous(): Observable<PagedArray<T>> {
-    return this.request<ResourceArray<T>>(this.resourceArray.relations.previous)
+    return this.request<ResourceArray<T>>(this.resourceArray._links.previous)
       .map(response => {
-        this.resourceArray = response;
+        Object.assign(this.resourceArray, response);
 
-        return response.items;;
+        return response.items;
     });
   }  
 
@@ -60,7 +63,7 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
   }
 
   public create(entity: T): Observable<T> {
-    return this.request(this.resourceArray.relations.create, entity);
+    return this.request(this.resourceArray._links.create, entity);
   }
 
   public hasItem(index: number): boolean {
@@ -68,23 +71,23 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
   }
 
   public item(index: number): Observable<T> {
-    return this.request(this.resourceArray.relations.items[index], index);
+    return this.request(this.resourceArray._links.items[index], index);
   }
 
   public get<TResult extends T>(entity: T): Observable<TResult> {
-    return this.request(entity.relations.get);
+    return this.request(entity._links.get);
   }
 
   public update(entity: T): Observable<T> {
-    return this.request(entity.relations.update, entity);
+    return this.request(entity._links.update, entity);
   }
 
   public delete(entity: T): Observable<T> {
-    return this.request(entity.relations.delete, entity);
+    return this.request(entity._links.delete, entity);
   }
 
   public exists(entity: T): Observable<boolean> {
-    return this.request(entity.relations.exists, entity);
+    return this.request(entity._links.exists, entity);
   }
 
   public request<T>(relation: Relation, data?: any): Observable<T> {
