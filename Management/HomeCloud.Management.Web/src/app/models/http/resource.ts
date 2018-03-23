@@ -1,63 +1,30 @@
-import { Link } from "./link";
 import { HttpClient } from "@angular/common/http";
-import { Relation } from "./relation";
+import { RelationArray } from "./relation-array";
 
 export interface IResource {
-    _links: Array<Link>;
-
-    hasRelation(relation: string);
-
-    relation(relation: string);
+    _links: RelationArray;
 }
 
 export class Resource implements IResource {
-    public _links: Array<Link> = Array<Link>();
-
-    public get get(): Link {
-        return this._links.find(link => link.rel == Relation.get);
-    }
+    public _links: RelationArray = new RelationArray();
 
     public hasGet(): boolean {
-        return this.get != null;
-    }
-
-    public get create(): Link {
-        return this._links.find(link => link.rel == Relation.create);
+        return this._links.get != null;
     }
 
     public hasCreate(): boolean {
-        return this.create != null;
-    }
-
-    public get update(): Link {
-        return this._links.find(link => link.rel == Relation.update);
+        return this._links.create != null;
     }
 
     public hasUpdate(): boolean {
-        return this.update != null;
-    }
-
-    public get delete(): Link {
-        return this._links.find(link => link.rel == Relation.delete);
+        return this._links.update != null;
     }
 
     public hasDelete(): boolean {
-        return this.delete != null;
+        return this._links.delete != null;
     }
 
-    public get exist(): Link {
-        return this._links.find(link => link.rel == Relation.exist);
-    }
-
-    public hasExist(): boolean {
-        return this.exist != null;
-    }
-
-    public hasRelation(relation: string) {
-        return this.relation(relation) != null;
-    }
-
-    public relation(relation: string) {
-        return this._links.find(link => link.rel == relation);
+    public hasExists(): boolean {
+        return this._links.exists != null;
     }
 }

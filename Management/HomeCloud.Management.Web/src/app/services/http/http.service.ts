@@ -9,9 +9,9 @@ import { PagedArray } from '../../models/paged-array';
 import { ResourceService } from '../resource/resource.service';
 
 @Injectable()
-export class HttpService<T extends Resource> {
+export class HttpService<T extends IResource> {
 
-  public resourceArray: ResourceArray<T> = new ResourceArray<T>();
+  protected resourceArray: ResourceArray<T> = new ResourceArray<T>();
 
   constructor(
     protected resourceService: ResourceService,
@@ -31,12 +31,12 @@ export class HttpService<T extends Resource> {
   }
 
   public next(): Observable<PagedArray<T>> {
-    return this.resourceService.next(this.resourceArray)
-      .map(response => {
-        this.resourceArray = response;
+    return this.resourceService.next<T>(this.resourceArray)
+    .map(response => {
+      this.resourceArray = response;
 
-        return response.items;
-    });
+      return response.items;
+  });;
   }
 
   public hasPrevious(): boolean {
@@ -44,21 +44,13 @@ export class HttpService<T extends Resource> {
   }
 
   public previous(): Observable<PagedArray<T>> {
-    return this.resourceService.previous(this.resourceArray)
+    return this.resourceService.previous<T>(this.resourceArray)
       .map(response => {
         this.resourceArray = response;
 
-        return response.items;
+        return response.items;;
     });
-  }
-
-  public get<TResult extends T>(entity: T): Observable<TResult> {
-    return this.resourceService.get(entity);
-  }
-
-  public relation<T extends IResource>(entity: T, relation: string, data?: any): Observable<T> {
-    return this.resourceService.relation(entity, relation, data);
-  }
+  }  
 
   public hasCreate(): boolean {
     return this.resourceArray.hasCreate();
@@ -66,6 +58,18 @@ export class HttpService<T extends Resource> {
 
   public create(entity: T): Observable<T> {
     return this.resourceService.create(this.resourceArray, entity);
+  }
+
+  public hasItem(index: number): boolean {
+    return this.resourceArray.hasItem(index);
+  }
+
+  public item(index: number): Observable<T> {
+    return this.resourceService.item(this.resourceArray, index);
+  }
+
+  public get<TResult extends T>(entity: T): Observable<TResult> {
+    return this.resourceService.get(entity);
   }
 
   public update(entity: T): Observable<T> {

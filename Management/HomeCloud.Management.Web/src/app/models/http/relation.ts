@@ -1,10 +1,6 @@
-export enum Relation {
-    unknown = "",
-    create = "create",
-    update = "update",
-    delete = "delete",
-    get = "get",
-    previous = "previous",
-    next = "next",
-    exist = "exist"
+import { HttpMethod } from "./http-method";
+
+export class Relation {
+    public href: string = "";
+    public method: HttpMethod = HttpMethod.unknown;
 }
