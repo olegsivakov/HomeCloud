@@ -2,29 +2,33 @@ import { HttpClient } from "@angular/common/http";
 import { RelationArray } from "./relation-array";
 
 export interface IResource {
-    _links: RelationArray;
+    relations: RelationArray;
 }
 
 export class Resource implements IResource {
-    public _links: RelationArray = new RelationArray();
+    public relations: RelationArray = new RelationArray();
+
+    constructor(public relationType: new() => RelationArray) {
+        this.relations = new this.relationType;
+    }
 
     public hasGet(): boolean {
-        return this._links.get != null;
+        return this.relations.get != null;
     }
 
     public hasCreate(): boolean {
-        return this._links.create != null;
+        return this.relations.create != null;
     }
 
     public hasUpdate(): boolean {
-        return this._links.update != null;
+        return this.relations.update != null;
     }
 
     public hasDelete(): boolean {
-        return this._links.delete != null;
+        return this.relations.delete != null;
     }
 
     public hasExists(): boolean {
-        return this._links.exists != null;
+        return this.relations.exists != null;
     }
 }

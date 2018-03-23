@@ -7,6 +7,7 @@ import { ResourceArray } from '../../models/http/resource-array';
 import { PagedArray } from '../../models/paged-array';
 
 import { ResourceService } from '../resource/resource.service';
+import { Relation } from '../../models/http/relation';
 
 @Injectable()
 export class HttpService<T extends IResource> {
@@ -82,5 +83,9 @@ export class HttpService<T extends IResource> {
 
   public exists(entity: T): Observable<boolean> {
     return this.resourceService.exists(entity);
+  }
+
+  public request<TResult>(relation: Relation, data?: any): Observable<TResult> {
+    return this.resourceService.request(relation, data);
   }
 }

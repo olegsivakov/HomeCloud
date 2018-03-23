@@ -22,36 +22,36 @@ export class ResourceService {
   }
 
   public previous<T extends IResource>(resource: IResource): Observable<ResourceArray<T>> {
-    return this.request(resource._links.previous);
+    return this.request(resource.relations.previous);
   }
 
   public next<T extends IResource>(resource: IResource): Observable<ResourceArray<T>> {
-    return this.request(resource._links.next);
+    return this.request(resource.relations.next);
   }
 
   public get<T extends IResource>(resource: IResource): Observable<T> {
-    return this.request(resource._links.get);
+    return this.request(resource.relations.get);
   }
 
   public item<T extends IResource>(resource: IResource, index: number): Observable<T> {
-    return this.request(resource._links.items[index]);
+    return this.request(resource.relations.items[index]);
   }
 
   public create<T extends IResource>(resource: IResource, data: T): Observable<T> {
-    return this.request(resource._links.create);
+    return this.request(resource.relations.create);
   }
 
   public update<T extends IResource>(resource: T): Observable<T> {
-    return this.request(resource._links.update);
+    return this.request(resource.relations.update);
   }
 
   public delete<T extends IResource>(resource: T): Observable<T> {
-    return this.request(resource._links.delete)
+    return this.request(resource.relations.delete)
           .map(response => resource);
   }
 
   public exists<T extends IResource>(resource: T): Observable<boolean> {
-    return this.request(resource._links.exists)
+    return this.request(resource.relations.exists)
           .map((response: Response) => response.ok);
   }
 

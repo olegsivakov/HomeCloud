@@ -6,22 +6,22 @@ import { PagedArray } from "../paged-array";
 import { RelationArray } from "./relation-array";
 
 export class ResourceArray<T extends IResource> implements IResource {
-    public _links: RelationArray = new RelationArray();
+    public relations: RelationArray = new RelationArray();
     public items: PagedArray<T> = new PagedArray<T>();
 
     public hasPrevious(): boolean {
-        return this._links.previous != null;
+        return this.relations.previous != null;
     }
 
     public hasNext(): boolean {
-        return this._links.next != null;
+        return this.relations.next != null;
     }
 
     public hasCreate(): boolean {
-        return this._links.create != null;
+        return this.relations.create != null;
     }
 
     public hasItem(index: number): boolean {
-        return this._links.items != null && this._links.items.length > index && this._links.items[index] != null;
+        return this.relations.items != null && this.relations.items.length > index && this.relations.items[index] != null;
     }
 }
