@@ -4,12 +4,14 @@
 
 	using System.Collections.Generic;
 
+	using HomeCloud.Mvc.Hypermedia.Relations;
+
 	#endregion
 
 	/// <summary>
 	/// Represents the <see cref="HTTP"/> response model containing object with hypermedia links.
 	/// </summary>
-	public class HypermediaResponse
+	internal class HypermediaResponse
 	{
 		#region Constructors
 
@@ -35,12 +37,12 @@
 		public object Data { get; set; }
 
 		/// <summary>
-		/// Gets or sets the <see cref="HATEOAS"/> links.
+		/// Gets or sets the <see cref="HATEOAS"/> relation links.
 		/// </summary>
 		/// <value>
-		/// The <see cref="HATEOAS"/> links.
+		/// The <see cref="HATEOAS"/> relation links.
 		/// </value>
-		public IEnumerable<Link> Links { get; set; }
+		public IEnumerable<IRelation> Relations { get; set; }
 
 		#endregion
 	}

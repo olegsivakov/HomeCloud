@@ -3,22 +3,20 @@
 	#region Usings
 
 	using System;
-	using System.Buffers;
 
-	using Microsoft.AspNetCore.Builder;
-	using Microsoft.AspNetCore.Hosting;
-	using Microsoft.AspNetCore.Mvc.Formatters;
-
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.DependencyInjection;
-
-	using HomeCloud.Mvc;
-	using HomeCloud.Mvc.Hypermedia;
-	using HomeCloud.Mvc.Exceptions;
 	using HomeCloud.DataStorage.Api.DependencyInjection;
 	using HomeCloud.DataStorage.Api.Models;
 	using HomeCloud.DataStorage.Api.Controllers;
-	using HomeCloud.Core;
+
+	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.Exceptions;
+	using HomeCloud.Mvc.Hypermedia;
+
+	using Microsoft.AspNetCore.Builder;
+	using Microsoft.AspNetCore.Hosting;
+
+	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.DependencyInjection;
 
 	#endregion
 
@@ -94,61 +92,59 @@
 			application.UseHypermedia(routes =>
 			{
 				routes.AddRoute(nameof(StorageController.GetStorageList))
-						.AddRouteLink<PagedListViewModel<StorageViewModel>>("self", nameof(StorageController.GetStorageList), model => new { offset = model.Offset, limit = model.Size })
-						.AddRouteLink<PagedListViewModel<StorageViewModel>>("previous", nameof(StorageController.GetStorageList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRouteLink<PagedListViewModel<StorageViewModel>>("next", nameof(StorageController.GetStorageList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRouteLink<PagedListViewModel<StorageViewModel>>("create", nameof(StorageController.CreateStorage), null)
-						.AddRouteLink<PagedListViewModel<StorageViewModel>>("get", nameof(StorageController.GetStorageList), null);
+						.AddRoute<PagedListViewModel<StorageViewModel>>("self", nameof(StorageController.GetStorageList), model => new { offset = model.Offset, limit = model.Size })
+						.AddRoute<PagedListViewModel<StorageViewModel>>("previous", nameof(StorageController.GetStorageList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<PagedListViewModel<StorageViewModel>>("next", nameof(StorageController.GetStorageList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<PagedListViewModel<StorageViewModel>>("create", nameof(StorageController.CreateStorage), null)
+						.AddRoute<PagedListViewModel<StorageViewModel>, StorageViewModel>("items", nameof(StorageController.GetStorageByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(StorageController.GetStorageByID))
-						.AddRouteLink<StorageViewModel>("self", nameof(StorageController.GetStorageByID), model => new { id = model.ID })
-						.AddRouteLink<StorageViewModel>("update", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
-						.AddRouteLink<StorageViewModel>("delete", nameof(StorageController.DeleteStorage), model => new { id = model.ID })
-						.AddRouteLink<StorageViewModel>("catalogs", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ID, offset = 0, limit = 20 })
-						.AddRouteLink<StorageViewModel>("data", nameof(DataController.GetDataList), model => new { catalogID = model.ID, offset = 0, limit = 20 });
+						.AddRoute<StorageViewModel>("self", nameof(StorageController.GetStorageByID), model => new { id = model.ID })
+						.AddRoute<StorageViewModel>("update", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
+						.AddRoute<StorageViewModel>("delete", nameof(StorageController.DeleteStorage), model => new { id = model.ID })
+						.AddRoute<StorageViewModel>("catalogs", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ID, offset = 0, limit = 20 })
+						.AddRoute<StorageViewModel>("data", nameof(DataController.GetDataList), model => new { catalogID = model.ID, offset = 0, limit = 20 });
 
 				routes.AddRoute(nameof(StorageController.CreateStorage))
-						.AddRouteLink<StorageViewModel>("self", nameof(StorageController.CreateStorage), null)
-						.AddRouteLink<StorageViewModel>("get", nameof(StorageController.GetStorageByID), model => new { id = model.ID });
+						.AddRoute<StorageViewModel>("self", nameof(StorageController.CreateStorage), null)
+						.AddRoute<StorageViewModel>("get", nameof(StorageController.GetStorageByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(StorageController.UpdateStorage))
-						.AddRouteLink<StorageViewModel>("self", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
-						.AddRouteLink<StorageViewModel>("get", nameof(StorageController.GetStorageByID), model => new { id = model.ID });
+						.AddRoute<StorageViewModel>("self", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
+						.AddRoute<StorageViewModel>("get", nameof(StorageController.GetStorageByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.GetCatalogList))
-						.AddRouteLink<CatalogListViewModel>("self", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset, limit = model.Size })
-						.AddRouteLink<CatalogListViewModel>("previous", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRouteLink<CatalogListViewModel>("next", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRouteLink<CatalogListViewModel>("create", nameof(CatalogController.CreateCatalog), model => new { parentID = model.ParentID })
-						.AddRouteLink<CatalogListViewModel>("get", nameof(CatalogController.GetCatalogList), null);
+						.AddRoute<CatalogListViewModel>("self", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset, limit = model.Size })
+						.AddRoute<CatalogListViewModel>("previous", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<CatalogListViewModel>("next", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<CatalogListViewModel>("create", nameof(CatalogController.CreateCatalog), model => new { parentID = model.ParentID });
 
 				routes.AddRoute(nameof(CatalogController.GetCatalogByID))
-						.AddRouteLink<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
-						.AddRouteLink<CatalogViewModel>("update", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
-						.AddRouteLink<CatalogViewModel>("delete", nameof(CatalogController.DeleteCatalog), model => new { id = model.ID });
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("update", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("delete", nameof(CatalogController.DeleteCatalog), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.CreateCatalog))
-						.AddRouteLink<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
-						.AddRouteLink<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.UpdateCatalog))
-						.AddRouteLink<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
-						.AddRouteLink<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(DataController.GetDataList))
-						.AddRouteLink<DataListViewModel>("self", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset, limit = model.Size })
-						.AddRouteLink<DataListViewModel>("previous", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRouteLink<DataListViewModel>("next", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRouteLink<DataListViewModel>("create", nameof(DataController.CreateData), model => new { catalogID = model.CatalogID })
-						.AddRouteLink<DataListViewModel>("get", nameof(DataController.GetDataList), null);
+						.AddRoute<DataListViewModel>("self", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset, limit = model.Size })
+						.AddRoute<DataListViewModel>("previous", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<DataListViewModel>("next", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<DataListViewModel>("create", nameof(DataController.CreateData), model => new { catalogID = model.CatalogID });
 
 				routes.AddRoute(nameof(DataController.GetDataByID))
-						.AddRouteLink<DataViewModel>("self", nameof(DataController.GetDataByID), model => new { id = model.ID })
-						.AddRouteLink<DataViewModel>("delete", nameof(DataController.DeleteData), model => new { id = model.ID });
+						.AddRoute<DataViewModel>("self", nameof(DataController.GetDataByID), model => new { id = model.ID })
+						.AddRoute<DataViewModel>("delete", nameof(DataController.DeleteData), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(DataController.CreateData))
-						.AddRouteLink<DataViewModel>("self", nameof(DataController.GetDataByID), model => new { id = model.ID })
-						.AddRouteLink<DataViewModel>("get", nameof(DataController.GetDataByID), model => new { id = model.ID });
+						.AddRoute<DataViewModel>("self", nameof(DataController.GetDataByID), model => new { id = model.ID })
+						.AddRoute<DataViewModel>("get", nameof(DataController.GetDataByID), model => new { id = model.ID });
 			});
 
 			application.UseMvc();

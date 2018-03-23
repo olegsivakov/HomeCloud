@@ -9,6 +9,7 @@
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
+	using HomeCloud.Mvc.Hypermedia.Relations;
 
 	#endregion
 
@@ -70,7 +71,7 @@
 				JToken token = JToken.FromObject(model.Data, serializer);
 				JObject result = model.Data is IEnumerable ? new JObject(new JProperty("items", (JArray)token)) : (JObject)token;
 
-				JObject links = CreateLinkProperties(model.Links);
+				JObject links = CreateRelationProperties(model.Relations.Where(item => !string.IsNullOrWhiteSpace(item.Name)));
 				if (links != null)
 				{
 					JProperty linksProperty = links is null ? null : new JProperty("_links", links);
@@ -91,27 +92,31 @@
 		#region Private Methods
 
 		/// <summary>
-		/// Creates the <see cref="JSON"/> object from the specified links.
+		/// Creates the <see cref="JSON"/> object from the specified relations.
 		/// </summary>
-		/// <param name="links">The collection of links of <see cref="Link"/> type.</param>
+		/// <param name="relations">The collection of links of <see cref="Relation"/> type.</param>
 		/// <returns>the instance of <see cref="JObject"/>.</returns>
-		private static JObject CreateLinkProperties(IEnumerable<Link> links)
+		private static JObject CreateRelationProperties(IEnumerable<IRelation> relations)
 		{
-			if (links != null && links.Any())
+			if (relations != null && relations.Any())
 			{
 				JObject result = new JObject();
 
-				foreach (var link in links)
+				foreach(IRelation relation in relations)
 				{
-					if (!string.IsNullOrWhiteSpace(link.Relation) && !string.IsNullOrWhiteSpace(link.Href))
+					object link = null;
+					if (relation is Relation)
 					{
-						JObject linkObject = new JObject(new JProperty("href", link.Href.ToLower()));
-						if (!string.IsNullOrWhiteSpace(link.Method))
-						{
-							linkObject.Add(new JProperty("method", link.Method.ToLower()));
-						}
+						link = JObject.FromObject((relation as Relation).Link);
+					}
+					else if (relation is RelationList)
+					{
+						link = JArray.FromObject((relation as RelationList).Links);
+					}
 
-						result.Add(new JProperty(link.Relation, linkObject));
+					if (link != null)
+					{
+						result.Add(new JProperty(relation.Name, link));
 					}
 				}
 

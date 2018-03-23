@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Mvc.Hypermedia
+﻿namespace HomeCloud.Mvc.Hypermedia.Routing
 {
 	#region Usings
 
@@ -7,9 +7,9 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the link route.
+	/// Represents the hypermedia route.
 	/// </summary>
-	public class LinkRoute
+	public class Route
 	{
 		/// <summary>
 		/// Gets or sets the link name.
@@ -33,7 +33,7 @@
 		/// <value>
 		/// The route values delegate.
 		/// </value>
-		public Func<object, object> RouteValues { get; set; }
+		public virtual Func<object, object> RouteValues { get; set; }
 
 		/// <summary>
 		/// Gets or sets the delegate indicating whether the current instance is reliable.
@@ -41,6 +41,6 @@
 		/// <value>
 		/// The delegate.
 		/// </value>
-		public Func<object, bool> Condition { get; set; }
+		public virtual Func<object, bool> Condition { get; set; }
 	}
 }

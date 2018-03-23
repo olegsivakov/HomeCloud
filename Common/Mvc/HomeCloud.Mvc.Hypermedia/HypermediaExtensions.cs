@@ -6,6 +6,8 @@
 
 	using Microsoft.AspNetCore.Builder;
 
+	using HomeCloud.Mvc.Hypermedia.Routing;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -25,7 +27,7 @@
 		/// <param name="configureRoutes">A callback to configure hypermedia routes.</param>
 		/// <returns>The instance of <see cref="IApplicationBuilder"/>.</returns>
 		/// <exception cref="ArgumentNullException">Thrown if arguments are null.</exception>
-		public static IApplicationBuilder UseHypermedia(this IApplicationBuilder application, Action<ILinkRouteMap> configureRoutes)
+		public static IApplicationBuilder UseHypermedia(this IApplicationBuilder application, Action<IRouteMap> configureRoutes)
 		{
 			if (application == null)
 			{
@@ -37,7 +39,7 @@
 				throw new ArgumentNullException(nameof(configureRoutes));
 			}
 
-			ILinkRouteMap routeMap = application.ApplicationServices.GetRequiredService<ILinkRouteMap>();
+			IRouteMap routeMap = application.ApplicationServices.GetRequiredService<IRouteMap>();
 
 			configureRoutes(routeMap);
 
@@ -58,9 +60,9 @@
 				throw new ArgumentNullException(nameof(builder));
 			}
 
-			builder.Services.AddSingleton<ILinkRouteMap, LinkRouteMap>();
+			builder.Services.AddSingleton<IRouteMap, RouteMap>();
 			builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-			builder.Services.AddScoped<ILinkService, LinkService>();
+			builder.Services.AddScoped<IRelationService, RelationService>();
 
 			builder.Services.Configure<MvcJsonOptions>(options =>
 			{

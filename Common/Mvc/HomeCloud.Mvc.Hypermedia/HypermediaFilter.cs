@@ -4,6 +4,8 @@
 
 	using System.Collections.Generic;
 
+	using HomeCloud.Mvc.Hypermedia.Relations;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -14,12 +16,21 @@
 	/// </summary>
 	public class HypermediaFilter : ActionFilterAttribute
 	{
+		#region Constants
+
+		/// <summary>
+		/// The applicable content type
+		/// </summary>
+		private const string contentType = "application/json";
+
+		#endregion
+
 		#region Private Members
 
 		/// <summary>
-		/// The link service
+		/// The relation service
 		/// </summary>
-		private readonly ILinkService linkService = null;
+		private readonly IRelationService relationService = null;
 
 		#endregion
 
@@ -28,11 +39,10 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HypermediaFilter"/> class.
 		/// </summary>
-		/// <param name="linkService">The link service.</param>
-		public HypermediaFilter(ILinkService linkService)
+		/// <param name="relationService">The relation service.</param>
+		public HypermediaFilter(IRelationService relationService)
 		{
-			this.linkService = linkService;
-			this.Order = 50;
+			this.relationService = relationService;
 		}
 
 		#endregion
@@ -45,15 +55,13 @@
 		/// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext" />.</param>
 		public override void OnActionExecuted(ActionExecutedContext context)
 		{
-			const string contentType = "application/json";
-
 			ObjectResult result = context.Result as ObjectResult;
 			if (result != null && result.Value != null && result.ContentTypes.Contains(contentType))
 			{
-				IEnumerable<Link> links = this.linkService.GetLinks(result.Value, context.ActionDescriptor.AttributeRouteInfo.Name);
+				IEnumerable<IRelation> relations = this.relationService.GetRelations(result.Value, context.ActionDescriptor.AttributeRouteInfo.Name);
 				result.Value = new HypermediaResponse(result.Value)
 				{
-					Links = links
+					Relations = relations
 				};
 
 				context.Result = result;

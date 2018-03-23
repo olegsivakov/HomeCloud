@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Mvc.Hypermedia
+﻿namespace HomeCloud.Mvc.Hypermedia.Relations
 {
 	#region Usings
 
@@ -9,17 +9,8 @@
 	/// <summary>
 	/// Represents the hypermedia link.
 	/// </summary>
-	public class Link
+	internal class Link
 	{
-		/// <summary>
-		/// Gets or sets the relation.
-		/// </summary>
-		/// <value>
-		/// The relation.
-		/// </value>
-		[JsonProperty("rel")]
-		public string Relation { get; set; }
-
 		/// <summary>
 		/// Gets or sets the <see cref="URL"/>.
 		/// </summary>
