@@ -1,11 +1,10 @@
 import { Observable } from "rxjs/Observable";
 
 import { IResource } from "./resource";
-import { Relation } from "./relation";
 import { PagedArray } from "../paged-array";
 import { RelationArray } from "./relation-array";
 
-export class ResourceArray<T extends IResource> implements IResource {
+export class ResourceArray<T> implements IResource<RelationArray> {
     public relations: RelationArray = new RelationArray();
     public items: PagedArray<T> = new PagedArray<T>();
 

@@ -36,7 +36,6 @@ import { NotificationService } from './services/shared/notification/notification
 import { NotificationStateService } from './services/shared/notification-state/notification-state.service';
 import { ProgressService } from './services/shared/progress/progress.service';
 
-import { ResourceService } from './services/resource/resource.service';
 import { CatalogService } from './services/catalog/catalog.service';
 
 @NgModule({
@@ -74,9 +73,7 @@ import { CatalogService } from './services/catalog/catalog.service';
     CatalogService,
     NotificationService,
     NotificationStateService,
-    ProgressService,
-
-    ResourceService
+    ProgressService
   ],
   bootstrap: [AppComponent]
 })

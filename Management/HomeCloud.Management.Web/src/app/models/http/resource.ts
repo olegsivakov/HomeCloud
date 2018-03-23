@@ -1,14 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { RelationArray } from "./relation-array";
 
-export interface IResource {
-    relations: RelationArray;
+export interface IResource<T extends RelationArray> {
+    relations: T;
 }
 
-export class Resource implements IResource {
-    public relations: RelationArray = new RelationArray();
+export class Resource<T extends RelationArray> implements IResource<T> {
+    public relations: T = null;
 
-    constructor(public relationType: new() => RelationArray) {
+    constructor(public relationType: new() => T) {
         this.relations = new this.relationType;
     }
 

@@ -1,10 +1,9 @@
 import { StorageData } from "./storage-data";
 import { Resource } from "./http/resource";
 import { RelationArray } from "./http/relation-array";
-import { Relation } from "./http/relation";
 
 export class Catalog
-    extends Resource
+    extends Resource<RelationArray>
     implements StorageData {
 
   public ID: string = "";
