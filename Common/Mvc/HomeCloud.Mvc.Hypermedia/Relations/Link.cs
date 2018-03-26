@@ -28,5 +28,14 @@
 		/// </value>
 		[JsonProperty("method")]
 		public string Method { get; set; }
+
+		/// <summary>
+		/// Gets or sets the content type.
+		/// </summary>
+		/// <value>
+		/// The content type.
+		/// </value>
+		[JsonProperty("type")]
+		public string ContentType { get; set; }
 	}
 }

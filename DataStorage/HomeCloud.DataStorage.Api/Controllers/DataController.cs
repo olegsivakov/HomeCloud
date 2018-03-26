@@ -19,6 +19,7 @@
 	using HomeCloud.Mapping.Extensions;
 
 	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.ActionConstraints;
 	using HomeCloud.Mvc.DataAnnotations;
 
 	using Microsoft.AspNetCore.Http.Features;
@@ -70,32 +71,30 @@
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" /> or <see cref="FileViewModel" /> stream.
 		/// </returns>
 		[HttpGet("v1/[controller]/{id}", Name = nameof(DataController.GetDataByID))]
-		[ContentType(
-			MimeTypes.Application.Json,
-			MimeTypes.Application.OctetStream)]
+		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetDataByID(
 			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+			DataViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
 
-			object data = null;
+			return this.HttpResult(data, result.Errors);
+		}
 
-			switch (this.HttpContext.Request.ContentType)
-			{
-				case MimeTypes.Application.OctetStream:
-					{
-						data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileViewModel>(result.Data) : null;
-
-						break;
-					}
-
-				case MimeTypes.Application.Json:
-					{
-						data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, DataViewModel>(result.Data) : null;
-
-						break;
-					}
-			}
+		/// <summary>
+		/// Downloads the data by specified identifie
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <returns>
+		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="DataViewModel" /> or <see cref="FileViewModel" /> stream.
+		/// </returns>
+		[HttpGet("v1/[controller]/{id}/download", Name = nameof(DataController.DownloadDataByID))]
+		[ContentType(MimeTypes.Application.OctetStream)]
+		public async Task<IActionResult> DownloadDataByID(
+			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
+		{
+			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
+			FileViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}

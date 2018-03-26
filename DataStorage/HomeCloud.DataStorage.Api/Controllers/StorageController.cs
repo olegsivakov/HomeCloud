@@ -18,7 +18,7 @@
 	using HomeCloud.Mapping;
 	using HomeCloud.Mapping.Extensions;
 
-	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.ActionConstraints;
 	using HomeCloud.Mvc.DataAnnotations;
 
 	using Microsoft.AspNetCore.Mvc;

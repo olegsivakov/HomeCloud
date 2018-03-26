@@ -81,9 +81,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Providers", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Http", "..\Common\HomeCloud.Http\HomeCloud.Http.csproj", "{AB670BD6-44F7-497F-BC62-8A5976658372}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api.DependencyInjection", "HomeCloud.DataStorage.Api.DependencyInjection\HomeCloud.DataStorage.Api.DependencyInjection.csproj", "{AE623CE1-63D1-4DF9-B9BB-9A53A3C296EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Api.DependencyInjection", "HomeCloud.DataStorage.Api.DependencyInjection\HomeCloud.DataStorage.Api.DependencyInjection.csproj", "{AE623CE1-63D1-4DF9-B9BB-9A53A3C296EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.DataStorage.Api", "HomeCloud.DataStorage.Api\HomeCloud.DataStorage.Api.csproj", "{076FCB99-0C68-4C82-B4AA-0E95D9F67CAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Api", "HomeCloud.DataStorage.Api\HomeCloud.DataStorage.Api.csproj", "{076FCB99-0C68-4C82-B4AA-0E95D9F67CAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc", "..\Common\Mvc\HomeCloud.Mvc\HomeCloud.Mvc.csproj", "{15692C8A-07C1-4A9E-8B1B-2B5E01E3A748}"
 EndProject
@@ -96,6 +96,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Exceptions", "..\Common\Mvc\HomeCloud.Mvc.Exceptions\HomeCloud.Mvc.Exceptions.csproj", "{9CE1A495-6461-4B78-9B36-2B28FAC495FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.DataAnnotations", "..\Common\Mvc\HomeCloud.Mvc.DataAnnotations\HomeCloud.Mvc.DataAnnotations.csproj", "{06C6460C-8DDD-4C6D-AED1-6584A1563DCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Mvc.ActionConstraints", "..\Common\Mvc\HomeCloud.Mvc.ActionConstraints\HomeCloud.Mvc.ActionConstraints.csproj", "{42A3F4A1-3145-4C3D-B086-D98B745E09CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -277,6 +279,10 @@ Global
 		{06C6460C-8DDD-4C6D-AED1-6584A1563DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C6460C-8DDD-4C6D-AED1-6584A1563DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06C6460C-8DDD-4C6D-AED1-6584A1563DCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42A3F4A1-3145-4C3D-B086-D98B745E09CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A3F4A1-3145-4C3D-B086-D98B745E09CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A3F4A1-3145-4C3D-B086-D98B745E09CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A3F4A1-3145-4C3D-B086-D98B745E09CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -321,6 +327,7 @@ Global
 		{363308FB-798F-4F2B-A926-79A53CA1E328} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
 		{9CE1A495-6461-4B78-9B36-2B28FAC495FB} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
 		{06C6460C-8DDD-4C6D-AED1-6584A1563DCF} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
+		{42A3F4A1-3145-4C3D-B086-D98B745E09CD} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88883B2F-2D2D-4999-8236-EEB3FCB5D249}

@@ -6,11 +6,13 @@
 	using System.Collections;
 	using System.Collections.Generic;
 
+	using HomeCloud.Mvc.ActionConstraints;
 	using HomeCloud.Mvc.Hypermedia.Relations;
 	using HomeCloud.Mvc.Hypermedia.Routing;
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.AspNetCore.Mvc.Abstractions;
+	using Microsoft.AspNetCore.Mvc.ActionConstraints;
 	using Microsoft.AspNetCore.Mvc.Infrastructure;
 	using Microsoft.AspNetCore.Mvc.Internal;
 	using Microsoft.AspNetCore.Mvc.Routing;
@@ -77,36 +79,65 @@
 
 			IEnumerable<Route> routes = this.routes.GetRoutes(routeName);
 
-			result.AddRange(routes.Where(route => route.Condition(model)).Select(route => new Relation()
+			result.AddRange(routes.Where(route => route.Condition(model)).Select(route =>
 			{
-				Name = route.Name,
-				Link = new Link()
+				IEnumerable<IActionConstraintMetadata> constraints = this.GetActionConstraints(route);
+
+				return new Relation()
 				{
-					Href = this.urlHelper.Link(route.RouteName, route.RouteValues(model))?.ToLower(),
-					Method = this.actionDescriptors
-										.FirstOrDefault(descriptor => descriptor.AttributeRouteInfo.Name == route.RouteName)?
-										.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods.FirstOrDefault()?.ToLower()
-				}
+					Name = route.Name,
+					Link = this.CreateLink(route, constraints, model)
+				};
 			}));
 
 			if (model is IEnumerable)
 			{
 				IEnumerable<object> items = (model as IEnumerable).Cast<object>();
 
-				result.AddRange(routes.Where(route => items.Any(item => route.Condition(item))).Select(route => new RelationList()
+				result.AddRange(routes.Where(route => items.Any(item => route.Condition(item))).Select(route =>
 				{
-					Name = route.Name,
-					Links = items.Where(item => route.Condition(item)).Select(item => new Link()
+					IEnumerable<IActionConstraintMetadata> constraints = this.GetActionConstraints(route);
+
+					return new RelationList()
 					{
-						Href = this.urlHelper.Link(route.RouteName, route.RouteValues(item))?.ToLower(),
-						Method = this.actionDescriptors
-									.FirstOrDefault(descriptor => descriptor.AttributeRouteInfo.Name == route.RouteName)?
-									.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods.FirstOrDefault()?.ToLower()
-					})
+						Name = route.Name,
+						Links = items.Where(item => route.Condition(item)).Select(item => this.CreateLink(route, constraints, item))
+					};
 				}).Where(relation => relation.Links.Any()));
 			}
 
 			return result;
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Gets the action constraints of the specified route.
+		/// </summary>
+		/// <param name="route">The route.</param>
+		/// <returns>The list of instances of type <see cref="IActionConstraintMetadata"/>.</returns>
+		private IEnumerable<IActionConstraintMetadata> GetActionConstraints(Route route)
+		{
+			return this.actionDescriptors.FirstOrDefault(item => item.AttributeRouteInfo.Name == route.RouteName)?.ActionConstraints ?? Enumerable.Empty<IActionConstraintMetadata>();
+		}
+
+		/// <summary>
+		/// Creates the link for specified model based on route and route action constraints.
+		/// </summary>
+		/// <param name="route">The route.</param>
+		/// <param name="constraints">The constraints.</param>
+		/// <param name="model">The model.</param>
+		/// <returns>the instance of <see cref="Link"/>.</returns>
+		private Link CreateLink(Route route, IEnumerable<IActionConstraintMetadata> constraints, object model)
+		{
+			return new Link()
+			{
+				Href = this.urlHelper.Link(route.RouteName, route.RouteValues(model))?.ToLower(),
+				Method = constraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods.FirstOrDefault()?.ToLower(),
+				ContentType = constraints.OfType<ContentTypeAttribute>().FirstOrDefault()?.ContentType?.ToLower()
+			};
 		}
 
 		#endregion

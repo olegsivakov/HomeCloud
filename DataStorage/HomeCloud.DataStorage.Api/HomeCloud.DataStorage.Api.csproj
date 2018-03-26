@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\HomeCloud.Http\HomeCloud.Http.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.ActionConstraints\HomeCloud.Mvc.ActionConstraints.csproj" />
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.DataAnnotations\HomeCloud.Mvc.DataAnnotations.csproj" />
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Exceptions\HomeCloud.Mvc.Exceptions.csproj" />
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Hypermedia\HomeCloud.Mvc.Hypermedia.csproj" />

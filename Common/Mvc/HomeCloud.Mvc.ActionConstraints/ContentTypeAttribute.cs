@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.Mvc
+﻿namespace HomeCloud.Mvc.ActionConstraints
 {
 	#region Usings
 
@@ -16,7 +16,7 @@
 	/// </summary>
 	/// <seealso cref="System.Attribute" />
 	/// <seealso cref="Microsoft.AspNetCore.Mvc.ActionConstraints.IActionConstraint" />
-	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
 	public class ContentTypeAttribute : Attribute, IActionConstraint
 	{
 		#region Constants
@@ -28,29 +28,33 @@
 
 		#endregion
 
-		#region Private Members
-
-		/// <summary>
-		/// The list of accepted content types
-		/// </summary>
-		private readonly IEnumerable<string> contentTypes = null;
-
-		#endregion
-
 		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ContentTypeAttribute" /> class.
 		/// </summary>
-		/// <param name="contentTypes">The content types.</param>
-		public ContentTypeAttribute(params string[] contentTypes)
+		/// <param name="contentType">The content type.</param>
+		public ContentTypeAttribute(string contentType)
 		{
-			this.contentTypes = contentTypes ?? Enumerable.Empty<string>();
+			if (string.IsNullOrWhiteSpace(contentType))
+			{
+				throw new ArgumentNullException(nameof(contentType));
+			}
+
+			this.ContentType = contentType.ToLower();
 		}
 
 		#endregion
 
 		#region Public Properties
+
+		/// <summary>
+		/// Gets the accepted content type.
+		/// </summary>
+		/// <value>
+		/// The accepted content type.
+		/// </value>
+		public string ContentType { get; private set; }
 
 		/// <summary>
 		/// Gets the constraint order.
@@ -78,7 +82,7 @@
 			if (!request.Headers.ContainsKey(ContentTypeHeaderName))
 				return false;
 
-			return this.contentTypes.Any(contentType => (request.Headers[ContentTypeHeaderName].ToString()).ToLower().Contains(contentType.ToLower()));
+			return this.ContentType.ToLower() == Convert.ToString(request.Headers[ContentTypeHeaderName])?.ToLower();
 		}
 
 		#endregion

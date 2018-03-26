@@ -4,6 +4,7 @@
 
 	using System.Collections.Generic;
 
+	using HomeCloud.Http;
 	using HomeCloud.Mvc.Hypermedia.Relations;
 
 	using Microsoft.AspNetCore.Mvc;
@@ -16,15 +17,6 @@
 	/// </summary>
 	public class HypermediaFilter : ActionFilterAttribute
 	{
-		#region Constants
-
-		/// <summary>
-		/// The applicable content type
-		/// </summary>
-		private const string contentType = "application/json";
-
-		#endregion
-
 		#region Private Members
 
 		/// <summary>
@@ -56,7 +48,7 @@
 		public override void OnActionExecuted(ActionExecutedContext context)
 		{
 			ObjectResult result = context.Result as ObjectResult;
-			if (result != null && result.Value != null && result.ContentTypes.Contains(contentType))
+			if (result != null && result.Value != null && result.ContentTypes.Contains(MimeTypes.Application.Json))
 			{
 				IEnumerable<IRelation> relations = this.relationService.GetRelations(result.Value, context.ActionDescriptor.AttributeRouteInfo.Name);
 				result.Value = new HypermediaResponse(result.Value)
