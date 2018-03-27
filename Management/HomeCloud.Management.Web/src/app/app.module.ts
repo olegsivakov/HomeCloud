@@ -37,8 +37,8 @@ import { NotificationStateService } from './services/shared/notification-state/n
 import { ProgressService } from './services/shared/progress/progress.service';
 
 import { StorageService } from './services/storage/storage.service';
-import { StorageStateService } from './services/storage-state/storage-state.service';
 import { CatalogService } from './services/catalog/catalog.service';
+import { StorageCatalogComponent } from './components/storages/storage-catalog/storage-catalog.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +60,8 @@ import { CatalogService } from './services/catalog/catalog.service';
     AlertComponent,
     ProgressComponent,
     CatalogBreadcrumbComponent,
-    CatalogCardComponent
+    CatalogCardComponent,
+    StorageCatalogComponent
   ],
   imports: [
     FormsModule,
@@ -78,7 +79,6 @@ import { CatalogService } from './services/catalog/catalog.service';
     ProgressService,
 
     StorageService,
-    StorageStateService,
     CatalogService
   ],
   bootstrap: [AppComponent]

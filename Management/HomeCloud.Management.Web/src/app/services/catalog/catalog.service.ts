@@ -3,19 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
-import { RelationArray } from '../../models/http/relation-array';
 import { PagedArray } from '../../models/paged-array';
 import { Catalog } from '../../models/catalog';
 import { StorageData } from '../../models/storage-data';
 import { CatalogStateChanged } from '../../models/catalog-state-changed';
 
 import { HttpService } from '../http/http.service';
-import { ResourceArray } from '../../models/http/resource-array';
+import { CatalogRelation } from '../../models/catalog-relation';
 
 const catalogUrl: string = "http://localhost:54832/v1/catalogs/";
 
 @Injectable()
-export class CatalogService extends HttpService<RelationArray, Catalog> {
+export class CatalogService extends HttpService<CatalogRelation, Catalog> {
 
   private stateChangedSource: Subject<CatalogStateChanged> = new Subject<CatalogStateChanged>();
 
@@ -27,5 +26,11 @@ export class CatalogService extends HttpService<RelationArray, Catalog> {
 
   public onStateChanged(args: CatalogStateChanged): void {
     this.stateChangedSource.next(args);
+  }
+
+  public catalogs(catalog: Catalog): Observable<PagedArray<Catalog>> {
+    return this.relations<Catalog>(catalog._links.catalogs).map(data => {
+      return this.map(data);
+    });
   }
 }

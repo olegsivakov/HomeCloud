@@ -10,12 +10,12 @@ import { CatalogStateChanged } from '../../../models/catalog-state-changed';
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
 
-import { StorageStateService } from '../../../services/storage-state/storage-state.service';
 import { CatalogService } from '../../../services/catalog/catalog.service';
 
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
+import { StorageService } from '../../../services/storage/storage.service';
 
 @Component({
   selector: 'app-catalog-list',
@@ -24,9 +24,11 @@ import { ProgressService } from '../../../services/shared/progress/progress.serv
 })
 export class CatalogListComponent implements OnInit, OnDestroy {
 
-  private catalog: Catalog = null;
+  private catalog: Catalog = new Catalog();
 
   private data: PagedArray<StorageData> = new PagedArray<StorageData>();
+
+  private storageSelectedSubscription: ISubscription = null;
 
   private loadSubscription: ISubscription = null;
   private updateSubscription: ISubscription = null;
@@ -36,23 +38,24 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService,
     private progressService: ProgressService,
-    private storageStateService: StorageStateService,
+    private storageService: StorageService,
     private catalogService: CatalogService) {
+
+      this.storageSelectedSubscription = this.storageService.storageSelected$.subscribe(storage => {
+        Object.assign(this.catalog, storage);
+
+        this.open(this.catalog);
+      });
   }
 
   ngOnInit() {
- 
-    this.catalog = new Catalog();
-    Object.assign(this.catalog, this.storageStateService.storage);
-
-    this.open(this.catalog);
   }
 
   private open(catalog: Catalog) {
     this.progressService.show();
     this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.open));
 
-    this.loadSubscription = this.catalogService.list(20).subscribe(data => {
+    this.loadSubscription = this.catalogService.catalogs(catalog).subscribe(data => {
 
       this.data = data;
 
@@ -124,6 +127,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.storageSelectedSubscription) {
+      this.storageSelectedSubscription.unsubscribe();
+      this.storageSelectedSubscription = null;
+    }
+
     if (this.loadSubscription) {
       this.loadSubscription.unsubscribe();
       this.loadSubscription = null;

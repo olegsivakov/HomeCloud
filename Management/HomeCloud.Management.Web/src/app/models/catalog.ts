@@ -1,9 +1,9 @@
 import { StorageData } from "./storage-data";
 import { Resource } from "./http/resource";
-import { RelationArray } from "./http/relation-array";
+import { CatalogRelation } from "./catalog-relation";
 
 export class Catalog
-    extends Resource<RelationArray>
+    extends Resource<CatalogRelation>
     implements StorageData {
 
   public id: string = "";
@@ -13,7 +13,11 @@ export class Catalog
   public creationDate: Date = new Date();
 
   constructor() {
-      super(RelationArray);
+      super(CatalogRelation);
+  }
+
+  public hasCatalogs(): boolean {
+    return this._links.catalogs != null;
   }
 }
   
