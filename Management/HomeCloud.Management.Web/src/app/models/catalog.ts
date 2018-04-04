@@ -3,7 +3,7 @@ import { Resource } from "./http/resource";
 import { CatalogRelation } from "./catalog-relation";
 
 export class Catalog
-    extends Resource<CatalogRelation>
+    extends Resource
     implements StorageData {
 
   public id: string = "";
@@ -17,7 +17,7 @@ export class Catalog
   }
 
   public hasCatalogs(): boolean {
-    return this._links.catalogs != null;
+    return (this._links as CatalogRelation).catalogs != null;
   }
 }
   

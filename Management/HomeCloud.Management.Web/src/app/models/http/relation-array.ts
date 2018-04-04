@@ -1,23 +1,23 @@
 import { Relation } from "./relation";
 
 export class RelationArray {
-    public self: Relation = null;
+    public self: Relation = new Relation();
 
-    public get: Relation = null;
+    public get: Relation = new Relation();
 
-    public create: Relation = null;
+    public create: Relation = new Relation();
 
-    public update: Relation = null;
+    public update: Relation = new Relation();
 
-    public delete: Relation = null;
+    public delete: Relation = new Relation();
 
-    public list: Relation = null;
+    public list: Relation = new Relation();
 
-    public exists: Relation = null;
+    public exists: Relation = new Relation();
 
-    public next: Relation = null;
+    public next: Relation = new Relation();
 
-    public previous: Relation = null;
+    public previous: Relation = new Relation();
 
-    public items: Array<Relation> = null;
+    public items: Array<Relation> = new Array<Relation>();
 }

@@ -10,27 +10,36 @@ import { CatalogStateChanged } from '../../models/catalog-state-changed';
 
 import { HttpService } from '../http/http.service';
 import { CatalogRelation } from '../../models/catalog-relation';
+import { ResourceService } from '../resource/resource.service';
 
-const catalogUrl: string = "http://localhost:54832/v1/catalogs/";
+import 'rxjs/add/observable/throw';
 
 @Injectable()
-export class CatalogService extends HttpService<CatalogRelation, Catalog> {
+export class CatalogService extends HttpService<Catalog> {
 
   private stateChangedSource: Subject<CatalogStateChanged> = new Subject<CatalogStateChanged>();
 
   stateChanged$ = this.stateChangedSource.asObservable();
 
-  constructor(protected httpClient: HttpClient) {    
-    super(httpClient, catalogUrl);
+  constructor(protected resourceService: ResourceService) {    
+    super(Catalog, resourceService);
   }
 
   public onStateChanged(args: CatalogStateChanged): void {
     this.stateChangedSource.next(args);
   }
 
-  public catalogs(catalog: Catalog): Observable<PagedArray<Catalog>> {
-    return this.relations<Catalog>(catalog._links.catalogs).map(data => {
-      return this.map(data);
-    });
+  public list(catalog: Catalog): Observable<PagedArray<Catalog>>;
+  public list(catalog: any): Observable<PagedArray<Catalog>>;
+  public list(catalog: Catalog | any): Observable<PagedArray<Catalog>> {
+    if (catalog instanceof Catalog) {
+      let relation = (catalog._links as CatalogRelation).catalogs;
+
+      return this.relation<Catalog>(Catalog, relation).map(data => {
+        return this.map(data);
+      });
+    }
+    
+    return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
   }
 }

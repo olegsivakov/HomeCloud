@@ -1,76 +1,80 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpResponse } from '@angular/common/http/src/response';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { IResource } from '../../models/http/resource';
 import { ResourceArray } from '../../models/http/resource-array';
+import { Relation } from '../../models/http/relation';
+import { HttpMethod } from '../../models/http/http-method';
 import { PagedArray } from '../../models/paged-array';
 
-import { Relation } from '../../models/http/relation';
-import { RelationArray } from '../../models/http/relation-array';
-import { HttpMethod } from '../../models/http/http-method';
-
-import 'rxjs/add/observable/throw';
+import { ResourceService } from '../resource/resource.service';
 
 @Injectable()
-export class HttpService<TRelations extends RelationArray, T extends IResource<TRelations>> {
+export class HttpService<T extends IResource> {
 
-  protected resourceArray: ResourceArray<T> = new ResourceArray<T>();
+  protected resources: ResourceArray<T> = new ResourceArray<T>();
 
   constructor(
-    protected httpClient: HttpClient,
-    protected resourceUrl: string) { }
+    protected type: new() => T,
+    protected resourceService: ResourceService,
+    protected resourceUrl?: string) {
+    }
 
-  public list(limit: number): Observable<PagedArray<T>> {
+  public load(resources: ResourceArray<T>): void {
+    this.resources = resources;
+  }
+
+  public list(limit: number): Observable<PagedArray<T>>;
+  public list(limit: number | any): Observable<PagedArray<T>> {
     let relation: Relation = new Relation();
     relation.href = this.resourceUrl + "?limit=" + limit;
     relation.type = "application/json";
     relation.method = HttpMethod.get;
-  
-    return this.request<ResourceArray<T>>(relation).map(response => {
-      return this.map(response);
+
+    return this.resourceService.request<T>(this.type, relation).map(resource => {
+      return this.map(resource);
     });
   }
 
   public hasNext(): boolean {
-    return this.resourceArray.hasNext();
+    return this.resources.hasNext();
   }
 
   public next(): Observable<PagedArray<T>> {
-    return this.request<ResourceArray<T>>(this.resourceArray._links.next).map(response => {
-      return this.map(response);
+    return this.resourceService.request<T>(this.type, this.resources._links.next).map(resource => {
+      return this.map(resource);
     });
   }
 
   public hasPrevious(): boolean {
-    return this.resourceArray.hasPrevious();
+    return this.resources.hasPrevious();
   }
 
   public previous(): Observable<PagedArray<T>> {
-    return this.request<ResourceArray<T>>(this.resourceArray._links.previous).map(response => {
-      return this.map(response);
+    return this.resourceService.request<T>(this.type, this.resources._links.previous).map(resource => {
+      return this.map(resource);
     });
   }
 
   public hasCreate(): boolean {
-    return this.resourceArray.hasCreate();
+    return this.resources.hasCreate();
   }
 
   public create(entity: T): Observable<T> {
-    return this.request<T>(this.resourceArray._links.create, entity).map(response => {
-      return response.body;
+    return this.resourceService.request<T>(this.type, this.resources._links.create, entity).map(resource => {
+      return resource as T;
     });
   }
 
   public hasItem(index: number): boolean {
-    return this.resourceArray.hasItem(index);
+    return this.resources.hasItem(index);
   }
 
   public item(index: number): Observable<T> {
     if (this.hasItem(index)) {
-      return this.request<T>(this.resourceArray._links.items[index], index).map(response => {
-        return response.body;
+      return this.resourceService.request<T>(this.type, this.resources._links.items[index], index).map(resource => {
+        return resource as T;
       });
     }
 
@@ -79,109 +83,52 @@ export class HttpService<TRelations extends RelationArray, T extends IResource<T
   }
 
   public get<TResult extends T>(entity: T): Observable<TResult> {
-    return this.request<TResult>(entity._links.get).map(response => {
-      return response.body;
+    let resultType: new() => TResult;
+
+    return this.resourceService.request<TResult>(resultType, entity._links.get).map(resource => {
+      return resource as TResult;
     });
   }
 
   public update(entity: T): Observable<T> {
-    return this.request<T>(entity._links.update, entity).map(response => {
-      return response.body;
+    return this.resourceService.request<T>(this.type, entity._links.update, entity).map(resource => {
+      return resource as T;
     });
   }
 
   public delete(entity: T): Observable<T> {
-    return this.request<T>(entity._links.delete, entity).map(response => {
-      return response.body;
+    return this.resourceService.request<T>(this.type, entity._links.delete, entity).map(resource => {
+      return resource as T;
     });
   }
 
   public exists(entity: T): Observable<boolean> {
-    return this.request<T>(entity._links.exists, entity).map(response => {
-      return response.ok;
+    return this.resourceService.request<T>(this.type, entity._links.exists, entity).map(resource => {
+      return true;
     });
   }
 
-  public relation<TRelation>(relation: Relation): Observable<TRelation> {
-    return this.request<TRelation>(relation).map(response => {
-      return response.body;
+  public relation<TRelation extends IResource>(initializer: new() => TRelation, relation: Relation): Observable<IResource>;
+  public relation<TRelation extends IResource>(initializer: new() => TRelation, relation: string, resource?: IResource): Observable<IResource>;
+  public relation<TRelation extends IResource>(initializer: new() => TRelation, relation: string | Relation, resource?: IResource): Observable<IResource> {
+
+    if (relation instanceof String) {
+      return this.resourceService.request<TRelation>(initializer, (resource ? resource : this.resources)._links[relation]).map(resource => {
+        return resource;
+      });
+    }
+
+    return this.resourceService.request<TRelation>(initializer, relation).map(resource => {
+      return resource;
     });
   }
 
-  public relations<TRelation>(relation: Relation): Observable<ResourceArray<TRelation>> {
-    const totalCountHeader: string = "X-Total-Count";
-
-    return this.request<ResourceArray<TRelation>>(relation).map(response => {
-      response.body.items.totalCount = response.headers[totalCountHeader];
-
-      return response.body;
-    });
-  }
-  
-  protected map(response: ResourceArray<T> | HttpResponse<ResourceArray<T>>): PagedArray<T> {
-    const totalCountHeader: string = "X-Total-Count";
-
-    if (response instanceof ResourceArray) {
-      Object.assign(this.resourceArray, response);
-
-      return response.items;
-    }
-    else {
-      response.body.items.totalCount = response.headers[totalCountHeader];
-      Object.assign(this.resourceArray, response.body);
-
-      return response.body.items;
-    }
-    
-  }
-
-  private request<TResult>(relation: Relation, data?: any): Observable<HttpResponse<TResult>> {
-    if (!relation) {
-      return Observable.throw(new Error("Resource link is undefined"));
+  protected map<T>(resource: IResource): PagedArray<T> {
+    if (resource instanceof ResourceArray) {
+      this.load(resource);
+      return resource.items;
     }
 
-    switch (relation.method) {
-      case HttpMethod.get: {
-        return this.httpClient.get<TResult>(relation.href, {
-          headers: new HttpHeaders({"Content-Type": relation.type}),
-          observe: "response"
-        });
-      }
-
-      case HttpMethod.post: {        
-        return this.httpClient.post<TResult>(relation.href, data, {
-          headers: new HttpHeaders({"Content-Type": relation.type}),
-          observe: "response"
-        });
-      }
-
-      case HttpMethod.put: {
-        
-        return this.httpClient.put<TResult>(relation.href, data, {
-          headers: new HttpHeaders({"Content-Type": relation.type}),
-          observe: "response"
-        });
-      }
-
-      case HttpMethod.delete: {
-        
-        return this.httpClient.delete<TResult>(relation.href, {
-          headers: new HttpHeaders({"Content-Type": relation.type}),
-          observe: "response"
-        });
-      }
-
-      case HttpMethod.head: {
-        
-        return this.httpClient.head<TResult>(relation.href, {
-          headers: new HttpHeaders({"Content-Type": relation.type}),
-          observe: "response"
-        });
-      }
-
-      default: {
-        return Observable.throw(new Error("HTTP method is undefined"));
-      }
-    }
+    return new PagedArray<T>();
   }
 }

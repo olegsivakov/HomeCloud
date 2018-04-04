@@ -29,7 +29,7 @@ export class CatalogCardComponent implements OnInit {
   }
 
   private get canOpen(): boolean {
-    return true;
+    return this.catalog.hasCatalogs();
   }
 
   private onOpen(): void {

@@ -16,6 +16,7 @@ import { NotificationService } from '../../../services/shared/notification/notif
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
 import { StorageService } from '../../../services/storage/storage.service';
+import { CloneableService } from '../../../services/cloneable/cloneable.service';
 
 @Component({
   selector: 'app-catalog-list',
@@ -38,11 +39,12 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService,
     private progressService: ProgressService,
+    private cloneableService: CloneableService,
     private storageService: StorageService,
     private catalogService: CatalogService) {
 
       this.storageSelectedSubscription = this.storageService.storageSelected$.subscribe(storage => {
-        Object.assign(this.catalog, storage);
+        this.catalog = this.cloneableService.clone(Catalog, storage);
 
         this.open(this.catalog);
       });
@@ -55,7 +57,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     this.progressService.show();
     this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.open));
 
-    this.loadSubscription = this.catalogService.catalogs(catalog).subscribe(data => {
+    this.loadSubscription = this.catalogService.list(catalog).subscribe(data => {
 
       this.data = data;
 
