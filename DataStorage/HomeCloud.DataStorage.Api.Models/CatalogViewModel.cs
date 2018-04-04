@@ -9,24 +9,8 @@
 	/// <summary>
 	/// Represents catalog view model.
 	/// </summary>
-	public class CatalogViewModel
+	public class CatalogViewModel : DataViewModel
 	{
-		/// <summary>
-		/// Gets or sets the identifier.
-		/// </summary>
-		/// <value>
-		/// The identifier.
-		/// </value>
-		public Guid ID { get; set; }
-
-		/// <summary>
-		/// Gets or sets the name.
-		/// </summary>
-		/// <value>
-		/// The name.
-		/// </value>
-		public virtual string Name { get; set; }
-
 		/// <summary>
 		/// Gets or sets the creation date.
 		/// </summary>

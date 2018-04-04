@@ -2,8 +2,6 @@
 {
 	#region Usings
 
-	using System.IO;
-
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
@@ -12,10 +10,9 @@
 	#endregion
 
 	/// <summary>
-	/// Provides converter methods for <see cref="FileViewModel" /> entity.
+	/// Provides converter methods for <see cref="FileStreamViewModel" /> entity.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.Api.Models.FileViewModel}" />
-	public class FileViewModelConverter : ITypeConverter<CatalogEntry, FileViewModel>
+	public class FileStreamViewModelConverter : ITypeConverter<CatalogEntry, FileStreamViewModel>, ITypeConverter<FileStreamViewModel, CatalogEntry>
 	{
 		#region Private Members
 
@@ -32,14 +29,14 @@
 		/// Initializes a new instance of the <see cref="FileViewModelConverter"/> class.
 		/// </summary>
 		/// <param name="contentTypeProvider">The <see cref="IContentTypeProvider"/> provider.</param>
-		public FileViewModelConverter(IContentTypeProvider contentTypeProvider)
+		public FileStreamViewModelConverter(IContentTypeProvider contentTypeProvider)
 		{
 			this.contentTypeProvider = contentTypeProvider;
 		}
 
 		#endregion
 
-		#region ITypeConverter<CatalogEntry, FileViewModel> Implementations
+		#region ITypeConverter<CatalogEntry, FileStreamViewModel> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -51,12 +48,15 @@
 		/// </returns>
 		public FileViewModel Convert(CatalogEntry source, FileViewModel target)
 		{
-			target.ID = source.ID;
-			target.Name = Path.GetFileName(source.Path) ?? source.Name;
-			target.Size = source.Size.GetValueOrDefault();
-			target.CreationDate = source.CreationDate;
-			target.MimeType = this.contentTypeProvider?.GetContentType(source.Path);
+			return target;
+		}
 
+		#endregion
+
+		#region ITypeConverter<FileStreamViewModel, CatalogEntry> Implementations
+
+		public FileStreamViewModel Convert(CatalogEntry source, FileStreamViewModel target)
+		{
 			return target;
 		}
 
