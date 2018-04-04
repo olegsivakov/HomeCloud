@@ -52,7 +52,7 @@
 		public FileViewModel Convert(CatalogEntry source, FileViewModel target)
 		{
 			target.ID = source.ID;
-			target.Name = Path.GetFileName(source.Path) ?? source.Name;
+			target.Name = source.Name;
 			target.Size = source.Size.GetValueOrDefault();
 			target.CreationDate = source.CreationDate;
 			target.MimeType = this.contentTypeProvider?.GetContentType(source.Path);

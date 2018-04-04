@@ -5,8 +5,6 @@
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
-	using HomeCloud.Mvc.Providers;
-
 	#endregion
 
 	/// <summary>
@@ -16,28 +14,6 @@
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Catalog, HomeCloud.DataStorage.Api.Models.DataViewModel}" />
 	public class DataViewModelConverter : ITypeConverter<CatalogEntry, DataViewModel>, ITypeConverter<Catalog, DataViewModel>
 	{
-		#region Private Members
-
-	/// <summary>
-	/// The <see cref="IContentTypeProvider"/> provider.
-	/// </summary>
-	private IContentTypeProvider contentTypeProvider = null;
-
-		#endregion
-
-		#region Constructors
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataViewModelConverter" /> class.
-		/// </summary>
-		/// <param name="contentTypeProvider">The <see cref="IContentTypeProvider" /> provider.</param>
-		public DataViewModelConverter(IContentTypeProvider contentTypeProvider)
-		{
-			this.contentTypeProvider = contentTypeProvider;
-		}
-
-		#endregion
-
 		#region ITypeConverter<CatalogEntry, DataViewModel>
 
 		/// <summary>

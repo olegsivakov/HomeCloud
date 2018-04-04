@@ -46,8 +46,13 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public FileViewModel Convert(CatalogEntry source, FileViewModel target)
+		public FileStreamViewModel Convert(CatalogEntry source, FileStreamViewModel target)
 		{
+			target.FileName = source.Name;
+			target.Path = source.Path;
+			target.MimeType = !string.IsNullOrWhiteSpace(source.Path) ? this.contentTypeProvider?.GetContentType(source.Path) : null;
+			target.Size = source.Size.GetValueOrDefault();
+
 			return target;
 		}
 
@@ -55,8 +60,12 @@
 
 		#region ITypeConverter<FileStreamViewModel, CatalogEntry> Implementations
 
-		public FileStreamViewModel Convert(CatalogEntry source, FileStreamViewModel target)
+		public CatalogEntry Convert(FileStreamViewModel source, CatalogEntry target)
 		{
+			target.Name = source.FileName;
+			target.Size = source.Size;
+			target.Catalog = new Catalog();
+
 			return target;
 		}
 

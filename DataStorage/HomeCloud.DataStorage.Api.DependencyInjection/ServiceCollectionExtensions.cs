@@ -119,11 +119,11 @@
 			services.AddTypeConverter<ITypeConverter<Catalog, CatalogViewModel>, CatalogViewModelConverter>();
 			services.AddTypeConverter<ITypeConverter<CatalogViewModel, Catalog>, CatalogViewModelConverter>();
 
+			services.AddTypeConverter<ITypeConverter<Catalog, DataViewModel>, DataViewModelConverter>();
 			services.AddTypeConverter<ITypeConverter<CatalogEntry, DataViewModel>, DataViewModelConverter>();
-			services.AddTypeConverter<ITypeConverter<DataViewModel, CatalogEntry>, DataViewModelConverter>();
 
 			services.AddTypeConverter<ITypeConverter<CatalogEntry, FileViewModel>, FileViewModelConverter>();
-			services.AddTypeConverter<ITypeConverter<FileViewModel, CatalogEntry>, FileViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<FileStreamViewModel, CatalogEntry>, FileStreamViewModelConverter>();
 
 			return services;
 		}

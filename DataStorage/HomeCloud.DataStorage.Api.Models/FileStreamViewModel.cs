@@ -51,7 +51,7 @@
 		/// <value>
 		/// The MIME type.
 		/// </value>
-		[HttpHeader("Content-Type", HttpMethods.Head, HttpMethods.Get)]
+		[HttpHeader("Content-Type", HttpMethods.Head)]
 		[JsonIgnore]
 		public virtual string MimeType { get; set; }
 
@@ -61,7 +61,7 @@
 		/// <value>
 		/// The accept ranges.
 		/// </value>
-		[HttpHeader("Accept-Ranges", HttpMethods.Head, HttpMethods.Get)]
+		[HttpHeader("Accept-Ranges", HttpMethods.Head)]
 		[JsonIgnore]
 		public virtual string AcceptRanges { get; } = BinaryRange;
 
@@ -71,7 +71,7 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		[HttpHeader("Content-Length", HttpMethods.Head, HttpMethods.Get)]
+		[HttpHeader("Content-Length", HttpMethods.Head)]
 		[JsonIgnore]
 		public virtual long Size { get; set; }
 
