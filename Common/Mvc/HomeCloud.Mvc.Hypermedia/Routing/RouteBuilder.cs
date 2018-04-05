@@ -25,7 +25,7 @@
 		/// <summary>
 		/// The link route collection.
 		/// </summary>
-		private readonly IList<Route> routes = new List<Route>();
+		private readonly IList<RelationRoute> routes = new List<RelationRoute>();
 
 		#endregion
 
@@ -75,26 +75,38 @@
 				throw new ArgumentNullException(nameof(relation));
 			}
 
-			if (this.routes.Any(route => route.Name.ToLower() == relation.ToLower()))
+			if (string.IsNullOrWhiteSpace(routeName))
 			{
-				throw new DuplicateNameException(relation);
+				throw new ArgumentNullException(nameof(routeName));
 			}
 
-			this.routes.Add(new Route()
+			RelationRoute route = this.routes.FirstOrDefault(item => item.Name.ToLower() == relation.ToLower());
+			if (route is null)
 			{
-				Name = relation,
-				RouteName = routeName,
-				RouteValues = model => routeValues != null && model is T ? routeValues(model as T) : null,
-				Condition = model =>
+				route = new RelationRoute()
 				{
-					if (model is T)
-					{
-						return condition is null || condition(model as T);
-					}
+					Name = relation
+				};
+				this.routes.Add(route);
+			}
 
-					return false;
-				}
-			});
+			if (!route.Routes.Any(item => item.RouteName.ToLower() == routeName.ToLower()))
+			{
+				route.Routes.Add(new Route()
+				{
+					RouteName = routeName,
+					RouteValues = model => routeValues != null && model is T ? routeValues(model as T) : null,
+					Condition = model =>
+					{
+						if (model is T)
+						{
+							return condition is null || condition(model as T);
+						}
+
+						return false;
+					}
+				});
+			}
 
 			return this;
 		}
@@ -107,12 +119,13 @@
 		/// <param name="relation">The link relation name. According to <see cref="!:HATEOAS" /> the value corresponds to <see cref="!:Link.Relation" />.</param>
 		/// <param name="routeName">The route name of an action the link is being generated for.</param>
 		/// <param name="routeValues">The route values required by an action the link is being generated for.</param>
+		/// <param name="condition">The value defining whether the link should be generated.</param>
 		/// <returns>
 		/// The instance of<see cref="IRouteBuilder" />.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">relation</exception>
 		/// <exception cref="DuplicateNameException"></exception>
-		public IRouteBuilder AddRoute<TList, T>(string relation, string routeName, Func<T, object> routeValues)
+		public IRouteBuilder AddRoute<TList, T>(string relation, string routeName, Func<T, object> routeValues, Func<T, bool> condition = null)
 			where TList : class, IEnumerable<T>
 			where T : class
 		{
@@ -121,18 +134,30 @@
 				throw new ArgumentNullException(nameof(relation));
 			}
 
-			if (this.routes.Any(route => route.Name.ToLower() == relation.ToLower()))
+			if (string.IsNullOrWhiteSpace(routeName))
 			{
-				throw new DuplicateNameException(relation);
+				throw new ArgumentNullException(nameof(routeName));
 			}
 
-			this.routes.Add(new Route()
+			RelationRoute route = this.routes.FirstOrDefault(item => item.Name.ToLower() == relation.ToLower());
+			if (route is null)
 			{
-				Name = relation,
-				RouteName = routeName,
-				RouteValues = model => routeValues != null && model is T ? routeValues(model as T) : null,
-				Condition = model => model is T
-			});
+				route = new RelationRoute()
+				{
+					Name = relation
+				};
+				this.routes.Add(route);
+			}
+
+			if (!route.Routes.Any(item => item.RouteName.ToLower() == routeName.ToLower()))
+			{
+				route.Routes.Add(new Route()
+				{
+					RouteName = routeName,
+					RouteValues = model => routeValues != null && model is T ? routeValues(model as T) : null,
+					Condition = model => model is T && (condition is null ? true : condition(model as T))
+				});
+			}
 
 			return this;
 		}

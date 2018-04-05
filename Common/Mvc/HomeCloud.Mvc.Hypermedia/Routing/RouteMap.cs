@@ -19,7 +19,7 @@
 		/// <summary>
 		/// The mapping container.
 		/// </summary>
-		private readonly IDictionary<string, IEnumerable<Route>> container = new Dictionary<string, IEnumerable<Route>>();
+		private readonly IDictionary<string, IEnumerable<RelationRoute>> container = new Dictionary<string, IEnumerable<RelationRoute>>();
 
 		/// <summary>
 		/// The builders
@@ -59,8 +59,8 @@
 		/// Adds mapping of the route collection and route specified by name to the current instance.
 		/// </summary>
 		/// <param name="routeName">The route name.</param>
-		/// <param name="routes">The collection of <see cref="T:HomeCloud.Mvc.Hypermedia.Routing.Route" />.</param>
-		public void MapRoutes(string routeName, IEnumerable<Route> routes)
+		/// <param name="routes">The collection of <see cref="T:HomeCloud.Mvc.Hypermedia.Routing.RelationRoute" />.</param>
+		public void MapRoutes(string routeName, IEnumerable<RelationRoute> routes)
 		{
 			if (routeName != null && routes.Any())
 			{
@@ -81,14 +81,14 @@
 		/// </summary>
 		/// <param name="routeName">The route name.</param>
 		/// <returns>
-		/// The list of <see cref="T:HomeCloud.Mvc.Hypermedia.Routing.Route" />.
+		/// The list of <see cref="T:HomeCloud.Mvc.Hypermedia.Routing.RelationRoute" />.
 		/// </returns>
-		public IEnumerable<Route> GetRoutes(string routeName)
+		public IEnumerable<RelationRoute> GetRoutes(string routeName)
 		{
 			routeName = routeName?.ToLower();
 			if (!this.container.ContainsKey(routeName))
 			{
-				return Enumerable.Empty<Route>();
+				return Enumerable.Empty<RelationRoute>();
 			}
 
 			return this.container[routeName];

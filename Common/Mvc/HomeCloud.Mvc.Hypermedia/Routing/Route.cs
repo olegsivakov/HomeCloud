@@ -7,18 +7,10 @@
 	#endregion
 
 	/// <summary>
-	/// Represents the hypermedia route.
+	/// Represents the route.
 	/// </summary>
 	public class Route
 	{
-		/// <summary>
-		/// Gets or sets the link name.
-		/// </summary>
-		/// <value>
-		/// The link name.
-		/// </value>
-		public string Name { get; set; }
-
 		/// <summary>
 		/// Gets or sets the route name for the link.
 		/// </summary>

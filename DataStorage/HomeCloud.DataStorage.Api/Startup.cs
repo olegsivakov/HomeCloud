@@ -107,8 +107,7 @@
 						.AddRoute<StorageViewModel>("self", nameof(StorageController.GetStorageByID), model => new { id = model.ID })
 						.AddRoute<StorageViewModel>("update", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
 						.AddRoute<StorageViewModel>("delete", nameof(StorageController.DeleteStorage), model => new { id = model.ID })
-						.AddRoute<StorageViewModel>("catalogs", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ID, offset = 0, limit = 20 })
-						.AddRoute<StorageViewModel>("data", nameof(DataController.GetDataList), model => new { catalogID = model.ID, offset = 0, limit = 20 });
+						.AddRoute<StorageViewModel>("catalog", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(StorageController.CreateStorage))
 						.AddRoute<StorageViewModel>("self", nameof(StorageController.CreateStorage), null)
@@ -118,38 +117,37 @@
 						.AddRoute<StorageViewModel>("self", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
 						.AddRoute<StorageViewModel>("get", nameof(StorageController.GetStorageByID), model => new { id = model.ID });
 
-				routes.AddRoute(nameof(CatalogController.GetCatalogList))
-						.AddRoute<CatalogListViewModel>("self", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset, limit = model.Size })
-						.AddRoute<CatalogListViewModel>("previous", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRoute<CatalogListViewModel>("next", nameof(CatalogController.GetCatalogList), model => new { parentID = model.ParentID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRoute<CatalogListViewModel>("create", nameof(CatalogController.CreateCatalog), model => new { parentID = model.ParentID });
+				routes.AddRoute(nameof(CatalogController.GetCatalogDataList))
+						.AddRoute<DataListViewModel>("self", nameof(CatalogController.GetCatalogDataList), model => new { id = model.CatalogID, offset = model.Offset, limit = model.Size })
+						.AddRoute<DataListViewModel>("previous", nameof(CatalogController.GetCatalogDataList), model => new { id = model.CatalogID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<DataListViewModel>("next", nameof(CatalogController.GetCatalogDataList), model => new { id = model.CatalogID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<DataListViewModel>("createCatalog", nameof(CatalogController.CreateCatalog), model => new { catalogID = model.CatalogID })
+						.AddRoute<DataListViewModel>("createFile", nameof(FileController.CreateFile), model => new { catalogID = model.CatalogID })
+						.AddRoute<DataListViewModel, DataViewModel>("items", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID }, model => model.IsCatalog)
+						.AddRoute<DataListViewModel, DataViewModel>("items", nameof(FileController.GetFileByID), model => new { id = model.ID }, model => !model.IsCatalog);
 
 				routes.AddRoute(nameof(CatalogController.GetCatalogByID))
 						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("update", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
-						.AddRoute<CatalogViewModel>("delete", nameof(CatalogController.DeleteCatalog), model => new { id = model.ID });
+						.AddRoute<CatalogViewModel>("delete", nameof(CatalogController.DeleteCatalog), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("data", nameof(CatalogController.GetCatalogDataList), model => new { id = model.ID, offset = 0, limit = 20 }); ;
 
 				routes.AddRoute(nameof(CatalogController.CreateCatalog))
-						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.CreateCatalog), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.UpdateCatalog))
-						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
-				routes.AddRoute(nameof(DataController.GetDataList))
-						.AddRoute<DataListViewModel>("self", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset, limit = model.Size })
-						.AddRoute<DataListViewModel>("previous", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRoute<DataListViewModel>("next", nameof(DataController.GetDataList), model => new { catalogID = model.CatalogID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRoute<DataListViewModel>("create", nameof(DataController.CreateData), model => new { catalogID = model.CatalogID });
+				routes.AddRoute(nameof(FileController.GetFileByID))
+						.AddRoute<DataViewModel>("self", nameof(FileController.GetFileByID), model => new { id = model.ID })
+						.AddRoute<DataViewModel>("download", nameof(FileController.DownloadFileByID), model => new { id = model.ID })
+						.AddRoute<DataViewModel>("delete", nameof(FileController.DeleteFile), model => new { id = model.ID });
 
-				routes.AddRoute(nameof(DataController.GetDataByID))
-						.AddRoute<DataViewModel>("self", nameof(DataController.GetDataByID), model => new { id = model.ID })
-						.AddRoute<DataViewModel>("delete", nameof(DataController.DeleteData), model => new { id = model.ID });
-
-				routes.AddRoute(nameof(DataController.CreateData))
-						.AddRoute<DataViewModel>("self", nameof(DataController.GetDataByID), model => new { id = model.ID })
-						.AddRoute<DataViewModel>("get", nameof(DataController.GetDataByID), model => new { id = model.ID });
+				routes.AddRoute(nameof(FileController.CreateFile))
+						.AddRoute<DataViewModel>("self", nameof(FileController.CreateFile), model => new { id = model.ID })
+						.AddRoute<DataViewModel>("get", nameof(FileController.GetFileByID), model => new { id = model.ID });
 			});
 
 			application.UseMvc();

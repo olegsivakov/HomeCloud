@@ -49,6 +49,8 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 
+			target.IsCatalog = true;
+
 			return target;
 		}
 

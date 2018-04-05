@@ -56,26 +56,26 @@
 		#endregion
 
 		/// <summary>
-		/// Gets the list of catalog models by specified parent catalog identifier.
+		/// Gets the list of data models by specified catalog identifier.
 		/// </summary>
-		/// <param name="parentID">The parent catalog identifier.</param>
+		/// <param name="id">The catalog identifier.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="limit">The limit.</param>
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the list of instances of <see cref="CatalogViewModel" />.
 		/// </returns>
-		[HttpGet("v1/[controller]s/{parentID}", Name = nameof(CatalogController.GetCatalogList))]
+		[HttpGet("v1/[controller]s/{id}/data", Name = nameof(CatalogController.GetCatalogDataList))]
 		[ContentType(MimeTypes.Application.Json)]
-		public async Task<IActionResult> GetCatalogList(
-			[RequireNonDefault(ErrorMessage = "The parent catalog identifier is empty")] Guid parentID,
+		public async Task<IActionResult> GetCatalogDataList(
+			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid id,
 			[Range(0, int.MaxValue, ErrorMessage = "The offset parameter should be positive number.")] int offset,
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
-			ServiceResult<IPaginable<Catalog>> result = await this.catalogService.GetCatalogsAsync(parentID, offset, limit);
-			IEnumerable<CatalogViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;
+			ServiceResult<IPaginable<Catalog>> result = await this.catalogService.GetCatalogsAsync(id, offset, limit);
+			IEnumerable<DataViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, DataViewModel>(result.Data) : null;
 
 			return this.HttpResult(
-				new CatalogListViewModel(data, parentID)
+				new DataListViewModel(data, id)
 				{
 					Offset = result.Data?.Offset ?? offset,
 					Size = result.Data?.Limit ?? limit,
@@ -91,7 +91,7 @@
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
 		/// </returns>
-		[HttpGet("v1/[controller]s/{parentID}/{id}", Name = nameof(CatalogController.GetCatalogByID))]
+		[HttpGet("v1/[controller]s/{id}", Name = nameof(CatalogController.GetCatalogByID))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetCatalogByID(
 			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid id)
@@ -105,19 +105,19 @@
 		/// <summary>
 		/// Creates the specified catalog model.
 		/// </summary>
-		/// <param name="parentID">The parent catalog model identifier.</param>
+		/// <param name="catalogID">The catalog model identifier.</param>
 		/// <param name="model">The model of <see cref="CatalogViewModel" />.</param>
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
 		/// </returns>
-		[HttpPost("v1/[controller]s/{parentID}", Name = nameof(CatalogController.CreateCatalog))]
+		[HttpPost("v1/[controller]s/{catalogID}", Name = nameof(CatalogController.CreateCatalog))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> CreateCatalog(
-			[RequireNonDefault(ErrorMessage = "The parent catalog identifier is empty")] Guid parentID,
+			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid catalogID,
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] CatalogViewModel model)
 		{
 			Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
-			entity.Parent.ID = parentID;
+			entity.Parent.ID = catalogID;
 
 			ServiceResult<Catalog> result = await this.catalogService.CreateCatalogAsync(entity);
 			CatalogViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;
@@ -128,22 +128,19 @@
 		/// <summary>
 		/// Updates the existing catalog model by the specified identifier.
 		/// </summary>
-		/// <param name="parentID">The parent catalog model identifier.</param>
-		/// <param name="id">The unique identifier.</param>
+		/// <param name="id">The catalog unique identifier.</param>
 		/// <param name="model">The model of <see cref="CatalogViewModel" />.</param>
 		/// <returns>
 		/// The asynchronous result of <see cref="IActionResult" /> containing the instance of <see cref="CatalogViewModel" />.
 		/// </returns>
-		[HttpPut("v1/[controller]s/{parentID}/{id}", Name = nameof(CatalogController.UpdateCatalog))]
+		[HttpPut("v1/[controller]s/{id}", Name = nameof(CatalogController.UpdateCatalog))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> UpdateCatalog(
-			[RequireNonDefault(ErrorMessage = "The parent catalog identifier is empty")] Guid parentID,
 			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid id,
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] CatalogViewModel model)
 		{
 			Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
 			entity.ID = id;
-			entity.Parent.ID = parentID;
 
 			ServiceResult<Catalog> result = await this.catalogService.UpdateCatalogAsync(entity);
 			CatalogViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;

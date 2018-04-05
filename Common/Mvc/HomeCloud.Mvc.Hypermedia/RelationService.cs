@@ -77,15 +77,16 @@
 		{
 			List<IRelation> result = new List<IRelation>();
 
-			IEnumerable<Route> routes = this.routes.GetRoutes(routeName);
+			IEnumerable<RelationRoute> routes = this.routes.GetRoutes(routeName);
 
-			result.AddRange(routes.Where(route => route.Condition(model)).Select(route =>
+			result.AddRange(routes.Where(relationRoute => (relationRoute.Routes.FirstOrDefault()?.Condition(model)).GetValueOrDefault()).Select(relationRoute =>
 			{
+				Route route = relationRoute.Routes.FirstOrDefault();
 				IEnumerable<IActionConstraintMetadata> constraints = this.GetActionConstraints(route);
 
 				return new Relation()
 				{
-					Name = route.Name,
+					Name = relationRoute.Name,
 					Link = this.CreateLink(route, constraints, model)
 				};
 			}));
@@ -94,14 +95,23 @@
 			{
 				IEnumerable<object> items = (model as IEnumerable).Cast<object>();
 
-				result.AddRange(routes.Where(route => items.Any(item => route.Condition(item))).Select(route =>
+				result.AddRange(routes.Where(relationRoute => items.Any(item => relationRoute.Routes.Any(route => route.Condition(item)))).Select(relationRoute =>
 				{
-					IEnumerable<IActionConstraintMetadata> constraints = this.GetActionConstraints(route);
+					List<Link> links = new List<Link>();
+					foreach (object item in items)
+					{
+						links.AddRange(relationRoute.Routes.Where(route => route.Condition(item)).Select(itemRoute =>
+						{
+							IEnumerable<IActionConstraintMetadata> constraints = this.GetActionConstraints(itemRoute);
+
+							return this.CreateLink(itemRoute, constraints, item);
+						}));
+					}
 
 					return new RelationList()
 					{
-						Name = route.Name,
-						Links = items.Where(item => route.Condition(item)).Select(item => this.CreateLink(route, constraints, item))
+						Name = relationRoute.Name,
+						Links = links
 					};
 				}).Where(relation => relation.Links.Any()));
 			}

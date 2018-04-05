@@ -46,6 +46,18 @@
 		/// </value>
 		public virtual long Size { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is catalog.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is catalog; otherwise, <c>false</c>.
+		/// </value>
+		public override bool IsCatalog
+		{
+			get => base.IsCatalog = false;
+			set => base.IsCatalog = false;
+		}
+
 		#endregion
 	}
 }

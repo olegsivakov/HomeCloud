@@ -26,5 +26,13 @@
 		/// The name.
 		/// </value>
 		public virtual string Name { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is catalog.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is catalog; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsCatalog { get; set; }
 	}
 }

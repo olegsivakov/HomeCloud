@@ -40,10 +40,11 @@
 		/// <param name="relation">The link relation name. According to <see cref="!:HATEOAS" /> the value corresponds to <see cref="!:Link.Relation" />.</param>
 		/// <param name="routeName">The route name of an action the link is being generated for.</param>
 		/// <param name="routeValues">The route values required by an action the link is being generated for.</param>
+		/// <param name="condition">The value defining whether the link should be generated.</param>
 		/// <returns>
 		/// The instance of<see cref="IRouteBuilder" />.
 		/// </returns>
-		IRouteBuilder AddRoute<TList, T>(string relation, string routeName, Func<T, object> routeValues)
+		IRouteBuilder AddRoute<TList, T>(string relation, string routeName, Func<T, object> routeValues, Func<T, bool> condition = null)
 			where TList : class, IEnumerable<T>
 			where T : class;
 
