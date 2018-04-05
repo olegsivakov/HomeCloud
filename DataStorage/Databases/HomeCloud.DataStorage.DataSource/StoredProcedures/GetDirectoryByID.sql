@@ -13,14 +13,22 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		[ID],
-		[ParentID],
-		[Name],
-		[CreationDate],
-		[UpdatedDate]
-	FROM [dbo].[Directory] WITH(NOLOCK)
+		directory.[ID],
+		directory.[ParentID],
+		CASE
+			WHEN
+				directory.[ParentID] IS NULL AND storage.[Name] IS NOT NULL
+			THEN
+				storage.[Name]
+			ELSE
+				directory.[Name]
+			END AS [Name],
+		directory.[CreationDate],
+		directory.[UpdatedDate]
+	FROM [dbo].[Directory] directory WITH(NOLOCK)
+		LEFT OUTER JOIN [dbo].[Storage] storage WITH(NOLOCK) ON directory.ID = storage.ID
 	WHERE
-		ID = @local_ID
+		directory.ID = @local_ID
 END
 GO
 

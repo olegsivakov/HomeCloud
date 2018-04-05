@@ -19,28 +19,39 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		[ID],
-		[ParentID],
-		[Name],
-		[CreationDate],
-		[UpdatedDate]
-	FROM [dbo].[Directory] WITH(NOLOCK)
+		directory.[ID],
+		directory.[ParentID],
+		CASE
+			WHEN
+				directory.[ParentID] IS NULL AND storage.[Name] IS NOT NULL
+			THEN
+				storage.[Name]
+			ELSE
+				directory.[Name]
+			END AS [Name],
+		directory.[CreationDate],
+		directory.[UpdatedDate]
+	FROM [dbo].[Directory] directory WITH(NOLOCK)
+		LEFT OUTER JOIN [dbo].[Storage] storage WITH(NOLOCK) ON directory.ID = storage.ID
 	WHERE
 		(
 			(
 				@local_ParentID IS NULL
-				AND [ParentID] IS NULL
+				AND directory.[ParentID] IS NULL
 			)
 			OR
-			[ParentID] = @local_ParentID
+			directory.[ParentID] = @local_ParentID
 		)
 		AND
 		(
 			@local_Name IS NULL
-			OR
-			[Name] = @local_Name
+			OR (
+				directory.[Name] = @local_Name
+				OR
+				storage.[Name] = @local_Name
+			)
 		)
-	ORDER BY [Name] ASC
+	ORDER BY directory.[Name] ASC
 	OFFSET (@local_StartIndex * @local_ChunkSize) ROWS
 	FETCH NEXT @local_ChunkSize ROWS ONLY
 END

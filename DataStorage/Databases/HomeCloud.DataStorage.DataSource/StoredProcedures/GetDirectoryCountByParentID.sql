@@ -16,21 +16,25 @@ BEGIN
 
 	SELECT
 		COUNT(1)
-	FROM [dbo].[Directory] WITH(NOLOCK)
+	FROM [dbo].[Directory] directory WITH(NOLOCK)
+		LEFT OUTER JOIN [dbo].[Storage] storage WITH(NOLOCK) ON directory.ID = storage.ID
 	WHERE
 		(
 			(
 				@local_ParentID IS NULL
-				AND [ParentID] IS NULL
+				AND directory.[ParentID] IS NULL
 			)
 			OR
-			[ParentID] = @local_ParentID
+			directory.[ParentID] = @local_ParentID
 		)
 		AND
 		(
 			@local_Name IS NULL
-			OR
-			[Name] = @local_Name
+			OR (
+				directory.[Name] = @local_Name
+				OR
+				storage.[Name] = @local_Name
+			)
 		)
 END
 GO
