@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { StorageService } from '../../services/storage/storage.service';
+import { ISubscription } from 'rxjs/Subscription';
+
 import { PagedArray } from '../../models/paged-array';
 import { Storage } from '../../models/storage';
-import { CatalogStateChanged } from '../../models/catalog-state-changed';
 import { Catalog } from '../../models/catalog';
-import { CatalogService } from '../../services/catalog/catalog.service';
 import { CatalogState } from '../../models/catalog-state';
-import { ISubscription } from 'rxjs/Subscription';
+import { CatalogStateChanged } from '../../models/catalog-state-changed';
+
+import { StorageService } from '../../services/storage/storage.service';
+import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-navigation',
