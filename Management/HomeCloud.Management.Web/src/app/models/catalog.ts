@@ -1,10 +1,10 @@
 import { StorageData } from "./storage-data";
 import { Resource } from "./http/resource";
 import { CatalogRelation } from "./catalog-relation";
+import { Relation } from "./http/relation";
 
 export class Catalog
-    extends Resource
-    implements StorageData {
+    extends StorageData {
 
   public id: string = "";
   public name: string = "";
@@ -16,8 +16,9 @@ export class Catalog
       super(CatalogRelation);
   }
 
-  public hasCatalogs(): boolean {
-    return (this._links as CatalogRelation).catalogs != null;
+  public hasData(): boolean {
+    let relation: Relation = (this._links as CatalogRelation).data;
+    return relation != null && !relation.isEmpty();
   }
 }
   

@@ -15,21 +15,17 @@ const storageUrl: string = "http://localhost:54832/v1/storages";
 @Injectable()
 export class StorageService extends HttpService<Storage> {
 
-  private storageSelectedSource: Subject<Storage> = new Subject<Storage>();
+  private catalogSelectedSource: Subject<Catalog> = new Subject<Catalog>();
 
-  storageSelected$ = this.storageSelectedSource.asObservable();
+  catalogSelected$ = this.catalogSelectedSource.asObservable();
 
   constructor(protected resourceService: ResourceService) {
     super(Storage, resourceService, storageUrl);
   }
 
-  public catalogs(storage: Storage): Observable<ResourceArray<Catalog>> {
-    return this.relation<Catalog>(Catalog, (storage._links as StorageRelation).catalogs).map(resource => {
-      return resource as ResourceArray<Catalog>;
+  public catalog(storage: Storage): Observable<Catalog> {
+    return this.relation<Catalog>(Catalog, (storage._links as StorageRelation).catalog).map(resource => {
+      return resource as Catalog;
     });
-  }
-
-  public select(storage: Storage) {
-    this.storageSelectedSource.next(storage);
   }
 }

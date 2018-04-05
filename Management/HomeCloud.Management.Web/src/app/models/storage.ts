@@ -1,5 +1,6 @@
 import { Resource } from "./http/resource";
 import { StorageRelation } from "./storage-relation";
+import { Relation } from "./http/relation";
 
 export class Storage extends Resource {
     public id: string = "";
@@ -11,8 +12,9 @@ export class Storage extends Resource {
         super(StorageRelation);
     }
 
-    public hasCatalogs(): boolean {
-        return (this._links as StorageRelation).catalogs != null;
+    public hasCatalog(): boolean {
+        let relation: Relation = (this._links as StorageRelation).catalog;
+        return relation != null && !relation.isEmpty();
     }
 
 }

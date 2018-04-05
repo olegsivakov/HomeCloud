@@ -29,15 +29,15 @@ export class CatalogService extends HttpService<Catalog> {
     this.stateChangedSource.next(args);
   }
 
-  public list(catalog: Catalog): Observable<PagedArray<Catalog>>;
+  public list(catalog: Catalog): Observable<PagedArray<StorageData>>;
   public list(catalog: any): Observable<PagedArray<Catalog>>;
-  public list(catalog: Catalog | any): Observable<PagedArray<Catalog>> {
+  public list(catalog: Catalog | any): Observable<PagedArray<StorageData>> {
     if (catalog instanceof Catalog) {
-      let relation = (catalog._links as CatalogRelation).catalogs;
+      let relation = (catalog._links as CatalogRelation).data;
 
-      return this.relation<Catalog>(Catalog, relation).map(data => {
-        return this.map(data);
-      });
+    return this.relation<StorageData>(StorageData, relation).map(data => {
+      return this.map(data);
+    });
     }
     
     return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
