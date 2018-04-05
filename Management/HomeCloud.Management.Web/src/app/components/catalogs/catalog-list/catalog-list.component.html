@@ -11,8 +11,9 @@
 </div>
 <div class="row">
     <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" *ngFor="let item of data">
-      <app-catalog-card
+      <app-catalog-card        
           [catalog]="item"
+          (load)="load($event)"
           (open)="open($event)"
           (edit)="edit($event)"
           (remove)="remove($event)"

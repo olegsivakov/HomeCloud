@@ -15,6 +15,7 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
+import { CloneableService } from '../../../services/cloneable/cloneable.service';
 
 @Component({
   selector: 'app-catalog-list',
@@ -27,7 +28,9 @@ export class CatalogListComponent implements OnInit, OnDestroy {
 
   private stateChangedSubscription: ISubscription = null;
 
+  private listSubscription: ISubscription = null;
   private loadSubscription: ISubscription = null;
+
   private updateSubscription: ISubscription = null;
   private removeSubscription: ISubscription = null;
 
@@ -35,10 +38,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService,
     private progressService: ProgressService,
-    private catalogService: CatalogService) {
+    private catalogService: CatalogService,
+    private cloneableService: CloneableService) {
       this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
         if (args.state == CatalogState.open) {
-          this.load(args.catalog);
+          this.init(args.catalog);
         }
       });
     }
@@ -46,9 +50,9 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  private load(catalog: Catalog): void {
+  private init(catalog: Catalog): void {
     this.progressService.show();
-    this.loadSubscription = this.catalogService.list(catalog).subscribe(data => {
+    this.listSubscription = this.catalogService.list(catalog).subscribe(data => {
 
       this.data = data;
 
@@ -56,6 +60,17 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     }, error => {
       this.progressService.hide();
     });
+  }
+
+  private load(catalog: StorageData) {
+    let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
+
+    let index: number = this.data.indexOf(item);
+    if (index >= 0 && this.catalogService.hasItem(index)) {
+       this.loadSubscription = this.catalogService.item(index).subscribe(item => {
+        this.data[index]._links = item._links;
+       });
+    }
   }
 
   private open(catalog: Catalog) {
@@ -96,7 +111,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
 
       let index: number = this.data.indexOf(item);
       if (index >= 0) {
-        this.data.splice(index, 1, catalog);
+        this.data[index] = catalog;
       }
       
       state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been saved successfully.").setExpired();
@@ -107,7 +122,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
 
   private delete(catalog: Catalog) {
     let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to remove catalog '" + catalog.name + "'.");
-    let state: NotificationState = this.notificationStateService.addNotification(notification);    
+    let state: NotificationState = this.notificationStateService.addNotification(notification);
 
     this.removeSubscription = this.catalogService.delete(catalog).subscribe(catalog => {
       let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
@@ -132,6 +147,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     if (this.loadSubscription) {
       this.loadSubscription.unsubscribe();
       this.loadSubscription = null;
+    }
+
+    if (this.listSubscription) {
+      this.listSubscription.unsubscribe();
+      this.listSubscription = null;
     }
 
     if (this.updateSubscription) {

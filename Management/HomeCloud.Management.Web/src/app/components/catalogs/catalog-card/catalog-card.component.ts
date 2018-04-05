@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Catalog } from '../../../models/catalog';
+import { CatalogRelation } from '../../../models/catalog-relation';
 
 @Component({
   selector: 'app-catalog-card',
@@ -10,6 +11,9 @@ export class CatalogCardComponent implements OnInit {
 
   @Input()
   public catalog: Catalog = null;
+
+  @Output('load')
+  loadEmitter = new EventEmitter<Catalog>();
 
   @Output('open')
   openEmitter = new EventEmitter<Catalog>();
@@ -28,8 +32,18 @@ export class CatalogCardComponent implements OnInit {
   ngOnInit() {
   }
 
+  private get canLoad(): boolean {
+    return !(this.catalog._links instanceof CatalogRelation);
+  }
+
+  private onLoad(): void {
+    if (this.canLoad) {
+      this.loadEmitter.emit(this.catalog);
+    }
+  }
+  
   private get canOpen(): boolean {
-    return this.catalog.hasData();
+    return this.catalog.isCatalog;
   }
 
   private onOpen(): void {
