@@ -1,9 +1,6 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Output, Input } from '@angular/core';
-import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../../models/catalog';
-import { CatalogState } from '../../../models/catalog-state';
-import { CatalogService } from '../../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-catalog-edit',
@@ -12,8 +9,18 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
 })
 export class CatalogEditComponent implements OnInit, OnDestroy {
 
-  private catalog: Catalog = null;  
-  private stateChangedSubscription: ISubscription = null;
+  private _isVisible: boolean = false;
+
+  @Input('catalog')
+  public catalog: Catalog = null;
+
+  @Input('visible')
+  public set isVisible(value: boolean) {
+    this._isVisible = value;
+  }
+  public get isVisible(): boolean {
+    return this._isVisible && this.catalog != null;
+  }
 
   @Output('save')
   saveEmitter = new EventEmitter<Catalog>();
@@ -21,16 +28,7 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
   @Output('cancel')
   cancelEmitter = new EventEmitter<Catalog>();
 
-  constructor(private catalogService: CatalogService) {
-    this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
-      if (args.state == CatalogState.edit) {
-        this.catalog = Object.create(args.catalog);
-      }
-      else {
-        this.catalog = null;
-      }
-    });
-  }
+  constructor() { }
 
   private onSave() {
     this.saveEmitter.emit(this.catalog);
@@ -47,11 +45,6 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.stateChangedSubscription) {
-      this.stateChangedSubscription.unsubscribe();
-      this.stateChangedSubscription = null;
-    }
-
     this.catalog = null;
   }
 }

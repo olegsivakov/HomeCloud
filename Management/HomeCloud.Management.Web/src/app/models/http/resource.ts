@@ -14,6 +14,10 @@ export class Resource implements IResource {
         this._links = this.relationType ? new this.relationType() : new RelationArray();
     }
 
+    public getRelations<T extends RelationArray>(): T {
+        return this._links as T;
+    }
+
     public hasSelf(): boolean {
         return this._links.self != null && !this._links.self.isEmpty();
     }

@@ -53,8 +53,14 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private init(catalog: Catalog): void {
     this.progressService.show();
     this.listSubscription = this.catalogService.list(catalog).subscribe(data => {
+      this.data.splice(0, this.data.length);
+      data.forEach((item, index) => {
+        if (this.catalogService.hasItem(index)) {
 
-      this.data = data;
+        }
+
+      this.data.push(item);
+      });
 
       this.progressService.hide();
     }, error => {
@@ -95,7 +101,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   }
 
   private detail(catalog: Catalog) { 
-    this.catalogService.onStateChanged(new CatalogStateChanged(catalog, CatalogState.detail));
+    
   }
 
   private cancel(catalog: Catalog) {

@@ -98,6 +98,14 @@ export class ResourceService {
       let totalCount: number = response.headers[totalCountHeader];      
       result.items.totalCount = totalCount ? totalCount : 0;
 
+      if (response.body._links && response.body._links.items instanceof Array) {
+        response.body._links.items.forEach((item, index) => {
+          if (index < result.items.length) {
+            result.items[index]._links.self = this.cloneableService.clone<Relation>(Relation, response.body._links.items[index]);
+          }
+        });
+      }
+
       return result;
     }
     else {

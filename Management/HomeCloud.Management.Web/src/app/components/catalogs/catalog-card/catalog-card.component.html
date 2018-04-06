@@ -1,4 +1,4 @@
-<div class="card" (click)="onOpen()" [class.enabled]="canOpen" on-mouseover="onLoad()">
+<div class="card" (click)="onClick()" [class.enabled]="canClick" on-mouseover="onLoad()">
   <div class="card-img">
       <img src="https://www.planwallpaper.com/static/images/general-night-golden-gate-bridge-hd-wallpapers-golden-gate-bridge-wallpaper.jpg">
   </div>
@@ -21,3 +21,18 @@
       </div>
     </div>
 </div>
+<app-catalog-edit
+      *ngIf="isEditMode"
+      [catalog]="catalog"
+      [visible]="isEditMode"
+      (save)="save($event)"
+      (cancel)="cancel($event)"></app-catalog-edit>
+<app-catalog-remove
+      *ngIf="isRemoveMode"
+      [catalog]="catalog"
+      [visible]="isRemoveMode"
+      (remove)="remove($event)"
+      (cancel)="cancel($event)"></app-catalog-remove> 
+<app-catalog-details
+      [catalog]="catalog"
+      [visible]="isDetailMode"></app-catalog-details>  

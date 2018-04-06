@@ -121,8 +121,6 @@
 						.AddRoute<DataListViewModel>("self", nameof(CatalogController.GetCatalogDataList), model => new { id = model.CatalogID, offset = model.Offset, limit = model.Size })
 						.AddRoute<DataListViewModel>("previous", nameof(CatalogController.GetCatalogDataList), model => new { id = model.CatalogID, offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
 						.AddRoute<DataListViewModel>("next", nameof(CatalogController.GetCatalogDataList), model => new { id = model.CatalogID, offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRoute<DataListViewModel>("createCatalog", nameof(CatalogController.CreateCatalog), model => new { catalogID = model.CatalogID })
-						.AddRoute<DataListViewModel>("createFile", nameof(FileController.CreateFile), model => new { catalogID = model.CatalogID })
 						.AddRoute<DataListViewModel, DataViewModel>("items", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID }, model => model.IsCatalog)
 						.AddRoute<DataListViewModel, DataViewModel>("items", nameof(FileController.GetFileByID), model => new { id = model.ID }, model => !model.IsCatalog);
 
@@ -130,7 +128,9 @@
 						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("update", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("delete", nameof(CatalogController.DeleteCatalog), model => new { id = model.ID })
-						.AddRoute<CatalogViewModel>("data", nameof(CatalogController.GetCatalogDataList), model => new { id = model.ID, offset = 0, limit = 20 }); ;
+						.AddRoute<CatalogViewModel>("data", nameof(CatalogController.GetCatalogDataList), model => new { id = model.ID, offset = 0, limit = 20 })
+						.AddRoute<CatalogViewModel>("createCatalog", nameof(CatalogController.CreateCatalog), model => new { catalogID = model.ID })
+						.AddRoute<CatalogViewModel>("createFile", nameof(FileController.CreateFile), model => new { catalogID = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.CreateCatalog))
 						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.CreateCatalog), model => new { id = model.ID })

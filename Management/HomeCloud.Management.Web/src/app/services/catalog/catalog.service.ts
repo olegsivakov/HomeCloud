@@ -17,6 +17,8 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class CatalogService extends HttpService<Catalog> {
 
+  public catalog: Catalog = null;
+
   private stateChangedSource: Subject<CatalogStateChanged> = new Subject<CatalogStateChanged>();
 
   stateChanged$ = this.stateChangedSource.asObservable();
@@ -36,10 +38,40 @@ export class CatalogService extends HttpService<Catalog> {
       let relation = (catalog._links as CatalogRelation).data;
 
     return this.relation<StorageData>(StorageData, relation).map(data => {
+      this.catalog = catalog;
       return this.map(data);
     });
     }
     
     return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
+  }
+
+  public hasCreateCatalog(): boolean {
+    let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
+    if (!relations) {
+      return false;
+    }
+
+    return relations.createCatalog && !relations.createCatalog.isEmpty();
+  }
+
+  public createCatalog(catalog: Catalog): Catalog {
+    let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
+    if (relations) {
+      this.relation<Catalog>(Catalog, this.catalog.getRelations)
+    }
+  }
+
+  public hasCreateFile(): boolean {
+    let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
+    if (!relations) {
+      return false;
+    }
+
+    return relations.createFile && !relations.createFile.isEmpty();
+  }
+
+  public createFile(catalog: Catalog): any {
+    return null;
   }
 }

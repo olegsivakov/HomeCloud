@@ -1,8 +1,8 @@
 <app-right-panel>
-  <div class="catalog-group-header" *ngIf="catalog">
+  <div class="catalog-group-header" *ngIf="isVisible">
     Information
   </div>
-  <div *ngIf="catalog" class="catalog-details">
+  <div *ngIf="isVisible" class="catalog-details">
       <div class="catalog-details-item">
         <div class="title">Name</div>
         <div class="description">{{catalog.name}}</div>

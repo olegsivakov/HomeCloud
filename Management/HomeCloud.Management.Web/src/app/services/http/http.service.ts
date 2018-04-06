@@ -37,6 +37,24 @@ export class HttpService<T extends IResource> {
     });
   }
 
+  public hasSelf(): boolean {
+    return this.resources.hasSelf();
+  }
+
+  public self(): Observable<PagedArray<T>>;
+  public self(entity: T): Observable<T>;
+  public self(entity?: T): Observable<T> | Observable<PagedArray<T>> {
+    if (entity) {
+      return this.resourceService.request<T>(this.type, entity._links.self).map((resource: T) => {
+        return resource;
+      });
+    }
+
+    return this.resourceService.request<T>(this.type, this.resources._links.self).map(resource => {
+      return this.map(resource);
+    });
+  }
+
   public hasNext(): boolean {
     return this.resources.hasNext();
   }
@@ -62,8 +80,8 @@ export class HttpService<T extends IResource> {
   }
 
   public create(entity: T): Observable<T> {
-    return this.resourceService.request<T>(this.type, this.resources._links.create, entity).map(resource => {
-      return resource as T;
+    return this.resourceService.request<T>(this.type, this.resources._links.create, entity).map((resource: T) => {
+      return resource;
     });
   }
 
@@ -73,8 +91,8 @@ export class HttpService<T extends IResource> {
 
   public item(index: number): Observable<T> {
     if (this.hasItem(index)) {
-      return this.resourceService.request<T>(this.type, this.resources._links.items[index], index).map(resource => {
-        return resource as T;
+      return this.resourceService.request<T>(this.type, this.resources._links.items[index], index).map((resource: T) => {
+        return resource;
       });
     }
 
@@ -85,20 +103,20 @@ export class HttpService<T extends IResource> {
   public get<TResult extends T>(entity: T): Observable<TResult> {
     let resultType: new() => TResult;
 
-    return this.resourceService.request<TResult>(resultType, entity._links.get).map(resource => {
-      return resource as TResult;
+    return this.resourceService.request<TResult>(resultType, entity._links.get).map((resource: TResult) => {
+      return resource;
     });
   }
 
   public update(entity: T): Observable<T> {
-    return this.resourceService.request<T>(this.type, entity._links.update, entity).map(resource => {
-      return resource as T;
+    return this.resourceService.request<T>(this.type, entity._links.update, entity).map((resource: T) => {
+      return resource;
     });
   }
 
   public delete(entity: T): Observable<T> {
-    return this.resourceService.request<T>(this.type, entity._links.delete, entity).map(resource => {
-      return resource as T;
+    return this.resourceService.request<T>(this.type, entity._links.delete, entity).map((resource: T) => {
+      return resource;
     });
   }
 

@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../../models/catalog';
-import { CatalogState } from '../../../models/catalog-state';
-import { CatalogService } from '../../../services/catalog/catalog.service';
+import { CloneableService } from '../../../services/cloneable/cloneable.service';
 
 @Component({
   selector: 'app-catalog-remove',
@@ -12,8 +10,18 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
 })
 export class CatalogRemoveComponent implements OnInit, OnDestroy {
 
-  private catalog: Catalog = null;  
-  private stateChangedSubscription: ISubscription = null;
+  private _isVisible: boolean = false;
+
+  @Input('catalog')
+  public catalog: Catalog = null;
+
+  @Input('visible')
+  public set isVisible(value: boolean) {
+    this._isVisible = value;
+  }
+  public get isVisible(): boolean {
+    return this._isVisible && this.catalog != null;
+  }
 
   @Output('remove')
   removeEmitter = new EventEmitter<Catalog>();
@@ -21,16 +29,7 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
   @Output('cancel')
   cancelEmitter = new EventEmitter<Catalog>();
 
-  constructor(private catalogService: CatalogService) {    
-    this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
-      if (args.state == CatalogState.remove) {
-        this.catalog = args.catalog;
-      }
-      else {
-        this.catalog = null;
-      }
-    });
-  }
+  constructor(private cloneableService: CloneableService) { }
 
   private onRemove() {
     this.removeEmitter.emit(this.catalog);
@@ -47,11 +46,6 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.stateChangedSubscription) {
-      this.stateChangedSubscription.unsubscribe();
-      this.stateChangedSubscription = null;
-    }
-
     this.catalog = null;
   }
 }

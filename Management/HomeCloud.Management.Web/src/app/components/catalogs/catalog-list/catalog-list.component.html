@@ -13,19 +13,12 @@
     <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" *ngFor="let item of data">
       <app-catalog-card        
           [catalog]="item"
-          (load)="load($event)"
-          (open)="open($event)"
-          (edit)="edit($event)"
-          (remove)="remove($event)"
-          (detail)="detail($event)">
+          (click)="open($event)"
+          (save)="edit($event)"
+          (remove)="remove($event)">
       </app-catalog-card>
     </div>
 </div>
 
-<app-catalog-details></app-catalog-details>
-<app-catalog-edit
-      (save)="save($event)"
-      (cancel)="cancel($event)"></app-catalog-edit>
-<app-catalog-remove
-      (remove)="delete($event)"
-      (cancel)="cancel($event)"></app-catalog-remove>      
+
+   
