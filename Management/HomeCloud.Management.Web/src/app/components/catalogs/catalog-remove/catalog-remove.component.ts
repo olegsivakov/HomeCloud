@@ -27,18 +27,17 @@ export class CatalogRemoveComponent implements OnInit, OnDestroy {
   removeEmitter = new EventEmitter<Catalog>();
 
   @Output('cancel')
-  cancelEmitter = new EventEmitter<Catalog>();
+  cancelEmitter = new EventEmitter();
 
   constructor(private cloneableService: CloneableService) { }
 
   private onRemove() {
     this.removeEmitter.emit(this.catalog);
-
     this.onCancel();
   }
 
   private onCancel() {
-    this.cancelEmitter.emit(this.catalog);
+    this.cancelEmitter.emit();
     this.catalog = null;
   }
 

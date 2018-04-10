@@ -1,5 +1,6 @@
 ﻿namespace HomeCloud.Validation
 {
+	using HomeCloud.Core.Extensions;
 	#region Usings
 
 	using System;
@@ -35,16 +36,12 @@
 		/// </returns>
 		public async Task<ValidationResult> ValidateAsync(T instance)
 		{
-			ValidationResult result = new ValidationResult();
-
-			IList<Task<ValidationResult>> tasks = new List<Task<ValidationResult>>();
-			foreach (IValidationRule<T> rule in this.rules)
+			IEnumerable<ValidationResult> ruleResults = await this.rules.SelectAsync(async rule =>
 			{
-				tasks.Add(rule.IsSatisfiedByAsync(instance));
-			}
+				return await rule.IsSatisfiedByAsync(instance);
+			});
 
-			IEnumerable<ValidationResult> ruleResults = await Task.WhenAll(tasks);
-
+			ValidationResult result = new ValidationResult();
 			foreach (ValidationResult ruleResult in ruleResults)
 			{
 				if (!ruleResult.IsValid)

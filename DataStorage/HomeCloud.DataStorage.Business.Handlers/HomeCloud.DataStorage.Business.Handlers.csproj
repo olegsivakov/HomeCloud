@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Extensions\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj" />
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Commands.Abstractions\HomeCloud.DataStorage.Business.Commands.Abstractions.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj" />

@@ -3,9 +3,6 @@ import { ISubscription } from 'rxjs/Subscription';
 
 import { PagedArray } from '../../models/paged-array';
 import { Storage } from '../../models/storage';
-import { Catalog } from '../../models/catalog';
-import { CatalogState } from '../../models/catalog-state';
-import { CatalogStateChanged } from '../../models/catalog-state-changed';
 
 import { StorageService } from '../../services/storage/storage.service';
 import { CatalogService } from '../../services/catalog/catalog.service';

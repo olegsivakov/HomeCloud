@@ -1,7 +1,7 @@
-import { HttpClient } from "@angular/common/http";
 import { RelationArray } from "./relation-array";
 import { Relation } from "./relation";
-import { CatalogRelation } from "../catalog-relation";
+
+export const GUID: string = "00000000-0000-0000-0000-000000000000";
 
 export interface IResource {
     _links: RelationArray;

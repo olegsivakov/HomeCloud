@@ -7,7 +7,7 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-
+	using HomeCloud.Core.Extensions;
 	using HomeCloud.DataStorage.Business.Commands;
 	using HomeCloud.DataStorage.Business.Providers;
 
@@ -75,14 +75,10 @@
 		/// </returns>
 		public virtual async Task ExecuteAsync()
 		{
-			IList<Task> tasks = new List<Task>();
-
-			foreach (ICommand command in this.commands)
+			await this.commands.ForEachAsync(async command =>
 			{
-				tasks.Add(command.ExecuteAsync());
-			}
-
-			await Task.WhenAll(tasks);
+				await command.ExecuteAsync();
+			});
 		}
 
 		/// <summary>
@@ -102,14 +98,10 @@
 		/// </returns>
 		public virtual async Task UndoAsync()
 		{
-			IList<Task> tasks = new List<Task>();
-
-			foreach (ICommand command in this.commands)
+			await this.commands.ForEachAsync(async command =>
 			{
-				tasks.Add(command.UndoAsync());
-			}
-
-			await Task.WhenAll(tasks);
+				await command.UndoAsync();
+			});
 		}
 
 		#endregion

@@ -10,9 +10,27 @@ import { Catalog } from '../../../models/catalog';
 export class CatalogEditComponent implements OnInit, OnDestroy {
 
   private _isVisible: boolean = false;
+  private _catalog: Catalog = null;
 
   @Input('catalog')
-  public catalog: Catalog = null;
+  public set catalog(value: Catalog) {
+    if (value) {
+      if (!this._catalog) {
+        this._catalog = new Catalog();
+      }
+
+      if (this._catalog.id != value.id) {
+        this._catalog = Object.assign(this._catalog, value);
+      }
+    }
+    else {
+      this._catalog = value;
+    }
+  }
+
+  public get catalog(): Catalog {
+    return this._catalog;
+  }
 
   @Input('visible')
   public set isVisible(value: boolean) {
@@ -26,18 +44,17 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
   saveEmitter = new EventEmitter<Catalog>();
 
   @Output('cancel')
-  cancelEmitter = new EventEmitter<Catalog>();
+  cancelEmitter = new EventEmitter();
 
   constructor() { }
 
   private onSave() {
     this.saveEmitter.emit(this.catalog);
-
     this.onCancel();
   }
 
   private onCancel() {
-    this.cancelEmitter.emit(this.catalog);
+    this.cancelEmitter.emit();
     this.catalog = null;
   }
 

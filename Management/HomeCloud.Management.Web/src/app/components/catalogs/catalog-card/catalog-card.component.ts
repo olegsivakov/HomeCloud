@@ -32,9 +32,6 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   @Input('catalog')
   public catalog: Catalog = null;
 
-  @Output('select')
-  selectEmitter = new EventEmitter<Catalog>();
-
   @Output('save')
   saveEmitter = new EventEmitter<Catalog>();
 
@@ -72,7 +69,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   }
   public onSelect(): void {
     if (this.canSelect) {
-      this.selectEmitter.emit(this.catalog);
+      this.catalogService.onCatalogChanged(this.catalog);
     }
   }
 
@@ -83,8 +80,10 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     return this.catalog.hasSelf && this.catalog.hasSelf();
   }
   private onDetail(): void {
-    this.state = CatalogState.details;
-    this.rightPanelService.show();
+    if (this.canDetail) {
+      this.state = CatalogState.details;
+      this.rightPanelService.show();
+    }
   }
 
   private get isEditMode(): boolean {
@@ -94,8 +93,10 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     return this.catalog.hasUpdate && this.catalog.hasUpdate();
   }
   private onEdit(): void {
-    this.cancel(true);
-    this.state = CatalogState.edit;
+    if (this.canEdit) {
+      this.cancel(true);
+      this.state = CatalogState.edit;
+    }
   }
   private save(catalog: Catalog): void {
     if (this.canEdit) {
@@ -119,8 +120,10 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     return this.catalog.hasDelete && this.catalog.hasDelete();
   }
   private onRemove(): void {
-    this.cancel(true);
-    this.state = CatalogState.remove;
+    if (this.canRemove) {
+      this.cancel(true);
+      this.state = CatalogState.remove;
+    }
   }
   private remove(catalog: Catalog): void {
     if (this.canRemove) {

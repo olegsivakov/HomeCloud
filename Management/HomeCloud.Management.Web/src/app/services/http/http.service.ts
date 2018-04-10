@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { IResource, Resource } from '../../models/http/resource';
@@ -130,17 +129,20 @@ export class HttpService<T extends IResource> {
     });
   }
 
-  public relation<TRelation extends IResource>(initializer: new() => TRelation, relation: Relation): Observable<IResource>;
-  public relation<TRelation extends IResource>(initializer: new() => TRelation, relation: string, resource?: IResource): Observable<IResource>;
   public relation<TRelation extends IResource>(initializer: new() => TRelation, relation: string | Relation, resource?: IResource): Observable<IResource> {
 
-    if (relation instanceof String) {
-      return this.resourceService.request<TRelation>(initializer, (resource ? resource : this.resources)._links[relation]).map(resource => {
+    if (relation instanceof Relation) {
+      return this.resourceService.request<TRelation>(initializer, relation, resource).map(resource => {
         return resource;
       });
     }
+    
+    let resourceRelation: Relation = resource ? resource._links[relation] : null;
+    if (!resourceRelation) {
+      resourceRelation = this.resources._links[relation];
+    }
 
-    return this.resourceService.request<TRelation>(initializer, relation).map(resource => {
+    return this.resourceService.request<TRelation>(initializer, resourceRelation, resource).map(resource => {
       return resource;
     });
   }

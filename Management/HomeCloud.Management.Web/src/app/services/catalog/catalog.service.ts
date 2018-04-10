@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 import { PagedArray } from '../../models/paged-array';
 import { Catalog } from '../../models/catalog';
 import { StorageData } from '../../models/storage-data';
-import { CatalogStateChanged } from '../../models/catalog-state-changed';
 
 import { HttpService } from '../http/http.service';
 import { CatalogRelation } from '../../models/catalog-relation';
@@ -60,7 +58,7 @@ export class CatalogService extends HttpService<Catalog> {
   public createCatalog(catalog: Catalog): Observable<Catalog> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      return this.relation<Catalog>(Catalog, relations.createCatalog).map((resource: Catalog) => resource);
+      return this.relation<Catalog>(Catalog, relations.createCatalog, catalog).map((resource: Catalog) => resource);
     }
 
     return Observable.throw("No resource found to create catalog");
@@ -78,7 +76,7 @@ export class CatalogService extends HttpService<Catalog> {
   public createFile(catalog: Catalog): Observable<Catalog> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      return this.relation<Catalog>(Catalog, relations.createFile).map((resource: Catalog) => resource);
+      return this.relation<Catalog>(Catalog, relations.createFile, catalog).map((resource: Catalog) => resource);
     }
 
     return Observable.throw("No resource found to create file");

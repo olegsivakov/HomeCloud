@@ -15,9 +15,6 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
 })
 export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
 
-  @Output('navigate')
-  navigateEmitter = new EventEmitter<Catalog>();
-
   private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
   private catalogChangedSubscription: ISubscription = null;
 
@@ -28,7 +25,7 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   private open(breadcrumb: CatalogBreadcrumb) {
-    this.navigateEmitter.emit(breadcrumb.catalog);
+    this.catalogService.onCatalogChanged(breadcrumb.catalog);
   }
 
   private handleCatalog(catalog: Catalog) {
@@ -53,8 +50,7 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
-    
+  ngOnInit() {    
   }
 
   ngOnDestroy(): void {

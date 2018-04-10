@@ -1,14 +1,17 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { PagedArray } from '../../../models/paged-array';
 import { StorageData } from '../../../models/storage-data';
 import { Catalog } from '../../../models/catalog';
-import { CatalogState } from '../../../models/catalog-state';
-import { CatalogStateChanged } from '../../../models/catalog-state-changed';
+
+import { Notification } from '../../../models/notifications/notification';
+import { NotificationState } from '../../../models/notifications/notification-state';
 
 import { CatalogService } from '../../../services/catalog/catalog.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
+import { NotificationService } from '../../../services/shared/notification/notification.service';
+import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 
 @Component({
   selector: 'app-catalog-list',
@@ -17,14 +20,18 @@ import { ProgressService } from '../../../services/shared/progress/progress.serv
 })
 export class CatalogListComponent implements OnInit, OnDestroy {
 
+  private newCatalog: Catalog = null;
   private data: PagedArray<StorageData> = new PagedArray<StorageData>();
 
   private catalogChangedSubscription: ISubscription = null;
   private listSubscription: ISubscription = null;
+  private createCatalogSubscription: ISubscription = null;
 
   constructor(
     private progressService: ProgressService,
-    private catalogService: CatalogService) {
+    private catalogService: CatalogService,
+    private notificationService: NotificationService,
+    private notificationStateService: NotificationStateService) {
       this.catalogChangedSubscription = this.catalogService.catalogChanged$.subscribe(catalog => {        
         this.data.splice(0);
         this.open(catalog);
@@ -32,10 +39,6 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-  }
-
-  private select(catalog: Catalog) {
-    this.catalogService.onCatalogChanged(catalog);
   }
 
   private open(catalog: Catalog) {
@@ -50,13 +53,27 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     });
   }
 
+  private get isCreateCatalogMode(): boolean {
+    return this.newCatalog != null;
+  }  
   private get canCreateCatalog(): boolean {
     return this.catalogService.hasCreateCatalog();
   }
-
-  private createCatalog() {
+  private onCreateCatalog() {
     if (this.canCreateCatalog) {
-      
+      this.newCatalog = new Catalog();
+    }
+  }
+  private createCatalog(catalog: Catalog) {
+    if (this.canCreateCatalog) {
+      let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to create catalog '" + catalog.name + "'.");
+      let state: NotificationState = this.notificationStateService.addNotification(notification);    
+
+      this.createCatalogSubscription = this.catalogService.createCatalog(catalog).subscribe(catalog => {         
+        state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
+      }, error => {
+        state.setFailed("Operation failure", "An error occured while creating catalog.").setExpired();
+      });
     }
   }
 
@@ -69,7 +86,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private save(catalog: Catalog) {    
+  private save(catalog: Catalog) {
     // let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
 
     // let index: number = this.data.indexOf(item);
@@ -78,11 +95,27 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     // }
   }
 
+  private cancel() {
+    if (this.isCreateCatalogMode) {
+      this.newCatalog = null;
+    }
+  }
+
   ngOnDestroy(): void {
+
+    if (this.catalogChangedSubscription) {
+      this.catalogChangedSubscription.unsubscribe();
+      this.catalogChangedSubscription = null;
+    }
 
     if (this.listSubscription) {
       this.listSubscription.unsubscribe();
       this.listSubscription = null;
+    }
+
+    if (this.createCatalogSubscription) {
+      this.createCatalogSubscription.unsubscribe();
+      this.createCatalogSubscription = null;
     }
 
     this.data.splice(0);
