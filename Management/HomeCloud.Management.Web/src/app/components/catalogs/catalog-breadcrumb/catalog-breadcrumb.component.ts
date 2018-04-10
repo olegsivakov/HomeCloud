@@ -19,13 +19,11 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   navigateEmitter = new EventEmitter<Catalog>();
 
   private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
-  private stateChangedSubscription: ISubscription = null;
+  private catalogChangedSubscription: ISubscription = null;
 
   constructor(private catalogService: CatalogService) {
-    this.stateChangedSubscription = this.catalogService.stateChanged$.subscribe(args => {
-      if (args.state == CatalogState.open) {
-        this.handleCatalog(args.catalog);
-      }
+    this.catalogChangedSubscription = this.catalogService.catalogChanged$.subscribe(catalog => {
+      this.handleCatalog(catalog);
     });
   }
 
@@ -60,5 +58,9 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.catalogChangedSubscription) {
+      this.catalogChangedSubscription.unsubscribe();
+      this.catalogChangedSubscription = null;
+    }
   }
 }

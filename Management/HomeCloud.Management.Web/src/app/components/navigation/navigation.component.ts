@@ -20,7 +20,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private storages: PagedArray<Storage> = new PagedArray<Storage>();
 
   private listSubscription: ISubscription = null;
-  private getSubscription: ISubscription = null;
+  private selfSubscription: ISubscription = null;
   private catalogSubscription: ISubscription = null;
 
   constructor(
@@ -41,25 +41,32 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.listSubscription = null;
     }
 
-    if (this.getSubscription) {
-      this.getSubscription.unsubscribe();
-      this.getSubscription = null;
-    }
-
     if (this.catalogSubscription) {
       this.catalogSubscription.unsubscribe();
       this.catalogSubscription = null;
     }
+
+    if (this.selfSubscription) {
+      this.selfSubscription.unsubscribe();
+      this.selfSubscription = null;
+    }
+  }
+
+  public canSelectStorage(storage: Storage): boolean {
+    return storage.hasSelf();
   }
 
   public selectStorage(storage: Storage) {
-    let index: number = this.storages.indexOf(storage);
+    if (this.canSelectStorage(storage)) {
+      let index: number = this.storages.indexOf(storage);
 
-    this.getSubscription = this.storageService.item(index).subscribe(item => {
-      this.catalogSubscription = this.storageService.catalog(item).subscribe(catalog => {
-        let args: CatalogStateChanged = new CatalogStateChanged(catalog, CatalogState.open);
-        this.catalogService.onStateChanged(args);
-      });
-    });
+      this.selfSubscription = this.storageService.self(storage).subscribe(item => {
+        if (item.hasCatalog()) {
+          this.catalogSubscription = this.storageService.catalog(item).subscribe(catalog => {
+            this.catalogService.onCatalogChanged(catalog);
+          });
+        }
+      });     
+    }
   }
 }

@@ -7,6 +7,6 @@
     <clr-icon shape="cloud-network" clrVerticalNavIcon></clr-icon>
     Storages
     <clr-vertical-nav-group-children>
-        <a clrVerticalNavLink *ngFor="let storage of storages" (click)="selectStorage(storage)" [routerLink]="['/catalogs', storage.id]" routerLinkActive="active">{{storage.name}}</a>
+        <a clrVerticalNavLink *ngFor="let storage of storages" (click)="selectStorage(storage)" [class.disabled]="!canSelectStorage" [routerLink]="['/catalogs', storage.id]" routerLinkActive="active">{{storage.name}}</a>
     </clr-vertical-nav-group-children>
 </clr-vertical-nav-group>

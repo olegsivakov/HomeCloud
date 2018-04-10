@@ -3,7 +3,7 @@
     <app-catalog-breadcrumb (navigate)="open($event)"></app-catalog-breadcrumb>
   </div>
   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 command-container">
-    <a (click)="create()" [class.disabled]="!canCreate">
+    <a (click)="createCatalog()" [class.disabled]="!canCreateCatalog">
       <clr-icon shape="plus-circle" size="24"></clr-icon>
       <span>New Catalog</span>
     </a>
@@ -13,8 +13,8 @@
     <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" *ngFor="let item of data">
       <app-catalog-card        
           [catalog]="item"
-          (click)="open($event)"
-          (save)="edit($event)"
+          (select)="select($event)"
+          (save)="save($event)"
           (remove)="remove($event)">
       </app-catalog-card>
     </div>

@@ -19,16 +19,19 @@ export class CatalogService extends HttpService<Catalog> {
 
   public catalog: Catalog = null;
 
-  private stateChangedSource: Subject<CatalogStateChanged> = new Subject<CatalogStateChanged>();
+  private catalogChangedSource: Subject<Catalog> = new Subject<Catalog>();
 
-  stateChanged$ = this.stateChangedSource.asObservable();
+  catalogChanged$ = this.catalogChangedSource.asObservable();
 
   constructor(protected resourceService: ResourceService) {    
     super(Catalog, resourceService);
   }
 
-  public onStateChanged(args: CatalogStateChanged): void {
-    this.stateChangedSource.next(args);
+  public onCatalogChanged(catalog: Catalog): void {
+    if (!this.catalog || (this.catalog && catalog && this.catalog.id != catalog.id)) {
+      this.catalog = catalog;
+      this.catalogChangedSource.next(this.catalog);
+    }
   }
 
   public list(catalog: Catalog): Observable<PagedArray<StorageData>>;
@@ -37,10 +40,9 @@ export class CatalogService extends HttpService<Catalog> {
     if (catalog instanceof Catalog) {
       let relation = (catalog._links as CatalogRelation).data;
 
-    return this.relation<StorageData>(StorageData, relation).map(data => {
-      this.catalog = catalog;
-      return this.map(data);
-    });
+      return this.relation<StorageData>(StorageData, relation).map(data => {
+        return this.map(data);
+      });
     }
     
     return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
@@ -55,11 +57,13 @@ export class CatalogService extends HttpService<Catalog> {
     return relations.createCatalog && !relations.createCatalog.isEmpty();
   }
 
-  public createCatalog(catalog: Catalog): Catalog {
+  public createCatalog(catalog: Catalog): Observable<Catalog> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      this.relation<Catalog>(Catalog, this.catalog.getRelations)
+      return this.relation<Catalog>(Catalog, relations.createCatalog).map((resource: Catalog) => resource);
     }
+
+    return Observable.throw("No resource found to create catalog");
   }
 
   public hasCreateFile(): boolean {
@@ -71,7 +75,12 @@ export class CatalogService extends HttpService<Catalog> {
     return relations.createFile && !relations.createFile.isEmpty();
   }
 
-  public createFile(catalog: Catalog): any {
-    return null;
+  public createFile(catalog: Catalog): Observable<Catalog> {
+    let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
+    if (relations) {
+      return this.relation<Catalog>(Catalog, relations.createFile).map((resource: Catalog) => resource);
+    }
+
+    return Observable.throw("No resource found to create file");
   }
 }

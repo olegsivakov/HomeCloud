@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import { IResource } from '../../models/http/resource';
+import { IResource, Resource } from '../../models/http/resource';
 import { ResourceArray } from '../../models/http/resource-array';
 import { Relation } from '../../models/http/relation';
 import { HttpMethod } from '../../models/http/http-method';
@@ -37,7 +37,11 @@ export class HttpService<T extends IResource> {
     });
   }
 
-  public hasSelf(): boolean {
+  public hasSelf(entity?: T): boolean {
+    if (entity) {
+      return entity._links.self != null && !entity._links.self.isEmpty();;
+    }
+
     return this.resources.hasSelf();
   }
 
