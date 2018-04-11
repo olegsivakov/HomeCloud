@@ -40,6 +40,16 @@
 		#region Public Properties
 
 		/// <summary>
+		/// Gets a value indicating whether the object changed status is changed.
+		/// </summary>
+		[BsonIgnore]
+		public override bool IsChanged
+		{
+			get => base.IsChanged;
+			protected set => base.IsChanged = value;
+		}
+
+		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>

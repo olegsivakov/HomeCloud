@@ -4,7 +4,7 @@
 	
 	using HomeCloud.Core;
 	using HomeCloud.DataStorage.DataAccess.Aggregation.Objects;
-
+	using System;
 	using Contracts = HomeCloud.DataStorage.DataAccess.Objects;
 
 	#endregion
@@ -56,7 +56,11 @@
 		{
 			target = this.Convert((CatalogRoot)source, target);
 
-			target.ParentID = source.Parent?.ID;
+			Guid parentID = (source.Parent?.ID).GetValueOrDefault();
+			if (parentID != Guid.Empty)
+			{
+				target.ParentID = source.Parent?.ID;
+			}
 
 			return target;
 		}

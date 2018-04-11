@@ -3,7 +3,7 @@
     <app-catalog-breadcrumb></app-catalog-breadcrumb>
   </div>
   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 command-container">
-    <a (click)="onCreateCatalog()" [class.disabled]="!canCreateCatalog">
+    <a (click)="onSaveCatalog()" [class.disabled]="!canSaveCatalog">
       <clr-icon shape="plus-circle" size="24"></clr-icon>
       <span>New Catalog</span>
     </a>
@@ -13,17 +13,16 @@
     <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" *ngFor="let item of data">
       <app-catalog-card        
           [catalog]="item"
-          (save)="save($event)"
           (remove)="remove($event)">
       </app-catalog-card>
     </div>
 </div>
 
 <app-catalog-edit
-      *ngIf="isCreateCatalogMode"
+      *ngIf="isSaveCatalogMode"
       [catalog]="newCatalog"
-      [visible]="isCreateCatalogMode"
-      (save)="createCatalog($event)"
+      [visible]="isSaveCatalogMode"
+      (save)="saveCatalog($event)"
       (cancel)="cancel($event)"></app-catalog-edit>
 
 

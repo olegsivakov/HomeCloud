@@ -17,12 +17,12 @@
 		/// <summary>
 		/// Gets a value indicating whether the object changed status is changed.
 		/// </summary>
-		public bool IsChanged { get; private set; }
+		public virtual bool IsChanged { get; protected set; }
 
 		/// <summary>
 		/// Resets the object’s state to unchanged by accepting the modifications.
 		/// </summary>
-		public void AcceptChanges()
+		public virtual void AcceptChanges()
 		{
 			this.IsChanged = false;
 		}

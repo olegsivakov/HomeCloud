@@ -124,9 +124,11 @@
 			}
 
 			Func<IDataProvider, Task> updateCatalogFunction = async provider => catalog = await provider.UpdateCatalog(catalog);
+			Func<IDataProvider, Task> getCatalogFunction = async provider => catalog = await provider.GetCatalog(catalog);
 
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateCatalogFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => catalog = await provider.GetCatalog(catalog), null);
+			this.processor.CreateDataHandler<IDataCommandHandler>()
+				.CreateAsyncCommand<IDataStoreProvider>(updateCatalogFunction, null)
+				.CreateAsyncCommand<IAggregationDataProvider>(getCatalogFunction, null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateCatalogFunction, null);
 			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateCatalogFunction, null);
 
