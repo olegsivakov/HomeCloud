@@ -105,17 +105,22 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
+			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(catalog.ID);
+			if (!serviceResult.IsSuccess)
+			{
+				return serviceResult;
+			}
+
+			serviceResult.Data.Name = catalog.Name;
+
 			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
-			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
-			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
-
+			ValidationResult result = await validator.Get<IUniqueValidator>().ValidateAsync(serviceResult.Data);
 			if (!result.IsValid)
 			{
-				return new ServiceResult<Catalog>(catalog)
-				{
-					Errors = result.Errors
-				};
+				serviceResult.Errors = result.Errors;
+
+				return serviceResult;
 			}
 
 			Func<IDataProvider, Task> updateCatalogFunction = async provider => catalog = await provider.UpdateCatalog(catalog);
