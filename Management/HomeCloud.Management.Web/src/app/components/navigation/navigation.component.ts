@@ -17,7 +17,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private storages: PagedArray<Storage> = new PagedArray<Storage>();
 
   private listSubscription: ISubscription = null;
-  private selfSubscription: ISubscription = null;
+  private getSubscription: ISubscription = null;
   private catalogSubscription: ISubscription = null;
 
   constructor(
@@ -43,27 +43,27 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.catalogSubscription = null;
     }
 
-    if (this.selfSubscription) {
-      this.selfSubscription.unsubscribe();
-      this.selfSubscription = null;
+    if (this.getSubscription) {
+      this.getSubscription.unsubscribe();
+      this.getSubscription = null;
     }
   }
 
   public canSelectStorage(storage: Storage): boolean {
-    return storage.hasSelf();
+    return storage.hasGet && storage.hasGet();
   }
 
   public selectStorage(storage: Storage) {
     if (this.canSelectStorage(storage)) {
       let index: number = this.storages.indexOf(storage);
 
-      this.selfSubscription = this.storageService.self(storage).subscribe(item => {
+      this.getSubscription = this.storageService.get(storage).subscribe(item => {
         if (item.hasCatalog()) {
           this.catalogSubscription = this.storageService.catalog(item).subscribe(catalog => {
             this.catalogService.onCatalogChanged(catalog);
           });
         }
-      });     
+      });
     }
   }
 }

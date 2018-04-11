@@ -23,7 +23,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
 
   private state: CatalogState = CatalogState.view;
 
-  private selfSubscription: ISubscription = null;
+  private getSubscription: ISubscription = null;
   private rightPanelVisibilityChangedSubscription: ISubscription = null;
 
   private updateSubscription: ISubscription = null;
@@ -51,7 +51,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     }
 
   private get canLoad(): boolean {
-    return this.catalog.hasSelf && this.catalog.hasSelf() && !(this.catalog._links instanceof CatalogRelation);
+    return this.catalog.hasGet && this.catalog.hasGet() && !(this.catalog._links instanceof CatalogRelation);
   }
   private onLoad(): void {
     if (this.canLoad) {
@@ -59,7 +59,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     }
   }
   private load() {
-    this.selfSubscription = this.catalogService.self(this.catalog).subscribe(data => {
+    this.getSubscription = this.catalogService.get(this.catalog).subscribe(data => {
       this.catalog = data;
     });
   }
@@ -103,9 +103,10 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
       let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to save catalog '" + catalog.name + "'.");
       let state: NotificationState = this.notificationStateService.addNotification(notification);    
 
-      this.updateSubscription = this.catalogService.update(catalog).subscribe(catalog => {        
-        this.saveEmitter.emit(catalog);
-        
+      this.updateSubscription = this.catalogService.update(catalog).subscribe(catalog => {
+        this.catalog = catalog;
+        this.load();
+        this.saveEmitter.emit(this.catalog);
         state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been saved successfully.").setExpired();
       }, error => {
         state.setFailed("Operation failure", "An error occured while saving catalog.").setExpired();
@@ -131,9 +132,9 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
       let state: NotificationState = this.notificationStateService.addNotification(notification);
 
       this.removeSubscription = this.catalogService.delete(catalog).subscribe(catalog => {
-        this.removeEmitter.emit(catalog);
+        this.removeEmitter.emit(this.catalog);
 
-        state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been removed successfully.").setExpired();
+        state.setSucceded("Operation complete", "Catalog has been removed successfully.").setExpired();
       }, error => {
         state.setFailed("Operation failure", "An error occured while removing catalog.").setExpired();
       });
@@ -158,9 +159,9 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
       this.rightPanelVisibilityChangedSubscription = null;
     }
 
-    if (this.selfSubscription) {
-      this.selfSubscription.unsubscribe();
-      this.selfSubscription = null;
+    if (this.getSubscription) {
+      this.getSubscription.unsubscribe();
+      this.getSubscription = null;
     }
 
     if (this.updateSubscription) {

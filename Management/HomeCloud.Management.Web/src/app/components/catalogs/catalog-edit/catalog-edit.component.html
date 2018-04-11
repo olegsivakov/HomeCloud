@@ -18,7 +18,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="catalogForm.invalid">Save</button>
+        <button type="button" class="btn btn-outline" (click)="onCancel($event)">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSave($event)" [disabled]="catalogForm.invalid">Save</button>
     </div>
 </clr-modal>

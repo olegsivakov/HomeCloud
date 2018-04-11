@@ -63,6 +63,10 @@ export class ResourceService {
           headers: new HttpHeaders({"Content-Type": relation.type}),
           observe: "response"
         }).map(response => {
+          if (response.status == 204 || response.status == 404) {
+            return null;
+          }
+
           return this.processResponse<T>(initializer, response);
         });
       }
@@ -86,6 +90,10 @@ export class ResourceService {
   private processResponse<T extends IResource>(initializer: new() => T, response: HttpResponse<any>): IResource {
     let result: ResourceArray<T> = null;
 
+    if (!response.body) {
+      return null;
+    }
+
     if (response.body instanceof Array) {
       result = this.getResourceArray<T>(initializer, { items: response.body });
     }
@@ -101,7 +109,7 @@ export class ResourceService {
       if (response.body._links && response.body._links.items instanceof Array) {
         response.body._links.items.forEach((item, index) => {
           if (index < result.items.length) {
-            result.items[index]._links.self = this.cloneableService.clone<Relation>(Relation, response.body._links.items[index]);
+            result.items[index]._links.get = this.cloneableService.clone<Relation>(Relation, response.body._links.items[index]);
           }
         });
       }

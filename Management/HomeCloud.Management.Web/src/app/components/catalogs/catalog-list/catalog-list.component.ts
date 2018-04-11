@@ -26,6 +26,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private catalogChangedSubscription: ISubscription = null;
   private listSubscription: ISubscription = null;
   private createCatalogSubscription: ISubscription = null;
+  private getCatalogSubscription: ISubscription = null;
 
   constructor(
     private progressService: ProgressService,
@@ -53,24 +54,31 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     });
   }
 
-  private get isCreateCatalogMode(): boolean {
+  private get isSaveCatalogMode(): boolean {
     return this.newCatalog != null;
   }  
-  private get canCreateCatalog(): boolean {
+  private get canSaveCatalog(): boolean {
     return this.catalogService.hasCreateCatalog();
   }
-  private onCreateCatalog() {
-    if (this.canCreateCatalog) {
+  private onSaveCatalog() {
+    if (this.canSaveCatalog) {
       this.newCatalog = new Catalog();
     }
   }
-  private createCatalog(catalog: Catalog) {
-    if (this.canCreateCatalog) {
+  private saveCatalog(catalog: Catalog) {
+    if (this.canSaveCatalog) {
       let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to create catalog '" + catalog.name + "'.");
       let state: NotificationState = this.notificationStateService.addNotification(notification);    
 
-      this.createCatalogSubscription = this.catalogService.createCatalog(catalog).subscribe(catalog => {         
-        state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
+      this.createCatalogSubscription = this.catalogService.createCatalog(catalog).subscribe(catalog => {
+        this.data.unshift(catalog);
+        this.getCatalogSubscription = this.catalogService.get(catalog).subscribe(item => {
+          this.data[0] = item;
+          state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
+        }, error => {
+          state.setWarning("Operation complete with errors", "Catalog '" + catalog.name + "' has been created successfully but failed to complete the operation.").setExpired();
+        });
+
       }, error => {
         state.setFailed("Operation failure", "An error occured while creating catalog.").setExpired();
       });
@@ -86,17 +94,8 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     }
   }
 
-  private save(catalog: Catalog) {
-    // let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
-
-    // let index: number = this.data.indexOf(item);
-    // if (index >= 0) {
-    //   this.data[index] = catalog;
-    // }
-  }
-
   private cancel() {
-    if (this.isCreateCatalogMode) {
+    if (this.isSaveCatalogMode) {
       this.newCatalog = null;
     }
   }
@@ -111,6 +110,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     if (this.listSubscription) {
       this.listSubscription.unsubscribe();
       this.listSubscription = null;
+    }
+
+    if (this.getCatalogSubscription) {
+      this.getCatalogSubscription.unsubscribe();
+      this.getCatalogSubscription = null;
     }
 
     if (this.createCatalogSubscription) {

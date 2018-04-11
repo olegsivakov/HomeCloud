@@ -103,10 +103,9 @@ export class HttpService<T extends IResource> {
     return Observable.throw(error);
   }
 
-  public get<TResult extends T>(entity: T): Observable<TResult> {
-    let resultType: new() => TResult;
+  public get(entity: T): Observable<T> {
 
-    return this.resourceService.request<TResult>(resultType, entity._links.get).map((resource: TResult) => {
+    return this.resourceService.request<T>(this.type, entity._links.get).map((resource: T) => {
       return resource;
     });
   }

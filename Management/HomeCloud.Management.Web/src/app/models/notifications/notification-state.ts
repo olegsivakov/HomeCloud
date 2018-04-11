@@ -13,6 +13,15 @@ export class NotificationState {
         return this.timeExpired && this.timeExpired <= new Date();
     }
 
+    public setWarning(reason?: string, description?: string): NotificationState {
+        this.notification.type = NotificationType.warning;
+
+        this.notification.title = reason ? reason : this.notification.title;
+        this.notification.message = description ? description : this.notification.message;
+
+        return this;
+    }
+
     public setSucceded(reason?: string, description?: string): NotificationState {
         this.notification.type = NotificationType.success;
 
