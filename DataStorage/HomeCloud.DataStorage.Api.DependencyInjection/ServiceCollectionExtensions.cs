@@ -10,12 +10,9 @@
 	using HomeCloud.DataStorage.Api.Models;
 	using HomeCloud.DataStorage.Api.Models.Converters;
 
-	using HomeCloud.DataStorage.Business.Commands;
-
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Entities.Converters;
 
-	using HomeCloud.DataStorage.Business.Handlers;
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Services;
 	using HomeCloud.DataStorage.Business.Validation;
@@ -151,11 +148,6 @@
 			services.AddSingleton<IDataProviderFactory, DataProviderFactory>();
 
 			services.AddFactory<IDataProvider>();
-
-			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();
-			services.AddTransient<IDataCommandHandler, DataCommandHandler>();
-			services.AddScoped<ICommandHandlerProcessor, CommandHandlerProcessor>();
-			services.AddFactory<ICommandHandler>();
 
 			services.AddScoped<IStorageService, StorageService>();
 			services.AddScoped<ICatalogService, CatalogService>();

@@ -84,7 +84,9 @@
 		/// </returns>
 		public async Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
 		{
-			return await Task.Run(() => this.Map<TSource, TTarget>(source, target));
+			target = this.Map<TSource, TTarget>(source, target);
+
+			return await Task.FromResult(target);
 		}
 
 		#endregion

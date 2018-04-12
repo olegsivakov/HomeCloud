@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}"
 EndProject
@@ -57,19 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Busin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Validation", "HomeCloud.DataStorage.Business.Validation\HomeCloud.DataStorage.Business.Validation.csproj", "{1E4F6B7E-895B-41C0-8392-1C398794D775}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Commands.Abstractions", "HomeCloud.DataStorage.Business.Commands.Abstractions\HomeCloud.DataStorage.Business.Commands.Abstractions.csproj", "{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Commands", "HomeCloud.DataStorage.Business.Commands\HomeCloud.DataStorage.Business.Commands.csproj", "{58EE6BB1-8F76-4F4D-B26F-856091C1474C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Handlers.Abstractions", "HomeCloud.DataStorage.Business.Handlers.Abstractions\HomeCloud.DataStorage.Business.Handlers.Abstractions.csproj", "{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Handlers", "HomeCloud.DataStorage.Business.Handlers\HomeCloud.DataStorage.Business.Handlers.csproj", "{7E36375B-AC01-474E-878E-272620C6BC1E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Services.Abstractions", "HomeCloud.DataStorage.Business.Services.Abstractions\HomeCloud.DataStorage.Business.Services.Abstractions.csproj", "{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Services", "HomeCloud.DataStorage.Business.Services\HomeCloud.DataStorage.Business.Services.csproj", "{5D3E601C-979E-43F1-B3C6-EC6A780112BD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Business.Handlers.Extensions", "HomeCloud.DataStorage.Business.Handlers.Extensions\HomeCloud.DataStorage.Business.Handlers.Extensions.csproj", "{B1A18727-82AA-48B1-AD05-412D9978DB6E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DataStorage.Api.Models", "HomeCloud.DataStorage.Api.Models\HomeCloud.DataStorage.Api.Models.csproj", "{81FB920A-2AFC-4FDB-8444-3DD21068D2F5}"
 EndProject
@@ -97,7 +87,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Exceptions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.DataAnnotations", "..\Common\Mvc\HomeCloud.Mvc.DataAnnotations\HomeCloud.Mvc.DataAnnotations.csproj", "{06C6460C-8DDD-4C6D-AED1-6584A1563DCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.Mvc.ActionConstraints", "..\Common\Mvc\HomeCloud.Mvc.ActionConstraints\HomeCloud.Mvc.ActionConstraints.csproj", "{42A3F4A1-3145-4C3D-B086-D98B745E09CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.ActionConstraints", "..\Common\Mvc\HomeCloud.Mvc.ActionConstraints\HomeCloud.Mvc.ActionConstraints.csproj", "{42A3F4A1-3145-4C3D-B086-D98B745E09CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -199,22 +189,6 @@ Global
 		{1E4F6B7E-895B-41C0-8392-1C398794D775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E4F6B7E-895B-41C0-8392-1C398794D775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E4F6B7E-895B-41C0-8392-1C398794D775}.Release|Any CPU.Build.0 = Release|Any CPU
-		{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58EE6BB1-8F76-4F4D-B26F-856091C1474C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58EE6BB1-8F76-4F4D-B26F-856091C1474C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58EE6BB1-8F76-4F4D-B26F-856091C1474C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58EE6BB1-8F76-4F4D-B26F-856091C1474C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E36375B-AC01-474E-878E-272620C6BC1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E36375B-AC01-474E-878E-272620C6BC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E36375B-AC01-474E-878E-272620C6BC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E36375B-AC01-474E-878E-272620C6BC1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -223,10 +197,6 @@ Global
 		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D3E601C-979E-43F1-B3C6-EC6A780112BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1A18727-82AA-48B1-AD05-412D9978DB6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81FB920A-2AFC-4FDB-8444-3DD21068D2F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81FB920A-2AFC-4FDB-8444-3DD21068D2F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81FB920A-2AFC-4FDB-8444-3DD21068D2F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -311,13 +281,8 @@ Global
 		{6B2C3CF1-8029-4E5A-8EB9-EBE3C8B686A9} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{2AAFE2E1-7D55-44AB-B94A-42A9A9EADCF0} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{1E4F6B7E-895B-41C0-8392-1C398794D775} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
-		{836BDA6B-D311-45DA-8B66-DE4ADFBE83A3} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
-		{58EE6BB1-8F76-4F4D-B26F-856091C1474C} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
-		{03E91E1B-AED9-4EBF-9BD1-6F0B080009D0} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
-		{7E36375B-AC01-474E-878E-272620C6BC1E} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{1BB3A1EE-9F2E-458D-9D6D-B16F0676230F} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{5D3E601C-979E-43F1-B3C6-EC6A780112BD} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
-		{B1A18727-82AA-48B1-AD05-412D9978DB6E} = {FAC86F67-6AC1-46C4-9056-67B35123A1CD}
 		{5007BBEF-6BAA-44B0-885E-153EC1FABDCC} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
 		{F7FCDC6D-AB7C-4433-B2AF-0721E868FD4F} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}
 		{AB670BD6-44F7-497F-BC62-8A5976658372} = {AAB6E0C3-FA59-494B-8EDD-9D2FEE987631}

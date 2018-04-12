@@ -170,7 +170,7 @@
 
 			IPaginable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
 
-			IEnumerable<Storage> storages = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
+			IEnumerable<Storage> storages = this.mapper.MapNew<StorageContract, Storage>(data);
 			storages = storages.SelectAsync(async storage =>
 			{
 				CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
@@ -202,7 +202,7 @@
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			catalogContract = await catalogRepository.GetAsync(storage.ID);
 
-			storage = await this.mapper.MapNewAsync<StorageContract, Storage>(storageContract);
+			storage = await this.mapper.MapAsync<StorageContract, Storage>(storageContract, storage);
 			storage = await this.mapper.MapAsync(catalogContract, storage);
 
 			return storage;
@@ -343,7 +343,7 @@
 
 			IPaginable<CatalogContract> data = await catalogRepository.FindAsync(contract, offset, limit);
 
-			IEnumerable<Catalog> catalogs = await this.mapper.MapNewAsync<CatalogContract, Catalog>(data);
+			IEnumerable<Catalog> catalogs = this.mapper.MapNew<CatalogContract, Catalog>(data);
 			catalogs = catalogs.Select(catalog =>
 			{
 				catalog.Parent = (Catalog)parent;
@@ -485,7 +485,7 @@
 
 			IPaginable<FileContract> data = await fileRepository.FindAsync(contract, offset, limit);
 
-			IEnumerable<CatalogEntry> entries = await this.mapper.MapNewAsync<FileContract, CatalogEntry>(data);
+			IEnumerable<CatalogEntry> entries = this.mapper.MapNew<FileContract, CatalogEntry>(data);
 			entries = entries.Select(entry =>
 			{
 				entry.Catalog = (Catalog)catalog;

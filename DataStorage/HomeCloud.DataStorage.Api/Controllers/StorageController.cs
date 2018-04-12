@@ -68,7 +68,7 @@
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
 			ServiceResult<IPaginable<Storage>> result = await this.storageService.GetStoragesAsync(offset, limit);
-			IEnumerable<StorageViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
+			IEnumerable<StorageViewModel> data = result.Data != null ? this.Mapper.MapNew<Storage, StorageViewModel>(result.Data) : null;
 
 			return this.HttpResult(
 				new PagedListViewModel<StorageViewModel>(data)

@@ -72,7 +72,7 @@
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
 			ServiceResult<IPaginable<Catalog>> result = await this.catalogService.GetCatalogsAsync(id, offset, limit);
-			IEnumerable<DataViewModel> data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, DataViewModel>(result.Data) : null;
+			IEnumerable<DataViewModel> data = result.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(result.Data) : null;
 
 			return this.HttpResult(
 				new DataListViewModel(data, id)
