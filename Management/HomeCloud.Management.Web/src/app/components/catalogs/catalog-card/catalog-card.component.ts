@@ -29,6 +29,8 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   private updateSubscription: ISubscription = null;
   private removeSubscription: ISubscription = null;
 
+  private isLoading: boolean = false;
+
   @Input('catalog')
   public catalog: Catalog = null;
 
@@ -54,7 +56,8 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     return this.catalog.hasGet && this.catalog.hasGet() && !(this.catalog._links instanceof CatalogRelation);
   }
   private onLoad(): void {
-    if (this.canLoad) {
+    if (this.canLoad && !this.isLoading) {
+      this.isLoading = true;
       this.load();
     }
   }
