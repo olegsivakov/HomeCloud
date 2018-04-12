@@ -8,10 +8,6 @@
 	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Business.Entities;
-
-	using HomeCloud.DataStorage.Business.Handlers;
-	using HomeCloud.DataStorage.Business.Handlers.Extensions;
-
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 
@@ -28,9 +24,9 @@
 		#region Private Members
 
 		/// <summary>
-		/// The processor
+		/// The data factory
 		/// </summary>
-		private readonly ICommandHandlerProcessor processor = null;
+		private readonly IDataProviderFactory dataFactory = null;
 
 		/// <summary>
 		/// The validation service factory.
@@ -44,13 +40,13 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StorageService" /> class.
 		/// </summary>
-		/// <param name="processor">The command processor.</param>
+		/// <param name="dataFactory">The data factory.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public StorageService(
-			ICommandHandlerProcessor processor,
+			IDataProviderFactory dataFactory,
 			IValidationServiceFactory validationServiceFactory)
 		{
-			this.processor = processor;
+			this.dataFactory = dataFactory;
 			this.validationServiceFactory = validationServiceFactory;
 		}
 
@@ -84,14 +80,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> createStorageFunction = async provider => storage = await provider.CreateStorage(storage);
-			Func<IDataProvider, Task> createStorageUndoFunction = async provider => storage = await provider.DeleteStorage(storage);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createStorageFunction, createStorageUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createStorageFunction, createStorageUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createStorageFunction, createStorageUndoFunction);
-
-			await this.processor.ProcessAsync();
+			storage = await this.dataFactory.CreateStorage(storage);
 
 			return new ServiceResult<Storage>(storage);
 		}
@@ -118,13 +107,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> updateStorageFunction = async provider => storage = await provider.UpdateStorage(storage);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(updateStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateStorageFunction, null);
-
-			await this.processor.ProcessAsync();
+			storage = await this.dataFactory.UpdateStorage(storage);
 
 			return new ServiceResult<Storage>(storage);
 		}
@@ -139,12 +122,7 @@
 		/// </returns>
 		public async Task<ServiceResult<IPaginable<Storage>>> GetStoragesAsync(int offset = 0, int limit = 20)
 		{
-			IPaginable<Storage> storages = null;
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => storages = await provider.GetStorages(offset, limit), null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommandFor<Storage, IAggregationDataProvider>(storages, async (provider, item) => await provider.GetStorage(item), null);
-
-			await this.processor.ProcessAsync();
+			IPaginable<Storage> storages = await this.dataFactory.GetStorages(offset, limit);
 
 			return new ServiceResult<IPaginable<Storage>>(storages);
 		}
@@ -171,12 +149,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> getStorageFunction = async provider => storage = await provider.GetStorage(storage);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(getStorageFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(getStorageFunction, null);
-
-			await this.processor.ProcessAsync();
+			storage = await this.dataFactory.GetStorage(storage);
 
 			return new ServiceResult<Storage>(storage);
 		}
@@ -197,12 +170,7 @@
 			Storage storage = serviceResult.Data;
 			Func<IDataProvider, Task> deleteStorageFunction = async provider => storage = await provider.DeleteStorage(storage);
 
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(deleteStorageFunction, null)
-				.CreateAsyncCommand<IFileSystemProvider>(deleteStorageFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(deleteStorageFunction, null);
-
-			await this.processor.ProcessAsync();
+			storage = await this.dataFactory.DeleteStorage(storage);
 
 			return new ServiceResult<Storage>(storage);
 		}

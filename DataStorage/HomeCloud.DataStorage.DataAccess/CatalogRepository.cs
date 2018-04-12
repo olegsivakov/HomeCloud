@@ -131,7 +131,7 @@
 					@ChunkSize = limit
 				});
 
-			await result.ForEachAsync(async item => await Task.Run(() => item.AcceptChanges()));
+			Parallel.ForEach(result, item => item.AcceptChanges());
 			int count = await this.GetCountAsync(catalog);
 
 			return new PagedList<Catalog>(result)

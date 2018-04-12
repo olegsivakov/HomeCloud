@@ -3,15 +3,11 @@
 	#region Usings
 
 	using System;
-	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Business.Entities;
-
-	using HomeCloud.DataStorage.Business.Handlers;
-	using HomeCloud.DataStorage.Business.Handlers.Extensions;
 
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
@@ -29,9 +25,9 @@
 		#region Private Members
 
 		/// <summary>
-		/// The processor
+		/// The data factory
 		/// </summary>
-		private readonly ICommandHandlerProcessor processor = null;
+		private readonly IDataProviderFactory dataFactory = null;
 
 		/// <summary>
 		/// The validation service factory.
@@ -45,13 +41,13 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CatalogService" /> class.
 		/// </summary>
-		/// <param name="processor">The command processor.</param>
+		/// <param name="dataFactory">The data factory.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public CatalogService(
-			ICommandHandlerProcessor processor,
+			IDataProviderFactory dataFactory,
 			IValidationServiceFactory validationServiceFactory)
 		{
-			this.processor = processor;
+			this.dataFactory = dataFactory;
 			this.validationServiceFactory = validationServiceFactory;
 		}
 
@@ -83,15 +79,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> createCatalogFunction = async provider => catalog = await provider.CreateCatalog(catalog);
-			Func<IDataProvider, Task> createCatalogUndoFunction = async provider => catalog = await provider.DeleteCatalog(catalog);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createCatalogFunction, createCatalogUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => catalog.Parent = await provider.GetCatalog(catalog.Parent), null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createCatalogFunction, createCatalogUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createCatalogFunction, createCatalogUndoFunction);
-
-			await this.processor.ProcessAsync();
+			catalog = await this.dataFactory.CreateCatalog(catalog);
 
 			return new ServiceResult<Catalog>(catalog);
 		}
@@ -105,34 +93,19 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
-			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(catalog.ID);
-			if (!serviceResult.IsSuccess)
-			{
-				return serviceResult;
-			}
-
-			serviceResult.Data.Name = catalog.Name;
-
 			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 
-			ValidationResult result = await validator.Get<IUniqueValidator>().ValidateAsync(serviceResult.Data);
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
 			if (!result.IsValid)
 			{
-				serviceResult.Errors = result.Errors;
-
-				return serviceResult;
+				return new ServiceResult<Catalog>(catalog)
+				{
+					Errors = result.Errors
+				};
 			}
 
-			Func<IDataProvider, Task> updateCatalogFunction = async provider => catalog = await provider.UpdateCatalog(catalog);
-			Func<IDataProvider, Task> getCatalogFunction = async provider => catalog = await provider.GetCatalog(catalog);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(updateCatalogFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(getCatalogFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(updateCatalogFunction, null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(updateCatalogFunction, null);
-
-			await this.processor.ProcessAsync();
+			catalog = await this.dataFactory.UpdateCatalog(catalog);
 
 			return new ServiceResult<Catalog>(catalog);
 		}
@@ -150,7 +123,6 @@
 
 			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
 			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
-
 			if (!result.IsValid)
 			{
 				return new ServiceResult<Catalog>(catalog)
@@ -159,13 +131,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> getCatalogFunction = async provider => catalog = await provider.GetCatalog(catalog);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(getCatalogFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(getCatalogFunction, null);
-
-			await this.processor.ProcessAsync();
+			catalog = await this.dataFactory.GetCatalog(catalog);
 
 			return new ServiceResult<Catalog>(catalog);
 		}
@@ -181,21 +147,19 @@
 		/// </returns>
 		public async Task<ServiceResult<IPaginable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20)
 		{
-			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(parentID);
-			if (!serviceResult.IsSuccess)
+			Catalog parentCatalog = new Catalog() { ID = parentID };
+
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(parentCatalog);
+			if (!result.IsValid)
 			{
-				return new ServiceResult<IPaginable<Catalog>>(new PagedList<Catalog>())
+				return new ServiceResult<IPaginable<Catalog>>(null)
 				{
-					Errors = serviceResult.Errors
+					Errors = result.Errors
 				};
 			}
 
-			IPaginable<Catalog> catalogs = null;
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => catalogs = await provider.GetCatalogs(serviceResult.Data, offset, limit), null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommandFor<Catalog, IAggregationDataProvider>(catalogs, async (provider, item) => await provider.GetCatalog(item), null);
-
-			await this.processor.ProcessAsync();
+			IPaginable<Catalog> catalogs = await this.dataFactory.GetCatalogs(parentCatalog, offset, limit);
 
 			return new ServiceResult<IPaginable<Catalog>>(catalogs);
 		}
@@ -209,21 +173,19 @@
 		/// </returns>
 		public async Task<ServiceResult> DeleteCatalogAsync(Guid id)
 		{
-			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(id);
-			if (!serviceResult.IsSuccess)
+			Catalog catalog = new Catalog() { ID = id };
+
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			if (!result.IsValid)
 			{
-				return serviceResult;
+				return new ServiceResult()
+				{
+					Errors = result.Errors
+				};
 			}
 
-			Catalog catalog = serviceResult.Data;
-			Func<IDataProvider, Task> deleteCatalogFunction = async provider => catalog = await provider.DeleteCatalog(catalog);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(deleteCatalogFunction, null)
-				.CreateAsyncCommand<IFileSystemProvider>(deleteCatalogFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(deleteCatalogFunction, null);
-
-			await this.processor.ProcessAsync();
+			catalog = await this.dataFactory.DeleteCatalog(catalog);
 
 			return new ServiceResult<Catalog>(catalog);
 		}

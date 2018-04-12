@@ -171,7 +171,7 @@
 			IPaginable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
 
 			IEnumerable<Storage> storages = await this.mapper.MapNewAsync<StorageContract, Storage>(data);
-			storages = await storages.SelectAsync(async storage =>
+			storages = storages.SelectAsync(async storage =>
 			{
 				CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
 

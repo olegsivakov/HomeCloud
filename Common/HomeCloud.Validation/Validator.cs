@@ -36,7 +36,7 @@
 		/// </returns>
 		public async Task<ValidationResult> ValidateAsync(T instance)
 		{
-			IEnumerable<ValidationResult> ruleResults = await this.rules.SelectAsync(async rule =>
+			IEnumerable<ValidationResult> ruleResults = this.rules.SelectAsync(async rule =>
 			{
 				return await rule.IsSatisfiedByAsync(instance);
 			});
@@ -50,7 +50,7 @@
 				}
 			}
 
-			return result;
+			return await Task.FromResult(result);
 		}
 
 		#endregion

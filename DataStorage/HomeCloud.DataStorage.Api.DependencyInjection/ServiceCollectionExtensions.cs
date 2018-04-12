@@ -148,6 +148,8 @@
 			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
 			services.AddSingleton<IFileSystemProvider, FileSystemProvider>();
 			services.AddSingleton<IAggregationDataProvider, AggregationDataProvider>();
+			services.AddSingleton<IDataProviderFactory, DataProviderFactory>();
+
 			services.AddFactory<IDataProvider>();
 
 			services.AddSingleton<IActionCommandFactory, ActionCommandFactory>();

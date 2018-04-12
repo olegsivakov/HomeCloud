@@ -3,16 +3,11 @@
 	#region Usings
 
 	using System;
-	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
 	using HomeCloud.DataStorage.Business.Entities;
-
-	using HomeCloud.DataStorage.Business.Handlers;
-	using HomeCloud.DataStorage.Business.Handlers.Extensions;
-
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 
@@ -29,19 +24,14 @@
 		#region Private Members
 
 		/// <summary>
-		/// The processor
+		/// The data factory
 		/// </summary>
-		private readonly ICommandHandlerProcessor processor = null;
+		private readonly IDataProviderFactory dataFactory = null;
 
 		/// <summary>
 		/// The validation service factory.
 		/// </summary>
 		private readonly IValidationServiceFactory validationServiceFactory = null;
-
-		/// <summary>
-		/// The catalog service
-		/// </summary>
-		private readonly ICatalogService catalogService = null;
 
 		#endregion
 
@@ -50,18 +40,14 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CatalogEntryService"/> class.
 		/// </summary>
-		/// <param name="processor">The command processor.</param>
+		/// <param name="dataFactory">The data factory.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
-		/// <param name="catalogService">The catalog service.</param>
 		public CatalogEntryService(
-			ICommandHandlerProcessor processor,
-			IValidationServiceFactory validationServiceFactory,
-			ICatalogService catalogService)
+			IDataProviderFactory dataFactory,
+			IValidationServiceFactory validationServiceFactory)
 		{
-			this.processor = processor;
+			this.dataFactory = dataFactory;
 			this.validationServiceFactory = validationServiceFactory;
-
-			this.catalogService = catalogService;
 		}
 
 		#endregion
@@ -92,15 +78,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> createCatalogEntryFunction = async provider => stream.Entry = await provider.CreateCatalogEntry(stream);
-			Func<IDataProvider, Task> createCatalogEntryUndoFunction = async provider => stream.Entry = await provider.DeleteCatalogEntry(stream.Entry);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(createCatalogEntryFunction, createCatalogEntryUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => stream.Entry.Catalog = await provider.GetCatalog(stream.Entry.Catalog), null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IFileSystemProvider>(createCatalogEntryFunction, createCatalogEntryUndoFunction);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(createCatalogEntryFunction, createCatalogEntryUndoFunction);
-
-			await this.processor.ProcessAsync();
+			stream.Entry = await this.dataFactory.CreateCatalogEntry(stream);
 
 			return new ServiceResult<CatalogEntry>(stream.Entry);
 		}
@@ -114,21 +92,19 @@
 		/// </returns>
 		public async Task<ServiceResult> DeleteEntryAsync(Guid id)
 		{
-			ServiceResult<CatalogEntry> serviceResult = await this.GetEntryAsync(id);
-			if (!serviceResult.IsSuccess)
+			CatalogEntry entry = new CatalogEntry() { ID = id };
+
+			IServiceFactory<ICatalogEntryValidator> validator = this.validationServiceFactory.GetFactory<ICatalogEntryValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(entry);
+			if (!result.IsValid)
 			{
-				return serviceResult;
+				return new ServiceResult<CatalogEntry>(entry)
+				{
+					Errors = result.Errors
+				};
 			}
 
-			CatalogEntry entry = serviceResult.Data;
-			Func<IDataProvider, Task> deleteCatalogEntryFunction = async provider => entry = await provider.DeleteCatalogEntry(entry);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(deleteCatalogEntryFunction, null)
-				.CreateAsyncCommand<IFileSystemProvider>(deleteCatalogEntryFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(deleteCatalogEntryFunction, null);
-
-			await this.processor.ProcessAsync();
+			entry = await this.dataFactory.DeleteCatalogEntry(entry);
 
 			return new ServiceResult<CatalogEntry>(entry);
 		}
@@ -146,7 +122,6 @@
 
 			IServiceFactory<ICatalogEntryValidator> validator = this.validationServiceFactory.GetFactory<ICatalogEntryValidator>();
 			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(entry);
-
 			if (!result.IsValid)
 			{
 				return new ServiceResult<CatalogEntry>(entry)
@@ -155,13 +130,7 @@
 				};
 			}
 
-			Func<IDataProvider, Task> getCatalogEntryFunction = async provider => entry = await provider.GetCatalogEntry(entry);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(getCatalogEntryFunction, null)
-				.CreateAsyncCommand<IAggregationDataProvider>(getCatalogEntryFunction, null);
-
-			await this.processor.ProcessAsync();
+			entry = await this.dataFactory.GetCatalogEntry(entry);
 
 			return new ServiceResult<CatalogEntry>(entry);
 		}
@@ -181,7 +150,6 @@
 
 			IServiceFactory<ICatalogEntryValidator> validator = this.validationServiceFactory.GetFactory<ICatalogEntryValidator>();
 			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(entry);
-
 			if (!result.IsValid)
 			{
 				return new ServiceResult<CatalogEntryStream>(new CatalogEntryStream(entry, 0))
@@ -190,16 +158,7 @@
 				};
 			}
 
-			CatalogEntryStream stream = null;
-
-			Func<IDataProvider, Task> getCatalogEntryStreamFunction = async provider => entry = await provider.GetCatalogEntry(entry);
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IAggregationDataProvider>(async provider => entry = await provider.GetCatalogEntry(entry), null);
-			this.processor.CreateDataHandler<IDataCommandHandler>()
-				.CreateAsyncCommand<IDataStoreProvider>(async provider => entry = await provider.GetCatalogEntry(entry), null)
-				.CreateAsyncCommand<IFileSystemProvider>(async provider => stream = await provider.GetCatalogEntryStream(entry, offset, length), null);
-
-			await this.processor.ProcessAsync();
+			CatalogEntryStream stream = await this.dataFactory.GetCatalogEntryStream(entry, offset, length);
 
 			return new ServiceResult<CatalogEntryStream>(stream);
 		}
@@ -215,21 +174,19 @@
 		/// </returns>
 		public async Task<ServiceResult<IPaginable<CatalogEntry>>> GetEntriesAsync(Guid catalogID, int offset = 0, int limit = 20)
 		{
-			ServiceResult<Catalog> serviceResult = await this.catalogService.GetCatalogAsync(catalogID);
-			if (!serviceResult.IsSuccess)
+			Catalog catalog = new Catalog() { ID = catalogID };
+
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			if (!result.IsValid)
 			{
-				return new ServiceResult<IPaginable<CatalogEntry>>(new PagedList<CatalogEntry>())
+				return new ServiceResult<IPaginable<CatalogEntry>>(null)
 				{
-					Errors = serviceResult.Errors
+					Errors = result.Errors
 				};
 			}
 
-			IPaginable<CatalogEntry> entries = null;
-
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommand<IDataStoreProvider>(async provider => entries = await provider.GetCatalogEntries(serviceResult.Data, offset, limit), null);
-			this.processor.CreateDataHandler<IDataCommandHandler>().CreateAsyncCommandFor<CatalogEntry, IAggregationDataProvider>(entries, async (provider, item) => await provider.GetCatalogEntry(item), null);
-
-			await this.processor.ProcessAsync();
+			IPaginable<CatalogEntry> entries = await this.dataFactory.GetCatalogEntries(catalog, offset, limit);
 
 			return new ServiceResult<IPaginable<CatalogEntry>>(entries);
 		}

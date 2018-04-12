@@ -7,6 +7,7 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core.Extensions;
+	using System;
 
 	#endregion
 
@@ -59,7 +60,7 @@
 				return Enumerable.Empty<TTarget>();
 			}
 
-			return source.Select(item => mapper.MapNew<TSource, TTarget>(item));
+			return source.SelectAsync(async item => await Task.FromResult(mapper.MapNew<TSource, TTarget>(item)));
 		}
 
 		/// <summary>
@@ -70,15 +71,11 @@
 		/// <param name="mapper">The <see cref="IMapper"/> mapper.</param>
 		/// <param name="source">The list of instances of <see cref="TSource"/>.</param>
 		/// <returns>The list of instances of <see cref="TTarget"/>.</returns>
+		[Obsolete]
 		public static async Task<IEnumerable<TTarget>> MapNewAsync<TSource, TTarget>(this IMapper mapper, IEnumerable<TSource> source)
 			where TTarget : new()
 		{
-			if (source is null || source.Count() == 0)
-			{
-				return Enumerable.Empty<TTarget>();
-			}
-
-			return await source.SelectAsync(async item => await mapper.MapNewAsync<TSource, TTarget>(item));
+			return await Task.FromResult(mapper.MapNew<TSource, TTarget>(source));
 		}
 	}
 }

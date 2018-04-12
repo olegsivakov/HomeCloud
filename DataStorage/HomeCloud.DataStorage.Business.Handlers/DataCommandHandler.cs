@@ -75,7 +75,7 @@
 		/// </returns>
 		public virtual async Task ExecuteAsync()
 		{
-			await this.commands.ForEachAsync(async command =>
+			this.commands.ForEachAsync(async command =>
 			{
 				await command.ExecuteAsync();
 			});
@@ -98,7 +98,7 @@
 		/// </returns>
 		public virtual async Task UndoAsync()
 		{
-			await this.commands.ForEachAsync(async command =>
+			this.commands.ForEachAsync(async command =>
 			{
 				await command.UndoAsync();
 			});
