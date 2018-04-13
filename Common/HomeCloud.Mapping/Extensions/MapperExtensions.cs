@@ -31,20 +31,6 @@
 		}
 
 		/// <summary>
-		/// Creates the instance of <see cref="TTarget"/> and maps the instance of <see cref="TSource"/> to it asynchronously.
-		/// </summary>
-		/// <typeparam name="TSource">The type of the source instance.</typeparam>
-		/// <typeparam name="TTarget">The type of the target instance.</typeparam>
-		/// <param name="mapper">The <see cref="IMapper"/> mapper.</param>
-		/// <param name="source">The instance of <see cref="TSource"/>.</param>
-		/// <returns>The instance of <see cref="TTarget"/>.</returns>
-		public static async Task<TTarget> MapNewAsync<TSource, TTarget>(this IMapper mapper, TSource source)
-			where TTarget : new()
-		{
-			return await mapper.MapAsync(source, new TTarget());
-		}
-
-		/// <summary>
 		/// Creates the instance of <see cref="IEnumerable{T}"/> and maps the instance of <see cref="IEnumerable{TSource}"/> to them.
 		/// </summary>
 		/// <typeparam name="TSource">The type of the source instance.</typeparam>
@@ -60,7 +46,7 @@
 				return Enumerable.Empty<TTarget>();
 			}
 
-			return source.SelectAsync(async item => await Task.FromResult(mapper.MapNew<TSource, TTarget>(item)));
+			return source.AsParallel().Select(item => mapper.MapNew<TSource, TTarget>(item));
 		}
 	}
 }

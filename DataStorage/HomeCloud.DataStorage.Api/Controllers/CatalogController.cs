@@ -97,7 +97,7 @@
 			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid id)
 		{
 			ServiceResult<Catalog> result = await this.catalogService.GetCatalogAsync(id);
-			CatalogViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;
+			CatalogViewModel data = result.Data != null ? this.Mapper.MapNew<Catalog, CatalogViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -116,11 +116,11 @@
 			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid catalogID,
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] CatalogViewModel model)
 		{
-			Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
+			Catalog entity = this.Mapper.MapNew<CatalogViewModel, Catalog>(model);
 			entity.Parent.ID = catalogID;
 
 			ServiceResult<Catalog> result = await this.catalogService.CreateCatalogAsync(entity);
-			CatalogViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;
+			CatalogViewModel data = result.Data != null ? this.Mapper.MapNew<Catalog, CatalogViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -139,11 +139,11 @@
 			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid id,
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] CatalogViewModel model)
 		{
-			Catalog entity = await this.Mapper.MapNewAsync<CatalogViewModel, Catalog>(model);
+			Catalog entity = this.Mapper.MapNew<CatalogViewModel, Catalog>(model);
 			entity.ID = id;
 
 			ServiceResult<Catalog> result = await this.catalogService.UpdateCatalogAsync(entity);
-			CatalogViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Catalog, CatalogViewModel>(result.Data) : null;
+			CatalogViewModel data = result.Data != null ? this.Mapper.MapNew<Catalog, CatalogViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}

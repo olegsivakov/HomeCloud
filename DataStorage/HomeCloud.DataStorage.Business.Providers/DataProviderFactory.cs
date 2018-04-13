@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -114,10 +115,7 @@
 		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
 			IPaginable<Storage> result = await this.providerFactory.Get<IDataStoreProvider>().GetStorages(offset, limit);
-			result.ForEachAsync(async item =>
-			{
-				item = await this.providerFactory.Get<IAggregationDataProvider>().GetStorage(item);
-			});
+			result.AsParallel().ForAll(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetStorage(item));
 
 			return result;
 		}
@@ -197,10 +195,7 @@
 		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
 			IPaginable<Catalog> result = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogs(parent, offset, limit);
-			result.ForEachAsync(async item =>
-			{
-				item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(item);
-			});
+			result.AsParallel().ForAll(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(item));
 
 			return result;
 		}
@@ -303,10 +298,7 @@
 		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
 			IPaginable<CatalogEntry> result = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogEntries(catalog, offset, limit);
-			result.ForEachAsync(async item =>
-			{
-				item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalogEntry(item);
-			});
+			result.AsParallel().ForAll(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalogEntry(item));
 
 			return result;
 		}

@@ -23,31 +23,20 @@
 		/// <param name="action">The action to perform against the chunked collection.</param>
 		/// <param name="size">The chunk size.</param>
 		/// <returns>The asynchronous operation.</returns>
-		public static async Task ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action, int size)
+		[Obsolete("Use built-in TPL framework")]
+		public static void ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action, int size)
 		{
 			int count = source.Count();
 
-			await ForEachAsync(
-				async (offset, limit) => await Task.FromResult(new PagedList<T>(source.Skip(offset).Take(limit))
+			ForEachAsync(
+				(offset, limit) => new PagedList<T>(source.Skip(offset).Take(limit))
 				{
 					Offset = offset,
 					Limit = limit,
 					TotalCount = count
-				}),
+				},
 				action,
 				size);
-		}
-
-		/// <summary>
-		/// Performs the specified action on each selector element asynchronously.
-		/// </summary>
-		/// <typeparam name="T">The type of elements in the collection.</typeparam>
-		/// <param name="source">The source collection.</param>
-		/// <param name="action">The action to perform against the collection element.</param>
-		/// <returns>The asynchronous operation.</returns>
-		public static void ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action)
-		{
-			source.AsParallel().ForAll(item => action(item).Wait());
 		}
 
 		/// <summary>
@@ -60,7 +49,6 @@
 		/// <returns>The instance of <see cref="IEnumerable{T}"/> whose elements are the result of  invoking the transform function on each element of source.</returns>
 		public static IEnumerable<TResult> SelectAsync<T, TResult>(this IEnumerable<T> source, Func<T, Task<TResult>> selector)
 		{
-			IList<TResult> result = new List<TResult>();
 			return source.AsParallel().Select(item =>
 			{
 				Task<TResult> task = selector(item);
@@ -79,7 +67,8 @@
 		/// <param name="action">The action to perform against the chunked collection.</param>
 		/// <param name="size">The chunk size.</param>
 		/// <returns>The asynchronous operation.</returns>
-		private static async Task ForEachAsync<T>(Func<int, int, Task<IPaginable<T>>> selector, Func<T, Task> action, int size)
+		[Obsolete("Use built-in TPL framework")]
+		private static void ForEachAsync<T>(Func<int, int, IPaginable<T>> selector, Func<T, Task> action, int size)
 		{
 			IPaginable<T> chunks = null;
 
@@ -88,9 +77,9 @@
 				int offset = (chunks?.Limit).GetValueOrDefault() + chunks?.Offset ?? 0;
 				int limit = chunks?.Limit ?? size;
 
-				chunks = await selector(offset, limit);
+				chunks = selector(offset, limit);
 
-				chunks.ForEachAsync(action);
+				chunks.AsParallel().ForAll(async chunk => await action(chunk));
 			}
 			while (chunks.Offset < chunks.TotalCount);
 		}

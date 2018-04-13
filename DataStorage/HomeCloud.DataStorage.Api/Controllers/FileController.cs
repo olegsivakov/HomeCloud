@@ -76,7 +76,7 @@
 			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
-			FileViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileViewModel>(result.Data) : null;
+			FileViewModel data = result.Data != null ? this.Mapper.MapNew<CatalogEntry, FileViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -94,7 +94,7 @@
 			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
-			FileStreamViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileStreamViewModel>(result.Data) : null;
+			FileStreamViewModel data = result.Data != null ? this.Mapper.MapNew<CatalogEntry, FileStreamViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -114,13 +114,13 @@
 			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid catalogID,
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] FileStreamViewModel model)
 		{
-			CatalogEntry entry = await this.Mapper.MapNewAsync<FileStreamViewModel, CatalogEntry>(model);
+			CatalogEntry entry = this.Mapper.MapNew<FileStreamViewModel, CatalogEntry>(model);
 			entry.Catalog.ID = catalogID;
 
 			CatalogEntryStream stream = new CatalogEntryStream(entry, model.Stream);
 
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
-			FileStreamViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileStreamViewModel>(result.Data) : null;
+			FileStreamViewModel data = result.Data != null ? this.Mapper.MapNew<CatalogEntry, FileStreamViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -155,7 +155,7 @@
 			[RequireNonDefault(ErrorMessage = "The unique identifier is empty")] Guid id)
 		{
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.GetEntryAsync(id);
-			FileStreamViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<CatalogEntry, FileStreamViewModel>(result.Data) : null;
+			FileStreamViewModel data = result.Data != null ? this.Mapper.MapNew<CatalogEntry, FileStreamViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}

@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 
@@ -19,13 +20,13 @@
 		/// <param name="actions">The actions.</param>
 		public static void InvokeAsync(params Func<Task>[] actions)
 		{
-			var invocations = actions.Select(action => new Action(() =>
+			IEnumerable<Action> invocations = actions.Select(action => new Action(() =>
 			{
 				Task task = action();
 				task.Wait();
-			})).ToArray();
+			}));
 
-			Parallel.Invoke(invocations);
+			Parallel.Invoke(invocations.ToArray());
 		}
 	}
 }

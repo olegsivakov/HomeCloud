@@ -91,7 +91,7 @@
 			[RequireNonDefault(ErrorMessage = "The storage unique identifier is empty")] Guid id)
 		{
 			ServiceResult<Storage> result = await this.storageService.GetStorageAsync(id);
-			StorageViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
+			StorageViewModel data = result.Data != null ? this.Mapper.MapNew<Storage, StorageViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -106,10 +106,10 @@
 		public async Task<IActionResult> CreateStorage(
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] StorageViewModel model)
 		{
-			Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
+			Storage entity = this.Mapper.MapNew<StorageViewModel, Storage>(model);
 			ServiceResult<Storage> result = await this.storageService.CreateStorageAsync(entity);
 
-			StorageViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
+			StorageViewModel data = result.Data != null ? this.Mapper.MapNew<Storage, StorageViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}
@@ -128,10 +128,10 @@
 		{
 			model.ID = id;
 
-			Storage entity = await this.Mapper.MapNewAsync<StorageViewModel, Storage>(model);
+			Storage entity = this.Mapper.MapNew<StorageViewModel, Storage>(model);
 			ServiceResult<Storage> result = await this.storageService.UpdateStorageAsync(entity);
 
-			StorageViewModel data = result.Data != null ? await this.Mapper.MapNewAsync<Storage, StorageViewModel>(result.Data) : null;
+			StorageViewModel data = result.Data != null ? this.Mapper.MapNew<Storage, StorageViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}

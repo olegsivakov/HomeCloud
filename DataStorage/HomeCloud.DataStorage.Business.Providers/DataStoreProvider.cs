@@ -72,7 +72,7 @@
 		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> StorageExists(Storage storage)
 		{
-			StorageContract contract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
+			StorageContract contract = this.mapper.MapNew<Storage, StorageContract>(storage);
 
 			if (string.IsNullOrWhiteSpace(contract.Name) && contract.ID == Guid.Empty)
 			{
@@ -98,12 +98,12 @@
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
-			StorageContract storageContract = await this.mapper.MapNewAsync<Storage, StorageContract>(storage);
-			CatalogContract catalogContract = await this.mapper.MapNewAsync<Storage, CatalogContract>(storage);
+			CatalogContract catalogContract = this.mapper.MapNew<Storage, CatalogContract>(storage);
 
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			catalogContract = await catalogRepository.SaveAsync(catalogContract);
 
+			StorageContract storageContract = this.mapper.MapNew<Storage, StorageContract>(storage);
 			storageContract.ID = catalogContract.ID;
 
 			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
@@ -111,8 +111,8 @@
 
 			this.dataContextScope.Commit();
 
-			storage = await this.mapper.MapAsync(storageContract, storage);
-			storage = await this.mapper.MapAsync(catalogContract, storage);
+			storage = this.mapper.Map(storageContract, storage);
+			storage = this.mapper.Map(catalogContract, storage);
 
 			return storage;
 		}
@@ -130,7 +130,7 @@
 			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
 
 			storageContract = await storageRepository.GetAsync(storage.ID);
-			storageContract = await this.mapper.MapAsync(storage, storageContract);
+			storageContract = this.mapper.Map(storage, storageContract);
 
 			if (storageContract.IsChanged)
 			{
@@ -142,8 +142,8 @@
 
 			this.dataContextScope.Commit();
 
-			storage = await this.mapper.MapAsync(storageContract, storage);
-			storage = await this.mapper.MapAsync(catalogContract, storage);
+			storage = this.mapper.Map(storageContract, storage);
+			storage = this.mapper.Map(catalogContract, storage);
 
 			return storage;
 		}
@@ -175,7 +175,7 @@
 			{
 				CatalogContract catalogContract = await catalogRepository.GetAsync(storage.ID);
 
-				return await this.mapper.MapAsync(catalogContract, storage);
+				return this.mapper.Map(catalogContract, storage);
 			});
 
 			return new PagedList<Storage>(storages)
@@ -202,8 +202,8 @@
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			catalogContract = await catalogRepository.GetAsync(storage.ID);
 
-			storage = await this.mapper.MapAsync<StorageContract, Storage>(storageContract, storage);
-			storage = await this.mapper.MapAsync(catalogContract, storage);
+			storage = this.mapper.Map(storageContract, storage);
+			storage = this.mapper.Map(catalogContract, storage);
 
 			return storage;
 		}
@@ -236,7 +236,7 @@
 		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogExists(Catalog catalog)
 		{
-			CatalogContract contract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
+			CatalogContract contract = this.mapper.MapNew<Catalog, CatalogContract>(catalog);
 
 			if (string.IsNullOrWhiteSpace(contract.Name) && contract.ID == Guid.Empty)
 			{
@@ -262,7 +262,7 @@
 		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
-			CatalogContract catalogContract = await this.mapper.MapNewAsync<Catalog, CatalogContract>(catalog);
+			CatalogContract catalogContract = this.mapper.MapNew<Catalog, CatalogContract>(catalog);
 			CatalogContract parentCatalogContract = null;
 
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
@@ -275,8 +275,8 @@
 
 			this.dataContextScope.Commit();
 
-			catalog = await this.mapper.MapAsync(catalogContract, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent);
+			catalog = this.mapper.Map(catalogContract, catalog);
+			catalog.Parent = this.mapper.Map(parentCatalogContract, catalog.Parent);
 
 			return catalog;
 		}
@@ -294,7 +294,7 @@
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 
 			catalogContract = await catalogRepository.GetAsync(catalog.ID);
-			catalogContract = await this.mapper.MapAsync(catalog, catalogContract);
+			catalogContract = this.mapper.Map(catalog, catalogContract);
 
 			if (catalogContract.IsChanged)
 			{
@@ -308,8 +308,8 @@
 
 			this.dataContextScope.Commit();
 
-			catalog = await this.mapper.MapAsync(catalogContract, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent);
+			catalog = this.mapper.Map(catalogContract, catalog);
+			catalog.Parent = this.mapper.Map(parentCatalogContract, catalog.Parent);
 
 			return catalog;
 		}
@@ -344,7 +344,7 @@
 			IPaginable<CatalogContract> data = await catalogRepository.FindAsync(contract, offset, limit);
 
 			IEnumerable<Catalog> catalogs = this.mapper.MapNew<CatalogContract, Catalog>(data);
-			catalogs = catalogs.Select(catalog =>
+			catalogs = catalogs.AsParallel().Select(catalog =>
 			{
 				catalog.Parent = (Catalog)parent;
 
@@ -377,8 +377,8 @@
 				parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
 			}
 
-			catalog = await this.mapper.MapAsync(catalogContract, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogContract, catalog.Parent);
+			catalog = this.mapper.Map(catalogContract, catalog);
+			catalog.Parent = this.mapper.Map(parentCatalogContract, catalog.Parent);
 
 			return catalog;
 		}
@@ -411,7 +411,7 @@
 		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogEntryExists(CatalogEntry entry)
 		{
-			FileContract contract = await this.mapper.MapNewAsync<CatalogEntry, FileContract>(entry);
+			FileContract contract = this.mapper.MapNew<CatalogEntry, FileContract>(entry);
 
 			if (string.IsNullOrWhiteSpace(contract.Name) && contract.ID == Guid.Empty)
 			{
@@ -439,7 +439,7 @@
 		{
 			CatalogEntry entry = stream.Entry;
 
-			FileContract fileContract = await this.mapper.MapNewAsync<CatalogEntry, FileContract>(entry);
+			FileContract fileContract = this.mapper.MapNew<CatalogEntry, FileContract>(entry);
 			CatalogContract catalogContract = null;
 
 			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
@@ -450,8 +450,8 @@
 
 			this.dataContextScope.Commit();
 
-			entry = await this.mapper.MapAsync(fileContract, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog);
+			entry = this.mapper.Map(fileContract, entry);
+			entry.Catalog = this.mapper.Map(catalogContract, entry.Catalog);
 
 			return entry;
 		}
@@ -517,8 +517,8 @@
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			catalogContract = await catalogRepository.GetAsync(fileContract.DirectoryID);
 
-			entry = await this.mapper.MapAsync(fileContract, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogContract, entry.Catalog);
+			entry = this.mapper.Map(fileContract, entry);
+			entry.Catalog = this.mapper.Map(catalogContract, entry.Catalog);
 
 			return entry;
 		}

@@ -3,7 +3,6 @@
 	#region Usings
 
 	using System;
-	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
@@ -70,23 +69,6 @@
 			}
 
 			return converter.Convert(source, target);
-		}
-
-		/// <summary>
-		/// Converts the specified instance of type <see cref="TSource" /> to the instance of type <see cref="TTarget" /> asynchronously.
-		/// </summary>
-		/// <typeparam name="TSource">The type of the source.</typeparam>
-		/// <typeparam name="TTarget">The type of the target.</typeparam>
-		/// <param name="source">The instance of <see cref="TSource" />.</param>
-		/// <param name="target">The instance of <see cref="TTarget" />.</param>
-		/// <returns>
-		/// The mapped instance of <see cref="TTarget" />.
-		/// </returns>
-		public async Task<TTarget> MapAsync<TSource, TTarget>(TSource source, TTarget target)
-		{
-			target = this.Map<TSource, TTarget>(source, target);
-
-			return await Task.FromResult(target);
 		}
 
 		#endregion

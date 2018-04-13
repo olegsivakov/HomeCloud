@@ -81,12 +81,12 @@
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
-			CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Storage, CatalogDocument>(storage);
+			CatalogDocument catalogDocument = this.mapper.MapNew<Storage, CatalogDocument>(storage);
 
 			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 			catalogDocument = await repository.SaveAsync(catalogDocument);
 
-			return await this.mapper.MapAsync(catalogDocument, storage);
+			return this.mapper.Map(catalogDocument, storage);
 		}
 
 		/// <summary>
@@ -99,14 +99,14 @@
 			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 
 			CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
-			catalogDocument = await this.mapper.MapAsync(storage, catalogDocument);
+			catalogDocument = this.mapper.Map(storage, catalogDocument);
 
 			if (catalogDocument.IsChanged)
 			{
 				catalogDocument = await repository.SaveAsync(catalogDocument);
 			}
 
-			return await this.mapper.MapAsync(catalogDocument, storage);
+			return this.mapper.Map(catalogDocument, storage);
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@
 			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 			CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
 
-			return await this.mapper.MapAsync(catalogDocument, storage);
+			return this.mapper.Map(catalogDocument, storage);
 		}
 
 		/// <summary>
@@ -173,7 +173,7 @@
 		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
-			CatalogDocument catalogDocument = await this.mapper.MapNewAsync<Catalog, CatalogDocument>(catalog);
+			CatalogDocument catalogDocument = this.mapper.MapNew<Catalog, CatalogDocument>(catalog);
 
 			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 			catalogDocument = await repository.SaveAsync(catalogDocument);
@@ -184,8 +184,8 @@
 				parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 			}
 
-			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent);
+			catalog = this.mapper.Map(catalogDocument, catalog);
+			catalog.Parent = this.mapper.Map(parentCatalogDocument, catalog.Parent);
 
 			return catalog;
 		}
@@ -200,7 +200,7 @@
 			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
 
 			CatalogDocument catalogDocument = await repository.GetAsync(catalog.ID);
-			catalogDocument = await this.mapper.MapAsync(catalog, catalogDocument);
+			catalogDocument = this.mapper.Map(catalog, catalogDocument);
 
 			if (catalogDocument.IsChanged)
 			{
@@ -213,8 +213,8 @@
 				parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 			}
 
-			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent);
+			catalog = this.mapper.Map(catalogDocument, catalog);
+			catalog.Parent = this.mapper.Map(parentCatalogDocument, catalog.Parent);
 
 			return catalog;
 		}
@@ -249,8 +249,8 @@
 				parentCatalogDocument = await repository.GetAsync(catalog.Parent.ID);
 			}
 
-			catalog = await this.mapper.MapAsync(catalogDocument, catalog);
-			catalog.Parent = await this.mapper.MapAsync(parentCatalogDocument, catalog.Parent);
+			catalog = this.mapper.Map(catalogDocument, catalog);
+			catalog.Parent = this.mapper.Map(parentCatalogDocument, catalog.Parent);
 
 			return catalog;
 		}
@@ -298,7 +298,7 @@
 		{
 			CatalogEntry entry = stream.Entry;
 
-			FileDocument fileDocument = await this.mapper.MapNewAsync<CatalogEntry, FileDocument>(entry);
+			FileDocument fileDocument = this.mapper.MapNew<CatalogEntry, FileDocument>(entry);
 			CatalogDocument catalogDocument = null;
 
 			IFileDocumentRepository fileRepository = this.repositoryFactory.GetService<IFileDocumentRepository>();
@@ -310,8 +310,8 @@
 				catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
 			}
 
-			entry = await this.mapper.MapAsync(fileDocument, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog);
+			entry = this.mapper.Map(fileDocument, entry);
+			entry.Catalog = this.mapper.Map(catalogDocument, entry.Catalog);
 
 			return entry;
 		}
@@ -347,8 +347,8 @@
 				catalogDocument = await catalogRepository.GetAsync(entry.Catalog.ID);
 			}
 
-			entry = await this.mapper.MapAsync(fileDocument, entry);
-			entry.Catalog = await this.mapper.MapAsync(catalogDocument, entry.Catalog);
+			entry = this.mapper.Map(fileDocument, entry);
+			entry.Catalog = this.mapper.Map(catalogDocument, entry.Catalog);
 
 			return entry;
 		}
