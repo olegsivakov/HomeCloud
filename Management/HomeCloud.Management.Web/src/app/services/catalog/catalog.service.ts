@@ -15,7 +15,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class CatalogService extends HttpService<Catalog> {
 
-  public catalog: Catalog = null;
+  private catalog: Catalog = null;
 
   private catalogChangedSource: Subject<Catalog> = new Subject<Catalog>();
 
@@ -39,7 +39,9 @@ export class CatalogService extends HttpService<Catalog> {
       let relation = (catalog._links as CatalogRelation).data;
 
       return this.relation<StorageData>(StorageData, relation).map(data => {
-        return this.map(data);
+        let items: PagedArray<StorageData> = this.map(data);
+        this.catalog.count = items.totalCount;
+        return items;
       });
     }
     

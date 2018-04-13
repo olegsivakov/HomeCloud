@@ -65,7 +65,7 @@
 		/// <value>
 		/// The total count.
 		/// </value>
-		[HttpHeader("X-Total-Count")]
+		[HttpHeader("X-Total-Count", HttpMethods.Get)]
 		public int TotalCount { get; set; }
 
 		#endregion

@@ -112,7 +112,7 @@ export class ResourceService {
 
     if (result) {
       const totalCountHeader: string = "X-Total-Count";
-      let totalCount: number = response.headers[totalCountHeader];      
+      let totalCount: number = response.headers.has(totalCountHeader) ? parseInt(response.headers.get(totalCountHeader)) : 0;
       result.items.totalCount = totalCount ? totalCount : 0;
 
       if (response.body._links && response.body._links.items instanceof Array) {

@@ -26,4 +26,8 @@ export class CatalogBreadcrumb extends Breadcrumb {
             this.catalog.name = value;
         }
     }
+
+    public get count(): number {
+        return this.catalog.count;
+    }
 }

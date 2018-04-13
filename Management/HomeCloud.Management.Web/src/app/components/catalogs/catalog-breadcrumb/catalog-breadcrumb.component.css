@@ -13,5 +13,14 @@
 }
 
 .breadcrumb * {
-    font-size: 20px;
+    font-size: 16px;
+}
+
+.breadcrumb .label {
+    border: none !important;
+    padding: 0px;
+}
+
+.breadcrumb .badge {
+    font-size: 10px;
 }

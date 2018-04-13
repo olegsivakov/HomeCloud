@@ -12,6 +12,8 @@ export class Catalog
   public readonly isCatalog: boolean = true;
   public creationDate: Date = new Date();
 
+  public count: number = 0;
+
   constructor() {
       super(CatalogRelation);
   }

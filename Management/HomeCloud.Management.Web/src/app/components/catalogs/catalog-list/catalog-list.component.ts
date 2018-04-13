@@ -7,12 +7,12 @@ import { Catalog } from '../../../models/catalog';
 
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
+import { HttpError } from '../../../models/http/http-error';
 
 import { CatalogService } from '../../../services/catalog/catalog.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
-import { HttpError } from '../../../models/http/http-error';
 
 @Component({
   selector: 'app-catalog-list',
