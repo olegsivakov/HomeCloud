@@ -77,7 +77,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Errors = new List<string>() { exception.Message }
+							Messages = new List<string>() { exception.Message }
 						};
 					});
 			}
@@ -93,7 +93,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Errors = new List<string>() { exception.Message }
+							Messages = new List<string>() { exception.Message }
 						};
 					});
 			}
@@ -109,7 +109,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Errors = new List<string>() { exception.Message }
+							Messages = new List<string>() { exception.Message }
 						};
 					});
 			}
@@ -125,7 +125,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Errors = this.GetAgregateErrors(exception).Select(error => error.Message)
+							Messages = this.GetAgregateErrors(exception).Select(error => error.Message)
 						};
 					});
 			}
@@ -141,7 +141,7 @@
 						return new HttpExceptionResponse
 						{
 							StatusCode = context.Response.StatusCode,
-							Errors = new List<string>() { exception.InnerException is null ? exception.Message : $"{exception.Message}: {exception.InnerException.Message}" }
+							Messages = new List<string>() { exception.InnerException is null ? exception.Message : $"{exception.Message}: {exception.InnerException.Message}" }
 						};
 					});
 			}

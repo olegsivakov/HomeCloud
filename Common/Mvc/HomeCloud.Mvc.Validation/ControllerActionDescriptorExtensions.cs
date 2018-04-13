@@ -45,7 +45,7 @@
 				}
 			}
 
-			return errors.Count == 0 ? null : new HttpExceptionResponse() { Errors = errors };
+			return errors.Count == 0 ? null : new HttpExceptionResponse() { Messages = errors };
 		}
 	}
 }

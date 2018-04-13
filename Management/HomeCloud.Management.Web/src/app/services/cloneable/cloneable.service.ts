@@ -41,6 +41,10 @@ export class CloneableService {
   }
 
   private cloneProperty(source: any, destination: any): any {
+    if (typeof source === 'string') {
+        destination = source;
+    }
+    else {
       let properties: Array<string> = Object.keys(source);
       for (let property of properties) {
               if (Object.prototype.hasOwnProperty.call(destination, property)) {
@@ -48,7 +52,7 @@ export class CloneableService {
                       destination[property] = this.cloneProperty(source[property], destination[property]);
                   }
                   else if (source[property] instanceof Array && destination[property] instanceof Array) {
-                      source[property].forEach(item => {
+                      source[property].forEach(item => {                          
                           let destinationItem: any = this.cloneProperty(item, Object.assign({}, item));
                           destination[property].push(destinationItem);
                       });
@@ -58,6 +62,7 @@ export class CloneableService {
                   } 
               }
           }
+    }
 
       return destination;
   }

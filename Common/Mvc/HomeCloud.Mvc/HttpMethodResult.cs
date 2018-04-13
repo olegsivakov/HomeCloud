@@ -192,7 +192,7 @@
 				{
 					HttpExceptionResponse model = new HttpExceptionResponse()
 					{
-						Errors = notFoundExceptions.Select(error => error.Message)
+						Messages = notFoundExceptions.Select(error => error.Message)
 					};
 
 					return this.Controller.NotFound(model);
@@ -203,7 +203,7 @@
 				{
 					HttpExceptionResponse model = new HttpExceptionResponse()
 					{
-						Errors = alreadyExistsExceptions.Select(error => error.Message)
+						Messages = alreadyExistsExceptions.Select(error => error.Message)
 					};
 
 					return this.Controller.Conflict(model);
@@ -214,7 +214,7 @@
 				{
 					HttpExceptionResponse model = new HttpExceptionResponse()
 					{
-						Errors = validationExceptions.Select(error => error.Message)
+						Messages = validationExceptions.Select(error => error.Message)
 					};
 
 					return this.Controller.UnprocessableEntity(model);

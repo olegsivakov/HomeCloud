@@ -34,6 +34,6 @@
 		/// <value>
 		/// The error messages.
 		/// </value>
-		public virtual IEnumerable<string> Errors { get; set; }
+		public virtual IEnumerable<string> Messages { get; set; }
 	}
 }

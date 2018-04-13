@@ -12,6 +12,9 @@ import { PagedArray } from '../../models/paged-array';
 import { CloneableService } from '../cloneable/cloneable.service';
 
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+import { HttpErrorResponse } from '@angular/common/http/src/response';
+import { HttpError } from '../../models/http/http-error';
 
 @Injectable()
 export class ResourceService {
@@ -34,6 +37,10 @@ export class ResourceService {
                 observe: "response"
               }).map(response => {
                 return this.processResponse<T>(initializer, response);
+              }).catch((response: HttpErrorResponse) => {
+                let error: HttpError = this.processErrorResponse(response);
+                
+                return Observable.throw(error);
               });
       }
 
@@ -119,6 +126,12 @@ export class ResourceService {
     else {
       return this.cloneableService.clone<T>(initializer, response.body);
     }
+  }
+
+  private processErrorResponse(response: HttpErrorResponse): HttpError {
+    let result: HttpError = this.cloneableService.clone<HttpError>(HttpError, response.error);
+
+    return result;
   }
 
   private getResourceArray<T>(typeInitializer: new () => T, source: any): ResourceArray<T> {
