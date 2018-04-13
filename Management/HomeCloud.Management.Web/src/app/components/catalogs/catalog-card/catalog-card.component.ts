@@ -13,6 +13,7 @@ import { NotificationStateService } from '../../../services/shared/notification-
 
 import { CatalogService } from '../../../services/catalog/catalog.service';
 import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
+import { HttpError } from '../../../models/http/http-error';
 
 @Component({
   selector: 'app-catalog-card',
@@ -64,6 +65,8 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   private load() {
     this.getSubscription = this.catalogService.get(this.catalog).subscribe(data => {
       this.catalog = data;
+    }, error => {
+      this.isLoading = false;
     });
   }
 
@@ -111,8 +114,18 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
         this.load();
         this.saveEmitter.emit(this.catalog);
         state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been saved successfully.").setExpired();
-      }, error => {
-        state.setFailed("Operation failure", "An error occured while saving catalog.").setExpired();
+      }, (error: HttpError) => {
+        if (error.statusCode == 500) {
+          state.setFailed("Operation failure", "An error occured while saving catalog.").setExpired();
+        }
+        else if (error.statusCode == 404) {
+          this.removeEmitter.emit(this.catalog);
+
+          state.setWarning("Operation failure", error.messages).setExpired();
+        }
+        else {
+          state.setFailed("Operation failure", error.messages).setExpired();
+        }
       });
     }
   }
@@ -138,8 +151,16 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
         this.removeEmitter.emit(this.catalog);
 
         state.setSucceded("Operation complete", "Catalog has been removed successfully.").setExpired();
-      }, error => {
-        state.setFailed("Operation failure", "An error occured while removing catalog.").setExpired();
+      }, (error: HttpError) => {
+        if (error.statusCode == 404) {
+          state.setSucceded("Operation complete", "Catalog has been removed successfully.").setExpired();
+        }
+        else if(error.statusCode == 500) {
+          state.setFailed("Operation failure", "An error occured while removing catalog.").setExpired();
+        }
+        else {
+          state.setFailed("Operation failure", error.messages).setExpired();
+        }
       });
     }
   }

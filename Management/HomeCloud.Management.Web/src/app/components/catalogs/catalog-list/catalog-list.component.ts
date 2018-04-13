@@ -12,6 +12,7 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
 import { ProgressService } from '../../../services/shared/progress/progress.service';
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
+import { HttpError } from '../../../models/http/http-error';
 
 @Component({
   selector: 'app-catalog-list',
@@ -79,8 +80,16 @@ export class CatalogListComponent implements OnInit, OnDestroy {
           state.setWarning("Operation complete with errors", "Catalog '" + catalog.name + "' has been created successfully but failed to complete the operation.").setExpired();
         });
 
-      }, error => {
-        state.setFailed("Operation failure", "An error occured while creating catalog.").setExpired();
+      }, (error: HttpError) => {
+          if (error.statusCode == 500) {
+            state.setFailed("Operation failure", "An error occured while creating catalog.").setExpired();
+          }
+          else if (error.statusCode == 409) {
+            state.setWarning("Operation failure", error.messages).setExpired();
+          }
+          else {
+            state.setFailed("Operation failure", error.messages).setExpired();
+          }
       });
     }
   }

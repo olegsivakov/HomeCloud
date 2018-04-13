@@ -13,29 +13,50 @@ export class NotificationState {
         return this.timeExpired && this.timeExpired <= new Date();
     }
 
-    public setWarning(reason?: string, description?: string): NotificationState {
+    public setWarning(reason?: string, description?: string | Array<string>): NotificationState {
         this.notification.type = NotificationType.warning;
 
         this.notification.title = reason ? reason : this.notification.title;
-        this.notification.message = description ? description : this.notification.message;
+        if (description) {
+            if (description instanceof Array) {
+                this.notification.messages = description;
+            }
+            else {
+                this.notification.messages.splice(0, this.notification.messages.length, description);
+            }
+        }
 
         return this;
     }
 
-    public setSucceded(reason?: string, description?: string): NotificationState {
+    public setSucceded(reason?: string, description?: string | Array<string>): NotificationState {
         this.notification.type = NotificationType.success;
 
         this.notification.title = reason ? reason : this.notification.title;
-        this.notification.message = description ? description : this.notification.message;
+        if (description) {
+            if (description instanceof Array) {
+                this.notification.messages = description;
+            }
+            else {
+                this.notification.messages.splice(0, this.notification.messages.length, description);
+            }
+        }
 
         return this;
     }
 
-    public setFailed(reason?: string, description?: string): NotificationState {
+    public setFailed(reason?: string, description?: string | Array<string>): NotificationState {
         this.notification.type = NotificationType.error;
 
         this.notification.title = reason ? reason : this.notification.title;
-        this.notification.message = description ? description : this.notification.message;
+        if (description) {
+            if (description instanceof Array) {
+                this.notification.messages = description;
+            }
+            else {
+                this.notification.messages.splice(0, this.notification.messages.length, description);
+            }
+        }
 
         return this;
     }

@@ -14,7 +14,9 @@
                 </div>
                 <div class="alert-text">{{notification.title}}</div>
             </div>
-            <div class="alert-description">{{notification.message}}</div>
+            <div class="alert-description">
+                <span *ngFor="let message of notification.messages">{{message}}</span>
+            </div>
         </div>  
   </div>
 </div>
