@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpMethod } from '../../models/http/http-method';
 import { Relation } from '../../models/http/relation';
 import { RelationArray } from '../../models/http/relation-array';
-import { IResource } from '../../models/http/resource';
+import { IResource, GUID } from '../../models/http/resource';
 import { ResourceArray } from '../../models/http/resource-array';
 import { PagedArray } from '../../models/paged-array';
 
@@ -15,6 +15,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { HttpErrorResponse } from '@angular/common/http/src/response';
 import { HttpError } from '../../models/http/http-error';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class ResourceService {
@@ -38,9 +39,7 @@ export class ResourceService {
               }).map(response => {
                 return this.processResponse<T>(initializer, response);
               }).catch((response: HttpErrorResponse) => {
-                let error: HttpError = this.processErrorResponse(response);
-                
-                return Observable.throw(error);
+                return this.processErrorResponse(response);
               });
       }
 
@@ -51,6 +50,8 @@ export class ResourceService {
           observe: "response"
         }).map(response => {
           return this.processResponse<T>(initializer, response);
+        }).catch((response: HttpErrorResponse) => {
+          return this.processErrorResponse(response);
         });
       }
 
@@ -61,6 +62,8 @@ export class ResourceService {
           observe: "response"
         }).map(response => {
           return this.processResponse<T>(initializer, response);
+        }).catch((response: HttpErrorResponse) => {
+          return this.processErrorResponse(response);
         });
       }
 
@@ -70,11 +73,9 @@ export class ResourceService {
           headers: new HttpHeaders({"Content-Type": relation.type}),
           observe: "response"
         }).map(response => {
-          if (response.status == 204 || response.status == 404) {
-            return null;
-          }
-
           return this.processResponse<T>(initializer, response);
+        }).catch((response: HttpErrorResponse) => {
+          return this.processErrorResponse(response);
         });
       }
 
@@ -85,6 +86,8 @@ export class ResourceService {
           observe: "response"
         }).map(response => {
           return this.processResponse<T>(initializer, response);
+        }).catch((response: HttpErrorResponse) => {
+          return this.processErrorResponse(response);
         });
       }
 
@@ -96,9 +99,8 @@ export class ResourceService {
 
   private processResponse<T extends IResource>(initializer: new() => T, response: HttpResponse<any>): IResource {
     let result: ResourceArray<T> = null;
-
-    if (!response.body) {
-      return null;
+    if (!response.body || response.status == 204 || response.status == 404) {
+      return result;
     }
 
     if (response.body instanceof Array) {
@@ -128,10 +130,14 @@ export class ResourceService {
     }
   }
 
-  private processErrorResponse(response: HttpErrorResponse): HttpError {
+  private processErrorResponse(response: HttpErrorResponse): ErrorObservable {
     let result: HttpError = this.cloneableService.clone<HttpError>(HttpError, response.error);
+    if (result.id == GUID) {
+      result.statusCode = response.status;
+      result.messages.push(response.message);
+    }
 
-    return result;
+    return Observable.throw(result);
   }
 
   private getResourceArray<T>(typeInitializer: new () => T, source: any): ResourceArray<T> {
