@@ -14,11 +14,14 @@
 	/// <summary>
 	/// Provides converter methods for <see cref="CatalogRoot" /> entity.
 	/// </summary>
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.DataAccess.Objects.Catalog}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Objects.Catalog, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, CatalogContract}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{CatalogContract, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogRoot, HomeCloud.DataStorage.DataAccess.Aggregation.Objects.CatalogDocument}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Aggregation.Objects.CatalogDocument, HomeCloud.DataStorage.Business.Entities.CatalogRoot}" />
-	public class CatalogRootConverter : ITypeConverter<CatalogRoot, Contracts.Catalog>, ITypeConverter<Contracts.Catalog, CatalogRoot>, ITypeConverter<CatalogRoot, CatalogDocument>, ITypeConverter<CatalogDocument, CatalogRoot>
+	public class CatalogRootConverter : ITypeConverter<CatalogRoot, Contracts.Catalog>, ITypeConverter<Contracts.Catalog, CatalogRoot>, ITypeConverter<CatalogRoot, CatalogDocument>, ITypeConverter<CatalogDocument, CatalogRoot>, ITypeConverter<CatalogRoot, CatalogRoot>
 	{
 		#region ITypeConverter<CatalogRoot, Contracts.Catalog> Implementations
 
@@ -108,6 +111,28 @@
 
 			target.Path = source.Path;
 			target.Size = source.Size;
+
+			return target;
+		}
+
+		#endregion
+
+		#region ITypeConverter<CatalogRoot, CatalogRoot> Implementations
+
+		/// <summary>
+		/// Converts the specified source.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="target">The target.</param>
+		/// <returns></returns>
+		public CatalogRoot Convert(CatalogRoot source, CatalogRoot target)
+		{
+			target.ID = target.ID == Guid.Empty ? source.ID : target.ID;
+			target.Name = string.IsNullOrWhiteSpace(target.Name) ? source.Name : target.Name;
+			target.Path = string.IsNullOrWhiteSpace(target.Path) ? source.Path : target.Path;
+			target.Size = !target.Size.HasValue ? source.Size : target.Size;
+			target.CreationDate = target.CreationDate == DateTime.MinValue ? source.CreationDate : target.CreationDate;
+			target.UpdatedDate = target.UpdatedDate == DateTime.MinValue ? source.UpdatedDate : target.UpdatedDate;
 
 			return target;
 		}

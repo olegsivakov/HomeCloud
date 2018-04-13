@@ -48,5 +48,18 @@
 
 			return source.AsParallel().Select(item => mapper.MapNew<TSource, TTarget>(item));
 		}
+
+		/// <summary>
+		/// Merges the specified source of <see cref="T"/> to the target instance of the same type.
+		/// </summary>
+		/// <typeparam name="T">The type of the instance to merge.</typeparam>
+		/// <param name="mapper">The mapper.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="target">The target.</param>
+		/// <returns>The merged instance of <see cref="T"/>.</returns>
+		public static T Merge<T>(this IMapper mapper, T source, T target)
+		{
+			return mapper.Map(source, target);
+		}
 	}
 }

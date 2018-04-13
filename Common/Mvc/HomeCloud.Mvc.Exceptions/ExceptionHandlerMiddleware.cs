@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Exceptions;
@@ -112,6 +113,22 @@
 						};
 					});
 			}
+			catch (AggregateException exception)
+			{
+				await this.ProcessExceptionAsync(
+					context,
+					exception,
+					() =>
+					{
+						context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+						return new HttpExceptionResponse
+						{
+							StatusCode = context.Response.StatusCode,
+							Errors = this.GetAgregateErrors(exception).Select(error => error.Message)
+						};
+					});
+			}
 			catch (Exception exception)
 			{
 				await this.ProcessExceptionAsync(
@@ -162,6 +179,37 @@
 			await context.Response.WriteAsync(json);
 
 			this.logger.LogError(0, exception, json);
+		}
+
+		/// <summary>
+		/// Gets the list of <see cref="Exception"/> from the instance of <see cref="AggregateException"/>.
+		/// </summary>
+		/// <param name="exception">The aggregate exception.</param>
+		/// <returns>The list of instances of <see cref="Exception"/>.</returns>
+		private IEnumerable<Exception> GetAgregateErrors(AggregateException exception)
+		{
+			List<Exception> exceptions = new List<Exception>();
+
+			foreach (Exception innerException in exception.InnerExceptions)
+			{
+				AggregateException error = (innerException as AggregateException);
+
+				if (error is null || error.InnerExceptions.Count == 0)
+				{
+					exceptions.Add(innerException);
+				}
+				else
+				{
+					exceptions.AddRange(this.GetAgregateErrors(innerException as AggregateException));
+				}
+			}
+
+			if (exceptions.Count == 0)
+			{
+				exceptions.Add(exception);
+			}
+
+			return exceptions;
 		}
 
 		#endregion

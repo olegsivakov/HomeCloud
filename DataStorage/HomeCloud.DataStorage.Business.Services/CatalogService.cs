@@ -12,6 +12,9 @@
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 
+	using HomeCloud.Mapping;
+	using HomeCloud.Mapping.Extensions;
+
 	using HomeCloud.Validation;
 
 	#endregion
@@ -23,6 +26,11 @@
 	public class CatalogService : ICatalogService
 	{
 		#region Private Members
+
+		/// <summary>
+		/// The mapper
+		/// </summary>
+		private readonly IMapper mapper = null;
 
 		/// <summary>
 		/// The data factory
@@ -44,9 +52,11 @@
 		/// <param name="dataFactory">The data factory.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public CatalogService(
+			IMapper mapper,
 			IDataProviderFactory dataFactory,
 			IValidationServiceFactory validationServiceFactory)
 		{
+			this.mapper = mapper;
 			this.dataFactory = dataFactory;
 			this.validationServiceFactory = validationServiceFactory;
 		}
@@ -93,16 +103,21 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
-			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(catalog.ID);
+			if (!serviceResult.IsSuccess)
+			{
+				return serviceResult;
+			}
 
-			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
-			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
+			this.mapper.Merge(serviceResult.Data, catalog);
+
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ValidationResult result = await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
 			if (!result.IsValid)
 			{
-				return new ServiceResult<Catalog>(catalog)
-				{
-					Errors = result.Errors
-				};
+				serviceResult.Errors = result.Errors;
+
+				return serviceResult;
 			}
 
 			catalog = await this.dataFactory.UpdateCatalog(catalog);
@@ -173,21 +188,15 @@
 		/// </returns>
 		public async Task<ServiceResult> DeleteCatalogAsync(Guid id)
 		{
-			Catalog catalog = new Catalog() { ID = id };
-
-			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
-			if (!result.IsValid)
+			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(id);
+			if (!serviceResult.IsSuccess)
 			{
-				return new ServiceResult()
-				{
-					Errors = result.Errors
-				};
+				return serviceResult;
 			}
 
-			catalog = await this.dataFactory.DeleteCatalog(catalog);
+			await this.dataFactory.DeleteCatalog(serviceResult.Data);
 
-			return new ServiceResult<Catalog>(catalog);
+			return serviceResult;
 		}
 
 		#endregion

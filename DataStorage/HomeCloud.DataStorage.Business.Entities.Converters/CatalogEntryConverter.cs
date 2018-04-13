@@ -15,12 +15,34 @@
 	/// <summary>
 	/// Provides converter methods for <see cref="CatalogEntry" /> entity.
 	/// </summary>
+	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.DataAccess.Objects.File}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Objects.File, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.CatalogEntry, HomeCloud.DataStorage.DataAccess.Aggregation.Objects.FileDocument}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Aggregation.Objects.FileDocument, HomeCloud.DataStorage.Business.Entities.CatalogEntry}" />
-	public class CatalogEntryConverter : ITypeConverter<CatalogEntry, File>, ITypeConverter<File, CatalogEntry>, ITypeConverter<CatalogEntry, FileDocument>, ITypeConverter<FileDocument, CatalogEntry>
+	public class CatalogEntryConverter : ITypeConverter<CatalogEntry, File>, ITypeConverter<File, CatalogEntry>, ITypeConverter<CatalogEntry, FileDocument>, ITypeConverter<FileDocument, CatalogEntry>, ITypeConverter<CatalogEntry, CatalogEntry>
 	{
+		#region Private Members
+
+		/// <summary>
+		/// The catalog converter
+		/// </summary>
+		private readonly ITypeConverter<Catalog, Catalog> catalogConverter = null;
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CatalogEntryConverter"/> class.
+		/// </summary>
+		/// <param name="catalogConverter">The catalog converter.</param>
+		public CatalogEntryConverter(ITypeConverter<Catalog, Catalog> catalogConverter)
+		{
+			this.catalogConverter = catalogConverter;
+		}
+
+		#endregion
+
 		#region ITypeConverter<CatalogEntry, File> Implementations
 
 		/// <summary>
@@ -109,5 +131,30 @@
 		}
 
 		#endregion
+		#region ITypeConverter<CatalogEntry, CatalogEntry> Implementations
+
+		/// <summary>
+		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
+		/// </summary>
+		/// <param name="source">The instance of <see cref="!:TSource" />.</param>
+		/// <param name="target">The instance of <see cref="!:TTarget" />.</param>
+		/// <returns>
+		/// The converted instance of <see cref="!:TTarget" />.
+		/// </returns>
+		public CatalogEntry Convert(CatalogEntry source, CatalogEntry target)
+		{
+			target.ID = target.ID == Guid.Empty ? source.ID : target.ID;
+			target.Name = string.IsNullOrWhiteSpace(target.Name) ? source.Name : target.Name;
+			target.Path = string.IsNullOrWhiteSpace(target.Path) ? source.Path : target.Path;
+			target.Size = !target.Size.HasValue ? source.Size : target.Size;
+			target.CreationDate = target.CreationDate == DateTime.MinValue ? source.CreationDate : target.CreationDate;
+			target.UpdatedDate = target.UpdatedDate == DateTime.MinValue ? source.UpdatedDate : target.UpdatedDate;
+			target.Catalog = this.catalogConverter.Convert(source.Catalog, target.Catalog);
+
+			return target;
+		}
+
+		#endregion
+
 	}
 }

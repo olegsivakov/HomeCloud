@@ -19,7 +19,12 @@
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Storage, HomeCloud.DataStorage.DataAccess.Aggregation.Objects.CatalogDocument}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.DataAccess.Objects.Storage, HomeCloud.DataStorage.Business.Entities.Storage}" />
 	/// <seealso cref="HomeCloud.Core.ITypeConverter{HomeCloud.DataStorage.Business.Entities.Storage, HomeCloud.DataStorage.DataAccess.Objects.Storage}" />
-	public class StorageConverter : CatalogRootConverter, ITypeConverter<Contracts.Storage, Storage>, ITypeConverter<Storage, Contracts.Storage>, ITypeConverter<Contracts.Catalog, Storage>, ITypeConverter<Storage, Contracts.Catalog>, ITypeConverter<CatalogDocument, Storage>, ITypeConverter<Storage, CatalogDocument>
+	public class StorageConverter
+		: CatalogRootConverter,
+		ITypeConverter<Contracts.Storage, Storage>, ITypeConverter<Storage, Contracts.Storage>,
+		ITypeConverter<Contracts.Catalog, Storage>, ITypeConverter<Storage, Contracts.Catalog>,
+		ITypeConverter<CatalogDocument, Storage>, ITypeConverter<Storage, CatalogDocument>,
+		ITypeConverter<Storage, Storage>
 	{
 		#region ITypeConverter<Contracts.Storage, Storage> Implementations
 
@@ -133,6 +138,28 @@
 		public CatalogDocument Convert(Storage source, CatalogDocument target)
 		{
 			return this.Convert((CatalogRoot)source, target);
+		}
+
+		#endregion
+
+		#region ITypeConverter<Storage, Storage> Implementations
+
+		/// <summary>
+		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
+		/// </summary>
+		/// <param name="source">The instance of <see cref="!:TSource" />.</param>
+		/// <param name="target">The instance of <see cref="!:TTarget" />.</param>
+		/// <returns>
+		/// The converted instance of <see cref="!:TTarget" />.
+		/// </returns>
+		public Storage Convert(Storage source, Storage target)
+		{
+			target = (Storage)this.Convert((CatalogRoot)source, target);
+
+			target.Quota = !target.Quota.HasValue ? source.Quota : target.Quota;
+			target.DisplayName = string.IsNullOrWhiteSpace(target.DisplayName) ? source.DisplayName : target.DisplayName;
+
+			return target;
 		}
 
 		#endregion

@@ -14,6 +14,8 @@
 	/// </summary>
 	public static class ParallelExtensions
 	{
+		#region Public Methods
+
 		/// <summary>
 		/// Invokes asynchronous actions in parallel.
 		/// </summary>
@@ -28,5 +30,7 @@
 
 			Parallel.Invoke(invocations.ToArray());
 		}
+
+		#endregion
 	}
 }

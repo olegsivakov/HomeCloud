@@ -97,16 +97,19 @@
 			services.AddTypeConverter<ITypeConverter<Storage, DataContracts.Catalog>, StorageConverter>();
 			services.AddTypeConverter<ITypeConverter<CatalogDocument, Storage>, StorageConverter>();
 			services.AddTypeConverter<ITypeConverter<Storage,CatalogDocument>, StorageConverter>();
+			services.AddTypeConverter<ITypeConverter<Storage, Storage>, StorageConverter>();
 
 			services.AddTypeConverter<ITypeConverter<DataContracts.Catalog, Catalog>, CatalogConverter>();
 			services.AddTypeConverter<ITypeConverter<Catalog, DataContracts.Catalog>, CatalogConverter>();
 			services.AddTypeConverter<ITypeConverter<CatalogDocument, Catalog>, CatalogConverter>();
 			services.AddTypeConverter<ITypeConverter<Catalog, CatalogDocument>, CatalogConverter>();
+			services.AddTypeConverter<ITypeConverter<Catalog, Catalog>, CatalogConverter>();
 
 			services.AddTypeConverter<ITypeConverter<DataContracts.File, CatalogEntry>, CatalogEntryConverter>();
 			services.AddTypeConverter<ITypeConverter<CatalogEntry, DataContracts.File>, CatalogEntryConverter>();
 			services.AddTypeConverter<ITypeConverter<FileDocument, CatalogEntry>, CatalogEntryConverter>();
 			services.AddTypeConverter<ITypeConverter<CatalogEntry, FileDocument>, CatalogEntryConverter>();
+			services.AddTypeConverter<ITypeConverter<CatalogEntry, CatalogEntry>, CatalogEntryConverter>();
 
 			services.AddTypeConverter<ITypeConverter<ValidationResult, ServiceResult>, ServiceResultConverter>();
 
