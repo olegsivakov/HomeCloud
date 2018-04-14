@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { HttpMethod } from '../../models/http/http-method';
+import { HttpError } from '../../models/http/http-error';
 import { Relation } from '../../models/http/relation';
 import { RelationArray } from '../../models/http/relation-array';
 import { IResource, GUID } from '../../models/http/resource';
@@ -13,9 +15,6 @@ import { CloneableService } from '../cloneable/cloneable.service';
 
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
-import { HttpErrorResponse } from '@angular/common/http/src/response';
-import { HttpError } from '../../models/http/http-error';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class ResourceService {
@@ -112,8 +111,7 @@ export class ResourceService {
 
     if (result) {
       const totalCountHeader: string = "X-Total-Count";
-      let totalCount: number = response.headers.has(totalCountHeader) ? parseInt(response.headers.get(totalCountHeader)) : 0;
-      result.items.totalCount = totalCount ? totalCount : 0;
+      result.items.totalCount = response.headers.has(totalCountHeader) ? parseInt(response.headers.get(totalCountHeader)) : 0;
 
       if (response.body._links && response.body._links.items instanceof Array) {
         response.body._links.items.forEach((item, index) => {

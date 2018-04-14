@@ -67,6 +67,8 @@
 
 			services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
 
+			services.AddCors();
+
 			services.AddMvc()
 				.Extend()
 				.AddInputValidation()
@@ -87,11 +89,6 @@
 			{
 				application.UseDeveloperExceptionPage();
 			}
-
-			application.UseCors(builder =>
-			{
-				builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
-			});
 
 			application.UseExceptionHandling();
 			application.UseHypermedia(routes =>
@@ -148,6 +145,11 @@
 				routes.AddRoute(nameof(FileController.CreateFile))
 						.AddRoute<DataViewModel>("self", nameof(FileController.CreateFile), model => new { id = model.ID })
 						.AddRoute<DataViewModel>("get", nameof(FileController.GetFileByID), model => new { id = model.ID });
+			});
+
+			application.UseCors(policyBuilder =>
+			{
+				policyBuilder.WithOrigins("http://localhost:4200").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
 			});
 
 			application.UseMvc();
