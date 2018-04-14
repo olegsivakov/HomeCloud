@@ -22,12 +22,15 @@ import { NotificationStateService } from '../../../services/shared/notification-
 export class CatalogListComponent implements OnInit, OnDestroy {
 
   private newCatalog: Catalog = null;
+  private errors: Array<string> = new Array<string>();
+
   private data: PagedArray<StorageData> = new PagedArray<StorageData>();
 
   private catalogChangedSubscription: ISubscription = null;
   private listSubscription: ISubscription = null;
   private createCatalogSubscription: ISubscription = null;
   private getCatalogSubscription: ISubscription = null;
+  private validateSubscription: ISubscription = null;
 
   constructor(
     private progressService: ProgressService,
@@ -64,6 +67,17 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private onSaveCatalog() {
     if (this.canSaveCatalog) {
       this.newCatalog = new Catalog();
+    }
+  }
+  private validateCatalog(catalog: Catalog) {
+    if (catalog instanceof Catalog && this.catalogService.hasValidate()) {
+      this.validateSubscription = this.catalogService.validate(catalog).subscribe(data => {
+        this.errors.splice(0, this.errors.length);
+      }, (error: HttpError) => {
+        if (error.statusCode != 500) {
+          this.errors = error.messages;
+        }
+      });
     }
   }
   private saveCatalog(catalog: Catalog) {
@@ -106,6 +120,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private cancel() {
     if (this.isSaveCatalogMode) {
       this.newCatalog = null;
+      this.errors.splice(0, this.errors.length);
     }
   }
 
@@ -124,6 +139,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     if (this.getCatalogSubscription) {
       this.getCatalogSubscription.unsubscribe();
       this.getCatalogSubscription = null;
+    }
+
+    if (this.validateSubscription) {
+      this.validateSubscription.unsubscribe();
+      this.validateSubscription = null;
     }
 
     if (this.createCatalogSubscription) {

@@ -41,11 +41,22 @@ export class CatalogService extends HttpService<Catalog> {
       return this.relation<StorageData>(StorageData, relation).map(data => {
         let items: PagedArray<StorageData> = this.map(data);
         this.catalog.count = items.totalCount;
+
         return items;
       });
     }
     
     return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
+  }
+
+  public hasValidate() {
+    return this.catalog.hasValidate();
+  }
+
+  public validate(entity: Catalog): Observable<Catalog> {
+    entity._links.validate = this.catalog._links.validate;
+
+    return super.validate(entity);
   }
 
   public hasCreateCatalog(): boolean {

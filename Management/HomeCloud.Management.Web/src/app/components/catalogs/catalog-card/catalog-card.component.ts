@@ -7,13 +7,13 @@ import { CatalogState } from '../../../models/catalog-state';
 
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
+import { HttpError } from '../../../models/http/http-error';
 
 import { NotificationService } from '../../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 
 import { CatalogService } from '../../../services/catalog/catalog.service';
 import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
-import { HttpError } from '../../../models/http/http-error';
 
 @Component({
   selector: 'app-catalog-card',
@@ -23,12 +23,14 @@ import { HttpError } from '../../../models/http/http-error';
 export class CatalogCardComponent implements OnInit, OnDestroy {
 
   private state: CatalogState = CatalogState.view;
+  private errors: Array<string> = new Array<string>();
 
   private getSubscription: ISubscription = null;
   private rightPanelVisibilityChangedSubscription: ISubscription = null;
 
   private updateSubscription: ISubscription = null;
   private removeSubscription: ISubscription = null;
+  private validateSubscription: ISubscription = null;
 
   private isLoading: boolean = false;
 
@@ -104,6 +106,17 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
       this.state = CatalogState.edit;
     }
   }
+  private validate(catalog: Catalog) {
+    if (catalog instanceof Catalog && this.catalogService.hasValidate()) {
+      this.validateSubscription = this.catalogService.validate(catalog).subscribe(data => {
+        this.errors.splice(0, this.errors.length);
+      }, (error: HttpError) => {
+        if (error.statusCode != 500) {
+          this.errors = error.messages;
+        }
+      });
+    }
+  }
   private save(catalog: Catalog): void {
     if (this.canEdit) {
       let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to save catalog '" + catalog.name + "'.");
@@ -171,6 +184,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     }
     else {
       this.state = CatalogState.view;
+      this.errors.splice(0, this.errors.length);
     }
   }  
 
@@ -186,6 +200,11 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     if (this.getSubscription) {
       this.getSubscription.unsubscribe();
       this.getSubscription = null;
+    }
+
+    if (this.validateSubscription) {
+      this.validateSubscription.unsubscribe();
+      this.validateSubscription = null;
     }
 
     if (this.updateSubscription) {

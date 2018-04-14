@@ -110,6 +110,12 @@ export class HttpService<T extends IResource> {
     });
   }
 
+  public validate(entity: T): Observable<T> {
+    return this.resourceService.request<T>(this.type, entity._links.validate, entity).map((resource: T) => {
+      return resource;
+    });
+  }
+
   public update(entity: T): Observable<T> {
     return this.resourceService.request<T>(this.type, entity._links.update, entity).map((resource: T) => {
       return resource;

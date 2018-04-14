@@ -5,6 +5,8 @@ export class RelationArray {
 
     public get: Relation = new Relation();
 
+    public validate: Relation = new Relation();
+
     public create: Relation = new Relation();
 
     public update: Relation = new Relation();

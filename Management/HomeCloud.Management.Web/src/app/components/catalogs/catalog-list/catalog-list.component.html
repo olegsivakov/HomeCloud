@@ -21,7 +21,9 @@
 <app-catalog-edit
       *ngIf="isSaveCatalogMode"
       [catalog]="newCatalog"
+      [errors]="errors"
       [visible]="isSaveCatalogMode"
+      (change)="validateCatalog($event)"
       (save)="saveCatalog($event)"
       (cancel)="cancel($event)"></app-catalog-edit>
 

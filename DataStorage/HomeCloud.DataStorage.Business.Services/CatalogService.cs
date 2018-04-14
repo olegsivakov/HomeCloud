@@ -80,7 +80,6 @@
 
 			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(catalog);
 			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
-
 			if (!result.IsValid)
 			{
 				return new ServiceResult<Catalog>(catalog)
@@ -149,6 +148,24 @@
 			catalog = await this.dataFactory.GetCatalog(catalog);
 
 			return new ServiceResult<Catalog>(catalog);
+		}
+
+		/// <summary>
+		/// Validates catalog asynchronously.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The operation result.</returns>
+		public async Task<ServiceResult> ValidateAsync(Catalog catalog)
+		{
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+
+			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(catalog);
+			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
+
+			return new ServiceResult()
+			{
+				Errors = result.Errors
+			};
 		}
 
 		/// <summary>

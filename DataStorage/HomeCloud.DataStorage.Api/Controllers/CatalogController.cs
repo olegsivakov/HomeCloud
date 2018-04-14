@@ -149,6 +149,24 @@
 		}
 
 		/// <summary>
+		/// Validates the catalog model being created in parent catalog specified by <see cref="catalogID"/>.
+		/// </summary>
+		/// <returns></returns>
+		[HttpPut("v1/[controller]s/{catalogID}/validate", Name = nameof(CatalogController.ValidateCatalog))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> ValidateCatalog(
+			[RequireNonDefault(ErrorMessage = "The catalog identifier is empty")] Guid catalogID,
+			[Required(ErrorMessage = "The model is undefined")] [FromBody] CatalogViewModel model)
+		{
+			Catalog entity = this.Mapper.MapNew<CatalogViewModel, Catalog>(model);
+			entity.Parent.ID = catalogID;
+
+			ServiceResult result = await this.catalogService.ValidateAsync(entity);
+
+			return this.HttpResult(null, result.Errors);
+		}
+
+		/// <summary>
 		/// Deletes the existing catalog model by specified identifier.
 		/// </summary>
 		/// <param name="id">The unique identifier.</param>

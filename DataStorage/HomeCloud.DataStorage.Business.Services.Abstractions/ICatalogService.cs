@@ -50,6 +50,13 @@
 		Task<ServiceResult<Catalog>> GetCatalogAsync(Guid id);
 
 		/// <summary>
+		/// Validates catalog asynchronously.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The operation result.</returns>
+		Task<ServiceResult> ValidateAsync(Catalog catalog);
+
+		/// <summary>
 		/// Gets the list of catalogs by specified parent one.
 		/// </summary>
 		/// <param name="parentID">The parent catalog identifier.</param>

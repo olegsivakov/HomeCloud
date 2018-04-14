@@ -28,6 +28,9 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  @Input('errors')
+  public errors: Array<string> = new Array<string>();
+
   public get catalog(): Catalog {
     return this._catalog;
   }
@@ -43,6 +46,9 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
   @Output('save')
   saveEmitter = new EventEmitter<Catalog>();
 
+  @Output('change')
+  changeEmitter = new EventEmitter<Catalog>();
+
   @Output('cancel')
   cancelEmitter = new EventEmitter();
 
@@ -56,6 +62,10 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
   private onCancel() {
     this.cancelEmitter.emit();
     this.catalog = null;
+  }
+
+  private onChange() {
+    this.changeEmitter.emit(this.catalog);
   }
 
   ngOnInit() {

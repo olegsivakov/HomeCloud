@@ -22,6 +22,10 @@ export class Resource implements IResource {
         return this._links.self != null && !this._links.self.isEmpty();
     }
 
+    public hasValidate(): boolean {
+        return this._links.validate != null && !this._links.validate.isEmpty();
+    }
+
     public hasGet(): boolean {
         return this._links.get != null && !this._links.get.isEmpty();
     }
