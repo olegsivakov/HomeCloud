@@ -9,7 +9,6 @@
 	using HomeCloud.DataStorage.Api.Controllers;
 
 	using HomeCloud.Mvc;
-	using HomeCloud.Mvc.Cors;
 	using HomeCloud.Mvc.Exceptions;
 	using HomeCloud.Mvc.Hypermedia;
 
