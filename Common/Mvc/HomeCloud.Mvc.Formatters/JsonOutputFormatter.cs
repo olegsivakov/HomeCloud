@@ -73,23 +73,36 @@
 
 		#region Private Methods
 
-		private static void WriteResponseHeaders(HttpResponse response, object obj)
+		/// <summary>
+		/// Sets the headers on <see cref="T:Microsoft.AspNetCore.Http.HttpResponse" /> from specified object.
+		/// </summary>
+		/// <param name="response">The response.</param>
+		/// <param name="obj">The object containing header values.</param>
+		/// <returns>The list of headers.</returns>
+		private static IEnumerable<string> WriteResponseHeaders(HttpResponse response, object obj)
 		{
+			List<string> headers = new List<string>();
+
 			IEnumerable<PropertyInfo> properties = obj?.GetType().GetProperties().Where(property => (property.GetIndexParameters()?.Length).GetValueOrDefault() == 0) ?? Enumerable.Empty<PropertyInfo>();
 			foreach (PropertyInfo property in properties)
 			{
 				HttpHeaderAttribute headerAttribute = property.GetCustomAttribute(typeof(HttpHeaderAttribute), true) as HttpHeaderAttribute;
 				if (headerAttribute != null && headerAttribute.AllowedHttpMethods.Contains(response.HttpContext.Request.Method.ToUpper()))
 				{
+					string headerName = headerAttribute.Name;
+
 					response.Headers[headerAttribute.Name] = Convert.ToString(property.GetValue(obj));
+					headers.Add(headerName);
 				}
 
 				if (!property.PropertyType.IsPrimitive())
 				{
 					object propertyValue = property.GetValue(obj);
-					WriteResponseHeaders(response, propertyValue);
+					headers.AddRange(WriteResponseHeaders(response, propertyValue));
 				}
 			}
+
+			return headers.Distinct();
 		}
 
 		#endregion
