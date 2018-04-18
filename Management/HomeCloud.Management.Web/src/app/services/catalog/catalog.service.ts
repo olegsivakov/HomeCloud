@@ -59,6 +59,14 @@ export class CatalogService extends HttpService<Catalog> {
     return super.validate(entity);
   }
 
+  public delete(entity: Catalog): Observable<Catalog> {
+    return super.delete(entity).map((resource: Catalog) =>{
+      this.catalog.count -= 1;
+
+      return resource;
+    });
+  }
+
   public hasCreateCatalog(): boolean {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (!relations) {
@@ -71,7 +79,11 @@ export class CatalogService extends HttpService<Catalog> {
   public createCatalog(catalog: Catalog): Observable<Catalog> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      return this.relation<Catalog>(Catalog, relations.createCatalog, catalog).map((resource: Catalog) => resource);
+      return this.relation<Catalog>(Catalog, relations.createCatalog, catalog).map((resource: Catalog) => {
+        this.catalog.count += 1;
+
+        return resource;
+      });
     }
 
     return Observable.throw("No resource found to create catalog");

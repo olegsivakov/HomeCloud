@@ -1,5 +1,6 @@
 import { Breadcrumb } from "./breadcrumb";
 import { Catalog } from "../catalog";
+import { GUID } from "../http/resource";
 
 export class CatalogBreadcrumb extends Breadcrumb {
 
@@ -8,7 +9,7 @@ export class CatalogBreadcrumb extends Breadcrumb {
     }
 
     public get id(): string {
-        return this.catalog ? this.catalog.id : "";
+        return this.catalog ? this.catalog.id : GUID;
     }
 
     public set id(value: string) {
@@ -28,6 +29,6 @@ export class CatalogBreadcrumb extends Breadcrumb {
     }
 
     public get count(): number {
-        return this.catalog.count;
+        return this.catalog ? this.catalog.count : 0;
     }
 }
