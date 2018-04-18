@@ -130,7 +130,7 @@
 
 			int count = await this.GetCountAsync(file);
 
-			return new PagedList<File>()
+			return new PagedList<File>(result)
 			{
 				Offset = offset,
 				Limit = limit,
