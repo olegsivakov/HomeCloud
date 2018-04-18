@@ -83,12 +83,16 @@
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
 			ServiceResult<IPaginable<Catalog>> catalogs = await this.catalogService.GetCatalogsAsync(id, offset, limit);
-			IEnumerable<DataViewModel> data = catalogs.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(catalogs.Data) : null;
+			IEnumerable<DataViewModel> data = catalogs.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(catalogs.Data) : Enumerable.Empty<DataViewModel>();
 
-			ServiceResult<IPaginable<CatalogEntry>> entries = await this.catalogEntryService.GetEntriesAsync(id, offset, limit);
-			IEnumerable<DataViewModel> entriesData = entries.Data != null ? this.Mapper.MapNew<CatalogEntry, DataViewModel>(entries.Data) : null;
+			int entryLimit = limit - data.Count();
+			if (entryLimit > 0)
+			{
+				ServiceResult<IPaginable<CatalogEntry>> entries = await this.catalogEntryService.GetEntriesAsync(id, 0, entryLimit);
+				IEnumerable<DataViewModel> entriesData = entries.Data != null ? this.Mapper.MapNew<CatalogEntry, DataViewModel>(entries.Data) : Enumerable.Empty<DataViewModel>();
 
-			data = data.Concat(entriesData);
+				data = data.Concat(entriesData);
+			}
 
 			return this.HttpResult(
 				new DataListViewModel(data, id)
@@ -97,7 +101,7 @@
 					Size = catalogs.Data?.Limit ?? limit,
 					TotalCount = (catalogs.Data?.TotalCount ?? 0) + (entries.Data?.TotalCount ?? 0)
 				},
-				catalogs.Errors.Concat(entries.Errors));
+				catalogs.Errors?.Concat(entries.Errors ?? Enumerable.Empty<Exception>()));
 		}
 
 		/// <summary>
