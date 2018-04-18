@@ -14,16 +14,20 @@ import { FooterComponent } from './components/footer/footer.component';
 import { RightPanelComponent } from './components/shared/right-panel/right-panel.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 
-// -------------------- Catalog Components --------------------
-import { CatalogBreadcrumbComponent } from './components/catalogs/catalog-breadcrumb/catalog-breadcrumb.component';
-import { CatalogCardComponent } from './components//catalogs/catalog-card/catalog-card.component';
-import { CatalogDetailsComponent } from './components/catalogs/catalog-details/catalog-details.component';
-import { CatalogEditComponent } from './components/catalogs/catalog-edit/catalog-edit.component';
-import { CatalogRemoveComponent } from './components/catalogs/catalog-remove/catalog-remove.component';
-import { CatalogListComponent } from './components/catalogs/catalog-list/catalog-list.component';
+// -------------------- Route Components --------------------
+import { CatalogContainerComponent } from './components/catalog-container/catalog-container.component';
+import { CatalogBreadcrumbComponent } from './components/catalog/catalog-breadcrumb/catalog-breadcrumb.component';
 
-// -------------------- File Components --------------------
-import { FileComponent } from './components/file/file.component';
+// -------------------- Catalog Components --------------------
+import { CatalogCardComponent } from './components//catalog/catalog-card/catalog-card.component';
+import { CatalogDetailsComponent } from './components/catalog/catalog-details/catalog-details.component';
+import { CatalogEditComponent } from './components/catalog/catalog-edit/catalog-edit.component';
+import { CatalogRemoveComponent } from './components/catalog/catalog-remove/catalog-remove.component';
+
+// -------------------- CatalogEntry Components --------------------
+import { CatalogEntryCardComponent } from './components/catalog-entry/catalog-entry-card/catalog-entry-card.component';
+import { CatalogEntryRemoveComponent } from './components/catalog-entry/catalog-entry-remove/catalog-entry-remove.component';
+import { CatalogEntryDetailsComponent } from './components/catalog-entry/catalog-entry-details/catalog-entry-details.component';
 
 // -------------------- Shared Components --------------------
 import { ProgressComponent } from './components/shared/progress/progress.component';
@@ -41,6 +45,7 @@ import { ResourceService } from './services/resource/resource.service';
 
 import { StorageService } from './services/storage/storage.service';
 import { CatalogService } from './services/catalog/catalog.service';
+import { CatalogEntryService } from './services/catalog-entry/catalog-entry.service';
 
 @NgModule({
   declarations: [
@@ -50,19 +55,21 @@ import { CatalogService } from './services/catalog/catalog.service';
 
     RightPanelComponent,
 
-    CatalogListComponent,
+    CatalogContainerComponent,
+    CatalogBreadcrumbComponent,
+
     CatalogDetailsComponent,
-
-    FileComponent,
-
+    CatalogCardComponent,
     CatalogEditComponent,
     CatalogRemoveComponent,
+
+    CatalogEntryCardComponent,
+    CatalogEntryRemoveComponent,
+    CatalogEntryDetailsComponent,
 
     NotificationComponent,
     AlertComponent,
     ProgressComponent,
-    CatalogBreadcrumbComponent,
-    CatalogCardComponent
   ],
   imports: [
     FormsModule,
@@ -83,7 +90,8 @@ import { CatalogService } from './services/catalog/catalog.service';
     ResourceService,
 
     StorageService,
-    CatalogService
+    CatalogService,    
+    CatalogEntryService
   ],
   bootstrap: [AppComponent]
 })

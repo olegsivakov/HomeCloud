@@ -1,0 +1,8 @@
+<span *ngIf="!breadcrumbs || breadcrumbs.length == 0">&nbsp;</span>
+<span *ngFor="let breadcrumb of breadcrumbs" class="breadcrumb">
+  <span *ngIf="breadcrumb.isLast"><a class="label label-blue">{{breadcrumb.text}}  <span class="badge">{{breadcrumb.count}}</span></a></span>
+  <span *ngIf="!breadcrumb.isLast">
+    <a class="" (click)="open(breadcrumb)">{{breadcrumb.text}}</a>
+    <clr-icon shape="angle-double" dir="right" [ngClass]="{'separator':true}"></clr-icon>
+  </span>
+</span>

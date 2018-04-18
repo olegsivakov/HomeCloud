@@ -1,7 +1,7 @@
 import {ModuleWithProviders} from "@angular/core/src/metadata/ng_module";
 import {Routes, RouterModule}from '@angular/router';
 
-import { CatalogListComponent } from "./components/catalogs/catalog-list/catalog-list.component";
+import { CatalogContainerComponent } from "./components/catalog-container/catalog-container.component";
 
 
 export const APP_ROUTES: Routes = [
@@ -12,7 +12,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'catalogs/:id',
-    component: CatalogListComponent,
+    component: CatalogContainerComponent,
   }
 ];
 

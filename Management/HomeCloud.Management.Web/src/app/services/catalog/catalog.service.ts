@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { PagedArray } from '../../models/paged-array';
 import { Catalog } from '../../models/catalog';
+import { CatalogEntry } from '../../models/catalog-entry';
 import { StorageData } from '../../models/storage-data';
 
 import { HttpService } from '../http/http.service';
@@ -11,7 +12,6 @@ import { CatalogRelation } from '../../models/catalog-relation';
 import { ResourceService } from '../resource/resource.service';
 
 import 'rxjs/add/observable/throw';
-import { CatalogEntry } from '../../models/catalog-entry';
 
 @Injectable()
 export class CatalogService extends HttpService<Catalog> {

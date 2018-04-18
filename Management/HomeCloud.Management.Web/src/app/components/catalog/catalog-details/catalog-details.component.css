@@ -1,0 +1,20 @@
+.catalog-group-header {    
+    font-size: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.catalog-details .catalog-details-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.catalog-details-item .title {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.catalog-details-item .description {
+    font-size: 14px;
+    line-height: 14px;
+}

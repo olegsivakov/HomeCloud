@@ -5,6 +5,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -38,6 +39,11 @@
 		/// </summary>
 		private readonly ICatalogService catalogService = null;
 
+		/// <summary>
+		/// The <see cref="ICatalogEntryService"/> service.
+		/// </summary>
+		private readonly ICatalogEntryService catalogEntryService = null;
+
 		#endregion
 
 		#region Constructors
@@ -47,10 +53,15 @@
 		/// </summary>
 		/// <param name="mapper">The model type mapper.</param>
 		/// <param name="catalogService">The <see cref="ICatalogService" /> service.</param>
-		public CatalogController(IMapper mapper, ICatalogService catalogService)
+		/// <param name="catalogEntryService">The <see cref="ICatalogEntryService" /> service.</param>
+		public CatalogController(
+			IMapper mapper,
+			ICatalogService catalogService,
+			ICatalogEntryService catalogEntryService)
 			: base(mapper)
 		{
 			this.catalogService = catalogService;
+			this.catalogEntryService = catalogEntryService;
 		}
 
 		#endregion
@@ -71,17 +82,22 @@
 			[Range(0, int.MaxValue, ErrorMessage = "The offset parameter should be positive number.")] int offset,
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
-			ServiceResult<IPaginable<Catalog>> result = await this.catalogService.GetCatalogsAsync(id, offset, limit);
-			IEnumerable<DataViewModel> data = result.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(result.Data) : null;
+			ServiceResult<IPaginable<Catalog>> catalogs = await this.catalogService.GetCatalogsAsync(id, offset, limit);
+			IEnumerable<DataViewModel> data = catalogs.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(catalogs.Data) : null;
+
+			ServiceResult<IPaginable<CatalogEntry>> entries = await this.catalogEntryService.GetEntriesAsync(id, offset, limit);
+			IEnumerable<DataViewModel> entriesData = entries.Data != null ? this.Mapper.MapNew<CatalogEntry, DataViewModel>(entries.Data) : null;
+
+			data = data.Concat(entriesData);
 
 			return this.HttpResult(
 				new DataListViewModel(data, id)
 				{
-					Offset = result.Data?.Offset ?? offset,
-					Size = result.Data?.Limit ?? limit,
-					TotalCount = result.Data?.TotalCount ?? 0
+					Offset = catalogs.Data?.Offset ?? offset,
+					Size = catalogs.Data?.Limit ?? limit,
+					TotalCount = (catalogs.Data?.TotalCount ?? 0) + (entries.Data?.TotalCount ?? 0)
 				},
-				result.Errors);
+				catalogs.Errors.Concat(entries.Errors));
 		}
 
 		/// <summary>
