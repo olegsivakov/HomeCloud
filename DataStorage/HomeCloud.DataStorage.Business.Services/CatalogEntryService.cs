@@ -69,7 +69,6 @@
 
 			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(stream.Entry);
 			result += await validator.Get<IUniqueValidator>().ValidateAsync(stream.Entry);
-
 			if (!result.IsValid)
 			{
 				return new ServiceResult<CatalogEntry>(stream.Entry)
@@ -92,21 +91,15 @@
 		/// </returns>
 		public async Task<ServiceResult> DeleteEntryAsync(Guid id)
 		{
-			CatalogEntry entry = new CatalogEntry() { ID = id };
-
-			IServiceFactory<ICatalogEntryValidator> validator = this.validationServiceFactory.GetFactory<ICatalogEntryValidator>();
-			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(entry);
-			if (!result.IsValid)
+			ServiceResult<CatalogEntry> serviceResult = await this.GetEntryAsync(id);
+			if (!serviceResult.IsSuccess)
 			{
-				return new ServiceResult<CatalogEntry>(entry)
-				{
-					Errors = result.Errors
-				};
+				return serviceResult;
 			}
 
-			entry = await this.dataFactory.DeleteCatalogEntry(entry);
+			await this.dataFactory.DeleteCatalogEntry(serviceResult.Data);
 
-			return new ServiceResult<CatalogEntry>(entry);
+			return serviceResult;
 		}
 
 		/// <summary>

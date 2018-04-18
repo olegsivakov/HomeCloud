@@ -76,7 +76,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
 
       this.createFileSubscription = this.catalogService.createFile(entry).subscribe(entry => {
         this.data.unshift(entry);
-        state.setSucceded("Operation complete", "File '" + entry.name + "' has been upl successfully.").setExpired();
+        state.setSucceded("Operation complete", "File '" + entry.name + "' has been uploaded successfully.").setExpired();
       }, (error: HttpError) => {
         if (error.statusCode == 500) {
           state.setFailed("Operation failure", "An error occured while uploading file.").setExpired();
@@ -141,7 +141,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
   }
 
   private remove(catalog: Catalog) {    
-    let item: StorageData = this.data.find(item => item.isCatalog && item.id == catalog.id);
+    let item: StorageData = this.data.find(item => item.id == catalog.id);
 
     let index: number = this.data.indexOf(item);
     if (index >= 0) {
