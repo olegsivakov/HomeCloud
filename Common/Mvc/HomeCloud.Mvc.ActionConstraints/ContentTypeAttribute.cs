@@ -82,7 +82,7 @@
 			if (!request.Headers.ContainsKey(ContentTypeHeaderName))
 				return false;
 
-			return this.ContentType.ToLower() == Convert.ToString(request.Headers[ContentTypeHeaderName])?.ToLower();
+			return (Convert.ToString(request.Headers[ContentTypeHeaderName])?.ToLower()?.Contains(this.ContentType.ToLower())).GetValueOrDefault();
 		}
 
 		#endregion

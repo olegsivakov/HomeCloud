@@ -120,9 +120,9 @@
 			CatalogEntryStream stream = new CatalogEntryStream(entry, model.Stream);
 
 			ServiceResult<CatalogEntry> result = await this.catalogEntryService.CreateEntryAsync(stream);
-			FileStreamViewModel data = result.Data != null ? this.Mapper.MapNew<CatalogEntry, FileStreamViewModel>(result.Data) : null;
+			FileViewModel data = result.Data != null ? this.Mapper.MapNew<CatalogEntry, FileViewModel>(result.Data) : null;
 
-			return this.HttpResult(data, result.Errors);
+			return this.HttpResult(data, result.Errors).AsJson();
 		}
 
 		/// <summary>

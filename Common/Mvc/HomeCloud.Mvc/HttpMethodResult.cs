@@ -175,6 +175,20 @@
 		/// </returns>
 		public abstract IActionResult ToActionResult();
 
+		/// <summary>
+		/// Overrides default behavior of the current instance of <see cref="IHttpMethodResult" /> to forcibly respond as a <see cref="JSON" />.
+		/// </summary>
+		/// <returns>
+		/// The instance of <see cref="IHttpMethodResult" />.
+		/// </returns>
+		public IHttpMethodResult AsJson()
+		{
+			this.ContentTypes.Clear();
+			this.ContentTypes.Add(MimeTypes.Application.Json);
+
+			return this;
+		}
+
 		#endregion
 
 		#region Private Methods

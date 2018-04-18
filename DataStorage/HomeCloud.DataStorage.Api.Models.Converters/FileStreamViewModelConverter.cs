@@ -12,7 +12,7 @@
 	/// <summary>
 	/// Provides converter methods for <see cref="FileStreamViewModel" /> entity.
 	/// </summary>
-	public class FileStreamViewModelConverter : ITypeConverter<CatalogEntry, FileStreamViewModel>, ITypeConverter<FileStreamViewModel, CatalogEntry>
+	public class FileStreamViewModelConverter : ITypeConverter<FileStreamViewModel, CatalogEntry>
 	{
 		#region Private Members
 
@@ -32,28 +32,6 @@
 		public FileStreamViewModelConverter(IContentTypeProvider contentTypeProvider)
 		{
 			this.contentTypeProvider = contentTypeProvider;
-		}
-
-		#endregion
-
-		#region ITypeConverter<CatalogEntry, FileStreamViewModel> Implementations
-
-		/// <summary>
-		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
-		/// </summary>
-		/// <param name="source">The instance of <see cref="!:TSource" />.</param>
-		/// <param name="target">The instance of <see cref="!:TTarget" />.</param>
-		/// <returns>
-		/// The converted instance of <see cref="!:TTarget" />.
-		/// </returns>
-		public FileStreamViewModel Convert(CatalogEntry source, FileStreamViewModel target)
-		{
-			target.FileName = source.Name;
-			target.Path = source.Path;
-			target.MimeType = !string.IsNullOrWhiteSpace(source.Path) ? this.contentTypeProvider?.GetContentType(source.Path) : null;
-			target.Size = source.Size.GetValueOrDefault();
-
-			return target;
 		}
 
 		#endregion

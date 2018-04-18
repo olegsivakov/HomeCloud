@@ -43,5 +43,11 @@
 		/// </summary>
 		/// <returns>The instance of <see cref="IActionResult"/>.</returns>
 		IActionResult ToActionResult();
+
+		/// <summary>
+		/// Overrides default behavior of the current instance of <see cref="IHttpMethodResult"/> to forcibly respond as a <see cref="JSON"/>.
+		/// </summary>
+		/// <returns>The instance of <see cref="IHttpMethodResult"/>.</returns>
+		IHttpMethodResult AsJson();
 	}
 }
