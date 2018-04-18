@@ -11,6 +11,7 @@ import { CatalogRelation } from '../../models/catalog-relation';
 import { ResourceService } from '../resource/resource.service';
 
 import 'rxjs/add/observable/throw';
+import { CatalogEntry } from '../../models/catalog-entry';
 
 @Injectable()
 export class CatalogService extends HttpService<Catalog> {
@@ -98,10 +99,12 @@ export class CatalogService extends HttpService<Catalog> {
     return relations.createFile && !relations.createFile.isEmpty();
   }
 
-  public createFile(catalog: Catalog): Observable<Catalog> {
+  public createFile(entry: CatalogEntry): Observable<CatalogEntry> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      return this.relation<Catalog>(Catalog, relations.createFile, catalog).map((resource: Catalog) => resource);
+      return this.resourceService.request<CatalogEntry>(CatalogEntry, relations.createFile, entry.toFormData()).map((resource: CatalogEntry) => {
+        return resource;
+      });
     }
 
     return Observable.throw("No resource found to create file");

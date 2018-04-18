@@ -44,6 +44,17 @@ export class ResourceService {
 
       case HttpMethod.post: {
 
+        const multipartContentType: string = "multipart/form-data";
+        if (relation.type == multipartContentType) {
+          return this.httpClient.post<T>(relation.href, data, {
+            observe: "response"
+          }).map(response => {
+            return this.processResponse<T>(initializer, response);
+          }).catch((response: HttpErrorResponse) => {
+            return this.processErrorResponse(response);
+          });
+        }
+
         return this.httpClient.post<T>(relation.href, data, {
           headers: new HttpHeaders({"Content-Type": relation.type}),
           observe: "response"

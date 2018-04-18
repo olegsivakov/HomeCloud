@@ -7,6 +7,14 @@
       <clr-icon shape="plus-circle" size="24"></clr-icon>
       <span>New Catalog</span>
     </a>
+    <a [class.disabled]="!canSaveCatalog" class="clickable">
+      <clr-icon shape="plus-circle" size="24"></clr-icon>
+      <label for="file">New File</label>
+      <input type="file"
+      id="file"
+      [hidden]="true"
+      (change)="saveFile($event.target.files)">
+    </a>
   </div>
 </div>
 <div class="row">

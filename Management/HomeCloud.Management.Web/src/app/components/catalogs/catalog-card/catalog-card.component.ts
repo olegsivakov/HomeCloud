@@ -33,6 +33,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   private validateSubscription: ISubscription = null;
 
   private isLoading: boolean = false;
+  private isLoaded: boolean = false;
 
   @Input('catalog')
   public catalog: Catalog = null;
@@ -56,7 +57,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     }
 
   private get canLoad(): boolean {
-    return this.catalog.hasGet && this.catalog.hasGet() && !(this.catalog._links instanceof CatalogRelation);
+    return this.catalog.hasGet && this.catalog.hasGet() && !this.isLoaded;
   }
   private onLoad(): void {
     if (this.canLoad && !this.isLoading) {
@@ -67,6 +68,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   private load() {
     this.getSubscription = this.catalogService.get(this.catalog).subscribe(data => {
       this.catalog = data;
+      this.isLoaded = true;
     }, error => {
       this.isLoading = false;
     });
@@ -85,7 +87,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
     return this.state == CatalogState.details;
   }
   private get canDetail(): boolean {
-    return this.catalog.hasSelf && this.catalog.hasSelf();
+    return this.isLoaded;
   }
   private onDetail(): void {
     if (this.canDetail) {

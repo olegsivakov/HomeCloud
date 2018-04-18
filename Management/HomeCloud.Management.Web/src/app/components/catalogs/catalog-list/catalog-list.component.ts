@@ -4,6 +4,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { PagedArray } from '../../../models/paged-array';
 import { StorageData } from '../../../models/storage-data';
 import { Catalog } from '../../../models/catalog';
+import { CatalogEntry } from '../../../models/catalog-entry';
 
 import { Notification } from '../../../models/notifications/notification';
 import { NotificationState } from '../../../models/notifications/notification-state';
@@ -29,6 +30,7 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private catalogChangedSubscription: ISubscription = null;
   private listSubscription: ISubscription = null;
   private createCatalogSubscription: ISubscription = null;
+  private createFileSubscription: ISubscription = null;
   private getCatalogSubscription: ISubscription = null;
   private validateSubscription: ISubscription = null;
 
@@ -58,6 +60,42 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     });
   }
 
+  private get canSaveFile(): boolean {
+    return this.catalogService.hasCreateFile();
+  }
+  private onSaveFile() {    
+  }
+  private validateFile(file: File) {
+  }
+  private saveFile(files: FileList) {
+    if (this.canSaveFile && files.length > 0) {
+      let entry: CatalogEntry = new CatalogEntry(files.item(0));
+
+      let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to upload file '" + entry.name + "'.");
+      let state: NotificationState = this.notificationStateService.addNotification(notification);
+
+      this.createFileSubscription = this.catalogService.createFile(entry).subscribe(entry => {
+        this.data.unshift(entry);
+        state.setSucceded("Operation complete", "File '" + entry.name + "' has been upl successfully.").setExpired();
+      }, (error: HttpError) => {
+        if (error.statusCode == 500) {
+          state.setFailed("Operation failure", "An error occured while uploading file.").setExpired();
+        }
+        else if (error.statusCode == 409) {
+          state.setWarning("Operation failure", error.messages).setExpired();
+        }
+        else {
+          state.setFailed("Operation failure", error.messages).setExpired();
+        }
+      }, () => {
+        for(let index = 0; index < files.length; index++) {
+          files.item(index).slice();
+        }
+      });
+    }
+  }
+
+
   private get isSaveCatalogMode(): boolean {
     return this.newCatalog != null;
   }  
@@ -83,17 +121,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
   private saveCatalog(catalog: Catalog) {
     if (this.canSaveCatalog) {
       let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to create catalog '" + catalog.name + "'.");
-      let state: NotificationState = this.notificationStateService.addNotification(notification);    
+      let state: NotificationState = this.notificationStateService.addNotification(notification);
 
       this.createCatalogSubscription = this.catalogService.createCatalog(catalog).subscribe(catalog => {
         this.data.unshift(catalog);
-        this.getCatalogSubscription = this.catalogService.get(catalog).subscribe(item => {
-          this.data[0] = item;
-          state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
-        }, error => {
-          state.setWarning("Operation complete with errors", "Catalog '" + catalog.name + "' has been created successfully but failed to complete the operation.").setExpired();
-        });
-
+        state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
       }, (error: HttpError) => {
           if (error.statusCode == 500) {
             state.setFailed("Operation failure", "An error occured while creating catalog.").setExpired();
@@ -149,6 +181,11 @@ export class CatalogListComponent implements OnInit, OnDestroy {
     if (this.createCatalogSubscription) {
       this.createCatalogSubscription.unsubscribe();
       this.createCatalogSubscription = null;
+    }
+
+    if (this.createFileSubscription) {
+      this.createFileSubscription.unsubscribe();
+      this.createFileSubscription = null;
     }
 
     this.data.splice(0);

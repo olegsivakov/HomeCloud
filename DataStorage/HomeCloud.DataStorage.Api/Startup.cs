@@ -131,11 +131,11 @@
 						.AddRoute<CatalogViewModel>("createFile", nameof(FileController.CreateFile), model => new { catalogID = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.CreateCatalog))
-						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.CreateCatalog), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.CreateCatalog), model => new { })
 						.AddRoute<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(CatalogController.UpdateCatalog))
-						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
+						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.UpdateCatalog), model => new { })
 						.AddRoute<CatalogViewModel>("get", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(FileController.GetFileByID))
@@ -144,7 +144,7 @@
 						.AddRoute<DataViewModel>("delete", nameof(FileController.DeleteFile), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(FileController.CreateFile))
-						.AddRoute<DataViewModel>("self", nameof(FileController.CreateFile), model => new { id = model.ID })
+						.AddRoute<DataViewModel>("self", nameof(FileController.CreateFile), model => new { })
 						.AddRoute<DataViewModel>("get", nameof(FileController.GetFileByID), model => new { id = model.ID });
 			});
 

@@ -2,7 +2,8 @@
     text-align: right;
 }
 
-.command-container a {
+.command-container a,
+.command-container a label {
     cursor: pointer;
     text-decoration: none;
 }
