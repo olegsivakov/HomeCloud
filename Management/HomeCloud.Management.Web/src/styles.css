@@ -60,7 +60,8 @@
 	opacity: 1;
 }
 
-a.disabled, a:hover.disabled {
+a.disabled, a:hover.disabled
+a.disabled, a:hover.disabled * {
     color: gray !important;
     cursor: not-allowed !important;
     text-decoration: none !important;

@@ -29,6 +29,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
 
   private catalogChangedSubscription: ISubscription = null;
   private listSubscription: ISubscription = null;
+  private nextSubscription: ISubscription = null;
   private createCatalogSubscription: ISubscription = null;
   private createFileSubscription: ISubscription = null;
   private getCatalogSubscription: ISubscription = null;
@@ -58,6 +59,23 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     }, error => {
       this.progressService.hide();
     });
+  }
+
+  private get canNext(): boolean {
+    return this.catalogService.hasNext();
+  }
+  private next() {
+    if (this.canNext) {
+      this.progressService.show();
+
+      this.nextSubscription = this.catalogService.next().subscribe(data => {
+        data.forEach(item => this.data.push(item));
+
+        this.progressService.hide();
+      }, error => {
+        this.progressService.hide();
+      });
+    }
   }
 
   private get canSaveFile(): boolean {
@@ -94,7 +112,6 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
       });
     }
   }
-
 
   private get isSaveCatalogMode(): boolean {
     return this.newCatalog != null;
@@ -140,8 +157,8 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private remove(catalog: Catalog) {    
-    let item: StorageData = this.data.find(item => item.id == catalog.id);
+  private remove(data: StorageData) {    
+    let item: StorageData = this.data.find(item => item.id == data.id);
 
     let index: number = this.data.indexOf(item);
     if (index >= 0) {
@@ -166,6 +183,11 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     if (this.listSubscription) {
       this.listSubscription.unsubscribe();
       this.listSubscription = null;
+    }
+
+    if (this.nextSubscription) {
+      this.nextSubscription.unsubscribe();
+      this.nextSubscription = null;
     }
 
     if (this.getCatalogSubscription) {

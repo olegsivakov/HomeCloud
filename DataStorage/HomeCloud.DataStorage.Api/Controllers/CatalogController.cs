@@ -82,26 +82,25 @@
 			[Range(0, int.MaxValue, ErrorMessage = "The offset parameter should be positive number.")] int offset,
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
-			ServiceResult<IPaginable<Catalog>> catalogs = await this.catalogService.GetCatalogsAsync(id, offset, limit);
-			IEnumerable<DataViewModel> data = catalogs.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(catalogs.Data) : Enumerable.Empty<DataViewModel>();
+			ServiceResult<IPaginable<Catalog>> catalogResult = await this.catalogService.GetCatalogsAsync(id, offset, limit);
+			IEnumerable<DataViewModel> catalogs = catalogResult.Data != null ? this.Mapper.MapNew<Catalog, DataViewModel>(catalogResult.Data) : Enumerable.Empty<DataViewModel>();
 
-			int entryLimit = limit - data.Count();
-			if (entryLimit > 0)
-			{
-				ServiceResult<IPaginable<CatalogEntry>> entries = await this.catalogEntryService.GetEntriesAsync(id, 0, entryLimit);
-				IEnumerable<DataViewModel> entriesData = entries.Data != null ? this.Mapper.MapNew<CatalogEntry, DataViewModel>(entries.Data) : Enumerable.Empty<DataViewModel>();
+			int entryLimit = catalogResult.Data.Limit - catalogResult.Data.Count();
+			int entryOffset = (entryOffset = catalogResult.Data.Offset - catalogResult.Data.TotalCount) < 0 ? 0 : entryOffset;
 
-				data = data.Concat(entriesData);
-			}
+			ServiceResult<IPaginable<CatalogEntry>> entryResult = await this.catalogEntryService.GetEntriesAsync(id, entryOffset, entryLimit);
+			IEnumerable<DataViewModel> entries = entryResult.Data != null ? this.Mapper.MapNew<CatalogEntry, DataViewModel>(entryResult.Data) : Enumerable.Empty<DataViewModel>();
+
+			IEnumerable<DataViewModel> data = catalogs.OrderBy(item => item.Name).Concat(entries.OrderBy(item => item.Name));
 
 			return this.HttpResult(
 				new DataListViewModel(data, id)
 				{
-					Offset = catalogs.Data?.Offset ?? offset,
-					Size = catalogs.Data?.Limit ?? limit,
-					TotalCount = (catalogs.Data?.TotalCount ?? 0) + (entries.Data?.TotalCount ?? 0)
+					Offset = catalogResult.Data?.Offset ?? offset,
+					Size = catalogResult.Data?.Limit ?? limit,
+					TotalCount = (catalogResult.Data?.TotalCount ?? 0) + (entryResult.Data?.TotalCount ?? 0)
 				},
-				catalogs.Errors?.Concat(entries.Errors ?? Enumerable.Empty<Exception>()));
+				catalogResult.Errors?.Concat(entryResult.Errors ?? Enumerable.Empty<Exception>()));
 		}
 
 		/// <summary>

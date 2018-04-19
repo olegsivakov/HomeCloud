@@ -156,20 +156,23 @@
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
 		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
+			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
+
 			if (limit == 0)
 			{
+				int count = await storageRepository.GetCountAsync();
+
 				return await Task.FromResult(new PagedList<Storage>()
 				{
 					Offset = offset,
-					Limit = limit
+					Limit = limit,
+					TotalCount = count
 				});
 			}
 
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 
 			IPaginable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
-
 			IEnumerable<Storage> storages = this.mapper.MapNew<StorageContract, Storage>(data);
 			storages = storages.SelectAsync(async storage =>
 			{
@@ -325,24 +328,25 @@
 		/// </returns>
 		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
-			if (limit == 0)
-			{
-				return await Task.FromResult(new PagedList<Catalog>()
-				{
-					Offset = offset,
-					Limit = limit
-				});
-			}
-
+			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			CatalogContract contract = new CatalogContract()
 			{
 				ParentID = parent?.ID
 			};
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			if (limit == 0)
+			{
+				int count = await catalogRepository.GetCountAsync(contract);
+
+				return await Task.FromResult(new PagedList<Catalog>()
+				{
+					Offset = offset,
+					Limit = limit,
+					TotalCount = count
+				});
+			}
 
 			IPaginable<CatalogContract> data = await catalogRepository.FindAsync(contract, offset, limit);
-
 			IEnumerable<Catalog> catalogs = this.mapper.MapNew<CatalogContract, Catalog>(data);
 			catalogs = catalogs.AsParallel().Select(catalog =>
 			{
@@ -467,26 +471,27 @@
 		/// </returns>
 		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
-			if (limit == 0)
-			{
-				return await Task.FromResult(new PagedList<CatalogEntry>()
-				{
-					Offset = offset,
-					Limit = limit
-				});
-			}
-
+			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
 			FileContract contract = new FileContract()
 			{
 				DirectoryID = catalog.ID
 			};
 
-			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
+			if (limit == 0)
+			{
+				int count = await fileRepository.GetCountAsync(contract);
+
+				return await Task.FromResult(new PagedList<CatalogEntry>()
+				{
+					Offset = offset,
+					Limit = limit,
+					TotalCount = count
+				});
+			}
 
 			IPaginable<FileContract> data = await fileRepository.FindAsync(contract, offset, limit);
-
 			IEnumerable<CatalogEntry> entries = this.mapper.MapNew<FileContract, CatalogEntry>(data);
-			entries = entries.Select(entry =>
+			entries = entries.AsParallel().Select(entry =>
 			{
 				entry.Catalog = (Catalog)catalog;
 

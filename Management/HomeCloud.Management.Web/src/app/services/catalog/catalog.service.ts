@@ -50,6 +50,12 @@ export class CatalogService extends HttpService<Catalog> {
     return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
   }
 
+  public next(): Observable<PagedArray<StorageData>>;
+  public next(): Observable<PagedArray<Catalog>>;
+  public next(): Observable<PagedArray<Catalog>> | Observable<PagedArray<StorageData>> {
+    return super.next().map(data => data as PagedArray<StorageData>);
+  }
+
   public hasValidate() {
     return this.catalog.hasValidate();
   }
@@ -60,8 +66,10 @@ export class CatalogService extends HttpService<Catalog> {
     return super.validate(entity);
   }
 
-  public delete(entity: Catalog): Observable<Catalog> {
-    return super.delete(entity).map((resource: Catalog) =>{
+  public delete(entity: Catalog): Observable<Catalog>;
+  public delete(entity: CatalogEntry): Observable<CatalogEntry>;
+  public delete(entity: Catalog | CatalogEntry): Observable<Catalog> | Observable<CatalogEntry> {
+    return super.delete(entity as Catalog).map(resource =>{
       this.catalog.count -= 1;
 
       return resource;

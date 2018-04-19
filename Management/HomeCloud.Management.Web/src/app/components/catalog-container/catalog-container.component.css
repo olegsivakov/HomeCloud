@@ -2,8 +2,16 @@
     text-align: right;
 }
 
+.more {
+    padding: 25px;
+}
+
 .command-container a,
-.command-container a label {
+.command-container a label,
+.command-container a span,
+.more a,
+.more a label,
+.more a span {
     cursor: pointer;
     text-decoration: none;
 }

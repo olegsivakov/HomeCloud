@@ -5,6 +5,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -71,7 +72,7 @@
 			IEnumerable<StorageViewModel> data = result.Data != null ? this.Mapper.MapNew<Storage, StorageViewModel>(result.Data) : null;
 
 			return this.HttpResult(
-				new PagedListViewModel<StorageViewModel>(data)
+				new PagedListViewModel<StorageViewModel>(data?.OrderBy(item => item.Name))
 				{
 					Offset = result.Data?.Offset ?? offset,
 					Size = result.Data?.Limit ?? limit,

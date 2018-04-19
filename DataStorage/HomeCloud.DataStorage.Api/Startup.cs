@@ -125,7 +125,7 @@
 						.AddRoute<CatalogViewModel>("self", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("update", nameof(CatalogController.UpdateCatalog), model => new { id = model.ID })
 						.AddRoute<CatalogViewModel>("delete", nameof(CatalogController.DeleteCatalog), model => new { id = model.ID })
-						.AddRoute<CatalogViewModel>("data", nameof(CatalogController.GetCatalogDataList), model => new { id = model.ID, offset = 0, limit = 20 })
+						.AddRoute<CatalogViewModel>("data", nameof(CatalogController.GetCatalogDataList), model => new { id = model.ID, offset = 0, limit = 5 })
 						.AddRoute<CatalogViewModel>("validate", nameof(CatalogController.ValidateCatalog), model => new { catalogID = model.ID })
 						.AddRoute<CatalogViewModel>("createCatalog", nameof(CatalogController.CreateCatalog), model => new { catalogID = model.ID })
 						.AddRoute<CatalogViewModel>("createFile", nameof(FileController.CreateFile), model => new { catalogID = model.ID });

@@ -7,13 +7,14 @@
       <clr-icon shape="plus-circle" size="24"></clr-icon>
       <span>New Catalog</span>
     </a>
-    <a [class.disabled]="!canSaveCatalog" class="clickable">
+    <a [class.disabled]="!canSaveFile">
       <clr-icon shape="plus-circle" size="24"></clr-icon>
       <label for="file">New File</label>
       <input type="file"
-      id="file"
-      [hidden]="true"
-      (change)="saveFile($event.target.files)">
+            id="file"
+            [hidden]="true"
+            [disabled]="!canSaveFile"
+            (change)="saveFile($event.target.files)">
     </a>
   </div>
 </div>
@@ -21,6 +22,13 @@
     <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" *ngFor="let item of data">
       <app-catalog-card *ngIf="item.isCatalog" [catalog]="item" (remove)="remove($event)"></app-catalog-card>
       <app-catalog-entry-card *ngIf="!item.isCatalog" [entry]="item" (remove)="remove($event)"></app-catalog-entry-card>
+    </div>
+</div>
+<div class="row flex-items-xs-center more" *ngIf="canNext">
+    <div class="col-lg-1">
+      <a title="more" (click)="next($event)">
+        <clr-icon shape="circle-arrow down" class="is-solid" size="28"></clr-icon>
+      </a>
     </div>
 </div>
 

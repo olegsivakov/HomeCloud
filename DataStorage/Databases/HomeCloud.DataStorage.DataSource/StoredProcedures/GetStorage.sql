@@ -28,7 +28,7 @@ BEGIN
 		OR
 		[Name] = @local_Name
 	ORDER BY [Name] ASC
-	OFFSET (@local_StartIndex * @local_ChunkSize) ROWS
+	OFFSET @local_StartIndex ROWS
 	FETCH NEXT @local_ChunkSize ROWS ONLY
 END
 GO
