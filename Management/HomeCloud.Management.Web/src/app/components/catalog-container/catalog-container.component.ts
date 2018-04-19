@@ -11,6 +11,8 @@ import { NotificationState } from '../../models/notifications/notification-state
 import { HttpError } from '../../models/http/http-error';
 
 import { CatalogService } from '../../services/catalog/catalog.service';
+import { CatalogEntryService } from '../../services/catalog-entry/catalog-entry.service';
+import { CatalogStateService } from '../../services/catalog-state/catalog-state.service';
 import { ProgressService } from '../../services/shared/progress/progress.service';
 import { NotificationService } from '../../services/shared/notification/notification.service';
 import { NotificationStateService } from '../../services/shared/notification-state/notification-state.service';
@@ -37,22 +39,24 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
 
   constructor(
     private progressService: ProgressService,
+    private catalogStateService: CatalogStateService,
     private catalogService: CatalogService,
+    private catalogEntryService: CatalogEntryService,
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService) {
-      this.catalogChangedSubscription = this.catalogService.catalogChanged$.subscribe(catalog => {        
+      this.catalogChangedSubscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {        
         this.data.splice(0);
-        this.open(catalog);
+        this.open();
       });
     }
 
   ngOnInit() {
   }
 
-  private open(catalog: Catalog) {
+  private open() {
     this.progressService.show();
 
-    this.listSubscription = this.catalogService.list(catalog).subscribe(data => {
+    this.listSubscription = this.catalogService.list().subscribe(data => {
       this.data = data;
 
       this.progressService.hide();
@@ -79,7 +83,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
   }
 
   private get canSaveFile(): boolean {
-    return this.catalogService.hasCreateFile();
+    return this.catalogEntryService.hasCreate();
   }
   private onSaveFile() {    
   }
@@ -92,7 +96,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
       let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to upload file '" + entry.name + "'.");
       let state: NotificationState = this.notificationStateService.addNotification(notification);
 
-      this.createFileSubscription = this.catalogService.createFile(entry).subscribe(entry => {
+      this.createFileSubscription = this.catalogEntryService.create(entry).subscribe(entry => {
         this.data.unshift(entry);
         state.setSucceded("Operation complete", "File '" + entry.name + "' has been uploaded successfully.").setExpired();
       }, (error: HttpError) => {
@@ -117,7 +121,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     return this.newCatalog != null;
   }  
   private get canSaveCatalog(): boolean {
-    return this.catalogService.hasCreateCatalog();
+    return this.catalogService.hasCreate();
   }
   private onSaveCatalog() {
     if (this.canSaveCatalog) {
@@ -140,7 +144,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
       let notification: Notification = this.notificationService.progress("Processing operation...", "Attempting to create catalog '" + catalog.name + "'.");
       let state: NotificationState = this.notificationStateService.addNotification(notification);
 
-      this.createCatalogSubscription = this.catalogService.createCatalog(catalog).subscribe(catalog => {
+      this.createCatalogSubscription = this.catalogService.create(catalog).subscribe(catalog => {
         this.data.unshift(catalog);
         state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
       }, (error: HttpError) => {

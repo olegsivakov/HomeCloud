@@ -2,11 +2,10 @@ import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { Catalog } from '../../../models/catalog';
-import { CatalogState } from '../../../models/catalog-state';
 import { Breadcrumb } from '../../../models/breadcrumbs/breadcrumb';
 import { CatalogBreadcrumb } from '../../../models/breadcrumbs/catalog-breadcrumb';
 
-import { CatalogService } from '../../../services/catalog/catalog.service';
+import { CatalogStateService } from '../../../services/catalog-state/catalog-state.service';
 
 @Component({
   selector: 'app-catalog-breadcrumb',
@@ -16,16 +15,16 @@ import { CatalogService } from '../../../services/catalog/catalog.service';
 export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
 
   private breadcrumbs: Array<Breadcrumb> = new Array<Breadcrumb>();
-  private catalogChangedSubscription: ISubscription = null;
+  private subscription: ISubscription = null;
 
-  constructor(private catalogService: CatalogService) {
-    this.catalogChangedSubscription = this.catalogService.catalogChanged$.subscribe(catalog => {
+  constructor(private catalogStateService: CatalogStateService) {
+    this.subscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {
       this.handleCatalog(catalog);
     });
   }
 
   private open(breadcrumb: CatalogBreadcrumb) {
-    this.catalogService.onCatalogChanged(breadcrumb.catalog);
+    this.catalogStateService.onCatalogChanged(breadcrumb.catalog);
   }
 
   private handleCatalog(catalog: Catalog) {
@@ -39,7 +38,6 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
     }
     else {
       breadcrumb = new CatalogBreadcrumb(catalog);
-
       this.breadcrumbs.push(breadcrumb);
     }
 
@@ -54,9 +52,9 @@ export class CatalogBreadcrumbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.catalogChangedSubscription) {
-      this.catalogChangedSubscription.unsubscribe();
-      this.catalogChangedSubscription = null;
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
     }
   }
 }

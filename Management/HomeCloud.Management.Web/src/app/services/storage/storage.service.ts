@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { ISubscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import { ResourceArray } from '../../models/http/resource-array';
@@ -9,17 +9,18 @@ import { Catalog } from '../../models/catalog';
 
 import { HttpService } from '../http/http.service';
 import { ResourceService } from '../resource/resource.service';
+import { CatalogStateService } from '../catalog-state/catalog-state.service';
 
 const storageUrl: string = "http://localhost:54832/v1/storages";
 
 @Injectable()
 export class StorageService extends HttpService<Storage> {
 
-  private catalogSelectedSource: Subject<Catalog> = new Subject<Catalog>();
-
-  catalogSelected$ = this.catalogSelectedSource.asObservable();
-
-  constructor(protected resourceService: ResourceService) {
+  private catalogSubscription: ISubscription = null;
+  
+  constructor(
+    protected resourceService: ResourceService,
+    private catalogStateService: CatalogStateService) {
     super(Storage, resourceService, storageUrl);
   }
 
@@ -27,5 +28,13 @@ export class StorageService extends HttpService<Storage> {
     return this.relation<Catalog>(Catalog, (storage._links as StorageRelation).catalog).map(resource => {
       return resource as Catalog;
     });
+  }
+
+  public selectCatalog(storage: Storage): void {
+    if (storage.hasCatalog()) {
+      this.catalogSubscription = this.catalog(storage).subscribe(catalog => {
+        this.catalogStateService.onCatalogChanged(catalog);
+      });
+    }
   }
 }

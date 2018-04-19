@@ -14,6 +14,7 @@ import { NotificationStateService } from '../../../services/shared/notification-
 
 import { CatalogService } from '../../../services/catalog/catalog.service';
 import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
+import { CatalogStateService } from '../../../services/catalog-state/catalog-state.service';
 
 @Component({
   selector: 'app-catalog-card',
@@ -46,6 +47,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
 
   constructor(
     private catalogService: CatalogService,
+    private catalogStateService: CatalogStateService,
     private rightPanelService: RightPanelService,  
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService) {
@@ -79,7 +81,7 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   }
   public onSelect(): void {
     if (this.canSelect) {
-      this.catalogService.onCatalogChanged(this.catalog);
+      this.catalogStateService.onCatalogChanged(this.catalog);
     }
   }
 

@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import { ISubscription } from 'rxjs/Subscription';
 
 import { PagedArray } from '../../models/paged-array';
+import { ResourceArray } from '../../models/http/resource-array';
 import { Catalog } from '../../models/catalog';
-import { CatalogEntry } from '../../models/catalog-entry';
+import { CatalogRelation } from '../../models/catalog-relation';
 import { StorageData } from '../../models/storage-data';
 
 import { HttpService } from '../http/http.service';
-import { CatalogRelation } from '../../models/catalog-relation';
 import { ResourceService } from '../resource/resource.service';
+import { CatalogStateService } from '../catalog-state/catalog-state.service';
 
 import 'rxjs/add/observable/throw';
 
@@ -17,28 +18,26 @@ import 'rxjs/add/observable/throw';
 export class CatalogService extends HttpService<Catalog> {
 
   private catalog: Catalog = null;
+  private subscription: ISubscription = null;
 
-  private catalogChangedSource: Subject<Catalog> = new Subject<Catalog>();
+  constructor(
+    protected resourceService: ResourceService,
+    private catalogStateService: CatalogStateService) {
+      super(Catalog, resourceService);
 
-  catalogChanged$ = this.catalogChangedSource.asObservable();
+      this.subscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {
+        if (this.catalog && catalog && this.catalog.id != catalog.id) {
+          this.resources = new ResourceArray<Catalog>();
+        }
 
-  constructor(protected resourceService: ResourceService) {    
-    super(Catalog, resourceService);
+        this.catalog = catalog;
+      });
   }
 
-  public onCatalogChanged(catalog: Catalog): void {
-    if (!this.catalog || (this.catalog && catalog && this.catalog.id != catalog.id)) {
-      this.catalog = catalog;
-      this.catalogChangedSource.next(this.catalog);
-    }
-  }
-
-  public list(catalog: Catalog): Observable<PagedArray<StorageData>>;
-  public list(catalog: any): Observable<PagedArray<Catalog>>;
-  public list(catalog: Catalog | any): Observable<PagedArray<StorageData>> {
-    if (catalog instanceof Catalog) {
-      let relation = (catalog._links as CatalogRelation).data;
-
+  public list(limit?: number): Observable<PagedArray<Catalog>>;
+  public list(limit?: number): Observable<PagedArray<StorageData>> {
+    let relation = (this.catalog._links as CatalogRelation).data;
+    if (relation) {
       return this.relation<StorageData>(StorageData, relation).map(data => {
         let items: PagedArray<StorageData> = this.map(data);
         this.catalog.count = items.totalCount;
@@ -46,14 +45,32 @@ export class CatalogService extends HttpService<Catalog> {
         return items;
       });
     }
-    
-    return Observable.throw("The type '" + typeof catalog + "' of 'catalog' parameter is not supported.");
+
+    return Observable.throw("No resource found to list data.");
   }
 
-  public next(): Observable<PagedArray<StorageData>>;
+  public previous(): Observable<PagedArray<Catalog>>;
+  public previous(): Observable<PagedArray<StorageData>> {
+    if (this.catalog._links.previous) {
+      return this.relation<StorageData>(StorageData, this.catalog._links.previous).map(data => {
+        let items: PagedArray<StorageData> = this.map(data);
+        this.catalog.count = items.totalCount;
+
+        return items;
+      });
+    }
+  }
+
   public next(): Observable<PagedArray<Catalog>>;
-  public next(): Observable<PagedArray<Catalog>> | Observable<PagedArray<StorageData>> {
-    return super.next().map(data => data as PagedArray<StorageData>);
+  public next(): Observable<PagedArray<StorageData>> {
+    if (this.catalog._links.next) {
+      return this.relation<StorageData>(StorageData, this.catalog._links.next).map(data => {
+        let items: PagedArray<StorageData> = this.map(data);
+        this.catalog.count = items.totalCount;
+
+        return items;
+      });
+    }
   }
 
   public hasValidate() {
@@ -66,17 +83,16 @@ export class CatalogService extends HttpService<Catalog> {
     return super.validate(entity);
   }
 
-  public delete(entity: Catalog): Observable<Catalog>;
-  public delete(entity: CatalogEntry): Observable<CatalogEntry>;
-  public delete(entity: Catalog | CatalogEntry): Observable<Catalog> | Observable<CatalogEntry> {
+  public delete(entity: Catalog): Observable<Catalog> {
     return super.delete(entity as Catalog).map(resource =>{
       this.catalog.count -= 1;
+      this.catalogStateService.onCatalogChanged(this.catalog);
 
       return resource;
     });
   }
 
-  public hasCreateCatalog(): boolean {
+  public hasCreate(): boolean {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (!relations) {
       return false;
@@ -85,36 +101,17 @@ export class CatalogService extends HttpService<Catalog> {
     return relations.createCatalog && !relations.createCatalog.isEmpty();
   }
 
-  public createCatalog(catalog: Catalog): Observable<Catalog> {
+  public create(catalog: Catalog): Observable<Catalog> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
       return this.relation<Catalog>(Catalog, relations.createCatalog, catalog).map((resource: Catalog) => {
         this.catalog.count += 1;
+        this.catalogStateService.onCatalogChanged(this.catalog);
 
         return resource;
       });
     }
 
     return Observable.throw("No resource found to create catalog");
-  }
-
-  public hasCreateFile(): boolean {
-    let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
-    if (!relations) {
-      return false;
-    }
-
-    return relations.createFile && !relations.createFile.isEmpty();
-  }
-
-  public createFile(entry: CatalogEntry): Observable<CatalogEntry> {
-    let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
-    if (relations) {
-      return this.resourceService.request<CatalogEntry>(CatalogEntry, relations.createFile, entry.toFormData()).map((resource: CatalogEntry) => {
-        return resource;
-      });
-    }
-
-    return Observable.throw("No resource found to create file");
   }
 }

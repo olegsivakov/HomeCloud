@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ISubscription } from 'rxjs/Subscription';
+import { ISubscription, Subscription } from 'rxjs/Subscription';
 
 import { PagedArray } from '../../models/paged-array';
 import { Storage } from '../../models/storage';
 
 import { StorageService } from '../../services/storage/storage.service';
-import { CatalogService } from '../../services/catalog/catalog.service';
 
 @Component({
   selector: 'app-navigation',
@@ -15,32 +14,24 @@ import { CatalogService } from '../../services/catalog/catalog.service';
 export class NavigationComponent implements OnInit, OnDestroy {
 
   private storages: PagedArray<Storage> = new PagedArray<Storage>();
-
-  private listSubscription: ISubscription = null;
-  private getSubscription: ISubscription = null;
-  private catalogSubscription: ISubscription = null;
+  
+  private listSubscription: Subscription = null;
+  private getSubscription: Subscription = null;
 
   constructor(
-    private storageService: StorageService,
-    private catalogService: CatalogService) {
+    private storageService: StorageService) {
       this.listSubscription = this.storageService.list(20).subscribe(data => {
         this.storages = data;
       });
   }
 
   ngOnInit() {
-    
   }
 
   ngOnDestroy(): void {
     if (this.listSubscription) {
       this.listSubscription.unsubscribe();
       this.listSubscription = null;
-    }
-
-    if (this.catalogSubscription) {
-      this.catalogSubscription.unsubscribe();
-      this.catalogSubscription = null;
     }
 
     if (this.getSubscription) {
@@ -58,11 +49,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
       let index: number = this.storages.indexOf(storage);
 
       this.getSubscription = this.storageService.get(storage).subscribe(item => {
-        if (item.hasCatalog()) {
-          this.catalogSubscription = this.storageService.catalog(item).subscribe(catalog => {
-            this.catalogService.onCatalogChanged(catalog);
-          });
-        }
+        this.storageService.selectCatalog(item);
       });
     }
   }

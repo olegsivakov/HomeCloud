@@ -44,6 +44,7 @@ import { CloneableService } from './services/cloneable/cloneable.service';
 import { ResourceService } from './services/resource/resource.service';
 
 import { StorageService } from './services/storage/storage.service';
+import { CatalogStateService } from './services/catalog-state/catalog-state.service';
 import { CatalogService } from './services/catalog/catalog.service';
 import { CatalogEntryService } from './services/catalog-entry/catalog-entry.service';
 
@@ -90,6 +91,7 @@ import { CatalogEntryService } from './services/catalog-entry/catalog-entry.serv
     ResourceService,
 
     StorageService,
+    CatalogStateService,
     CatalogService,    
     CatalogEntryService
   ],
