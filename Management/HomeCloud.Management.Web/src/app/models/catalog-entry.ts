@@ -6,15 +6,14 @@ export class CatalogEntry
     extends StorageData {
 
     private _file: File = null;
+
     public id: string = GUID;  
     public name: string = "";
-
     public size: number = 0;
+    public mimeType: string = "";
     public readonly isCatalog: boolean = false;
     public creationDate: Date = new Date();
-
     public count: number = 0;
-
     public set file(value: File) {
         this._file = value;
         this.name = this._file.name;
