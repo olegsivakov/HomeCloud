@@ -51,26 +51,22 @@ export class CatalogService extends HttpService<Catalog> {
 
   public previous(): Observable<PagedArray<Catalog>>;
   public previous(): Observable<PagedArray<StorageData>> {
-    if (this.catalog._links.previous) {
-      return this.relation<StorageData>(StorageData, this.catalog._links.previous).map(data => {
-        let items: PagedArray<StorageData> = this.map(data);
-        this.catalog.count = items.totalCount;
+    return this.relation<StorageData>(StorageData, this.resources._links.previous).map(data => {
+      let items: PagedArray<StorageData> = this.map(data);
+      this.catalog.count = items.totalCount;
 
-        return items;
-      });
-    }
+      return items;
+    });
   }
 
   public next(): Observable<PagedArray<Catalog>>;
   public next(): Observable<PagedArray<StorageData>> {
-    if (this.catalog._links.next) {
-      return this.relation<StorageData>(StorageData, this.catalog._links.next).map(data => {
-        let items: PagedArray<StorageData> = this.map(data);
-        this.catalog.count = items.totalCount;
+    return this.relation<StorageData>(StorageData, this.resources._links.next).map(data => {
+      let items: PagedArray<StorageData> = this.map(data);
+      this.catalog.count = items.totalCount;
 
-        return items;
-      });
-    }
+      return items;
+    });
   }
 
   public hasValidate() {

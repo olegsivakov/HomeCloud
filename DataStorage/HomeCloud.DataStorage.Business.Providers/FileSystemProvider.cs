@@ -50,7 +50,7 @@
 
 		#endregion
 
-		#region IDataStoreProvider Implementations
+		#region IFileSystemProvider Implementations
 
 		#region Storage Methods
 

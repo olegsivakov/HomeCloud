@@ -145,10 +145,10 @@
 
 			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
 
-			services.AddSingleton<IDataStoreProvider, DataStoreProvider>();
-			services.AddSingleton<IFileSystemProvider, FileSystemProvider>();
-			services.AddSingleton<IAggregationDataProvider, AggregationDataProvider>();
-			services.AddSingleton<IDataProviderFactory, DataProviderFactory>();
+			services.AddScoped<IDataStoreProvider, DataStoreProvider>();
+			services.AddScoped<IFileSystemProvider, FileSystemProvider>();
+			services.AddScoped<IAggregationDataProvider, AggregationDataProvider>();
+			services.AddScoped<IDataProviderFactory, DataProviderFactory>();
 
 			services.AddFactory<IDataProvider>();
 

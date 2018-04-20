@@ -94,9 +94,7 @@
 		/// <returns>The instance of <see cref="IDbTransaction"/>.</returns>
 		public IDbTransaction CreateTransaction()
 		{
-			this.transaction = this.Connection.BeginTransaction();
-
-			return this.transaction;
+			return this.transaction = this.Connection.BeginTransaction();
 		}
 
 		/// <summary>
@@ -221,7 +219,6 @@
 			if (this.transaction != null)
 			{
 				this.transaction.Commit();
-
 				this.isCommitFailed = false;
 			}
 		}

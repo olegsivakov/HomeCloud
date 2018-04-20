@@ -74,7 +74,7 @@
 			where TContext : class, ISqlServerDBContext
 			where TImplementation : SqlServerDBContext, TContext
 		{
-			services.AddScoped<TContext, TImplementation>();
+			this.services.AddScoped<TContext, TImplementation>();
 
 			return this;
 		}
@@ -91,7 +91,7 @@
 			where TContextScope : class, ISqlServerDBContextScope
 			where TImplementation : SqlServerDBContextScope, TContextScope
 		{
-			services.AddScoped<TContextScope, TImplementation>();
+			this.services.AddScoped<TContextScope, TImplementation>();
 
 			return this;
 		}
@@ -108,7 +108,7 @@
 			where TRepository : class, ISqlServerDBRepository
 			where TImplementation : class, TRepository
 		{
-			services.AddScoped<TRepository, TImplementation>();
+			this.services.AddScoped<TRepository, TImplementation>();
 
 			return this;
 		}

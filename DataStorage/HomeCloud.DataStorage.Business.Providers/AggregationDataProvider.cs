@@ -57,7 +57,7 @@
 
 		#endregion
 
-		#region IDataStoreProvider Implementations
+		#region IAggregationDataProvider Implementations
 
 		#region Storage Methods
 

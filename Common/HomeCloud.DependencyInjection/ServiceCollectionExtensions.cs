@@ -21,7 +21,7 @@
 		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
 		public static IServiceCollection AddFactory<TFactoryService>(this IServiceCollection services)
 		{
-			services.AddSingleton<IServiceFactory<TFactoryService>>(provider =>
+			services.AddScoped<IServiceFactory<TFactoryService>>(provider =>
 			{
 				return new ServiceFactory<TFactoryService>(provider);
 			});

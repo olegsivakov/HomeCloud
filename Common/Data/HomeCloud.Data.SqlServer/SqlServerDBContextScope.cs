@@ -2,6 +2,7 @@
 {
 	#region Usings
 
+	using System.Data;
 	using HomeCloud.Core;
 
 	#endregion
@@ -13,6 +14,11 @@
 	public class SqlServerDBContextScope : ISqlServerDBContextScope
 	{
 		#region Private Members
+
+		/// <summary>
+		/// The context synchronization object.
+		/// </summary>
+		private readonly object contextSynchronizer = new object();
 
 		/// <summary>
 		/// The database context.
@@ -27,7 +33,7 @@
 		/// <summary>
 		/// The database transaction
 		/// </summary>
-		private bool isTransactionCreated = false;
+		private IDbTransaction transaction = null;
 
 		#endregion
 
@@ -55,11 +61,15 @@
 		/// <returns>The instance of <see cref="!:T" />.</returns>
 		public T GetRepository<T>() where T : ISqlServerDBRepository
 		{
-			if (!isTransactionCreated)
+			if (this.transaction is null)
 			{
-				this.context.CreateTransaction();
-
-				isTransactionCreated = true;
+				lock (this.contextSynchronizer)
+				{
+					if (this.transaction is null)
+					{
+						this.transaction = this.context.CreateTransaction();
+					}
+				}
 			}
 
 			return this.repositoryFactory.GetService<T>();
@@ -70,11 +80,17 @@
 		/// </summary>
 		public void Commit()
 		{
-			if (isTransactionCreated)
+			if (this.transaction != null)
 			{
-				this.context.Commit();
+				lock (this.contextSynchronizer)
+				{
+					if (this.transaction != null)
+					{
+						this.context.Commit();
 
-				this.isTransactionCreated = false;
+						this.transaction = null;
+					}
+				}
 			}
 		}
 
@@ -87,7 +103,10 @@
 		/// </summary>
 		public void Dispose()
 		{
-			this.context.Dispose();
+			lock (this.contextSynchronizer)
+			{
+				this.context.Dispose();
+			}
 		}
 
 		#endregion
