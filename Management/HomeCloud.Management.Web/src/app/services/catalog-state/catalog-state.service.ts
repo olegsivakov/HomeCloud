@@ -16,7 +16,7 @@ export class CatalogStateService {
   constructor() { }
 
   public onCatalogChanged(catalog: Catalog) {
-    if (!this.catalog || (this.catalog && catalog && (this.catalog.id != catalog.id || this.catalog.name != catalog.name || this.catalog.count != catalog.count))) {
+    if (!this.catalog || (this.catalog && catalog && (this.catalog !== catalog || this.catalog.id != catalog.id))) {
       this.catalog = catalog;
 
       this.catalogChangedSource.next(this.catalog);

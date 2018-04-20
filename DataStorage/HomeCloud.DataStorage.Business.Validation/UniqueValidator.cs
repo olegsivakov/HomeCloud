@@ -86,7 +86,7 @@
 		{
 			if (!string.IsNullOrWhiteSpace(instance.Name))
 			{
-				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogEntryExists(instance)).AddError(new AlreadyExistsException("Catalog entry with specified name already exists."));
+				this.If(async id => await this.dataProviderFactory.Get<IDataStoreProvider>().CatalogEntryExists(instance)).AddError(new AlreadyExistsException("File with specified name already exists."));
 			}
 
 			return await this.ValidateAsync(instance.ID);

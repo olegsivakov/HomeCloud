@@ -67,7 +67,7 @@
 
 			if (string.IsNullOrWhiteSpace(catalog.Path) && string.IsNullOrWhiteSpace(catalog.Name))
 			{
-				throw new ArgumentException("Catalog entry path or name is empty.");
+				throw new ArgumentException("File path or name is empty.");
 			}
 		}
 
@@ -85,7 +85,7 @@
 
 			if (string.IsNullOrWhiteSpace(entry.Path) && string.IsNullOrWhiteSpace(entry.Name))
 			{
-				throw new ArgumentException("Catalog entry path or name is empty.");
+				throw new ArgumentException("File path or name is empty.");
 			}
 		}
 

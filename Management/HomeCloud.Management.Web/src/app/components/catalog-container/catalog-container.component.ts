@@ -44,7 +44,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     private catalogEntryService: CatalogEntryService,
     private notificationService: NotificationService,
     private notificationStateService: NotificationStateService) {
-      this.catalogChangedSubscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {        
+      this.catalogChangedSubscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {
         this.data.splice(0);
         this.open();
       });
