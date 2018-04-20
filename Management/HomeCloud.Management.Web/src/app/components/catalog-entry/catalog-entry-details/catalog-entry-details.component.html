@@ -1,8 +1,8 @@
-<app-right-panel>
-  <div class="catalog-entry-group-header" *ngIf="isVisible">
+<div *ngIf="entry">
+  <div class="catalog-entry-group-header">
     Information
   </div>
-  <div *ngIf="isVisible" class="catalog-entry-details">
+  <div class="catalog-entry-details">
       <div class="catalog-entry-details-item">
         <div class="title">Name</div>
         <div class="description">{{entry.name}}</div>
@@ -16,4 +16,4 @@
         <div class="description">{{entry.creationDate | date:'fullDate'}}</div>
       </div>
   </div>
-</app-right-panel>
+</div>

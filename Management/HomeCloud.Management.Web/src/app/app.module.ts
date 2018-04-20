@@ -11,7 +11,7 @@ import { ROUTING } from './app.routes';
 
 // -------------------- Layout --------------------
 import { FooterComponent } from './components/footer/footer.component';
-import { RightPanelComponent } from './components/shared/right-panel/right-panel.component';
+import { DetailViewComponent } from './components/shared/detail-view/detail-view.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 
 // -------------------- Route Components --------------------
@@ -35,7 +35,6 @@ import { NotificationComponent } from './components/shared/notification/notifica
 import { AlertComponent } from './components/shared/alert/alert.component';
 
 // -------------------- Services --------------------
-import { RightPanelService } from './services/shared/right-panel/right-panel.service';
 import { NotificationService } from './services/shared/notification/notification.service';
 import { NotificationStateService } from './services/shared/notification-state/notification-state.service';
 import { ProgressService } from './services/shared/progress/progress.service';
@@ -54,7 +53,7 @@ import { CatalogEntryService } from './services/catalog-entry/catalog-entry.serv
     FooterComponent,
     NavigationComponent,
 
-    RightPanelComponent,
+    DetailViewComponent,
 
     CatalogContainerComponent,
     CatalogBreadcrumbComponent,
@@ -81,7 +80,6 @@ import { CatalogEntryService } from './services/catalog-entry/catalog-entry.serv
     ClarityModule.forRoot()
   ],
   providers: [
-    RightPanelService,
 
     NotificationService,
     NotificationStateService,

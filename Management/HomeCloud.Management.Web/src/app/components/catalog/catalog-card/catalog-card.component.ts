@@ -13,7 +13,6 @@ import { NotificationService } from '../../../services/shared/notification/notif
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 
 import { CatalogService } from '../../../services/catalog/catalog.service';
-import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
 import { CatalogStateService } from '../../../services/catalog-state/catalog-state.service';
 
 @Component({
@@ -27,7 +26,6 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   private errors: Array<string> = new Array<string>();
 
   private getSubscription: ISubscription = null;
-  private rightPanelVisibilityChangedSubscription: ISubscription = null;
 
   private updateSubscription: ISubscription = null;
   private removeSubscription: ISubscription = null;
@@ -39,6 +37,9 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   @Input('catalog')
   public catalog: Catalog = null;
 
+  @Output('detail')
+  detailEmitter = new EventEmitter<Catalog>();
+
   @Output('save')
   saveEmitter = new EventEmitter<Catalog>();
 
@@ -48,15 +49,8 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   constructor(
     private catalogService: CatalogService,
     private catalogStateService: CatalogStateService,
-    private rightPanelService: RightPanelService,  
     private notificationService: NotificationService,
-    private notificationStateService: NotificationStateService) {
-      this.rightPanelVisibilityChangedSubscription = this.rightPanelService.visibilityChanged$.subscribe(isVisible => {
-        if (!isVisible) {
-          this.cancel();
-        }
-      });
-    }
+    private notificationStateService: NotificationStateService) { }
 
   private get canLoad(): boolean {
     return this.catalog.hasGet && this.catalog.hasGet() && !this.isLoaded;
@@ -84,17 +78,13 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
       this.catalogStateService.onCatalogChanged(this.catalog);
     }
   }
-
-  private get isDetailMode(): boolean {
-    return this.state == CatalogState.details;
-  }
+  
   private get canDetail(): boolean {
     return this.isLoaded;
   }
   private onDetail(): void {
     if (this.canDetail) {
-      this.state = CatalogState.details;
-      this.rightPanelService.show();
+      this.detailEmitter.emit(this.catalog);
     }
   }
 
@@ -183,23 +173,14 @@ export class CatalogCardComponent implements OnInit, OnDestroy {
   }
 
   private cancel(forceDetailsCancel?: boolean): void {
-    if (forceDetailsCancel && this.state == CatalogState.details) {
-      this.rightPanelService.hide();
-    }
-    else {
-      this.state = CatalogState.view;
+    this.state = CatalogState.view;
       this.errors.splice(0, this.errors.length);
-    }
   }  
 
   ngOnInit() {
   }
 
   ngOnDestroy(): void {
-    if (this.rightPanelVisibilityChangedSubscription) {
-      this.rightPanelVisibilityChangedSubscription.unsubscribe();
-      this.rightPanelVisibilityChangedSubscription = null;
-    }
 
     if (this.getSubscription) {
       this.getSubscription.unsubscribe();

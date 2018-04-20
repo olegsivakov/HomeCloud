@@ -12,7 +12,6 @@ import { NotificationService } from '../../../services/shared/notification/notif
 import { NotificationStateService } from '../../../services/shared/notification-state/notification-state.service';
 
 import { CatalogEntryService } from '../../../services/catalog-entry/catalog-entry.service';
-import { RightPanelService } from '../../../services/shared/right-panel/right-panel.service';
 
 @Component({
   selector: 'app-catalog-entry-card',
@@ -23,8 +22,6 @@ export class CatalogEntryCardComponent implements OnInit {
 
   private state: CatalogEntryState = CatalogEntryState.view;
   private errors: Array<string> = new Array<string>();
-
-  private rightPanelVisibilityChangedSubscription: ISubscription = null;
   
   private getSubscription: ISubscription = null;
   private removeSubscription: ISubscription = null;
@@ -35,6 +32,9 @@ export class CatalogEntryCardComponent implements OnInit {
   @Input('entry')
   public entry: CatalogEntry = null;
 
+  @Output('detail')
+  detailEmitter = new EventEmitter<CatalogEntry>();
+
   @Output('save')
   saveEmitter = new EventEmitter<CatalogEntry>();
 
@@ -43,15 +43,8 @@ export class CatalogEntryCardComponent implements OnInit {
 
   constructor(
     private catalogEntryService: CatalogEntryService,
-    private rightPanelService: RightPanelService,  
     private notificationService: NotificationService,
-    private notificationStateService: NotificationStateService) {
-      this.rightPanelVisibilityChangedSubscription = this.rightPanelService.visibilityChanged$.subscribe(isVisible => {
-        if (!isVisible) {
-          this.cancel();
-        }
-      });
-    }
+    private notificationStateService: NotificationStateService) { }
 
   private get canLoad(): boolean {
     return this.entry.hasGet && this.entry.hasGet() && !this.isLoaded;
@@ -80,16 +73,12 @@ export class CatalogEntryCardComponent implements OnInit {
     }
   }
 
-  private get isDetailMode(): boolean {
-    return this.state == CatalogEntryState.details;
-  }
   private get canDetail(): boolean {
     return this.isLoaded;
   }
   private onDetail(): void {
     if (this.canDetail) {
-      this.state = CatalogEntryState.details;
-      this.rightPanelService.show();
+      this.detailEmitter.emit(this.entry);
     }
   }  
 
@@ -129,23 +118,14 @@ export class CatalogEntryCardComponent implements OnInit {
   }
 
   private cancel(forceDetailsCancel?: boolean): void {
-    if (forceDetailsCancel && this.state == CatalogEntryState.details) {
-      this.rightPanelService.hide();
-    }
-    else {
-      this.state = CatalogEntryState.view;
+    this.state = CatalogEntryState.view;
       this.errors.splice(0, this.errors.length);
-    }
   }  
 
   ngOnInit() {
   }
 
   ngOnDestroy(): void {
-    if (this.rightPanelVisibilityChangedSubscription) {
-      this.rightPanelVisibilityChangedSubscription.unsubscribe();
-      this.rightPanelVisibilityChangedSubscription = null;
-    }
 
     if (this.getSubscription) {
       this.getSubscription.unsubscribe();

@@ -8,18 +8,8 @@ import { CatalogEntry } from '../../../models/catalog-entry';
 })
 export class CatalogEntryDetailsComponent implements OnInit {
 
-  private _isVisible: boolean = false;
-
   @Input('entry')
   public entry: CatalogEntry = null;
-
-  @Input('visible')
-  public set isVisible(value: boolean) {
-    this._isVisible = value;
-  }
-  public get isVisible(): boolean {
-    return this._isVisible && this.entry != null;
-  }
 
   constructor() {
   }

@@ -25,6 +25,8 @@ import { NotificationStateService } from '../../services/shared/notification-sta
 export class CatalogContainerComponent implements OnInit, OnDestroy {
 
   private newCatalog: Catalog = null;
+  private details: StorageData = null;
+
   private errors: Array<string> = new Array<string>();
 
   private data: PagedArray<StorageData> = new PagedArray<StorageData>();
@@ -46,6 +48,7 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     private notificationStateService: NotificationStateService) {
       this.catalogChangedSubscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {
         this.data.splice(0);
+        this.cancel();
         this.open();
       });
     }
@@ -161,6 +164,12 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     }
   }
 
+  private save(data: StorageData) {
+    if (this.details && this.details.isCatalog == data.isCatalog && this.details.id == data.id) {
+      this.details = data;
+    }
+  }
+
   private remove(data: StorageData) {    
     let item: StorageData = this.data.find(item => item.id == data.id);
 
@@ -168,6 +177,14 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     if (index >= 0) {
       this.data.splice(index, 1);
     }
+
+    if (this.details && this.details.isCatalog == data.isCatalog && this.details.id == data.id) {
+      this.cancel();
+    }
+  }
+
+  private show(data: StorageData) {
+    this.details = data;
   }
 
   private cancel() {
@@ -175,6 +192,8 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
       this.newCatalog = null;
       this.errors.splice(0, this.errors.length);
     }
+
+    this.details = null;
   }
 
   ngOnDestroy(): void {

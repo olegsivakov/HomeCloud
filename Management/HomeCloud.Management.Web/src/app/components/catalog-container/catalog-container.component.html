@@ -20,8 +20,8 @@
 </div>
 <div class="row">
     <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12" *ngFor="let item of data">
-      <app-catalog-card *ngIf="item.isCatalog" [catalog]="item" (remove)="remove($event)"></app-catalog-card>
-      <app-catalog-entry-card *ngIf="!item.isCatalog" [entry]="item" (remove)="remove($event)"></app-catalog-entry-card>
+      <app-catalog-card *ngIf="item.isCatalog" [catalog]="item" (detail)="show($event)" (save)="save($event)" (remove)="remove($event)"></app-catalog-card>
+      <app-catalog-entry-card *ngIf="!item.isCatalog" [entry]="item" (detail)="show($event)" (save)="save($event)" (remove)="remove($event)"></app-catalog-entry-card>
     </div>
 </div>
 <div class="row flex-items-xs-center more" *ngIf="canNext">
@@ -40,3 +40,8 @@
       (change)="validateCatalog($event)"
       (save)="saveCatalog($event)"
       (cancel)="cancel($event)"></app-catalog-edit>
+
+<app-detail-view [collapsed]="!details" (close)="cancel($event)">
+  <app-catalog-details *ngIf="details && details.isCatalog" [catalog]="details"></app-catalog-details>
+  <app-catalog-entry-details *ngIf="details && !details.isCatalog" [entry]="details"></app-catalog-entry-details>
+</app-detail-view>      
