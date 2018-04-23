@@ -7,7 +7,7 @@
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
-
+	using HomeCloud.Core.Extensions;
 	using HomeCloud.Data.MongoDB;
 
 	using HomeCloud.DataStorage.Business.Entities;
@@ -264,11 +264,19 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
-			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+			ParallelExtensions.InvokeAsync(
+				async () =>
+				{
+					ICatalogDocumentRepository catalogRepository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+					await catalogRepository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
+				},
+				async () =>
+				{
+					IFileDocumentRepository fileRepository = this.repositoryFactory.GetService<IFileDocumentRepository>();
+					await fileRepository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
+				});
 
-			await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
-
-			return catalog;
+			return await Task.FromResult(catalog);
 		}
 
 		/// <summary>
