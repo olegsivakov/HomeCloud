@@ -8,7 +8,6 @@ export class Catalog
 
   public id: string = GUID;
   public name: string = "";
-  public size: number = 0;
   public readonly isCatalog: boolean = true;
   public creationDate: Date = new Date();
 

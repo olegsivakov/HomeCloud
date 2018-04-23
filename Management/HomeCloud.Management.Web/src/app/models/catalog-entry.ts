@@ -9,7 +9,6 @@ export class CatalogEntry
 
     public id: string = GUID;  
     public name: string = "";
-    public size: number = 0;
     public type: string = "";
     public readonly isCatalog: boolean = false;
     public creationDate: Date = new Date();
