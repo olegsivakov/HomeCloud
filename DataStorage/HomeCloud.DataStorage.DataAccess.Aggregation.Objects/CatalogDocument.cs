@@ -4,7 +4,6 @@
 
 	using System;
 
-	using HomeCloud.Core;
 	using HomeCloud.Data.MongoDB;
 
 	using MongoDB.Bson.Serialization.Attributes;
@@ -16,7 +15,7 @@
 	/// Represents catalog document.
 	/// </summary>
 	[MongoDBCollection("catalogs")]
-	public class CatalogDocument : ChangeTrackingBase
+	public class CatalogDocument
 	{
 		#region Private Members
 
@@ -40,16 +39,6 @@
 		#region Public Properties
 
 		/// <summary>
-		/// Gets a value indicating whether the object changed status is changed.
-		/// </summary>
-		[BsonIgnore]
-		public override bool IsChanged
-		{
-			get => base.IsChanged;
-			protected set => base.IsChanged = value;
-		}
-
-		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
 		/// <value>
@@ -58,18 +47,7 @@
 		[BsonId(IdGenerator = typeof(NullIdChecker))]
 		[BsonIgnoreIfDefault]
 		[BsonRequired]
-		public Guid ID
-		{
-			get => this.id;
-
-			set
-			{
-				if (this.TrackPropertyChanged(this.id, value))
-				{
-					this.id = value;
-				}
-			}
-		}
+		public Guid ID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the path.
@@ -79,18 +57,7 @@
 		/// </value>
 		[BsonElement("path")]
 		[BsonRequired]
-		public string Path
-		{
-			get => this.path;
-
-			set
-			{
-				if (this.TrackPropertyChanged(this.path, value))
-				{
-					this.path = value;
-				}
-			}
-		}
+		public string Path { get; set; }
 
 		/// <summary>
 		/// Gets or sets the size.
@@ -99,18 +66,7 @@
 		/// The size.
 		/// </value>
 		[BsonElement("size")]
-		public long Size
-		{
-			get => this.size;
-
-			set
-			{
-				if (this.TrackPropertyChanged(this.size, value))
-				{
-					this.size = value;
-				}
-			}
-		}
+		public long Size { get; set; }
 
 		#endregion
 	}

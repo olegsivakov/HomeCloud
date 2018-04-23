@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
-    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj" />
   </ItemGroup>
 
 </Project>

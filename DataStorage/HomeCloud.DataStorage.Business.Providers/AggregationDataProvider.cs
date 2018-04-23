@@ -101,10 +101,7 @@
 			CatalogDocument catalogDocument = await repository.GetAsync(storage.ID);
 			catalogDocument = this.mapper.Map(storage, catalogDocument);
 
-			if (catalogDocument.IsChanged)
-			{
-				catalogDocument = await repository.SaveAsync(catalogDocument);
-			}
+			catalogDocument = await repository.SaveAsync(catalogDocument);
 
 			return this.mapper.Map(catalogDocument, storage);
 		}
@@ -202,10 +199,7 @@
 			CatalogDocument catalogDocument = await repository.GetAsync(catalog.ID);
 			catalogDocument = this.mapper.Map(catalog, catalogDocument);
 
-			if (catalogDocument.IsChanged)
-			{
-				catalogDocument = await repository.SaveAsync(catalogDocument);
-			}
+			catalogDocument = await repository.SaveAsync(catalogDocument);
 
 			CatalogDocument parentCatalogDocument = null;
 			if ((catalog.Parent?.ID).HasValue)
