@@ -33,3 +33,13 @@
 .content-area {
     position: relative;
 }
+
+.logo {
+    background-image: url('../assets/images/logo.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 37px;
+    height: 37px;
+    margin: 15px;
+    margin-left: -17px;
+}

@@ -55,7 +55,7 @@
 			target.Name = source.Name;
 			target.Size = source.Size.GetValueOrDefault();
 			target.CreationDate = source.CreationDate;
-			target.MimeType = this.contentTypeProvider?.GetContentType(source.Path);
+			target.Type = string.IsNullOrWhiteSpace(source.Path) ? string.Empty : Path.GetExtension(source.Path)?.Replace(".", string.Empty);
 
 			return target;
 		}

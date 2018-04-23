@@ -1,24 +1,24 @@
-<div class="card" (click)="onSelect()" [class.enabled]="canSelect" on-mouseover="onLoad()">
+<div class="storage-item card" (click)="onSelect()" [class.enabled]="canSelect" on-mouseover="onLoad()" title="{{entry.name}}">
   <div class="card-img">
-      <img src="https://cdn0.iconfinder.com/data/icons/file-extension-line-icon/100/txtb-512.png">
+      <div class="file {{entry.type}}"></div>
   </div>
   <div class="card-block">
     <div class="card-title">
-        <span>{{entry.name}}</span>
-        <div class="commands" (click)="$event.stopPropagation()">
-          <clr-dropdown>
-              <button class="nav-icon" clrDropdownTrigger>
-                  <clr-icon shape="ellipsis-horizontal"></clr-icon>
-              </button>
-              <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                <a clrDropdownItem (click)="onDetail()" [class.disabled]="!canDetail">View Details</a>
-                <div class="dropdown-divider"></div>
-                <a clrDropdownItem (click)="onRemove()" [class.disabled]="!canRemove">Remove</a>
-              </clr-dropdown-menu>
-          </clr-dropdown>
-        </div>
-      </div>
+      <span>{{entry.name}}</span>
     </div>
+    <div class="card-commands" (click)="$event.stopPropagation()">
+      <clr-dropdown>
+          <button class="nav-icon" clrDropdownTrigger>
+              <clr-icon shape="ellipsis-horizontal"></clr-icon>
+          </button>
+          <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+            <a clrDropdownItem (click)="onDetail()" [class.disabled]="!canDetail">View Details</a>
+            <div class="dropdown-divider"></div>
+            <a clrDropdownItem (click)="onRemove()" [class.disabled]="!canRemove">Remove</a>
+          </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </div>
 </div>
 <app-catalog-entry-remove
       *ngIf="isRemoveMode"

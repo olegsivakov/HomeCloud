@@ -36,7 +36,7 @@
 		/// <value>
 		/// The MIME type.
 		/// </value>
-		public virtual string MimeType { get; set; }
+		public virtual string Type { get; set; }
 
 		/// <summary>
 		/// Gets or sets the size.

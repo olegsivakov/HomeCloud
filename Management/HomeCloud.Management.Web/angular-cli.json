@@ -8,7 +8,7 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        "assets",
+        "assets/images",
         "favicon.ico"
       ],
       "index": "index.html",
@@ -20,6 +20,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
+        "icons.css",
+        "assets/css/storage.css",
         "../node_modules/clarity-icons/clarity-icons.min.css",
         "../node_modules/clarity-ui/clarity-ui.min.css"
       ],

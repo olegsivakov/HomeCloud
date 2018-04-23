@@ -1,0 +1,39 @@
+.storage-item.card.enabled:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 47, 255, 0.2), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 47, 255, 0.2), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 47, 255, 0.2), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    cursor: pointer;
+}
+
+.storage-item.card .card-img {
+    width: 250px;
+    height: 145px;
+}
+
+.storage-item.card .card-img > * {
+    width: 100%;
+    height: 100%;
+}
+
+.storage-item.card .card-block {
+    min-height: 40px;
+    border-top: 1px solid #eee;
+    line-height: 16px;
+}
+
+.storage-item.card .card-block .card-commands {
+    float: right;
+    font-weight: 400;
+}
+
+.storage-item.card .card-block .card-title {
+    font-weight: 400;
+    float: left;
+}
+.storage-item.card .card-block .card-title span {
+    width: 165px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: left;
+}
