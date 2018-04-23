@@ -258,7 +258,7 @@
 
 			if (catalog.Parent != null && catalog.Parent.ID != Guid.Empty)
 			{
-				this.RecalculateSize(catalog.Parent);
+				await this.RecalculateSize(catalog.Parent);
 			}
 
 			return await this.GetCatalog(catalog);
