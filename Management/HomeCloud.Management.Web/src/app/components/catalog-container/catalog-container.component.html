@@ -5,11 +5,11 @@
   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 command-container">
     <a (click)="onSaveCatalog()" [class.disabled]="!canSaveCatalog">
       <clr-icon shape="plus-circle" size="24"></clr-icon>
-      <span>New Catalog</span>
+      <span>Create Catalog</span>
     </a>
     <a [class.disabled]="!canSaveFile">
-      <clr-icon shape="plus-circle" size="24"></clr-icon>
-      <label for="file">New File</label>
+      <clr-icon shape="upload" size="24"></clr-icon>
+      <label for="file">Upload File</label>
       <input type="file"
             id="file"
             [hidden]="true"
@@ -34,6 +34,7 @@
 
 <app-catalog-edit
       *ngIf="isSaveCatalogMode"
+      header="Create Catalog"
       [catalog]="newCatalog"
       [errors]="errors"
       [visible]="isSaveCatalogMode"

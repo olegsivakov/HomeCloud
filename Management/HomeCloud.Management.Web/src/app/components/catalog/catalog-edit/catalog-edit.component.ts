@@ -12,6 +12,9 @@ export class CatalogEditComponent implements OnInit, OnDestroy {
   private _isVisible: boolean = false;
   private _catalog: Catalog = null;
 
+  @Input('header')
+  public header: string = "";
+
   @Input('catalog')
   public set catalog(value: Catalog) {
     if (value) {
