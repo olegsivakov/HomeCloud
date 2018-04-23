@@ -100,8 +100,11 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
       let state: NotificationState = this.notificationStateService.addNotification(notification);
 
       this.createFileSubscription = this.catalogEntryService.create(entry).subscribe(entry => {
-        this.data.unshift(entry);
-        state.setSucceded("Operation complete", "File '" + entry.name + "' has been uploaded successfully.").setExpired();
+        if (entry) {
+          this.data.unshift(entry);
+        }
+
+        state.setSucceded("Operation complete", "File" + (entry ? (" '" + entry.name + "'") : "") + " has been uploaded successfully.").setExpired();
       }, (error: HttpError) => {
         if (error.statusCode == 500) {
           state.setFailed("Operation failure", "An error occured while uploading file.").setExpired();
@@ -148,8 +151,11 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
       let state: NotificationState = this.notificationStateService.addNotification(notification);
 
       this.createCatalogSubscription = this.catalogService.create(catalog).subscribe(catalog => {
-        this.data.unshift(catalog);
-        state.setSucceded("Operation complete", "Catalog '" + catalog.name + "' has been created successfully.").setExpired();
+        if (catalog) {
+          this.data.unshift(catalog);
+        }
+
+        state.setSucceded("Operation complete", "Catalog" + (catalog ? (" '" + catalog.name + "'") : "") + " has been created successfully.").setExpired();
       }, (error: HttpError) => {
           if (error.statusCode == 500) {
             state.setFailed("Operation failure", "An error occured while creating catalog.").setExpired();
@@ -170,16 +176,18 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private remove(data: StorageData) {    
-    let item: StorageData = this.data.find(item => item.id == data.id);
+  private remove(data: StorageData) {
+    if (data) {
+      let item: StorageData = this.data.find(item => item.id == data.id);
 
-    let index: number = this.data.indexOf(item);
-    if (index >= 0) {
-      this.data.splice(index, 1);
-    }
+      let index: number = this.data.indexOf(item);
+      if (index >= 0) {
+        this.data.splice(index, 1);
+      }
 
-    if (this.details && this.details.isCatalog == data.isCatalog && this.details.id == data.id) {
-      this.cancel();
+      if (this.details && this.details.isCatalog == data.isCatalog && this.details.id == data.id) {
+        this.cancel();
+      }
     }
   }
 

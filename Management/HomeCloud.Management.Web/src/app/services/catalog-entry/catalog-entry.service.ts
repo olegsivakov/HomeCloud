@@ -34,11 +34,17 @@ export class CatalogEntryService extends HttpService<CatalogEntry> {
   }
 
   public delete(entity: CatalogEntry): Observable<CatalogEntry> {
-    return super.delete(entity).map(resource =>{
-      this.catalog.count -= 1;
-      this.catalogStateService.onCatalogChanged(this.catalog);
+    let catalogID: string = this.catalog ? this.catalog.id : null;
 
-      return resource;
+    return super.delete(entity).map(resource => {
+      if (this.catalog && this.catalog.id == catalogID) {
+        this.catalog.count -= 1;
+        this.catalogStateService.onCatalogChanged(this.catalog);
+
+        return resource;
+      }
+
+      return null;
     });
   }
 
@@ -54,11 +60,17 @@ export class CatalogEntryService extends HttpService<CatalogEntry> {
   public create(entity: CatalogEntry): Observable<CatalogEntry> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      return this.resourceService.request<CatalogEntry>(CatalogEntry, relations.createFile, entity.toFormData()).map((resource: CatalogEntry) => {
-        this.catalog.count += 1;
-        this.catalogStateService.onCatalogChanged(this.catalog);
+      let catalogID: string = this.catalog ? this.catalog.id : null;
 
-        return resource;
+      return this.resourceService.request<CatalogEntry>(CatalogEntry, relations.createFile, entity.toFormData()).map((resource: CatalogEntry) => {
+        if (this.catalog && this.catalog.id == catalogID) {
+          this.catalog.count += 1;
+          this.catalogStateService.onCatalogChanged(this.catalog);
+
+          return resource;
+        }
+
+        return null;
       });
     }
 

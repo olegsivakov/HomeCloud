@@ -80,11 +80,17 @@ export class CatalogService extends HttpService<Catalog> {
   }
 
   public delete(entity: Catalog): Observable<Catalog> {
-    return super.delete(entity as Catalog).map(resource =>{
-      this.catalog.count -= 1;
-      this.catalogStateService.onCatalogChanged(this.catalog);
+    let catalogID: string = this.catalog ? this.catalog.id : null;
 
-      return resource;
+    return super.delete(entity as Catalog).map(resource => {
+      if (this.catalog && this.catalog.id == catalogID) {
+        this.catalog.count -= 1;
+        this.catalogStateService.onCatalogChanged(this.catalog);
+
+        return resource;
+      }
+
+      return null;
     });
   }
 
@@ -100,11 +106,17 @@ export class CatalogService extends HttpService<Catalog> {
   public create(catalog: Catalog): Observable<Catalog> {
     let relations: CatalogRelation = this.catalog ? this.catalog.getRelations<CatalogRelation>() : null;
     if (relations) {
-      return this.relation<Catalog>(Catalog, relations.createCatalog, catalog).map((resource: Catalog) => {
-        this.catalog.count += 1;
-        this.catalogStateService.onCatalogChanged(this.catalog);
+      let catalogID: string = this.catalog ? this.catalog.id : null;
 
-        return resource;
+      return this.relation<Catalog>(Catalog, relations.createCatalog, catalog).map((resource: Catalog) => {
+        if (this.catalog && this.catalog.id == catalogID) {
+          this.catalog.count += 1;
+          this.catalogStateService.onCatalogChanged(this.catalog);
+
+          return resource;
+        }
+
+        return null;
       });
     }
 

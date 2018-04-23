@@ -1,0 +1,109 @@
+.directory {
+    background-image: url('../images/directory.png');
+}
+
+.file {
+    background-image: url('../images/file.png');
+}
+
+.txt,
+.file.txt {
+    background-image: url('../images/txt.png');
+}
+.pdf,
+.file.pdf {
+    background-image: url('../images/pdf.png');
+}
+.dll,
+.file.dll {
+    background-image: url('../images/dll.png');
+}
+.exe,
+.file.exe {
+    background-image: url('../images/exe.png');
+}
+.msi,
+.file.msi {
+    background-image: url('../images/msi.png');
+}
+.iso,
+.file.iso {
+    background-image: url('../images/iso.png');
+}
+
+.rar,
+.file.rar {
+    background-image: url('../images/rar.png');
+}
+.zip,
+.file.zip {
+    background-image: url('../images/zip.png');
+}
+.cab,
+.file.cab {
+    background-image: url('../images/cab.png');
+}
+
+.htm, .html, .asp, .aspx,
+.file.htm, .file.html, .file.asp, .file.aspx {
+    background-image: url('../images/html.png');
+}
+
+.docx,
+.file.docx {
+    background-image: url('../images/docx.png');
+}
+.doc,
+.file.doc {
+    background-image: url('../images/doc.png');
+}
+.xlsx,
+.file.xlsx {
+    background-image: url('../images/xlsx.png');
+}
+.xls,
+.file.xls {
+    background-image: url('../images/xls.png');
+}
+
+.jpg, jpeg,
+.file.jpg, .file.jpeg {
+    background-image: url('../images/jpg.png');
+}
+.png,
+.file.png {
+    background-image: url('../images/png.png');
+}
+.gif,
+.file.gif {
+    background-image: url('../images/gif.png');
+}
+.bmp,
+.file.bmp {
+    background-image: url('../images/bmp.png');
+}
+.wmv,
+.file.wmv {
+    background-image: url('../images/wmv.png');
+}
+.avi,
+.file.avi {
+    background-image: url('../images/avi.png');
+}
+.mp4,
+.file.mp4 {
+    background-image: url('../images/mp4.png');
+}
+
+.mp3,
+.file.mp3 {
+    background-image: url('../images/mp3.png');
+}
+.wav,
+.file.wav {
+    background-image: url('../images/wav.png');
+}
+.wma,
+.file.wma {
+    background-image: url('../images/wma.png');
+}
