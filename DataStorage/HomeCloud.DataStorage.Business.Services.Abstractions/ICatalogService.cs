@@ -66,5 +66,12 @@
 		/// The operation result containing the list of instances of <see cref="Catalog" />.
 		/// </returns>
 		Task<ServiceResult<IPaginable<Catalog>>> GetCatalogsAsync(Guid parentID, int offset = 0, int limit = 20);
+
+		/// <summary>
+		/// Calculates and syncs the size of the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The updated catalog.</returns>
+		Task<ServiceResult<Catalog>> CalculateSize(Catalog catalog);
 	}
 }

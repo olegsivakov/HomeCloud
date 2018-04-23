@@ -23,7 +23,6 @@
 		/// <param name="action">The action to perform against the chunked collection.</param>
 		/// <param name="size">The chunk size.</param>
 		/// <returns>The asynchronous operation.</returns>
-		[Obsolete("Use built-in TPL framework")]
 		public static void ForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> action, int size)
 		{
 			int count = source.Count();
@@ -67,8 +66,7 @@
 		/// <param name="action">The action to perform against the chunked collection.</param>
 		/// <param name="size">The chunk size.</param>
 		/// <returns>The asynchronous operation.</returns>
-		[Obsolete("Use built-in TPL framework")]
-		private static void ForEachAsync<T>(Func<int, int, IPaginable<T>> selector, Func<T, Task> action, int size)
+		public static void ForEachAsync<T>(Func<int, int, IPaginable<T>> selector, Func<T, Task> action, int size)
 		{
 			IPaginable<T> chunks = null;
 
@@ -78,6 +76,31 @@
 				int limit = chunks?.Limit ?? size;
 
 				chunks = selector(offset, limit);
+
+				chunks.AsParallel().ForAll(async chunk => await action(chunk));
+			}
+			while (chunks.Offset < chunks.TotalCount);
+		}
+
+		/// <summary>
+		/// Performs the specified action on each selector element by chunks of the specified size asynchronously.
+		/// Within a portion of elements the action against each element is being performed in parallel.
+		/// </summary>
+		/// <typeparam name="T">The type of elements in the collection.</typeparam>
+		/// <param name="selector">The action that defines a single chunk operation. The parameters specified in selector meets current offset index and chunk size value.</param>
+		/// <param name="action">The action to perform against the chunked collection.</param>
+		/// <param name="size">The chunk size.</param>
+		/// <returns>The asynchronous operation.</returns>
+		public static async Task ForEachAsync<T>(Func<int, int, Task<IPaginable<T>>> selector, Func<T, Task> action, int size)
+		{
+			IPaginable<T> chunks = null;
+
+			do
+			{
+				int offset = (chunks?.Limit).GetValueOrDefault() + chunks?.Offset ?? 0;
+				int limit = chunks?.Limit ?? size;
+
+				chunks = await selector(offset, limit);
 
 				chunks.AsParallel().ForAll(async chunk => await action(chunk));
 			}

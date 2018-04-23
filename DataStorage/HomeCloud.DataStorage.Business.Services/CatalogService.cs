@@ -212,8 +212,31 @@
 			}
 
 			await this.dataFactory.DeleteCatalog(serviceResult.Data);
+			this.dataFactory.RecalculateSize(serviceResult.Data.Parent);
 
 			return serviceResult;
+		}
+
+		/// <summary>
+		/// Calculates and syncs the size of the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The updated catalog.</returns>
+		public async Task<ServiceResult<Catalog>> CalculateSize(Catalog catalog)
+		{
+			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(catalog);
+			if (!result.IsValid)
+			{
+				return new ServiceResult<Catalog>(catalog)
+				{
+					Errors = result.Errors
+				};
+			}
+
+			catalog = await this.dataFactory.RecalculateSize(catalog);
+
+			return new ServiceResult<Catalog>(catalog);
 		}
 
 		#endregion

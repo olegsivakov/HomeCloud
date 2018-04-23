@@ -238,6 +238,32 @@
 			return catalog;
 		}
 
+		/// <summary>
+		/// Recalculates the size of the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The updated instance of <see cref="Catalog"/>.</returns>
+		public async Task<Catalog> RecalculateSize(Catalog catalog)
+		{
+			if (catalog.ID == Guid.Empty)
+			{
+				return catalog;
+			}
+
+			IAggregationDataProvider aggregationSourceProvider = this.providerFactory.GetService<IAggregationDataProvider>();
+
+			catalog = await aggregationSourceProvider.RecalculateSize(catalog);
+			catalog = await this.providerFactory.GetService<IFileSystemProvider>().RecalculateSize(catalog);
+			catalog = await aggregationSourceProvider.UpdateCatalog(catalog);
+
+			if (catalog.Parent != null && catalog.Parent.ID != Guid.Empty)
+			{
+				this.RecalculateSize(catalog.Parent);
+			}
+
+			return await this.GetCatalog(catalog);
+		}
+
 		#endregion
 
 		#region CatalogEntry Methods

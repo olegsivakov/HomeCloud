@@ -87,6 +87,13 @@
 		Task<Catalog> UpdateCatalog(Catalog catalog);
 
 		/// <summary>
+		/// Recalculates the size of the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The updated instance of <see cref="Catalog"/>.</returns>
+		Task<Catalog> RecalculateSize(Catalog catalog);
+
+		/// <summary>
 		/// Gets the list of catalogs located in specified parent catalog.
 		/// </summary>
 		/// <param name="parent">The parent catalog of <see cref="CatalogRoot"/> type.</param>

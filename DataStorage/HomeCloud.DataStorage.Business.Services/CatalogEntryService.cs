@@ -78,6 +78,7 @@
 			}
 
 			stream.Entry = await this.dataFactory.CreateCatalogEntry(stream);
+			this.dataFactory.RecalculateSize(stream.Entry.Catalog);
 
 			return new ServiceResult<CatalogEntry>(stream.Entry);
 		}
@@ -98,6 +99,7 @@
 			}
 
 			await this.dataFactory.DeleteCatalogEntry(serviceResult.Data);
+			this.dataFactory.RecalculateSize(serviceResult.Data.Catalog);
 
 			return serviceResult;
 		}

@@ -404,6 +404,16 @@
 			return catalog;
 		}
 
+		/// <summary>
+		/// Recalculates the size of the specified catalog.
+		/// </summary>
+		/// <param name="catalog">The catalog.</param>
+		/// <returns>The updated instance of <see cref="Catalog"/>.</returns>
+		public async Task<Catalog> RecalculateSize(Catalog catalog)
+		{
+			return await Task.FromResult(catalog);
+		}
+
 		#endregion
 
 		#region CatalogEntry Methods
