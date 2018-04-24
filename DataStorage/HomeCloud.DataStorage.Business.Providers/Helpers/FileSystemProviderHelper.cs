@@ -168,11 +168,6 @@
 			{
 				throw new ArgumentException("The parent catalog path is empty.");
 			}
-
-			if (!Directory.Exists(parent.Path))
-			{
-				throw new DirectoryNotFoundException("The parent catalog does not exist by specified path.");
-			}
 		}
 	}
 }

@@ -103,11 +103,20 @@
 			{
 				storage.ValidateStoragePath(this.fileSystemSettings);
 
-				storage.Path = storage.GeneratePath(this.fileSystemSettings);
-				if (!Directory.Exists(storage.Path))
+				string path = storage.GeneratePath(this.fileSystemSettings);
+				if (!Directory.Exists(path))
 				{
-					storage.Path = Directory.CreateDirectory(storage.Path).FullName;
+					if (storage.Path != path && Directory.Exists(storage.Path))
+					{
+						Directory.Move(storage.Path, path);
+					}
+					else
+					{
+						storage.Path = Directory.CreateDirectory(path).FullName;
+					}
 				}
+
+				storage.Path = path;
 
 				return storage;
 			});
@@ -339,6 +348,10 @@
 			return await Task.Run(() =>
 			{
 				stream.Entry.ValidatePath();
+				if (!Directory.Exists(stream.Entry.Catalog.Path))
+				{
+					stream.Entry.Catalog.Path = Directory.CreateDirectory(stream.Entry.Catalog.Path).FullName;
+				}
 
 				stream.Entry.Path = stream.Entry.GeneratePath(true);
 				if (!File.Exists(stream.Entry.Path))
