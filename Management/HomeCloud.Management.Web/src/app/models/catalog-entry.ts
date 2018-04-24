@@ -13,10 +13,11 @@ export class CatalogEntry
     public readonly isCatalog: boolean = false;
     public creationDate: Date = new Date();
     public count: number = 0;
+    
     public set file(value: File) {
         this._file = value;
         this.name = this._file.name;
-        this.size = this._file.size;
+        this.size.value = this._file.size;
     }
 
     constructor(file?: File) {

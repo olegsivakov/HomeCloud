@@ -28,7 +28,7 @@
 			target.Name = source.DisplayName;
 			target.Quota = source.Quota;
 			target.CreationDate = source.CreationDate;
-			target.Size = source.Size.GetValueOrDefault();
+			target.Size = new SizeViewModel(source.Size.GetValueOrDefault());
 
 			return target;
 		}
@@ -51,7 +51,7 @@
 			target.DisplayName = source.Name;
 			target.Quota = source.Quota;
 			target.CreationDate = source.CreationDate;
-			target.Size = source.Size;
+			target.Size = source.Size?.Value;
 
 			return target;
 		}

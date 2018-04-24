@@ -27,7 +27,7 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.CreationDate = source.CreationDate;
-			target.Size = source.Size.GetValueOrDefault();
+			target.Size = new SizeViewModel(source.Size.GetValueOrDefault());
 
 			return target;
 		}
@@ -51,7 +51,7 @@
 			target.CreationDate = source.CreationDate;
 			target.Parent = target.Parent ?? new Catalog();
 
-			target.Size = source.Size;
+			target.Size = source.Size?.Value;
 
 			return target;
 		}

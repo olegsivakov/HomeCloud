@@ -42,7 +42,7 @@
 		/// <value>
 		/// The size.
 		/// </value>
-		public virtual long Size { get; set; }
+		public virtual SizeViewModel Size { get; set; }
 
 		/// <summary>
 		/// Gets or sets the quota.
