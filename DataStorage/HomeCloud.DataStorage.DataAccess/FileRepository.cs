@@ -1,14 +1,15 @@
 ﻿namespace HomeCloud.DataStorage.DataAccess
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
-	using HomeCloud.Core;
 	#region Usings
 
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using HomeCloud.Core;
 	using HomeCloud.Data.SqlServer;
 	using HomeCloud.DataStorage.DataAccess.Objects;
-	using System.Linq;
 
 	#endregion
 
