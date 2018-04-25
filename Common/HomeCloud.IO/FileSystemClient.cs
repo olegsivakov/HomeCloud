@@ -2,9 +2,9 @@ namespace HomeCloud.IO
 {
 	#region Usings
 
-	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Threading.Tasks;
 	using System.Transactions;
 
 	using HomeCloud.IO.Extensions;
@@ -23,13 +23,7 @@ namespace HomeCloud.IO
 		/// <summary>
 		/// The enlistment container
 		/// </summary>
-		[ThreadStatic]
-		private static IDictionary<string, TransactionEnlistment> container = null;
-
-		/// <summary>
-		/// The synchronization object
-		/// </summary>
-		private static readonly object synchronizationObject = new object();
+		private readonly IDictionary<string, TransactionEnlistment> container = new Dictionary<string, TransactionEnlistment>();
 
 		#endregion
 
@@ -60,6 +54,40 @@ namespace HomeCloud.IO
 		#endregion
 
 		#region Public Methods
+
+		/// <summary>
+		/// Creates a temporary file with the given extension.
+		/// </summary>
+		/// <param name="extension">File extension. Default value is '<see cref=".tmp"/>'.</param>
+		/// <returns>The path to the temporary file.</returns>
+		public string CreateTemporaryFile(string extension = ".tmp")
+		{
+			string path = FileHelper.GetTemporaryFileName(extension);
+
+			this.Snapshot(path);
+
+			return path;
+		}
+
+		/// <summary>
+		/// Creates the temporary directory with the given directory prefix.
+		/// </summary>
+		/// <param name="prefix">The prefix of the directory name. Default value is <see cref="Nullable"/></param>
+		/// <returns>
+		/// The path to the newly created temporary directory.
+		/// </returns>
+		public string CreateTemporaryDirectory(string prefix = null)
+		{
+			string path = FileHelper.GetTemporaryDirectory(Path.GetTempPath(), prefix);
+
+			this.CreateDirectory(path);
+
+			return path;
+		}
+
+		#endregion
+
+		#region IFileOperation Implementations
 
 		/// <summary>
 		/// Determines whether the specified path refers to a directory that exists on disk.
@@ -110,40 +138,6 @@ namespace HomeCloud.IO
 		}
 
 		/// <summary>
-		/// Creates a temporary file with the given extension.
-		/// </summary>
-		/// <param name="extension">File extension. Default value is '<see cref=".tmp"/>'.</param>
-		/// <returns>The path to the temporary file.</returns>
-		public string CreateTemporaryFile(string extension = ".tmp")
-		{
-			string path = FileHelper.GetTemporaryFileName(extension);
-
-			this.Snapshot(path);
-
-			return path;
-		}
-
-		/// <summary>
-		/// Creates the temporary directory with the given directory prefix.
-		/// </summary>
-		/// <param name="prefix">The prefix of the directory name. Default value is <see cref="Nullable"/></param>
-		/// <returns>
-		/// The path to the newly created temporary directory.
-		/// </returns>
-		public string CreateTemporaryDirectory(string prefix = null)
-		{
-			string path = FileHelper.GetTemporaryDirectory(Path.GetTempPath(), prefix);
-
-			this.CreateDirectory(path);
-
-			return path;
-		}
-
-		#endregion
-
-		#region IFileOperation Implementations
-
-		/// <summary>
 		/// Appends the specified string to the file, creating the file if it doesn't already exist.
 		/// </summary>
 		/// <param name="path">The file to append the string to.</param>
@@ -152,7 +146,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new AppendAllTextOperation(path, content));
+				this.EnlistOperation(new AppendAllTextOperation(path, content));
 			}
 			else
 			{
@@ -170,7 +164,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new CopyOperation(sourcePath, destinationPath, overwrite));
+				this.EnlistOperation(new CopyOperation(sourcePath, destinationPath, overwrite));
 			}
 			else
 			{
@@ -194,7 +188,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new CreateDirectoryOperation(path));
+				this.EnlistOperation(new CreateDirectoryOperation(path));
 			}
 			else
 			{
@@ -211,7 +205,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new CreateFileOperation(path, stream));
+				this.EnlistOperation(new CreateFileOperation(path, stream));
 			}
 			else
 			{
@@ -230,7 +224,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new DeleteOperation(path));
+				this.EnlistOperation(new DeleteOperation(path));
 			}
 			else
 			{
@@ -254,7 +248,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new MoveOperation(sourcePath, destinationPath));
+				this.EnlistOperation(new MoveOperation(sourcePath, destinationPath));
 			}
 			else
 			{
@@ -278,7 +272,7 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new SnapshotOperation(path));
+				this.EnlistOperation(new SnapshotOperation(path));
 			}
 		}
 
@@ -291,12 +285,25 @@ namespace HomeCloud.IO
 		{
 			if (this.IsTransactional)
 			{
-				EnlistOperation(new WriteAllBytesOperation(path, content));
+				this.EnlistOperation(new WriteAllBytesOperation(path, content));
 			}
 			else
 			{
 				File.WriteAllBytes(path, content);
 			}
+		}
+
+		#endregion
+
+		#region IDIsposable Implementations
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public virtual void Dispose()
+		{
+			Parallel.ForEach(this.container.Values, enlistment => enlistment.Dispose());
+			this.container.Clear();
 		}
 
 		#endregion
@@ -309,31 +316,20 @@ namespace HomeCloud.IO
 		/// Enlists the specified operation.
 		/// </summary>
 		/// <param name="operation">The operation.</param>
-		private static void EnlistOperation(ITransactionalOperation operation)
+		private void EnlistOperation(ITransactionalOperation operation)
 		{
 			Transaction transaction = Transaction.Current;
+			string id = transaction.TransactionInformation.LocalIdentifier;
+
 			TransactionEnlistment enlistment = null;
-
-			if (container is null)
+			if (!this.container.TryGetValue(id, out enlistment))
 			{
-				lock (synchronizationObject)
-				{
-					if (container == null)
-					{
-						container = new Dictionary<string, TransactionEnlistment>();
-					}
+				enlistment = new TransactionEnlistment(transaction);
 
-					string id = transaction.TransactionInformation.LocalIdentifier;
-					if (!container.TryGetValue(id, out enlistment))
-					{
-						enlistment = new TransactionEnlistment(transaction);
-
-						container.Add(id, enlistment);
-					}
-
-					enlistment.EnlistOperation(operation);
-				}
+				this.container.Add(id, enlistment);
 			}
+
+			enlistment.EnlistOperation(operation);
 		}
 
 		#endregion

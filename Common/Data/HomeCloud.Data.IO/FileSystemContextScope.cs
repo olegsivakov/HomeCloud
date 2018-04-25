@@ -17,9 +17,9 @@
 		#region Private Members
 
 		/// <summary>
-		/// The context synchronization object.
+		/// The synchronization object
 		/// </summary>
-		private readonly object contextSynchronizer = new object();
+		private readonly object synchronizationObject = new object();
 
 		/// <summary>
 		/// The file system context.
@@ -64,7 +64,7 @@
 		{
 			if (this.scope is null)
 			{
-				lock (this.contextSynchronizer)
+				lock (this.synchronizationObject)
 				{
 					if (this.scope is null)
 					{

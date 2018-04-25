@@ -7,11 +7,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
-    <PackageReference Include="TxFileManager" Version="1.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\HomeCloud.DependencyInjection\HomeCloud.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\HomeCloud.IO\HomeCloud.IO.csproj" />
     <ProjectReference Include="..\HomeCloud.Data.Abstractions\HomeCloud.Data.Abstractions.csproj" />
   </ItemGroup>
 
