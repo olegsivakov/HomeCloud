@@ -46,6 +46,19 @@
 		}
 
 		/// <summary>
+		/// Gets a temporary directory .
+		/// </summary>
+		/// <param name="parentPath">The path to the parent directory.</param>
+		/// <param name="prefix">The prefix of the directory name.</param>
+		/// <returns>
+		/// The path to the newly created temporary directory. The temporary directory is created automatically.
+		/// </returns>
+		public static string GetTemporaryDirectory(string parentPath = null, string prefix = null)
+		{
+			return Path.Combine(parentPath ?? temporaryFolder, prefix ?? string.Empty + Guid.NewGuid().ToString().Substring(0, 16));
+		}
+
+		/// <summary>
 		/// Returns true if the given path is a directory.
 		/// </summary>
 		/// <param name="path">The path</param>

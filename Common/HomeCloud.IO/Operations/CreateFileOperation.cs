@@ -48,9 +48,9 @@
 				this.Backup();
 			}
 
-			using (FileStream fileStream = File.Create(this.Path, 1024, FileOptions.WriteThrough))
+			using (FileStream file = File.Create(this.Path, 1024, FileOptions.WriteThrough))
 			{
-				stream.CopyTo(fileStream);
+				stream.CopyTo(file);
 			}
 		}
 

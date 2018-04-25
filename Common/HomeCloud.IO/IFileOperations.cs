@@ -12,7 +12,7 @@ namespace HomeCloud.IO
 	public interface IFileOperations
 	{
 		/// <summary>
-		/// Appends the specified string the file, creating the file if it doesn't already exist.
+		/// Appends the specified string to the file, creating the file if it doesn't already exist.
 		/// </summary>
 		/// <param name="path">The file to append the string to.</param>
 		/// <param name="contents">The string to append to the file.</param>
@@ -21,13 +21,13 @@ namespace HomeCloud.IO
 		/// <summary>
 		/// Copies the specified <paramref name="sourceFileName"/> to <paramref name="destFileName"/>.
 		/// </summary>
-		/// <param name="sourceFileName">The file to copy.</param>
-		/// <param name="destFileName">The name of the destination file.</param>
-		/// <param name="overwrite">true if the destination file can be overwritten, otherwise false.</param>
-		void Copy(string sourceFileName, string destFileName, bool overwrite);
+		/// <param name="sourcePath">The file or directory path to copy from.</param>
+		/// <param name="destFileName">The destination file or directory path to copy to.</param>
+		/// <param name="overwrite">Indicates whether the destination file should be overwritten, otherwise false.</param>
+		void Copy(string sourcePath, string destinationPath, bool overwrite);
 
 		/// <summary>
-		/// Creates directory in the specified path.
+		/// Creates directory by the specified path.
 		/// </summary>
 		/// <param name="path">The directory path to create.</param>
 		void CreateDirectory(string path);
@@ -46,17 +46,17 @@ namespace HomeCloud.IO
 		void Delete(string path);
 
 		/// <summary>
-		/// Moves the specified file or directory to the new location.
+		/// Moves the specified file or directory to the new location specified by <paramref name="destinationPath"/>.
 		/// </summary>
-		/// <param name="sourcePath">The source path.</param>
-		/// <param name="destinationPath">The destination path.</param>
+		/// <param name="sourcePath">The source path to the file or directory to move.</param>
+		/// <param name="destinationPath">The destination path to move to.</param>
 		void Move(string sourcePath, string destinationPath);
 
 		/// <summary>
 		/// Takes a snapshot of the file or directory specified by path. Used to rollback the file or directory later.
 		/// </summary>
-		/// <param name="fileName">The file or directory path to take a snapshot for.</param>
-		void Snapshot(string fileName);
+		/// <param name="path">The file or directory path to take a snapshot for.</param>
+		void Snapshot(string path);
 
 		/// <summary>
 		/// Creates a file, writes the specified <paramref name="content"/> to the file.
