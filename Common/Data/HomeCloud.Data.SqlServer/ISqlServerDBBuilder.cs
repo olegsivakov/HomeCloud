@@ -36,7 +36,7 @@
 		/// <summary>
 		/// Adds specified <see cref="ISqlServerDBContextScope" /> data context to the service collection.
 		/// </summary>
-		/// <typeparam name="TContextScope">The type of the data context derived from <see cref="ISqlServerDBContextScope" />.</typeparam>
+		/// <typeparam name="TContextScope">The type of the data context scope derived from <see cref="ISqlServerDBContextScope" />.</typeparam>
 		/// <typeparam name="TImplementation">The type of <see cref="ISqlServerDBContextScope" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="ISqlServerDBBuilder" />.
@@ -49,7 +49,6 @@
 		/// Adds the specified <see cref="ISqlServerDBRepository" /> repository to the service collection.
 		/// </summary>
 		/// <typeparam name="TRepository">The type of the repository derived from <see cref="ISqlServerDBRepository" />.</typeparam>
-		/// <typeparam name="TContract">The type of the contract handled by the repository.</typeparam>
 		/// <typeparam name="TImplementation">The type of the <see cref="ISqlServerDBRepository" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="ISqlServerDBBuilder" />.

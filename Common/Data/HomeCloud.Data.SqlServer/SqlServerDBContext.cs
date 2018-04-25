@@ -41,7 +41,7 @@
 		private bool isCommitFailed = true;
 
 		/// <summary>
-		/// The configuration optionsю
+		/// The configuration options.
 		/// </summary>
 		private readonly SqlServerDBOptions options = null;
 
@@ -270,7 +270,6 @@
 		/// <summary>
 		/// Configures the connection to database.
 		/// </summary>
-		/// <param name="connection">The database connection.</param>
 		/// <returns>The instance of <see cref="IDbConnection"/>.</returns>
 		private IDbConnection ConfigureConnection()
 		{

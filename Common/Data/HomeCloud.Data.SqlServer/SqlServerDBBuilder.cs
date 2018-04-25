@@ -7,9 +7,9 @@
 	#endregion
 
 	/// <summary>
-	/// Implements methods to add <see cref="SqlServer"/> database services to service collection.
+	/// Implements methods to add <see cref="SqlServer" /> database services to service collection.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Data.DependencyInjection.Builders.ISqlServerDBBuilder" />
+	/// <seealso cref="HomeCloud.Data.SqlServer.ISqlServerDBBuilder" />
 	internal class SqlServerDBBuilder : ISqlServerDBBuilder
 	{
 		#region Private Members
@@ -82,7 +82,7 @@
 		/// <summary>
 		/// Adds specified <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" /> data context to the service collection.
 		/// </summary>
-		/// <typeparam name="TContextScope">The type of the data context derived from <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" />.</typeparam>
+		/// <typeparam name="TContextScope">The type of the data context scope derived from <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" />.</typeparam>
 		/// <typeparam name="TImplementation">The type of <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" /> implementation.</typeparam>
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.Data.DependencyInjection.Builders.ISqlServerDBBuilder" />.
