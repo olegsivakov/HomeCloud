@@ -80,15 +80,5 @@
 		/// <param name="outputParameters">The definition of input parameters marked as output.</param>
 		/// <returns>The list of instances of <see cref="TResult"/>.</returns>
 		Task<IEnumerable<TResult>> QueryAsync<TInput, TResult>(string sqlQuery, TInput parameters = default(TInput), params Expression<Func<TInput, object>>[] outputParameters);
-
-		/// <summary>
-		/// Commits the changes to the database.
-		/// </summary>
-		void Commit();
-
-		/// <summary>
-		/// Rollbacks the changes made against database.
-		/// </summary>
-		void Rollback();
 	}
 }

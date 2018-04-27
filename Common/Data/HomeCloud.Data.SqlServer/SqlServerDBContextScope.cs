@@ -3,6 +3,7 @@
 	#region Usings
 
 	using System.Data;
+
 	using HomeCloud.Core;
 
 	#endregion
@@ -55,11 +56,9 @@
 		#region ISqlServerDBContextScope Implementations
 
 		/// <summary>
-		/// Gets the <see cref="ISqlServerDBRepository" /> repository.
+		/// Begins the current scope.
 		/// </summary>
-		/// <typeparam name="T">The type of the repository derived from <see cref="ISqlServerDBRepository" />.</typeparam>
-		/// <returns>The instance of <see cref="!:T" />.</returns>
-		public T GetRepository<T>() where T : ISqlServerDBRepository
+		public void Begin()
 		{
 			if (this.transaction is null)
 			{
@@ -71,7 +70,15 @@
 					}
 				}
 			}
+		}
 
+		/// <summary>
+		/// Gets the <see cref="ISqlServerDBRepository" /> repository.
+		/// </summary>
+		/// <typeparam name="T">The type of the repository derived from <see cref="ISqlServerDBRepository" />.</typeparam>
+		/// <returns>The instance of <see cref="!:T" />.</returns>
+		public T GetRepository<T>() where T : ISqlServerDBRepository
+		{
 			return this.repositoryFactory.GetService<T>();
 		}
 
@@ -86,9 +93,7 @@
 				{
 					if (this.transaction != null)
 					{
-						this.context.Commit();
-
-						this.transaction = null;
+						this.transaction.Commit();
 					}
 				}
 			}
@@ -105,6 +110,12 @@
 		{
 			lock (this.contextSynchronizer)
 			{
+				if (this.transaction != null)
+				{
+					this.transaction.Dispose();
+					this.transaction = null;
+				}
+
 				this.context.Dispose();
 			}
 		}

@@ -36,11 +36,6 @@
 		private IDbTransaction transaction = null;
 
 		/// <summary>
-		/// The member indicating whether transaction commit is failed. It's considered the initial state of context as not committed and marked as failed.
-		/// </summary>
-		private bool isCommitFailed = true;
-
-		/// <summary>
 		/// The configuration options.
 		/// </summary>
 		private readonly SqlServerDBOptions options = null;
@@ -209,33 +204,6 @@
 
 		#endregion
 
-		#region ITransactionalDataContext Implementations
-
-		/// <summary>
-		/// Commits the changes to the database.
-		/// </summary>
-		public void Commit()
-		{
-			if (this.transaction != null)
-			{
-				this.transaction.Commit();
-				this.isCommitFailed = false;
-			}
-		}
-
-		/// <summary>
-		/// Rollbacks the changes made against database.
-		/// </summary>
-		public void Rollback()
-		{
-			if (this.transaction != null && this.isCommitFailed)
-			{
-				this.transaction.Rollback();
-			}
-		}
-
-		#endregion
-
 		#region IDisposable Implementations
 
 		/// <summary>
@@ -245,14 +213,7 @@
 		{
 			if (this.transaction != null)
 			{
-				try
-				{
-					this.Rollback();
-				}
-				finally
-				{
-					this.transaction.Dispose();
-				}
+				this.transaction.Dispose();
 			}
 
 			if (this.connection != null && this.Connection.State != ConnectionState.Closed)
@@ -287,7 +248,6 @@
 		/// </summary>
 		private void Initialize()
 		{
-			this.isCommitFailed = true;
 			this.connection = null;
 			this.transaction = null;
 		}

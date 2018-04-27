@@ -50,7 +50,7 @@
 
 			using (FileStream file = File.Create(this.Path, 1024, FileOptions.WriteThrough))
 			{
-				stream.CopyTo(file);
+				stream?.CopyTo(file);
 			}
 		}
 
