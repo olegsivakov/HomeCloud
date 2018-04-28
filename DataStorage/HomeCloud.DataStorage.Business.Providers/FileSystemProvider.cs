@@ -120,20 +120,20 @@
 			{
 				this.scope.Begin();
 
-				DirectoryInfo directory = string.IsNullOrWhiteSpace(storage.Path) ? this.operation.GetDirectory(storage.Name) : new DirectoryInfo(storage.Path);
+				DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
 				if (!directory.Exists)
 				{
-					if (storage.Path != path && Directory.Exists(storage.Path))
+					if (storage.Path != directory.FullName && this.operation.DirectoryExists(storage.Path))
 					{
-						Directory.Move(storage.Path, path);
+						this.operation.Move(storage.Path, directory.FullName);
 					}
 					else
 					{
-						storage.Path = Directory.CreateDirectory(path).FullName;
+						this.operation.CreateDirectory(directory.FullName);
 					}
 				}
 
-				storage.Path = path;
+				storage.Path = directory.FullName;
 
 				this.scope.Commit();
 
