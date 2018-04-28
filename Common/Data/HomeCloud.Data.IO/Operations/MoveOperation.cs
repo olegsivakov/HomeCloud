@@ -1,18 +1,18 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
 	using System.IO;
 
-	using HomeCloud.IO.Extensions;
-	using HomeCloud.IO.Helpers;
+	using HomeCloud.Core.Extensions;
+	using HomeCloud.Data.IO.Helpers;
 
 	#endregion
 
 	/// <summary>
 	///  Moves a specified file or directory to a new location, providing the option to specify a path.
 	/// </summary>
-	public sealed class MoveOperation : Operation
+	internal sealed class MoveOperation : Operation
 	{
 		#region Private Members
 

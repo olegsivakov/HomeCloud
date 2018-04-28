@@ -21,7 +21,7 @@
 		/// <param name="services">The service collection.</param>
 		/// <param name="setupAction">The setup action.</param>
 		/// <returns>The instance of <see cref="IFileSystemBuilder"/>.</returns>
-		public static IFileSystemBuilder AddSqlServerDB(this IServiceCollection services, Action<FileSystemOptions> setupAction)
+		public static IFileSystemBuilder AddFileSystem(this IServiceCollection services, Action<FileSystemOptions> setupAction)
 		{
 			services.AddFactory<IFileSystemRepository>();
 

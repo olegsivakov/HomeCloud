@@ -3,8 +3,12 @@
 	/// <summary>
 	/// Marks the repository implementation to be <see cref="IFileSystemRepository" />.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Data.IRepository" />
-	public interface IFileSystemRepository : IRepository
+	public interface IFileSystemRepository
 	{
+		/// <summary>
+		/// Deletes the record by specified file system path.
+		/// </summary>
+		/// <param name="path">The path.</param>
+		void Delete(string path);
 	}
 }

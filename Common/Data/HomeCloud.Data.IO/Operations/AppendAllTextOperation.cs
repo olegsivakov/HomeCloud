@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Opens a file, appends the specified string to the file, and then closes the file. If the file does not exist, this method creates a file, writes the specified string to the file, then closes the file.
 	/// </summary>
-	public sealed class AppendAllTextOperation : Operation
+	internal sealed class AppendAllTextOperation : Operation
 	{
 		#region Private Members
 

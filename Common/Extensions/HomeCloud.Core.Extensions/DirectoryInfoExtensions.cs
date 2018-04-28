@@ -16,9 +16,11 @@
 		/// </summary>
 		/// <param name="directory">The directory.</param>
 		/// <param name="path">The destination path.</param>
-		public static void Copy(this DirectoryInfo directory, string path)
+		/// <returns>The destination directory.</returns>
+		public static DirectoryInfo Copy(this DirectoryInfo directory, string path)
 		{
 			DirectoryInfo destination = Directory.Exists(path) ? new DirectoryInfo(path) : Directory.CreateDirectory(path);
+
 			foreach (FileInfo sourceFile in directory.GetFiles())
 			{
 				sourceFile.CopyTo(Path.Combine(destination.FullName, sourceFile.Name));
@@ -29,6 +31,8 @@
 				string destinationSubDirectoryPath = Path.Combine(destination.FullName, sourceSubDirectory.Name);
 				sourceSubDirectory.Copy(destinationSubDirectoryPath);
 			}
+
+			return destination;
 		}
 
 		/// <summary>

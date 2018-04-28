@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
@@ -9,8 +9,8 @@
 	/// <summary>
 	/// Creates or overwrites the specified file, specifying a buffer size and a System.IO.FileOptions value that describes how to create or overwrite the file.
 	/// </summary>
-	/// <seealso cref="HomeCloud.IO.Operations.Operation" />
-	public sealed class CreateFileOperation : Operation
+	/// <seealso cref="HomeCloud.Data.IO.Operations.Operation" />
+	internal sealed class CreateFileOperation : Operation
 	{
 		#region Private Members
 

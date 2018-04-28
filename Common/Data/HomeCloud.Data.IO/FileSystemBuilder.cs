@@ -2,6 +2,8 @@
 {
 	#region Usings
 
+	using HomeCloud.Data.IO.Repositories;
+
 	using Microsoft.Extensions.DependencyInjection;
 
 	#endregion
@@ -15,7 +17,7 @@
 		#region Private Members
 
 		/// <summary>
-		/// The <see cref="IServiceCollection"/>.
+		/// The <see cref="IServiceCollection"/> services.
 		/// </summary>
 		private readonly IServiceCollection services = null;
 
@@ -58,6 +60,20 @@
 		public IFileSystemBuilder AddContextScope()
 		{
 			this.services.AddScoped<IFileSystemContextScope, FileSystemContextScope>();
+
+			return this;
+		}
+
+		/// <summary>
+		/// Adds default file system repositories to the service collection.
+		/// </summary>
+		/// <returns>
+		/// The instance of <see cref="IFileSystemBuilder" />.
+		/// </returns>
+		public IFileSystemBuilder AddRepositories()
+		{
+			this.services.AddScoped<IDirectoryInfoRepository, DirectoryInfoRepository>();
+			this.services.AddScoped<IFileInfoRepository, FileInfoRepository>();
 
 			return this;
 		}

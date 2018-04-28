@@ -4,6 +4,7 @@
 
 	using HomeCloud.Core;
 
+	using HomeCloud.Data.IO;
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.Data.SqlServer;
 
@@ -77,7 +78,12 @@
 		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
 		public static IServiceCollection AddFileStorage(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<FileSystem>(configuration.GetSection(nameof(FileSystem)));
+			services.AddFileSystem(options =>
+			{
+				options.Root = configuration.GetSection("FileSystem").GetSection("StorageRootPath").Value;
+			})
+			.AddContext()
+			.AddContextScope();
 
 			return services;
 		}

@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Creates all directories and sub-directories in the specified path unless they already exist.
 	/// </summary>
-	public sealed class CreateDirectoryOperation : Operation
+	internal sealed class CreateDirectoryOperation : Operation
 	{
 		#region Constructors
 

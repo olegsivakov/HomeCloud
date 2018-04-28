@@ -1,21 +1,21 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
 	using System;
 	using System.IO;
 
-	using HomeCloud.IO.Extensions;
-	using HomeCloud.IO.Helpers;
+	using HomeCloud.Core.Extensions;
+	using HomeCloud.Data.IO.Helpers;
 
 	using SystemPath = System.IO.Path;
 
 	#endregion
 
 	/// <summary>
-	/// Contains common methods for those transactional file operations that need to backup a single file and restore it when <see cref="ITransactionalOperation.Rollback"/> is called.
+	/// Contains common methods for those transactional file operations that need to backup a single file and restore it when <see cref="IScopedOperation.Rollback"/> is called.
 	/// </summary>
-	public abstract class Operation : ITransactionalOperation, IDisposable
+	public abstract class Operation : IScopedOperation, IDisposable
 	{
 		#region Private Members
 

@@ -1,9 +1,9 @@
-﻿namespace HomeCloud.IO
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	/// <summary>
 	/// Represents a transactional file operation.
 	/// </summary>
-	public interface ITransactionalOperation
+	public interface IScopedOperation
 	{
 		/// <summary>
 		/// Executes the operation.

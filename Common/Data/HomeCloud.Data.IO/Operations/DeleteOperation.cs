@@ -1,16 +1,16 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
 	using System.IO;
-	using HomeCloud.IO.Helpers;
+	using HomeCloud.Data.IO.Helpers;
 
 	#endregion
 
 	/// <summary>
 	/// Deletes the directory or file by specified path and any sub-directories and files in the directory.
 	/// </summary>
-	public sealed class DeleteOperation : Operation
+	internal sealed class DeleteOperation : Operation
 	{
 		#region Constructors
 

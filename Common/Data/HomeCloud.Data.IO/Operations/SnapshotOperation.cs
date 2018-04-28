@@ -1,9 +1,9 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	/// <summary>
 	/// Takes a snapshot of a file to rollback the file later if needed.
 	/// </summary>
-	public sealed class SnapshotOperation : Operation
+	internal sealed class SnapshotOperation : Operation
 	{
 		#region Constructors
 

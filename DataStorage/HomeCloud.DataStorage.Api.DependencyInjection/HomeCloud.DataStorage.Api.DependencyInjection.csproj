@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.Abstractions\HomeCloud.Data.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.IO\HomeCloud.Data.IO.csproj" />
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.SqlServer\HomeCloud.Data.SqlServer.csproj" />
     <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj" />

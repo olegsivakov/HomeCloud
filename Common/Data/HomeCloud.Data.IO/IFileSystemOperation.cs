@@ -1,4 +1,4 @@
-namespace HomeCloud.IO
+namespace HomeCloud.Data.IO
 {
 	#region Usings
 
@@ -7,9 +7,9 @@ namespace HomeCloud.IO
 	#endregion
 
 	/// <summary>
-	/// Defines methods to handle files and directories.
+	/// Defines methods executed operations against files and directories.
 	/// </summary>
-	public interface IFileOperations
+	public interface IFileSystemOperation
 	{
 		/// <summary>
 		/// Appends the specified string to the file, creating the file if it doesn't already exist.
@@ -78,13 +78,5 @@ namespace HomeCloud.IO
 		/// <param name="path">The file to determine.</param>
 		/// <returns>True if the file exists. Otherwise it returns false.</returns>
 		bool FileExists(string path);
-
-		/// <summary>
-		/// Gets the files in the specified directory.
-		/// </summary>
-		/// <param name="path">The directory to get files.</param>
-		/// <param name="handler">The <see cref="FileEventHandler" /> object to call on each file found.</param>
-		/// <param name="recursive">if set to <c>true</c>, the method searches for files sub-directories recursively.</param>
-		void GetFiles(string path, FileEventHandler handler, bool recursive);
 	}
 }

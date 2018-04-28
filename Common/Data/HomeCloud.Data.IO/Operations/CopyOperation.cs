@@ -1,18 +1,18 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
 	using System.IO;
 
-	using HomeCloud.IO.Extensions;
-	using HomeCloud.IO.Helpers;
+	using HomeCloud.Core.Extensions;
+	using HomeCloud.Data.IO.Helpers;
 
 	#endregion
 
 	/// <summary>
 	/// Copies an existing file or directory to a new destination. Overwriting a file with the same name is not allowed by default.
 	/// </summary>
-	public sealed class CopyOperation : Operation
+	internal sealed class CopyOperation : Operation
 	{
 		#region Private Members
 

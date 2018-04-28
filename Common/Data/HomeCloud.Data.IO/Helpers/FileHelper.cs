@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.IO.Helpers
+﻿namespace HomeCloud.Data.IO.Helpers
 {
 	#region Usings
 

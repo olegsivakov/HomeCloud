@@ -1,4 +1,4 @@
-namespace HomeCloud.IO
+namespace HomeCloud.Data.IO
 {
 	#region Usings
 
@@ -7,6 +7,8 @@ namespace HomeCloud.IO
 	using System.Threading.Tasks;
 	using System.Transactions;
 
+	using HomeCloud.Data.IO.Operations;
+
 	#endregion
 
 	/// <summary>
@@ -14,14 +16,14 @@ namespace HomeCloud.IO
 	/// </summary>
 	/// <seealso cref="System.IDisposable" />
 	/// <seealso cref="System.Transactions.IEnlistmentNotification" />
-	public sealed class TransactionEnlistment : IEnlistmentNotification, IDisposable
+	internal sealed class TransactionEnlistment : IEnlistmentNotification, IDisposable
 	{
 		#region Private Members
 
 		/// <summary>
 		/// The operation container
 		/// </summary>
-		private readonly IList<ITransactionalOperation> operationContainer = new List<ITransactionalOperation>();
+		private readonly IList<IScopedOperation> operationContainer = new List<IScopedOperation>();
 
 		#endregion
 
@@ -44,7 +46,7 @@ namespace HomeCloud.IO
 		/// Registers the <paramref name="operation" /> in the operation container so that it will be committed or rolled back in along with the other registered operations.
 		/// </summary>
 		/// <param name="operation">The operation.</param>
-		public void EnlistOperation(ITransactionalOperation operation)
+		public void EnlistOperation(IScopedOperation operation)
 		{
 			operation.Execute();
 

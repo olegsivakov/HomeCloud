@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.IO.Operations
+﻿namespace HomeCloud.Data.IO.Operations
 {
 	#region Usings
 
@@ -9,7 +9,7 @@
 	/// <summary>
 	/// Creates a new file, writes the specified byte array to the file, and then closes the file. If the target file already exists, it is overwritten.
 	/// </summary>
-	public sealed class WriteAllBytesOperation : Operation
+	internal sealed class WriteAllBytesOperation : Operation
 	{
 		#region Private Members
 
