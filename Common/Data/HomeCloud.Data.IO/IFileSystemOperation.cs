@@ -12,6 +12,24 @@ namespace HomeCloud.Data.IO
 	public interface IFileSystemOperation
 	{
 		/// <summary>
+		/// Gets the instance of <see cref="DirectoryInfo"/> located in <paramref name="parent"/>.
+		/// </summary>
+		/// <param name="name">The name of the directory.</param>
+		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
+		/// By default the value corresponds to <see cref="FileSystemOptions.Root"/>.</param>
+		/// <returns>The instance of <see cref="DirectoryInfo"/></returns>
+		DirectoryInfo GetDirectory(string name, DirectoryInfo parent = null);
+
+		/// <summary>
+		/// Gets the instance of <see cref="FileInfo"/> located in <paramref name="parent"/>.
+		/// </summary>
+		/// <param name="name">The name of the file containing extension.</param>
+		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
+		/// By default the value corresponds <see cref="FileSystemOptions.Root"/>.</param>
+		/// <returns>The instance of <see cref="FileInfo"/></returns>
+		FileInfo GetFile(string name, DirectoryInfo parent = null);
+
+		/// <summary>
 		/// Appends the specified string to the file, creating the file if it doesn't already exist.
 		/// </summary>
 		/// <param name="path">The file to append the string to.</param>

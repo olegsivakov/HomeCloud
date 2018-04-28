@@ -7,10 +7,9 @@
 	public interface IFileSystemContextScope : IDataContextScope
 	{
 		/// <summary>
-		/// Gets the <see cref="IFileSystemRepository" /> repository.
+		/// Gets the interface that provides the file system management methods.
 		/// </summary>
-		/// <typeparam name="T">The type of the repository derived from <see cref="IFileSystemRepository" />.</typeparam>
-		/// <returns>The instance of <see cref="!:T" />.</returns>
-		T GetRepository<T>() where T : IFileSystemRepository;
+		/// <returns>The instance of <see cref="IFileSystemOperation" />.</returns>
+		IFileSystemOperation GetOperationCollection();
 	}
 }

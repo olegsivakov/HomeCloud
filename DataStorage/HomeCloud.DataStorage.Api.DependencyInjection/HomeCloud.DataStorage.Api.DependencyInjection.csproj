@@ -27,7 +27,6 @@
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Services\HomeCloud.DataStorage.Business.Services.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Validation.Abstractions\HomeCloud.DataStorage.Business.Validation.Abstractions.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Validation\HomeCloud.DataStorage.Business.Validation.csproj" />
-    <ProjectReference Include="..\HomeCloud.DataStorage.Configuration\HomeCloud.DataStorage.Configuration.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Abstractions\HomeCloud.DataStorage.DataAccess.Abstractions.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions\HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj" />

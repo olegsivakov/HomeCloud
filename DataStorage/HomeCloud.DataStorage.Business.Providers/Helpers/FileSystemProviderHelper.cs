@@ -16,25 +16,6 @@
 	internal static class FileSystemProviderHelper
 	{
 		/// <summary>
-		/// Validates <see cref="FileSystem.StorageRootPath" /> settings value not to be empty.
-		/// </summary>
-		/// <param name="settings">The settings.</param>
-		/// <exception cref="ArgumentException">The root path to the storages is not configured or does not exist.</exception>
-		/// <exception cref="DirectoryNotFoundException">The root path for storages does not exist.</exception>
-		public static void ValidateStorageRootSetting(this FileSystem settings)
-		{
-			if (string.IsNullOrWhiteSpace(settings.StorageRootPath))
-			{
-				throw new ArgumentException("The root path for storages is not configured.");
-			}
-
-			if (!Directory.Exists(settings.StorageRootPath))
-			{
-				throw new DirectoryNotFoundException("The root path for storages does not exist.");
-			}
-		}
-
-		/// <summary>
 		/// Validates storage <see cref="CatalogRoot.Path" /> and <see cref="CatalogRoot.Name" /> properties values not to be empty either.
 		/// </summary>
 		/// <param name="storage">The storage to validate.</param>

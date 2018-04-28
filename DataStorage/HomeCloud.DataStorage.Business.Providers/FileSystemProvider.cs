@@ -14,6 +14,7 @@
 	using HomeCloud.DataStorage.Configuration;
 
 	using Microsoft.Extensions.Options;
+	using HomeCloud.Data.IO;
 
 	#endregion
 
@@ -31,9 +32,14 @@
 		private static readonly object FileAccessSyncObject = new object();
 
 		/// <summary>
-		/// The file system settings
+		/// The context scope
 		/// </summary>
-		private readonly FileSystem fileSystemSettings = null;
+		private readonly IFileSystemContextScope scope = null;
+
+		/// <summary>
+		/// The operation collection
+		/// </summary>
+		private readonly IFileSystemOperation operation = null;
 
 		#endregion
 
@@ -42,10 +48,11 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileSystemProvider" /> class.
 		/// </summary>
-		/// <param name="fileSystemSettings">The file system settings.</param>
-		public FileSystemProvider(IOptionsSnapshot<FileSystem> fileSystemSettings)
+		/// <param name="scope">The context scope.</param>
+		public FileSystemProvider(IFileSystemContextScope scope)
 		{
-			this.fileSystemSettings = fileSystemSettings?.Value;
+			this.scope = scope;
+			this.operation = this.scope.GetOperationCollection();
 		}
 
 		#endregion
@@ -63,11 +70,17 @@
 		{
 			return await Task.Run(() =>
 			{
-				storage.ValidateStoragePath(this.fileSystemSettings);
+				if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
+				{
+					throw new ArgumentException("Storage path or name is empty.");
+				}
 
-				string path = storage.GeneratePath(this.fileSystemSettings);
+				if (!string.IsNullOrWhiteSpace(storage.Path))
+				{
+					return this.operation.DirectoryExists(storage.Path);
+				}
 
-				return Directory.Exists(path);
+				return this.operation.GetDirectory(storage.Name).Exists;
 			});
 		}
 
@@ -80,13 +93,17 @@
 		{
 			return await Task.Run(() =>
 			{
-				storage.ValidateStoragePath(this.fileSystemSettings);
+				this.scope.Begin();
 
-				storage.Path = storage.GeneratePath(this.fileSystemSettings, true);
-				if (!Directory.Exists(storage.Path))
+				DirectoryInfo directory = new DirectoryInfo(storage.Name);
+				if (!directory.Exists)
 				{
-					storage.Path = Directory.CreateDirectory(storage.Path).FullName;
+					storage.Path = directory.FullName;
+
+					this.operation.CreateDirectory(storage.Path);
 				}
+
+				this.scope.Commit();
 
 				return storage;
 			});
@@ -101,10 +118,10 @@
 		{
 			return await Task.Run(() =>
 			{
-				storage.ValidateStoragePath(this.fileSystemSettings);
+				this.scope.Begin();
 
-				string path = storage.GeneratePath(this.fileSystemSettings);
-				if (!Directory.Exists(path))
+				DirectoryInfo directory = string.IsNullOrWhiteSpace(storage.Path) ? this.operation.GetDirectory(storage.Name) : new DirectoryInfo(storage.Path);
+				if (!directory.Exists)
 				{
 					if (storage.Path != path && Directory.Exists(storage.Path))
 					{
@@ -117,6 +134,8 @@
 				}
 
 				storage.Path = path;
+
+				this.scope.Commit();
 
 				return storage;
 			});

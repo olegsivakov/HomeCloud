@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.Abstractions\HomeCloud.Data.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.IO\HomeCloud.Data.IO.csproj" />
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.SqlServer\HomeCloud.Data.SqlServer.csproj" />
     <ProjectReference Include="..\..\Common\Extensions\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj" />
@@ -17,7 +18,6 @@
     <ProjectReference Include="..\..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Entities\HomeCloud.DataStorage.Business.Entities.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.Business.Providers.Abstractions\HomeCloud.DataStorage.Business.Providers.Abstractions.csproj" />
-    <ProjectReference Include="..\HomeCloud.DataStorage.Configuration\HomeCloud.DataStorage.Configuration.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions\HomeCloud.DataStorage.DataAccess.Aggregation.Abstractions.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Aggregation.Objects\HomeCloud.DataStorage.DataAccess.Aggregation.Objects.csproj" />
     <ProjectReference Include="..\HomeCloud.DataStorage.DataAccess.Objects\HomeCloud.DataStorage.DataAccess.Objects.csproj" />

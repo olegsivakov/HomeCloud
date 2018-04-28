@@ -26,6 +26,11 @@
 		#region Private Members
 
 		/// <summary>
+		/// The synchronization object
+		/// </summary>
+		private static readonly object SynchronizationObject = new object();
+
+		/// <summary>
 		/// The enlistment container
 		/// </summary>
 		private readonly IDictionary<string, TransactionEnlistment> container = new Dictionary<string, TransactionEnlistment>();
@@ -116,13 +121,15 @@
 		}
 
 		/// <summary>
-		/// Creates the new instance of <see cref="DirectoryInfo"/> in <paramref name="parent"/>. The method doesn't create new directory in file system.
+		/// Gets the instance of <see cref="DirectoryInfo" /> located in <paramref name="parent" />.
 		/// </summary>
 		/// <param name="name">The name of the directory.</param>
-		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
-		/// By default the value corresponds <see cref="FileSystemOptions.Root"/>.</param>
-		/// <returns>The instance of <see cref="DirectoryInfo"/></returns>
-		public DirectoryInfo NewDirectory(string name, DirectoryInfo parent = null)
+		/// <param name="parent">The instance of <see cref="DirectoryInfo" /> representing parent directory the requested by <paramref name="name" /> instance should be created in.
+		/// By default the value corresponds to <see cref="FileSystemOptions.Root" />.</param>
+		/// <returns>
+		/// The instance of <see cref="DirectoryInfo" />
+		/// </returns>
+		public DirectoryInfo GetDirectory(string name, DirectoryInfo parent = null)
 		{
 			string parentPath = (parent?.FullName ?? this.options.Root);
 
@@ -130,13 +137,15 @@
 		}
 
 		/// <summary>
-		/// Creates the new instance of <see cref="FileInfo"/> in <paramref name="parent"/>. The method doesn't create new file in file system.
+		/// Gets the instance of <see cref="FileInfo" /> located in <paramref name="parent" />.
 		/// </summary>
 		/// <param name="name">The name of the file containing extension.</param>
-		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
-		/// By default the value corresponds <see cref="FileSystemOptions.Root"/>.</param>
-		/// <returns>The instance of <see cref="FileInfo"/></returns>
-		public FileInfo NewFile(string name, DirectoryInfo parent = null)
+		/// <param name="parent">The instance of <see cref="DirectoryInfo" /> representing parent directory the requested by <paramref name="name" /> instance should be created in.
+		/// By default the value corresponds <see cref="FileSystemOptions.Root" />.</param>
+		/// <returns>
+		/// The instance of <see cref="FileInfo" />
+		/// </returns>
+		public FileInfo GetFile(string name, DirectoryInfo parent = null)
 		{
 			string parentPath = (parent?.FullName ?? this.options.Root);
 
@@ -174,13 +183,16 @@
 		/// <param name="contents">The string to append to the file.</param>
 		public void AppendAllText(string path, string content)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new AppendAllTextOperation(path, content));
-			}
-			else
-			{
-				File.AppendAllText(path, content);
+				if (this.IsTransactional)
+				{
+					this.EnlistOperation(new AppendAllTextOperation(path, content));
+				}
+				else
+				{
+					File.AppendAllText(path, content);
+				}
 			}
 		}
 
@@ -192,20 +204,24 @@
 		/// <param name="overwrite">Indicates whether the destination file should be overwritten, otherwise false.</param>
 		public void Copy(string sourcePath, string destinationPath, bool overwrite)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new CopyOperation(sourcePath, destinationPath, overwrite));
-			}
-			else
-			{
-				if (FileHelper.IsDirectory(sourcePath))
+
+				if (this.IsTransactional)
 				{
-					DirectoryInfo directory = new DirectoryInfo(sourcePath);
-					directory.Copy(destinationPath);
+					this.EnlistOperation(new CopyOperation(sourcePath, destinationPath, overwrite));
 				}
 				else
 				{
-					File.Copy(sourcePath, destinationPath, overwrite);
+					if (FileHelper.IsDirectory(sourcePath))
+					{
+						DirectoryInfo directory = new DirectoryInfo(sourcePath);
+						directory.Copy(destinationPath);
+					}
+					else
+					{
+						File.Copy(sourcePath, destinationPath, overwrite);
+					}
 				}
 			}
 		}
@@ -216,13 +232,16 @@
 		/// <param name="path">The directory path to create.</param>
 		public void CreateDirectory(string path)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new CreateDirectoryOperation(path));
-			}
-			else
-			{
-				Directory.CreateDirectory(path);
+				if (this.IsTransactional)
+				{
+					this.EnlistOperation(new CreateDirectoryOperation(path));
+				}
+				else
+				{
+					Directory.CreateDirectory(path);
+				}
 			}
 		}
 
@@ -233,15 +252,18 @@
 		/// <param name="stream">The stream containing file data.</param>
 		public void CreateFile(string path, Stream stream)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new CreateFileOperation(path, stream));
-			}
-			else
-			{
-				using (FileStream file = File.Create(path, 1024, FileOptions.WriteThrough))
+				if (this.IsTransactional)
 				{
-					stream.CopyTo(file);
+					this.EnlistOperation(new CreateFileOperation(path, stream));
+				}
+				else
+				{
+					using (FileStream file = File.Create(path, 1024, FileOptions.WriteThrough))
+					{
+						stream.CopyTo(file);
+					}
 				}
 			}
 		}
@@ -252,19 +274,22 @@
 		/// <param name="path">The path to the file or directory to delete.</param>
 		public void Delete(string path)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new DeleteOperation(path));
-			}
-			else
-			{
-				if (FileHelper.IsDirectory(path))
+				if (this.IsTransactional)
 				{
-					Directory.Delete(path);
+					this.EnlistOperation(new DeleteOperation(path));
 				}
 				else
 				{
-					File.Delete(path);
+					if (FileHelper.IsDirectory(path))
+					{
+						Directory.Delete(path);
+					}
+					else
+					{
+						File.Delete(path);
+					}
 				}
 			}
 		}
@@ -276,20 +301,23 @@
 		/// <param name="destinationPath">The destination path to move to.</param>
 		public void Move(string sourcePath, string destinationPath)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new MoveOperation(sourcePath, destinationPath));
-			}
-			else
-			{
-				if (FileHelper.IsDirectory(sourcePath))
+				if (this.IsTransactional)
 				{
-					DirectoryInfo directory = new DirectoryInfo(sourcePath);
-					directory.Move(destinationPath);
+					this.EnlistOperation(new MoveOperation(sourcePath, destinationPath));
 				}
 				else
 				{
-					File.Move(sourcePath, destinationPath);
+					if (FileHelper.IsDirectory(sourcePath))
+					{
+						DirectoryInfo directory = new DirectoryInfo(sourcePath);
+						directory.Move(destinationPath);
+					}
+					else
+					{
+						File.Move(sourcePath, destinationPath);
+					}
 				}
 			}
 		}
@@ -313,13 +341,16 @@
 		/// <param name="content">The array of bytes to write to the file.</param>
 		public void WriteAllBytes(string path, byte[] content)
 		{
-			if (this.IsTransactional)
+			lock (SynchronizationObject)
 			{
-				this.EnlistOperation(new WriteAllBytesOperation(path, content));
-			}
-			else
-			{
-				File.WriteAllBytes(path, content);
+				if (this.IsTransactional)
+				{
+					this.EnlistOperation(new WriteAllBytesOperation(path, content));
+				}
+				else
+				{
+					File.WriteAllBytes(path, content);
+				}
 			}
 		}
 

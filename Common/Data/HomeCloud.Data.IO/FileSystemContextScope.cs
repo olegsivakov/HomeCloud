@@ -4,8 +4,6 @@
 
 	using System.Transactions;
 
-	using HomeCloud.Core;
-
 	#endregion
 
 	/// <summary>
@@ -22,9 +20,9 @@
 		private readonly object synchronizationObject = new object();
 
 		/// <summary>
-		/// The <see cref="IFileSystemRepository"/> factory.
+		/// The context
 		/// </summary>
-		private readonly IServiceFactory<IFileSystemRepository> repositoryFactory = null;
+		private readonly IFileSystemContext context = null;
 
 		/// <summary>
 		/// The transaction scope.
@@ -39,9 +37,9 @@
 		/// Initializes a new instance of the <see cref="FileSystemContextScope" /> class.
 		/// </summary>
 		/// <param name="repositoryFactory">The <see cref="IFileSystemRepository" /> factory.</param>
-		public FileSystemContextScope(IServiceFactory<IFileSystemRepository> repositoryFactory)
+		public FileSystemContextScope(IFileSystemContext context)
 		{
-			this.repositoryFactory = repositoryFactory;
+			this.context = context;
 		}
 
 		#endregion
@@ -66,13 +64,12 @@
 		}
 
 		/// <summary>
-		/// Gets the <see cref="IFileSystemRepository" /> repository.
+		/// Gets the interface that provides the file system management methods.
 		/// </summary>
-		/// <typeparam name="T">The type of the repository derived from <see cref="IFileSystemRepository" />.</typeparam>
-		/// <returns>The instance of <see cref="!:T" />.</returns>
-		public T GetRepository<T>() where T : IFileSystemRepository
+		/// <returns>The instance of <see cref="IFileSystemOperation" />.</returns>
+		public IFileSystemOperation GetOperationCollection()
 		{
-			return this.repositoryFactory.GetService<T>();
+			return this.context;
 		}
 
 		/// <summary>
@@ -87,6 +84,8 @@
 					if (this.scope != null)
 					{
 						this.scope.Complete();
+						this.scope.Dispose();
+						this.scope = null;
 					}
 				}
 			}
@@ -108,6 +107,7 @@
 					if (this.scope != null)
 					{
 						this.scope.Dispose();
+						this.scope = null;
 					}
 				}
 			}

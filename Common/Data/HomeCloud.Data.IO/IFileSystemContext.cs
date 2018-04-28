@@ -35,23 +35,5 @@
 		/// The path to the newly created temporary directory.
 		/// </returns>
 		string CreateTemporaryDirectory(string prefix = null);
-
-		/// <summary>
-		/// Creates the new instance of <see cref="DirectoryInfo"/> in <paramref name="parent"/>. The method doesn't create new directory in file system.
-		/// </summary>
-		/// <param name="name">The name of the directory.</param>
-		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
-		/// By default the value corresponds <see cref="FileSystemOptions.Root"/>.</param>
-		/// <returns>The instance of <see cref="DirectoryInfo"/></returns>
-		DirectoryInfo NewDirectory(string name, DirectoryInfo parent = null);
-
-		/// <summary>
-		/// Creates the new instance of <see cref="FileInfo"/> in <paramref name="parent"/>. The method doesn't create new file in file system.
-		/// </summary>
-		/// <param name="name">The name of the file containing extension.</param>
-		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
-		/// By default the value corresponds <see cref="FileSystemOptions.Root"/>.</param>
-		/// <returns>The instance of <see cref="FileInfo"/></returns>
-		FileInfo NewFile(string name, DirectoryInfo parent = null);
 	}
 }
