@@ -17,7 +17,6 @@
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Services;
 	using HomeCloud.DataStorage.Business.Validation;
-	using HomeCloud.DataStorage.Configuration;
 
 	using HomeCloud.DataStorage.DataAccess;
 	using HomeCloud.DataStorage.DataAccess.Aggregation;

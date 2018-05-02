@@ -23,8 +23,6 @@
 		/// <returns>The instance of <see cref="IFileSystemBuilder"/>.</returns>
 		public static IFileSystemBuilder AddFileSystem(this IServiceCollection services, Action<FileSystemOptions> setupAction)
 		{
-			services.AddFactory<IFileSystemRepository>();
-
 			if (setupAction is null)
 			{
 				services.Configure<FileSystemOptions>(options => { });

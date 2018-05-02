@@ -1,7 +1,8 @@
-namespace HomeCloud.Data.IO
+﻿namespace HomeCloud.Data.IO
 {
 	#region Usings
 
+	using System.Collections.Generic;
 	using System.IO;
 
 	#endregion
@@ -16,7 +17,7 @@ namespace HomeCloud.Data.IO
 		/// </summary>
 		/// <param name="name">The name of the directory.</param>
 		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
-		/// By default the value corresponds to <see cref="FileSystemOptions.Root"/>.</param>
+		/// The value corresponds to <see cref="FileSystemOptions.Root"/> by default.</param>
 		/// <returns>The instance of <see cref="DirectoryInfo"/></returns>
 		DirectoryInfo GetDirectory(string name, DirectoryInfo parent = null);
 
@@ -25,9 +26,25 @@ namespace HomeCloud.Data.IO
 		/// </summary>
 		/// <param name="name">The name of the file containing extension.</param>
 		/// <param name="parent">The instance of <see cref="DirectoryInfo"/> representing parent directory the requested by <paramref name="name"/> instance should be created in.
-		/// By default the value corresponds <see cref="FileSystemOptions.Root"/>.</param>
+		/// The value corresponds to <see cref="FileSystemOptions.Root"/> by default.</param>
 		/// <returns>The instance of <see cref="FileInfo"/></returns>
 		FileInfo GetFile(string name, DirectoryInfo parent = null);
+
+		/// <summary>
+		/// Gets the list of directories located in specified <paramref name="directory"/>.
+		/// </summary>
+		/// <param name="directory">The directory to search in. The value corresponds to <see cref="FileSystemOptions.Root"/> by default.</param>
+		/// <param name="recursive">Indicates whether the sub directories should be included in result output. By default the value is false.</param>
+		/// <returns>The list of instances if <see cref="DirectoryInfo"/></returns>
+		IEnumerable<DirectoryInfo> GetDirectories(DirectoryInfo directory = null, bool recursive = false);
+
+		/// <summary>
+		/// Gets the list files located in specified <paramref name="directory"/>.
+		/// </summary>
+		/// <param name="directory">The directory to search in. The value corresponds to <see cref="FileSystemOptions.Root"/> by default.</param>
+		/// <param name="recursive">Indicates whether the sub directories should be included in result output. By default the value is false.</param>
+		/// <returns>The list of instances if <see cref="FileInfo"/></returns>
+		IEnumerable<FileInfo> GetFiles(DirectoryInfo directory = null, bool recursive = false);
 
 		/// <summary>
 		/// Appends the specified string to the file, creating the file if it doesn't already exist.
@@ -48,14 +65,16 @@ namespace HomeCloud.Data.IO
 		/// Creates directory by the specified path.
 		/// </summary>
 		/// <param name="path">The directory path to create.</param>
-		void CreateDirectory(string path);
+		/// <returns>The newly created instance of <see cref="DirectoryInfo"/>.</returns>
+		DirectoryInfo CreateDirectory(string path);
 
 		/// <summary>
 		/// Creates the file by specified path and from the specified <see cref="Stream" />.
 		/// </summary>
 		/// <param name="path">The file path to create.</param>
 		/// <param name="stream">The stream containing file data.</param>
-		void CreateFile(string path, Stream stream);
+		/// <returns>The newly created instance of <see cref="FileInfo"/>.</returns>
+		FileInfo CreateFile(string path, Stream stream);
 
 		/// <summary>
 		/// Deletes the specified file or directory. An exception is not thrown if the file does not exist.
@@ -82,6 +101,15 @@ namespace HomeCloud.Data.IO
 		/// <param name="path">The file to write <paramref name="content"/> to.</param>
 		/// <param name="content">The array of bytes to write to the file.</param>
 		void WriteAllBytes(string path, byte[] content);
+
+		/// <summary>
+		/// Reads the byte portion from th efile specified by <paramref name="path" />.
+		/// </summary>
+		/// <param name="path">The file to write <paramref name="content" /> to.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="length">The number of bytes from byte array to return.</param>
+		/// <returns>The byte array.</returns>
+		byte[] ReadBytes(string path, int offset = 0, int length = 0);
 
 		/// <summary>
 		/// Determines whether the specified path refers to a directory that exists on disk.

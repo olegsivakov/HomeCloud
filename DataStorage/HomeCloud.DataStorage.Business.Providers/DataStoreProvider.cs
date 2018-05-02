@@ -100,6 +100,8 @@
 		{
 			CatalogContract catalogContract = this.mapper.MapNew<Storage, CatalogContract>(storage);
 
+			this.dataContextScope.Begin();
+
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			catalogContract = await catalogRepository.SaveAsync(catalogContract);
 
@@ -126,6 +128,8 @@
 		{
 			StorageContract storageContract = null;
 			CatalogContract catalogContract = null;
+
+			this.dataContextScope.Begin();
 
 			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
 
@@ -220,6 +224,8 @@
 		/// </returns>
 		public async Task<Storage> DeleteStorage(Storage storage)
 		{
+			this.dataContextScope.Begin();
+
 			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
 			await storageRepository.DeleteAsync(storage.ID);
 
@@ -268,6 +274,8 @@
 			CatalogContract catalogContract = this.mapper.MapNew<Catalog, CatalogContract>(catalog);
 			CatalogContract parentCatalogContract = null;
 
+			this.dataContextScope.Begin();
+
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 
 			catalogContract = await catalogRepository.SaveAsync(catalogContract);
@@ -293,6 +301,8 @@
 		{
 			CatalogContract catalogContract = null;
 			CatalogContract parentCatalogContract = null;
+
+			this.dataContextScope.Begin();
 
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 
@@ -396,6 +406,8 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
+			this.dataContextScope.Begin();
+
 			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
 			await catalogRepository.DeleteAsync(catalog.ID);
 
@@ -455,6 +467,8 @@
 
 			FileContract fileContract = this.mapper.MapNew<CatalogEntry, FileContract>(entry);
 			CatalogContract catalogContract = null;
+
+			this.dataContextScope.Begin();
 
 			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
 			fileContract = await fileRepository.SaveAsync(fileContract);
@@ -561,6 +575,8 @@
 		/// </returns>
 		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
 		{
+			this.dataContextScope.Begin();
+
 			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
 			await fileRepository.DeleteAsync(entry.ID);
 

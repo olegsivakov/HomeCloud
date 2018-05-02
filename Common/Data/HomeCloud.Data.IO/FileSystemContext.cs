@@ -76,7 +76,7 @@
 
 		#region IFileSystemClient Implementations
 
-		#region Public Properties
+		#region IFileSystemContext Methods
 
 		/// <summary>
 		/// Gets a value indicating whether this instance use transaction.
@@ -85,10 +85,6 @@
 		///   <c>True</c> if this instance use transaction; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsTransactional { get => Transaction.Current != null; }
-
-		#endregion
-
-		#region IFileSystemContext Methods
 
 		/// <summary>
 		/// Creates a temporary file with the given extension.
@@ -120,12 +116,16 @@
 			return path;
 		}
 
+		#endregion
+
+		#region IFileSystemOperation Implementations
+
 		/// <summary>
 		/// Gets the instance of <see cref="DirectoryInfo" /> located in <paramref name="parent" />.
 		/// </summary>
 		/// <param name="name">The name of the directory.</param>
 		/// <param name="parent">The instance of <see cref="DirectoryInfo" /> representing parent directory the requested by <paramref name="name" /> instance should be created in.
-		/// By default the value corresponds to <see cref="FileSystemOptions.Root" />.</param>
+		/// The value corresponds to <see cref="FileSystemOptions.Root" /> by default.</param>
 		/// <returns>
 		/// The instance of <see cref="DirectoryInfo" />
 		/// </returns>
@@ -141,7 +141,7 @@
 		/// </summary>
 		/// <param name="name">The name of the file containing extension.</param>
 		/// <param name="parent">The instance of <see cref="DirectoryInfo" /> representing parent directory the requested by <paramref name="name" /> instance should be created in.
-		/// By default the value corresponds <see cref="FileSystemOptions.Root" />.</param>
+		/// The value corresponds to <see cref="FileSystemOptions.Root" /> by default.</param>
 		/// <returns>
 		/// The instance of <see cref="FileInfo" />
 		/// </returns>
@@ -152,9 +152,31 @@
 			return new FileInfo(Path.Combine(parentPath, name));
 		}
 
-		#endregion
+		/// <summary>
+		/// Gets the list of directories located in specified <paramref name="directory" />.
+		/// </summary>
+		/// <param name="directory">The directory to search in. The value corresponds to <see cref="FileSystemOptions.Root" /> by default.</param>
+		/// <param name="recursive">Indicates whether the sub directories should be included in result output. By default the value is false.</param>
+		/// <returns>
+		/// The list of instances if <see cref="DirectoryInfo" />
+		/// </returns>
+		public IEnumerable<DirectoryInfo> GetDirectories(DirectoryInfo directory = null, bool recursive = false)
+		{
+			return (directory ?? new DirectoryInfo(this.options.Root)).GetDirectories("*", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+		}
 
-		#region IFileSystemOperation Implementations
+		/// <summary>
+		/// Gets the list files located in specified <paramref name="directory" />.
+		/// </summary>
+		/// <param name="directory">The directory to search in. The value corresponds to <see cref="FileSystemOptions.Root" /> by default.</param>
+		/// <param name="recursive">Indicates whether the sub directories should be included in result output. By default the value is false.</param>
+		/// <returns>
+		/// The list of instances if <see cref="FileInfo" />
+		/// </returns>
+		public IEnumerable<FileInfo> GetFiles(DirectoryInfo directory = null, bool recursive = false)
+		{
+			return (directory ?? new DirectoryInfo(this.options.Root)).GetFiles("*", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+		}
 
 		/// <summary>
 		/// Determines whether the specified path refers to a directory that exists on disk.
@@ -230,7 +252,8 @@
 		/// Creates directory by the specified path.
 		/// </summary>
 		/// <param name="path">The directory path to create.</param>
-		public void CreateDirectory(string path)
+		/// <returns>The newly created instance of <see cref="DirectoryInfo"/>.</returns>
+		public DirectoryInfo CreateDirectory(string path)
 		{
 			lock (SynchronizationObject)
 			{
@@ -243,6 +266,8 @@
 					Directory.CreateDirectory(path);
 				}
 			}
+
+			return new DirectoryInfo(path);
 		}
 
 		/// <summary>
@@ -250,7 +275,8 @@
 		/// </summary>
 		/// <param name="path">The file path to create.</param>
 		/// <param name="stream">The stream containing file data.</param>
-		public void CreateFile(string path, Stream stream)
+		/// <returns>The newly created instance of <see cref="FileInfo"/>.</returns>
+		public FileInfo CreateFile(string path, Stream stream)
 		{
 			lock (SynchronizationObject)
 			{
@@ -266,6 +292,8 @@
 					}
 				}
 			}
+
+			return new FileInfo(path);
 		}
 
 		/// <summary>
@@ -351,6 +379,26 @@
 				{
 					File.WriteAllBytes(path, content);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Reads the byte portion from th efile specified by <paramref name="path" />.
+		/// </summary>
+		/// <param name="path">The file to write <paramref name="content" /> to.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="length">The number of bytes from byte array to return.</param>
+		/// <returns>The byte array.</returns>
+		public byte[] ReadBytes(string path, int offset = 0, int length = 0)
+		{
+			using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+			{
+				long count = length == 0 ? stream.Length : length;
+
+				byte[] buffer = new byte[count];
+				stream.Read(buffer, offset, (int)count);
+
+				return buffer;
 			}
 		}
 

@@ -3,18 +3,15 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
 
-	using HomeCloud.DataStorage.Business.Entities;
-	using HomeCloud.DataStorage.Business.Providers.Helpers;
-	using HomeCloud.DataStorage.Configuration;
-
-	using Microsoft.Extensions.Options;
 	using HomeCloud.Data.IO;
+	using HomeCloud.DataStorage.Business.Entities;
 
 	#endregion
 
@@ -25,11 +22,6 @@
 	public class FileSystemProvider : IFileSystemProvider
 	{
 		#region Private Members
-
-		/// <summary>
-		/// The file access synchronization object
-		/// </summary>
-		private static readonly object FileAccessSyncObject = new object();
 
 		/// <summary>
 		/// The context scope
@@ -68,20 +60,14 @@
 		/// <returns><c>true</c> if the storage exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> StorageExists(Storage storage)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
-				if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
-				{
-					throw new ArgumentException("Storage path or name is empty.");
-				}
+				throw new ArgumentException("Storage path or name is empty.");
+			}
 
-				if (!string.IsNullOrWhiteSpace(storage.Path))
-				{
-					return this.operation.DirectoryExists(storage.Path);
-				}
+			bool result = !string.IsNullOrWhiteSpace(storage.Path) ? this.operation.DirectoryExists(storage.Path) : this.operation.GetDirectory(storage.Name).Exists;
 
-				return this.operation.GetDirectory(storage.Name).Exists;
-			});
+			return await Task.FromResult(result);
 		}
 
 		/// <summary>
@@ -91,22 +77,24 @@
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(storage.Name))
 			{
-				this.scope.Begin();
+				throw new ArgumentException("Storage name is empty.");
+			}
 
-				DirectoryInfo directory = new DirectoryInfo(storage.Name);
-				if (!directory.Exists)
-				{
-					storage.Path = directory.FullName;
+			this.scope.Begin();
 
-					this.operation.CreateDirectory(storage.Path);
-				}
+			DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
+			if (!directory.Exists)
+			{
+				directory = this.operation.CreateDirectory(directory.FullName);
+			}
 
-				this.scope.Commit();
+			storage.Path = directory.FullName;
 
-				return storage;
-			});
+			this.scope.Commit();
+
+			return await Task.FromResult(storage);
 		}
 
 		/// <summary>
@@ -116,29 +104,31 @@
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(storage.Path) || string.IsNullOrWhiteSpace(storage.Name))
 			{
-				this.scope.Begin();
+				throw new ArgumentException("Storage path or name is empty.");
+			}
 
-				DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
-				if (!directory.Exists)
+			this.scope.Begin();
+
+			DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
+			if (!directory.Exists)
+			{
+				if (storage.Path != directory.FullName && this.operation.DirectoryExists(storage.Path))
 				{
-					if (storage.Path != directory.FullName && this.operation.DirectoryExists(storage.Path))
-					{
-						this.operation.Move(storage.Path, directory.FullName);
-					}
-					else
-					{
-						this.operation.CreateDirectory(directory.FullName);
-					}
+					this.operation.Move(storage.Path, directory.FullName);
 				}
+				else
+				{
+					directory = this.operation.CreateDirectory(directory.FullName);
+				}
+			}
 
-				storage.Path = directory.FullName;
+			storage.Path = directory.FullName;
 
-				this.scope.Commit();
+			this.scope.Commit();
 
-				return storage;
-			});
+			return await Task.FromResult(storage);
 		}
 
 		/// <summary>
@@ -149,7 +139,17 @@
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
 		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
-			return await Task.FromException<IPaginable<Storage>>(new NotSupportedException());
+			IEnumerable<DirectoryInfo> result = this.operation.GetDirectories();
+
+			return await Task.FromResult(new PagedList<Storage>(result.Skip(offset).Take(limit).Select(directory => new Storage()
+			{
+				Path = directory.FullName, Name = directory.Name
+			}))
+			{
+				Offset = offset,
+				Limit = limit,
+				TotalCount = result.Count()
+			});
 		}
 
 		/// <summary>
@@ -159,18 +159,18 @@
 		/// <returns>The instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> GetStorage(Storage storage)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
-				storage.ValidateStoragePath(this.fileSystemSettings);
+				throw new ArgumentException("Storage path or name is empty.");
+			}
 
-				storage.Path = storage.GeneratePath(this.fileSystemSettings);
-				if (Directory.Exists(storage.Path))
-				{
-					storage.Size = Directory.GetFiles(storage.Path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)).Sum(file => file.Length);
-				}
+			DirectoryInfo directory = !string.IsNullOrWhiteSpace(storage.Path) ? new DirectoryInfo(storage.Path) : this.operation.GetDirectory(storage.Name);
+			if (directory.Exists)
+			{
+				storage.Size = this.operation.GetFiles(directory, true).Sum(file => file.Length);
+			}
 
-				return storage;
-			});
+			return await Task.FromResult(storage);
 		}
 
 		/// <summary>
@@ -182,18 +182,22 @@
 		/// </returns>
 		public async Task<Storage> DeleteStorage(Storage storage)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
-				storage.ValidateStoragePath(this.fileSystemSettings);
+				throw new ArgumentException("Storage path or name is empty.");
+			}
 
-				storage.Path = storage.GeneratePath(this.fileSystemSettings);
-				if (Directory.Exists(storage.Path))
-				{
-					Directory.Delete(storage.Path, true);
-				}
+			this.scope.Begin();
 
-				return storage;
-			});
+			DirectoryInfo directory = !string.IsNullOrWhiteSpace(storage.Path) ? new DirectoryInfo(storage.Path) : this.operation.GetDirectory(storage.Name);
+			if (directory.Exists)
+			{
+				this.operation.Delete(directory.FullName);
+			}
+
+			this.scope.Commit();
+
+			return await Task.FromResult(storage);
 		}
 
 		#endregion
@@ -207,14 +211,14 @@
 		/// <returns><c>true</c> if the catalog exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogExists(Catalog catalog)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(catalog.Path) && (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path)))
 			{
-				catalog.ValidatePath();
+				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+			}
 
-				string path = catalog.GeneratePath();
+			bool result = !string.IsNullOrWhiteSpace(catalog.Path) ? this.operation.DirectoryExists(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent?.Path)).Exists;
 
-				return Directory.Exists(path);
-			});
+			return await Task.FromResult(result);
 		}
 
 		/// <summary>
@@ -224,18 +228,24 @@
 		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path))
 			{
-				catalog.ValidatePath();
+				throw new ArgumentException("Catalog name or parent catalog are empty.");
+			}
 
-				catalog.Path = catalog.GeneratePath(true);
-				if (!Directory.Exists(catalog.Path))
-				{
-					catalog.Path = Directory.CreateDirectory(catalog.Path).FullName;
-				}
+			this.scope.Begin();
 
-				return catalog;
-			});
+			DirectoryInfo directory = this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+			if (!directory.Exists)
+			{
+				directory = Directory.CreateDirectory(directory.FullName);
+			}
+
+			catalog.Path = directory.FullName;
+
+			this.scope.Commit();
+
+			return await Task.FromResult(catalog);
 		}
 
 		/// <summary>
@@ -245,27 +255,31 @@
 		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(catalog.Path) || string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path))
 			{
-				catalog.ValidatePath();
+				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+			}
 
-				string path = catalog.GeneratePath(true);
-				if (!Directory.Exists(path))
+			this.scope.Begin();
+
+			DirectoryInfo directory = this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+			if (!directory.Exists)
+			{
+				if (catalog.Path != directory.FullName && this.operation.DirectoryExists(catalog.Path))
 				{
-					if (catalog.Path != path && Directory.Exists(catalog.Path))
-					{
-						Directory.Move(catalog.Path, path);
-					}
-					else
-					{
-						catalog.Path = Directory.CreateDirectory(path).FullName;
-					}
+					this.operation.Move(catalog.Path, directory.FullName);
 				}
+				else
+				{
+					directory = this.operation.CreateDirectory(directory.FullName);
+				}
+			}
 
-				catalog.Path = path;
+			catalog.Path = directory.FullName;
 
-				return catalog;
-			});
+			this.scope.Commit();
+
+			return await Task.FromResult(catalog);
 		}
 
 		/// <summary>
@@ -279,7 +293,18 @@
 		/// </returns>
 		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
-			return await Task.FromException<IPaginable<Catalog>>(new NotSupportedException());
+			IEnumerable<DirectoryInfo> result = this.operation.GetDirectories(new DirectoryInfo(parent.Path));
+
+			return await Task.FromResult(new PagedList<Catalog>(result.Skip(offset).Take(limit).Select(directory => new Catalog()
+			{
+				Path = directory.FullName,
+				Name = directory.Name
+			}))
+			{
+				Offset = offset,
+				Limit = limit,
+				TotalCount = result.Count()
+			});
 		}
 
 		/// <summary>
@@ -289,18 +314,18 @@
 		/// <returns>The instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> GetCatalog(Catalog catalog)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(catalog.Path) && (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path)))
 			{
-				catalog.ValidatePath();
+				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+			}
 
-				catalog.Path = catalog.GeneratePath();
-				if (Directory.Exists(catalog.Path))
-				{
-					catalog.Size = Directory.GetFiles(catalog.Path, "*", SearchOption.AllDirectories).Select(filePath => new FileInfo(filePath)).Sum(file => file.Length);
-				}
+			DirectoryInfo directory = !string.IsNullOrWhiteSpace(catalog.Path) ? new DirectoryInfo(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+			if (directory.Exists)
+			{
+				catalog.Size = this.operation.GetFiles(directory, true).Sum(file => file.Length);
+			}
 
-				return catalog;
-			});
+			return await Task.FromResult(catalog);
 		}
 
 		/// <summary>
@@ -312,18 +337,22 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(catalog.Path) && (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path)))
 			{
-				catalog.ValidatePath();
+				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+			}
 
-				catalog.Path = catalog.GeneratePath();
-				if (Directory.Exists(catalog.Path))
-				{
-					Directory.Delete(catalog.Path, true);
-				}
+			this.scope.Begin();
 
-				return catalog;
-			});
+			DirectoryInfo directory = !string.IsNullOrWhiteSpace(catalog.Path) ? new DirectoryInfo(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+			if (directory.Exists)
+			{
+				this.operation.Delete(directory.FullName);
+			}
+
+			this.scope.Commit();
+
+			return await Task.FromResult(catalog);
 		}
 
 		/// <summary>
@@ -347,14 +376,14 @@
 		/// <returns><c>true</c> if the catalog entry exists. Otherwise <c>false.</c></returns>
 		public async Task<bool> CatalogEntryExists(CatalogEntry entry)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				entry.ValidatePath();
+				throw new ArgumentException("File path, name or catalog is empty.");
+			}
 
-				string path = entry.GeneratePath();
+			bool result = !string.IsNullOrWhiteSpace(entry.Path) ? this.operation.FileExists(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog?.Path)).Exists;
 
-				return File.Exists(path);
-			});
+			return await Task.FromResult(result);
 		}
 
 		/// <summary>
@@ -364,33 +393,31 @@
 		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
 		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(stream.Entry.Name) || string.IsNullOrWhiteSpace(stream.Entry.Catalog?.Path))
 			{
-				stream.Entry.ValidatePath();
-				if (!Directory.Exists(stream.Entry.Catalog.Path))
-				{
-					stream.Entry.Catalog.Path = Directory.CreateDirectory(stream.Entry.Catalog.Path).FullName;
-				}
+				throw new ArgumentException("File name or catalog is empty.");
+			}
 
-				stream.Entry.Path = stream.Entry.GeneratePath(true);
-				if (!File.Exists(stream.Entry.Path))
-				{
-					lock (FileAccessSyncObject)
-					{
-						if (!File.Exists(stream.Entry.Path))
-						{
-							using (FileStream fileStream = File.Create(stream.Entry.Path, 1024, FileOptions.WriteThrough))
-							{
-								stream.CopyTo(fileStream);
-							}
-						}
-					}
-				}
+			this.scope.Begin();
 
-				stream.Entry.Size = new FileInfo(stream.Entry.Path).Length;
+			DirectoryInfo directory = new DirectoryInfo(stream.Entry.Catalog.Path);
+			if (!directory.Exists)
+			{
+				directory = this.operation.CreateDirectory(directory.FullName);
+			}
 
-				return stream.Entry;
-			});
+			FileInfo file = this.operation.GetFile(stream.Entry.Name, directory);
+			if (!file.Exists)
+			{
+				file = this.operation.CreateFile(file.FullName, stream);
+			}
+
+			this.scope.Commit();
+
+			stream.Entry.Path = file.FullName;
+			stream.Entry.Size = file.Length;
+
+			return await Task.FromResult(stream.Entry);
 		}
 
 		/// <summary>
@@ -404,7 +431,18 @@
 		/// </returns>
 		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
-			return await Task.FromException<IPaginable<CatalogEntry>>(new NotSupportedException());
+			IEnumerable<FileInfo> result = this.operation.GetFiles(new DirectoryInfo(catalog.Path));
+
+			return await Task.FromResult(new PagedList<CatalogEntry>(result.Skip(offset).Take(limit).Select(file => new CatalogEntry()
+			{
+				Name = file.Name,
+				Path = file.FullName
+			}))
+			{
+				Offset = offset,
+				Limit = limit,
+				TotalCount = result.Count()
+			});
 		}
 
 		/// <summary>
@@ -414,18 +452,17 @@
 		/// <returns>The instance of <see cref="CatalogEntry"/> type.</returns>
 		public async Task<CatalogEntry> GetCatalogEntry(CatalogEntry entry)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				entry.ValidatePath();
+				throw new ArgumentException("File path, name or catalog are empty.");
+			}
 
-				entry.Path = entry.GeneratePath();
-				if (File.Exists(entry.Path))
-				{
-					entry.Size = new FileInfo(entry.Path).Length;
-				}
+			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
 
-				return entry;
-			});
+			entry.Path = file.FullName;
+			entry.Size = file.Length;
+
+			return await Task.FromResult(entry);
 		}
 
 		/// <summary>
@@ -439,30 +476,23 @@
 		/// </returns>
 		public async Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0)
 		{
-			entry = await this.GetCatalogEntry(entry);
-
-			if (File.Exists(entry.Path))
+			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				lock (FileAccessSyncObject)
-				{
-					if (File.Exists(entry.Path))
-					{
-						using (FileStream stream = new FileStream(entry.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-						{
-							long count = length == 0 ? stream.Length : length;
-
-							byte[] buffer = new byte[count];
-							stream.Read(buffer, offset, (int)count);
-
-							CatalogEntryStream result = new CatalogEntryStream(entry, count);
-
-							result.Write(buffer, 0, (int)count);
-						}
-					}
-				}
+				throw new ArgumentException("File path, name or catalog are empty.");
 			}
 
-			return new CatalogEntryStream(entry, 0);
+			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
+			if (!file.Exists)
+			{
+				return await Task.FromResult(new CatalogEntryStream(entry, 0));
+			}
+
+			byte[] buffer = this.operation.ReadBytes(entry.Path, offset, length);
+
+			CatalogEntryStream stream = new CatalogEntryStream(entry, buffer.Length);
+			stream.Write(buffer, 0, buffer.Length);
+
+			return await Task.FromResult(stream);
 		}
 
 		/// <summary>
@@ -474,24 +504,22 @@
 		/// </returns>
 		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
 		{
-			return await Task.Run(() =>
+			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				entry.ValidatePath();
+				throw new ArgumentException("File path, name or catalog are empty.");
+			}
 
-				entry.Path = entry.GeneratePath();
-				if (File.Exists(entry.Path))
-				{
-					lock (FileAccessSyncObject)
-					{
-						if (File.Exists(entry.Path))
-						{
-							File.Delete(entry.Path);
-						}
-					}
-				}
+			this.scope.Begin();
 
-				return entry;
-			});
+			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
+			if (file.Exists)
+			{
+				this.operation.Delete(file.FullName);
+			}
+
+			this.scope.Commit();
+
+			return await Task.FromResult(entry);
 		}
 
 		#endregion
