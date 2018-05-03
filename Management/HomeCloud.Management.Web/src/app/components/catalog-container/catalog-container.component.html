@@ -14,6 +14,7 @@
             id="file"
             [hidden]="true"
             [disabled]="!canSaveFile"
+            #fileUpload
             (change)="saveFile($event.target.files)">
     </a>
   </div>

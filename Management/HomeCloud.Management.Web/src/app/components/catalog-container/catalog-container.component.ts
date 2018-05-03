@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 
 import { PagedArray } from '../../models/paged-array';
@@ -38,6 +38,8 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
   private createFileSubscription: ISubscription = null;
   private getCatalogSubscription: ISubscription = null;
   private validateSubscription: ISubscription = null;
+
+  @ViewChild('fileUpload') fileUpload: ElementRef;
 
   constructor(
     private progressService: ProgressService,
@@ -104,6 +106,8 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
           this.data.unshift(entry);
         }
 
+        this.fileUpload.nativeElement.value = "";
+
         state.setSucceded("Operation complete", "File" + (entry ? (" '" + entry.name + "'") : "") + " has been uploaded successfully.").setExpired();
       }, (error: HttpError) => {
         if (error.statusCode == 500) {
@@ -114,7 +118,9 @@ export class CatalogContainerComponent implements OnInit, OnDestroy {
         }
         else {
           state.setFailed("Operation failure", error.messages).setExpired();
-        }
+        }        
+
+        this.fileUpload.nativeElement.value = "";
       }, () => {
         for(let index = 0; index < files.length; index++) {
           files.item(index).slice();
