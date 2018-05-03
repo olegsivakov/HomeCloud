@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Threading.Tasks;
+	using System.Transactions;
 
 	using HomeCloud.Core;
 
@@ -74,21 +75,26 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> CreateCatalogAsync(Catalog catalog)
 		{
-			catalog.ID = Guid.Empty;
-
-			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-
-			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(catalog);
-			result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
-			if (!result.IsValid)
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return new ServiceResult<Catalog>(catalog)
-				{
-					Errors = result.Errors
-				};
-			}
+				catalog.ID = Guid.Empty;
 
-			catalog = await this.dataFactory.CreateCatalog(catalog);
+				IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+
+				ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(catalog);
+				result += await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
+				if (!result.IsValid)
+				{
+					return new ServiceResult<Catalog>(catalog)
+					{
+						Errors = result.Errors
+					};
+				}
+
+				catalog = await this.dataFactory.CreateCatalog(catalog);
+
+				scope.Complete();
+			}
 
 			return new ServiceResult<Catalog>(catalog);
 		}
@@ -102,24 +108,29 @@
 		/// </returns>
 		public async Task<ServiceResult<Catalog>> UpdateCatalogAsync(Catalog catalog)
 		{
-			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(catalog.ID);
-			if (!serviceResult.IsSuccess)
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return serviceResult;
+				ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(catalog.ID);
+				if (!serviceResult.IsSuccess)
+				{
+					return serviceResult;
+				}
+
+				this.mapper.Merge(serviceResult.Data, catalog);
+
+				IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
+				ValidationResult result = await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
+				if (!result.IsValid)
+				{
+					serviceResult.Errors = result.Errors;
+
+					return serviceResult;
+				}
+
+				catalog = await this.dataFactory.UpdateCatalog(catalog);
+
+				scope.Complete();
 			}
-
-			this.mapper.Merge(serviceResult.Data, catalog);
-
-			IServiceFactory<ICatalogValidator> validator = this.validationServiceFactory.GetFactory<ICatalogValidator>();
-			ValidationResult result = await validator.Get<IUniqueValidator>().ValidateAsync(catalog);
-			if (!result.IsValid)
-			{
-				serviceResult.Errors = result.Errors;
-
-				return serviceResult;
-			}
-
-			catalog = await this.dataFactory.UpdateCatalog(catalog);
 
 			return new ServiceResult<Catalog>(catalog);
 		}
@@ -205,13 +216,21 @@
 		/// </returns>
 		public async Task<ServiceResult> DeleteCatalogAsync(Guid id)
 		{
-			ServiceResult<Catalog> serviceResult = await this.GetCatalogAsync(id);
-			if (!serviceResult.IsSuccess)
+			ServiceResult<Catalog> serviceResult = null;
+
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return serviceResult;
+				serviceResult = await this.GetCatalogAsync(id);
+				if (!serviceResult.IsSuccess)
+				{
+					return serviceResult;
+				}
+
+				await this.dataFactory.DeleteCatalog(serviceResult.Data);
+
+				scope.Complete();
 			}
 
-			await this.dataFactory.DeleteCatalog(serviceResult.Data);
 			this.dataFactory.RecalculateSize(serviceResult.Data.Parent);
 
 			return serviceResult;

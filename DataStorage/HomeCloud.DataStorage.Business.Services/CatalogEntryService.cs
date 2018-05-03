@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Threading.Tasks;
+	using System.Transactions;
 
 	using HomeCloud.Core;
 
@@ -63,21 +64,27 @@
 		/// </returns>
 		public async Task<ServiceResult<CatalogEntry>> CreateEntryAsync(CatalogEntryStream stream)
 		{
-			stream.Entry.ID = Guid.Empty;
-
-			IServiceFactory<ICatalogEntryValidator> validator = this.validationServiceFactory.GetFactory<ICatalogEntryValidator>();
-
-			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(stream.Entry);
-			result += await validator.Get<IUniqueValidator>().ValidateAsync(stream.Entry);
-			if (!result.IsValid)
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return new ServiceResult<CatalogEntry>(stream.Entry)
+				stream.Entry.ID = Guid.Empty;
+
+				IServiceFactory<ICatalogEntryValidator> validator = this.validationServiceFactory.GetFactory<ICatalogEntryValidator>();
+
+				ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(stream.Entry);
+				result += await validator.Get<IUniqueValidator>().ValidateAsync(stream.Entry);
+				if (!result.IsValid)
 				{
-					Errors = result.Errors
-				};
+					return new ServiceResult<CatalogEntry>(stream.Entry)
+					{
+						Errors = result.Errors
+					};
+				}
+
+				stream.Entry = await this.dataFactory.CreateCatalogEntry(stream);
+
+				scope.Complete();
 			}
 
-			stream.Entry = await this.dataFactory.CreateCatalogEntry(stream);
 			this.dataFactory.RecalculateSize(stream.Entry.Catalog);
 
 			return new ServiceResult<CatalogEntry>(stream.Entry);
@@ -92,13 +99,21 @@
 		/// </returns>
 		public async Task<ServiceResult> DeleteEntryAsync(Guid id)
 		{
-			ServiceResult<CatalogEntry> serviceResult = await this.GetEntryAsync(id);
-			if (!serviceResult.IsSuccess)
+			ServiceResult<CatalogEntry> serviceResult = null;
+
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return serviceResult;
+				serviceResult = await this.GetEntryAsync(id);
+				if (!serviceResult.IsSuccess)
+				{
+					return serviceResult;
+				}
+
+				await this.dataFactory.DeleteCatalogEntry(serviceResult.Data);
+
+				scope.Complete();
 			}
 
-			await this.dataFactory.DeleteCatalogEntry(serviceResult.Data);
 			this.dataFactory.RecalculateSize(serviceResult.Data.Catalog);
 
 			return serviceResult;

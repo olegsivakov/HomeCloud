@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Threading.Tasks;
+	using System.Transactions;
 
 	using HomeCloud.Core;
 
@@ -64,23 +65,28 @@
 		/// <exception cref="ValidationException">The exception thrown when the validation of the specified instance of <see cref="Storage" /> has been failed.</exception>
 		public async Task<ServiceResult<Storage>> CreateStorageAsync(Storage storage)
 		{
-			storage.ID = Guid.Empty;
-			storage.Name = Guid.NewGuid().ToString();
-
-			IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-
-			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(storage);
-			result += await validator.Get<IUniqueValidator>().ValidateAsync(storage);
-
-			if (!result.IsValid)
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return new ServiceResult<Storage>(storage)
-				{
-					Errors = result.Errors
-				};
-			}
+				storage.ID = Guid.Empty;
+				storage.Name = Guid.NewGuid().ToString();
 
-			storage = await this.dataFactory.CreateStorage(storage);
+				IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+
+				ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(storage);
+				result += await validator.Get<IUniqueValidator>().ValidateAsync(storage);
+
+				if (!result.IsValid)
+				{
+					return new ServiceResult<Storage>(storage)
+					{
+						Errors = result.Errors
+					};
+				}
+
+				storage = await this.dataFactory.CreateStorage(storage);
+
+				scope.Complete();
+			}
 
 			return new ServiceResult<Storage>(storage);
 		}
@@ -94,20 +100,25 @@
 		/// </returns>
 		public async Task<ServiceResult<Storage>> UpdateStorageAsync(Storage storage)
 		{
-			IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-
-			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(storage);
-			result += await validator.Get<IUniqueValidator>().ValidateAsync(storage);
-
-			if (!result.IsValid)
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return new ServiceResult<Storage>(storage)
-				{
-					Errors = result.Errors
-				};
-			}
+				IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 
-			storage = await this.dataFactory.UpdateStorage(storage);
+				ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(storage);
+				result += await validator.Get<IUniqueValidator>().ValidateAsync(storage);
+
+				if (!result.IsValid)
+				{
+					return new ServiceResult<Storage>(storage)
+					{
+						Errors = result.Errors
+					};
+				}
+
+				storage = await this.dataFactory.UpdateStorage(storage);
+
+				scope.Complete();
+			}
 
 			return new ServiceResult<Storage>(storage);
 		}
@@ -161,16 +172,23 @@
 		/// <returns>The operation result.</returns>
 		public async Task<ServiceResult> DeleteStorageAsync(Guid id)
 		{
-			ServiceResult<Storage> serviceResult = await this.GetStorageAsync(id);
-			if (!serviceResult.IsSuccess)
+			Storage storage = null;
+
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				return serviceResult;
+				ServiceResult<Storage> serviceResult = await this.GetStorageAsync(id);
+				if (!serviceResult.IsSuccess)
+				{
+					return serviceResult;
+				}
+
+				storage = serviceResult.Data;
+				Func<IDataProvider, Task> deleteStorageFunction = async provider => storage = await provider.DeleteStorage(storage);
+
+				storage = await this.dataFactory.DeleteStorage(storage);
+
+				scope.Complete();
 			}
-
-			Storage storage = serviceResult.Data;
-			Func<IDataProvider, Task> deleteStorageFunction = async provider => storage = await provider.DeleteStorage(storage);
-
-			storage = await this.dataFactory.DeleteStorage(storage);
 
 			return new ServiceResult<Storage>(storage);
 		}

@@ -5,7 +5,6 @@
 	using System;
 	using System.Linq;
 	using System.Threading.Tasks;
-	using System.Transactions;
 
 	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
@@ -65,18 +64,11 @@
 		/// <returns>The newly created instance of <see cref="Storage" /> type.</returns>
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				ParallelExtensions.InvokeAsync(
+			ParallelExtensions.InvokeAsync(
 						async () => storage = await this.providerFactory.Get<IFileSystemProvider>().CreateStorage(storage),
 						async () => storage = await this.providerFactory.Get<IDataStoreProvider>().CreateStorage(storage));
 
-				storage = await this.providerFactory.Get<IAggregationDataProvider>().CreateStorage(storage);
-
-				scope.Complete();
-			}
-
-			return storage;
+			return await this.providerFactory.Get<IAggregationDataProvider>().CreateStorage(storage);
 		}
 
 		/// <summary>
@@ -88,15 +80,10 @@
 		/// </returns>
 		public async Task<Storage> DeleteStorage(Storage storage)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				ParallelExtensions.InvokeAsync(
+			ParallelExtensions.InvokeAsync(
 					async () => storage = await this.providerFactory.Get<IAggregationDataProvider>().DeleteStorage(storage),
 					async () => storage = await this.providerFactory.Get<IDataStoreProvider>().DeleteStorage(storage),
 					async () => storage = await this.providerFactory.Get<IFileSystemProvider>().DeleteStorage(storage));
-
-				scope.Complete();
-			}
 
 			return await Task.FromResult(storage);
 		}
@@ -141,18 +128,11 @@
 		/// <returns>The updated instance of <see cref="Storage"/> type.</returns>
 		public async Task<Storage> UpdateStorage(Storage storage)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				ParallelExtensions.InvokeAsync(
+			ParallelExtensions.InvokeAsync(
 					async () => storage = await this.providerFactory.Get<IDataStoreProvider>().UpdateStorage(storage),
 					async () => storage = await this.providerFactory.Get<IFileSystemProvider>().UpdateStorage(storage));
 
-				storage = await this.providerFactory.Get<IAggregationDataProvider>().UpdateStorage(storage);
-
-				scope.Complete();
-			}
-
-			return storage;
+			return await this.providerFactory.Get<IAggregationDataProvider>().UpdateStorage(storage);
 		}
 
 		#endregion
@@ -176,20 +156,13 @@
 		/// <returns>The newly created instance of <see cref="Catalog" /> type.</returns>
 		public async Task<Catalog> CreateCatalog(Catalog catalog)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				catalog.Parent = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(catalog.Parent);
+			catalog.Parent = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(catalog.Parent);
 
-				ParallelExtensions.InvokeAsync(
-						async () => catalog = await this.providerFactory.Get<IFileSystemProvider>().CreateCatalog(catalog),
-						async () => catalog = await this.providerFactory.Get<IDataStoreProvider>().CreateCatalog(catalog));
+			ParallelExtensions.InvokeAsync(
+					async () => catalog = await this.providerFactory.Get<IFileSystemProvider>().CreateCatalog(catalog),
+					async () => catalog = await this.providerFactory.Get<IDataStoreProvider>().CreateCatalog(catalog));
 
-				catalog = await this.providerFactory.Get<IAggregationDataProvider>().CreateCatalog(catalog);
-
-				scope.Complete();
-			}
-
-			return catalog;
+			return await this.providerFactory.Get<IAggregationDataProvider>().CreateCatalog(catalog);
 		}
 
 		/// <summary>
@@ -201,15 +174,10 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				ParallelExtensions.InvokeAsync(
+			ParallelExtensions.InvokeAsync(
 					async () => catalog = await this.providerFactory.Get<IAggregationDataProvider>().DeleteCatalog(catalog),
 					async () => catalog = await this.providerFactory.Get<IDataStoreProvider>().DeleteCatalog(catalog),
 					async () => catalog = await this.providerFactory.Get<IFileSystemProvider>().DeleteCatalog(catalog));
-
-				scope.Complete();
-			}
 
 			return await Task.FromResult(catalog);
 		}
@@ -257,20 +225,13 @@
 		/// <returns>The updated instance of <see cref="Catalog"/> type.</returns>
 		public async Task<Catalog> UpdateCatalog(Catalog catalog)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				catalog.Parent = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(catalog.Parent);
+			catalog.Parent = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(catalog.Parent);
 
-				ParallelExtensions.InvokeAsync(
-						async () => catalog = await this.providerFactory.Get<IDataStoreProvider>().UpdateCatalog(catalog),
-						async () => catalog = await this.providerFactory.Get<IFileSystemProvider>().UpdateCatalog(catalog));
+			ParallelExtensions.InvokeAsync(
+					async () => catalog = await this.providerFactory.Get<IDataStoreProvider>().UpdateCatalog(catalog),
+					async () => catalog = await this.providerFactory.Get<IFileSystemProvider>().UpdateCatalog(catalog));
 
-				catalog = await this.providerFactory.Get<IAggregationDataProvider>().UpdateCatalog(catalog);
-
-				scope.Complete();
-			}
-
-			return catalog;
+			return await this.providerFactory.Get<IAggregationDataProvider>().UpdateCatalog(catalog);
 		}
 
 		/// <summary>
@@ -320,22 +281,13 @@
 		/// <returns>The newly created instance of <see cref="CatalogEntry" /> type.</returns>
 		public async Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream)
 		{
-			CatalogEntry result = null;
+			stream.Entry.Catalog = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(stream.Entry.Catalog);
 
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				stream.Entry.Catalog = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(stream.Entry.Catalog);
+			ParallelExtensions.InvokeAsync(
+					async () => stream.Entry = await this.providerFactory.Get<IFileSystemProvider>().CreateCatalogEntry(stream),
+					async () => stream.Entry = await this.providerFactory.Get<IDataStoreProvider>().CreateCatalogEntry(stream));
 
-				ParallelExtensions.InvokeAsync(
-						async () => result = await this.providerFactory.Get<IFileSystemProvider>().CreateCatalogEntry(stream),
-						async () => result = await this.providerFactory.Get<IDataStoreProvider>().CreateCatalogEntry(stream));
-
-				result = await this.providerFactory.Get<IAggregationDataProvider>().CreateCatalogEntry(stream);
-
-				scope.Complete();
-			}
-
-			return result;
+			return await this.providerFactory.Get<IAggregationDataProvider>().CreateCatalogEntry(stream);
 		}
 
 		/// <summary>
@@ -347,15 +299,10 @@
 		/// </returns>
 		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
 		{
-			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
-			{
-				ParallelExtensions.InvokeAsync(
+			ParallelExtensions.InvokeAsync(
 					async () => entry = await this.providerFactory.Get<IAggregationDataProvider>().DeleteCatalogEntry(entry),
 					async () => entry = await this.providerFactory.Get<IDataStoreProvider>().DeleteCatalogEntry(entry),
 					async () => entry = await this.providerFactory.Get<IFileSystemProvider>().DeleteCatalogEntry(entry));
-
-				scope.Complete();
-			}
 
 			return await Task.FromResult(entry);
 		}
