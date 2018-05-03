@@ -28,7 +28,7 @@
 		/// <summary>
 		/// The synchronization object
 		/// </summary>
-		private static readonly object SynchronizationObject = new object();
+		private readonly object synchronizationObject = new object();
 
 		/// <summary>
 		/// The enlistment container
@@ -205,7 +205,7 @@
 		/// <param name="contents">The string to append to the file.</param>
 		public void AppendAllText(string path, string content)
 		{
-			lock (SynchronizationObject)
+			lock (this.synchronizationObject)
 			{
 				if (this.IsTransactional)
 				{
@@ -226,7 +226,7 @@
 		/// <param name="overwrite">Indicates whether the destination file should be overwritten, otherwise false.</param>
 		public void Copy(string sourcePath, string destinationPath, bool overwrite)
 		{
-			lock (SynchronizationObject)
+			lock (synchronizationObject)
 			{
 
 				if (this.IsTransactional)
@@ -255,7 +255,7 @@
 		/// <returns>The newly created instance of <see cref="DirectoryInfo"/>.</returns>
 		public DirectoryInfo CreateDirectory(string path)
 		{
-			lock (SynchronizationObject)
+			lock (synchronizationObject)
 			{
 				if (this.IsTransactional)
 				{
@@ -278,7 +278,7 @@
 		/// <returns>The newly created instance of <see cref="FileInfo"/>.</returns>
 		public FileInfo CreateFile(string path, Stream stream)
 		{
-			lock (SynchronizationObject)
+			lock (synchronizationObject)
 			{
 				if (this.IsTransactional)
 				{
@@ -302,7 +302,7 @@
 		/// <param name="path">The path to the file or directory to delete.</param>
 		public void Delete(string path)
 		{
-			lock (SynchronizationObject)
+			lock (synchronizationObject)
 			{
 				if (this.IsTransactional)
 				{
@@ -329,7 +329,7 @@
 		/// <param name="destinationPath">The destination path to move to.</param>
 		public void Move(string sourcePath, string destinationPath)
 		{
-			lock (SynchronizationObject)
+			lock (synchronizationObject)
 			{
 				if (this.IsTransactional)
 				{
@@ -369,7 +369,7 @@
 		/// <param name="content">The array of bytes to write to the file.</param>
 		public void WriteAllBytes(string path, byte[] content)
 		{
-			lock (SynchronizationObject)
+			lock (this.synchronizationObject)
 			{
 				if (this.IsTransactional)
 				{
@@ -411,8 +411,17 @@
 		/// </summary>
 		public virtual void Dispose()
 		{
-			Parallel.ForEach(this.container.Values, enlistment => enlistment.Dispose());
-			this.container.Clear();
+			if (this.container.Count > 0)
+			{
+				lock (this.synchronizationObject)
+				{
+					if (this.container.Count > 0)
+					{
+						Parallel.ForEach(this.container.Values, enlistment => enlistment.Dispose());
+						this.container.Clear();
+					}
+				}
+			}
 		}
 
 		#endregion
@@ -431,14 +440,16 @@
 			string id = transaction.TransactionInformation.LocalIdentifier;
 
 			TransactionEnlistment enlistment = null;
-			if (!this.container.TryGetValue(id, out enlistment))
+			lock (this.synchronizationObject)
 			{
-				enlistment = new TransactionEnlistment(transaction);
+				if (!this.container.TryGetValue(id, out enlistment))
+				{
+					enlistment = new TransactionEnlistment(transaction);
+					this.container.Add(id, enlistment);
+				}
 
-				this.container.Add(id, enlistment);
+				enlistment.EnlistOperation(operation);
 			}
-
-			enlistment.EnlistOperation(operation);
 		}
 
 		#endregion

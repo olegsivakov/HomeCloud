@@ -7,6 +7,7 @@
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using System.Transactions;
 
 	using HomeCloud.Core;
 
@@ -24,11 +25,6 @@
 		#region Private Members
 
 		/// <summary>
-		/// The context scope
-		/// </summary>
-		private readonly IFileSystemContextScope scope = null;
-
-		/// <summary>
 		/// The operation collection
 		/// </summary>
 		private readonly IFileSystemOperation operation = null;
@@ -41,10 +37,9 @@
 		/// Initializes a new instance of the <see cref="FileSystemProvider" /> class.
 		/// </summary>
 		/// <param name="scope">The context scope.</param>
-		public FileSystemProvider(IFileSystemContextScope scope)
+		public FileSystemProvider(IFileSystemContext context)
 		{
-			this.scope = scope;
-			this.operation = this.scope.GetOperationCollection();
+			this.operation = context;
 		}
 
 		#endregion
@@ -82,17 +77,17 @@
 				throw new ArgumentException("Storage name is empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
-			if (!directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				directory = this.operation.CreateDirectory(directory.FullName);
-			}
 
-			storage.Path = directory.FullName;
+				DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
+				if (!directory.Exists)
+				{
+					directory = this.operation.CreateDirectory(directory.FullName);
+				}
 
-			this.scope.Commit();
+				storage.Path = directory.FullName;
+			});
 
 			return await Task.FromResult(storage);
 		}
@@ -109,24 +104,23 @@
 				throw new ArgumentException("Storage path or name is empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
-			if (!directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				if (storage.Path != directory.FullName && this.operation.DirectoryExists(storage.Path))
+				DirectoryInfo directory = this.operation.GetDirectory(storage.Name);
+				if (!directory.Exists)
 				{
-					this.operation.Move(storage.Path, directory.FullName);
+					if (storage.Path != directory.FullName && this.operation.DirectoryExists(storage.Path))
+					{
+						this.operation.Move(storage.Path, directory.FullName);
+					}
+					else
+					{
+						directory = this.operation.CreateDirectory(directory.FullName);
+					}
 				}
-				else
-				{
-					directory = this.operation.CreateDirectory(directory.FullName);
-				}
-			}
 
-			storage.Path = directory.FullName;
-
-			this.scope.Commit();
+				storage.Path = directory.FullName;
+			});
 
 			return await Task.FromResult(storage);
 		}
@@ -187,15 +181,14 @@
 				throw new ArgumentException("Storage path or name is empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = !string.IsNullOrWhiteSpace(storage.Path) ? new DirectoryInfo(storage.Path) : this.operation.GetDirectory(storage.Name);
-			if (directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				this.operation.Delete(directory.FullName);
-			}
-
-			this.scope.Commit();
+				DirectoryInfo directory = !string.IsNullOrWhiteSpace(storage.Path) ? new DirectoryInfo(storage.Path) : this.operation.GetDirectory(storage.Name);
+				if (directory.Exists)
+				{
+					this.operation.Delete(directory.FullName);
+				}
+			});
 
 			return await Task.FromResult(storage);
 		}
@@ -233,17 +226,16 @@
 				throw new ArgumentException("Catalog name or parent catalog are empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
-			if (!directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				directory = Directory.CreateDirectory(directory.FullName);
-			}
+				DirectoryInfo directory = this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+				if (!directory.Exists)
+				{
+					directory = Directory.CreateDirectory(directory.FullName);
+				}
 
-			catalog.Path = directory.FullName;
-
-			this.scope.Commit();
+				catalog.Path = directory.FullName;
+			});
 
 			return await Task.FromResult(catalog);
 		}
@@ -260,24 +252,23 @@
 				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
-			if (!directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				if (catalog.Path != directory.FullName && this.operation.DirectoryExists(catalog.Path))
+				DirectoryInfo directory = this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+				if (!directory.Exists)
 				{
-					this.operation.Move(catalog.Path, directory.FullName);
+					if (catalog.Path != directory.FullName && this.operation.DirectoryExists(catalog.Path))
+					{
+						this.operation.Move(catalog.Path, directory.FullName);
+					}
+					else
+					{
+						directory = this.operation.CreateDirectory(directory.FullName);
+					}
 				}
-				else
-				{
-					directory = this.operation.CreateDirectory(directory.FullName);
-				}
-			}
 
-			catalog.Path = directory.FullName;
-
-			this.scope.Commit();
+				catalog.Path = directory.FullName;
+			});
 
 			return await Task.FromResult(catalog);
 		}
@@ -342,15 +333,14 @@
 				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = !string.IsNullOrWhiteSpace(catalog.Path) ? new DirectoryInfo(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
-			if (directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				this.operation.Delete(directory.FullName);
-			}
-
-			this.scope.Commit();
+				DirectoryInfo directory = !string.IsNullOrWhiteSpace(catalog.Path) ? new DirectoryInfo(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
+				if (directory.Exists)
+				{
+					this.operation.Delete(directory.FullName);
+				}
+			});
 
 			return await Task.FromResult(catalog);
 		}
@@ -398,24 +388,23 @@
 				throw new ArgumentException("File name or catalog is empty.");
 			}
 
-			this.scope.Begin();
-
-			DirectoryInfo directory = new DirectoryInfo(stream.Entry.Catalog.Path);
-			if (!directory.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				directory = this.operation.CreateDirectory(directory.FullName);
-			}
+				DirectoryInfo directory = new DirectoryInfo(stream.Entry.Catalog.Path);
+				if (!directory.Exists)
+				{
+					directory = this.operation.CreateDirectory(directory.FullName);
+				}
 
-			FileInfo file = this.operation.GetFile(stream.Entry.Name, directory);
-			if (!file.Exists)
-			{
-				file = this.operation.CreateFile(file.FullName, stream);
-			}
+				FileInfo file = this.operation.GetFile(stream.Entry.Name, directory);
+				if (!file.Exists)
+				{
+					file = this.operation.CreateFile(file.FullName, stream);
+				}
 
-			this.scope.Commit();
-
-			stream.Entry.Path = file.FullName;
-			stream.Entry.Size = file.Length;
+				stream.Entry.Path = file.FullName;
+				stream.Entry.Size = file.Length;
+			});
 
 			return await Task.FromResult(stream.Entry);
 		}
@@ -509,20 +498,37 @@
 				throw new ArgumentException("File path, name or catalog are empty.");
 			}
 
-			this.scope.Begin();
-
-			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
-			if (file.Exists)
+			this.ExecuteTransaction(() =>
 			{
-				this.operation.Delete(file.FullName);
-			}
-
-			this.scope.Commit();
+				FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
+				if (file.Exists)
+				{
+					this.operation.Delete(file.FullName);
+				}
+			});
 
 			return await Task.FromResult(entry);
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Executes the specified action as a single transaction.
+		/// </summary>
+		/// <param name="action">The action to execute.</param>
+		private void ExecuteTransaction(Action action)
+		{
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+			{
+				action();
+
+				scope.Complete();
+			}
+		}
 
 		#endregion
 	}

@@ -53,7 +53,6 @@
 				options.ConnectionString = configuration.GetSection("ConnectionStrings").GetSection("DataStorageDB").Value;
 			})
 			.AddContext()
-			.AddContextScope()
 			.AddRepository<IStorageRepository, StorageRepository>()
 			.AddRepository<ICatalogRepository, CatalogRepository>()
 			.AddRepository<IFileRepository, FileRepository>();
@@ -81,8 +80,7 @@
 			{
 				options.Root = configuration.GetSection("FileSystem").GetSection("StorageRootPath").Value;
 			})
-			.AddContext()
-			.AddContextScope();
+			.AddContext();
 
 			return services;
 		}
@@ -148,7 +146,7 @@
 			services.AddFactory<ICatalogValidator>();
 			services.AddFactory<IStorageValidator>();
 
-			services.AddSingleton<IValidationServiceFactory, ValidationServiceFactory>();
+			services.AddScoped<IValidationServiceFactory, ValidationServiceFactory>();
 
 			services.AddScoped<IDataStoreProvider, DataStoreProvider>();
 			services.AddScoped<IFileSystemProvider, FileSystemProvider>();

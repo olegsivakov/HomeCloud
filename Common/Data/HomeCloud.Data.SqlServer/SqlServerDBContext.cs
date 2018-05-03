@@ -26,14 +26,14 @@
 		#region Private Members
 
 		/// <summary>
+		/// The synchronization object
+		/// </summary>
+		private readonly object synchronizationObject = new object();
+
+		/// <summary>
 		/// The database connection member.
 		/// </summary>
 		private IDbConnection connection = null;
-
-		/// <summary>
-		/// The database transaction.
-		/// </summary>
-		private IDbTransaction transaction = null;
 
 		/// <summary>
 		/// The configuration options.
@@ -67,8 +67,6 @@
 			}
 
 			this.options = accessor.Value;
-
-			this.Initialize();
 		}
 
 		#endregion
@@ -81,16 +79,7 @@
 		/// <value>
 		/// The database connection.
 		/// </value>
-		public IDbConnection Connection => this.connection ?? (this.connection = this.ConfigureConnection());
-
-		/// <summary>
-		/// Creates the database transaction for <see cref="ISqlServerDBContext.Connection"/>.
-		/// </summary>
-		/// <returns>The instance of <see cref="IDbTransaction"/>.</returns>
-		public IDbTransaction CreateTransaction()
-		{
-			return this.transaction = this.Connection.BeginTransaction();
-		}
+		public IDbConnection Connection => this.ConfigureConnection();
 
 		/// <summary>
 		/// Queries data by the specified SQL query.
@@ -103,7 +92,7 @@
 		/// </returns>
 		public async Task<IEnumerable<T>> QueryAsync<T>(string sqlQuery, object parameter = null)
 		{
-			return await this.Connection.QueryAsync<T>(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+			return await this.Connection.QueryAsync<T>(sqlQuery, parameter, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -116,7 +105,7 @@
 		/// </returns>
 		public async Task<int> ExecuteAsync(string sqlQuery, object parameter = null)
 		{
-			return await this.Connection.ExecuteAsync(sqlQuery, parameter, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+			return await this.Connection.ExecuteAsync(sqlQuery, parameter, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -132,7 +121,7 @@
 		{
 			if (parameters == null)
 			{
-				return await this.Connection.ExecuteScalarAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+				return await this.Connection.ExecuteScalarAsync<TResult>(sqlQuery, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 			}
 
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
@@ -145,7 +134,7 @@
 				}
 			}
 
-			return await this.Connection.ExecuteScalarAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+			return await this.Connection.ExecuteScalarAsync<TResult>(sqlQuery, dynamicParams, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -161,7 +150,7 @@
 		{
 			if (parameters == null)
 			{
-				return await this.Connection.QueryAsync<TResult>(sqlQuery, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+				return await this.Connection.QueryAsync<TResult>(sqlQuery, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 			}
 
 			DynamicParameters dynamicParams = new DynamicParameters(parameters);
@@ -174,7 +163,7 @@
 				}
 			}
 
-			return await this.Connection.QueryAsync<TResult>(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+			return await this.Connection.QueryAsync<TResult>(sqlQuery, dynamicParams, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		/// <summary>
@@ -199,7 +188,7 @@
 				}
 			}
 
-			return await this.Connection.ExecuteAsync(sqlQuery, dynamicParams, this.transaction, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
+			return await this.Connection.ExecuteAsync(sqlQuery, dynamicParams, commandType: CommandType.StoredProcedure, commandTimeout: this.Connection.ConnectionTimeout);
 		}
 
 		#endregion
@@ -211,17 +200,17 @@
 		/// </summary>
 		public void Dispose()
 		{
-			if (this.transaction != null)
+			if (this.connection != null)
 			{
-				this.transaction.Dispose();
+				lock (this.synchronizationObject)
+				{
+					if (this.connection != null)
+					{
+						this.connection.Close();
+						this.connection = null;
+					}
+				}
 			}
-
-			if (this.connection != null && this.Connection.State != ConnectionState.Closed)
-			{
-				this.Connection.Close();
-			}
-
-			this.Initialize();
 		}
 
 		#endregion
@@ -236,20 +225,17 @@
 		{
 			if (this.connection is null)
 			{
-				this.connection = new SqlConnection(this.options.ConnectionString);
-				this.connection.Open();
+				lock (this.synchronizationObject)
+				{
+					if (this.connection is null)
+					{
+						this.connection = new SqlConnection(this.options.ConnectionString);
+						this.connection.Open();
+					}
+				}
 			}
 
 			return this.connection;
-		}
-
-		/// <summary>
-		/// Initializes current instance.
-		/// </summary>
-		private void Initialize()
-		{
-			this.connection = null;
-			this.transaction = null;
 		}
 
 		#endregion

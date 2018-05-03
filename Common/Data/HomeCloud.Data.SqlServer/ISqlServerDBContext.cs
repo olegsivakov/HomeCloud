@@ -25,12 +25,6 @@
 		IDbConnection Connection { get; }
 
 		/// <summary>
-		/// Creates the database transaction for <see cref="ISqlServerDBContext.Connection"/>.
-		/// </summary>
-		/// <returns>The instance of <see cref="IDbTransaction"/>.</returns>
-		IDbTransaction CreateTransaction();
-
-		/// <summary>
 		/// Queries data by the specified SQL query.
 		/// </summary>
 		/// <typeparam name="T">The type of data to query.</typeparam>

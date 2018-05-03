@@ -50,19 +50,6 @@
 		}
 
 		/// <summary>
-		/// Adds default <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" /> data context scope to the service collection.
-		/// </summary>
-		/// <returns>
-		/// The instance of <see cref="T:HomeCloud.Data.DependencyInjection.Builders.ISqlServerDBBuilder" />.
-		/// </returns>
-		public ISqlServerDBBuilder AddContextScope()
-		{
-			this.services.AddScoped<ISqlServerDBContextScope, SqlServerDBContextScope>();
-
-			return this;
-		}
-
-		/// <summary>
 		/// Adds specified <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContext" /> data context to the service collection.
 		/// </summary>
 		/// <typeparam name="TContext">The type of the data context derived from <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContext" />.</typeparam>
@@ -75,23 +62,6 @@
 			where TImplementation : SqlServerDBContext, TContext
 		{
 			this.services.AddScoped<TContext, TImplementation>();
-
-			return this;
-		}
-
-		/// <summary>
-		/// Adds specified <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" /> data context to the service collection.
-		/// </summary>
-		/// <typeparam name="TContextScope">The type of the data context scope derived from <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" />.</typeparam>
-		/// <typeparam name="TImplementation">The type of <see cref="T:HomeCloud.Data.SqlServer.ISqlServerDBContextScope" /> implementation.</typeparam>
-		/// <returns>
-		/// The instance of <see cref="T:HomeCloud.Data.DependencyInjection.Builders.ISqlServerDBBuilder" />.
-		/// </returns>
-		public ISqlServerDBBuilder AddContextScope<TContextScope, TImplementation>()
-			where TContextScope : class, ISqlServerDBContextScope
-			where TImplementation : SqlServerDBContextScope, TContextScope
-		{
-			this.services.AddScoped<TContextScope, TImplementation>();
 
 			return this;
 		}

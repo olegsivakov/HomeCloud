@@ -6,6 +6,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using System.Transactions;
 
 	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
@@ -33,9 +34,9 @@
 		#region Private Members
 
 		/// <summary>
-		/// The data context scope factory.
+		/// The repository factory
 		/// </summary>
-		private readonly ISqlServerDBContextScope dataContextScope = null;
+		private readonly IServiceFactory<ISqlServerDBRepository> repositoryFactory = null;
 
 		/// <summary>
 		/// The object mapper.
@@ -49,13 +50,13 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataStoreProvider" /> class.
 		/// </summary>
-		/// <param name="dataContextScope">The data context scope.</param>
+		/// <param name="repositoryFactory">The repository factory.</param>
 		/// <param name="mapper">The mapper.</param>
 		public DataStoreProvider(
-			ISqlServerDBContextScope dataContextScope,
+			IServiceFactory<ISqlServerDBRepository> repositoryFactory,
 			IMapper mapper)
 		{
-			this.dataContextScope = dataContextScope;
+			this.repositoryFactory = repositoryFactory;
 			this.mapper = mapper;
 		}
 
@@ -79,7 +80,7 @@
 				return false;
 			}
 
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
+			IStorageRepository storageRepository = this.repositoryFactory.GetService<IStorageRepository>();
 
 			if (!string.IsNullOrWhiteSpace(contract.Name))
 			{
@@ -99,19 +100,18 @@
 		public async Task<Storage> CreateStorage(Storage storage)
 		{
 			CatalogContract catalogContract = this.mapper.MapNew<Storage, CatalogContract>(storage);
+			StorageContract storageContract = null;
+			await this.ExecuteTransactionAsync(async () =>
+			{
+				ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
+				catalogContract = await catalogRepository.SaveAsync(catalogContract);
 
-			this.dataContextScope.Begin();
+				storageContract = this.mapper.MapNew<Storage, StorageContract>(storage);
+				storageContract.ID = catalogContract.ID;
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
-			catalogContract = await catalogRepository.SaveAsync(catalogContract);
-
-			StorageContract storageContract = this.mapper.MapNew<Storage, StorageContract>(storage);
-			storageContract.ID = catalogContract.ID;
-
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
-			storageContract = await storageRepository.SaveAsync(storageContract);
-
-			this.dataContextScope.Commit();
+				IStorageRepository storageRepository = this.repositoryFactory.GetService<IStorageRepository>();
+				storageContract = await storageRepository.SaveAsync(storageContract);
+			});
 
 			storage = this.mapper.Map(storageContract, storage);
 			storage = this.mapper.Map(catalogContract, storage);
@@ -129,22 +129,21 @@
 			StorageContract storageContract = null;
 			CatalogContract catalogContract = null;
 
-			this.dataContextScope.Begin();
-
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
-
-			storageContract = await storageRepository.GetAsync(storage.ID);
-			storageContract = this.mapper.Map(storage, storageContract);
-
-			if (storageContract.IsChanged)
+			await this.ExecuteTransactionAsync(async () =>
 			{
-				storageContract = await storageRepository.SaveAsync(storageContract);
-			}
+				IStorageRepository storageRepository = this.repositoryFactory.GetService<IStorageRepository>();
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
-			catalogContract = await catalogRepository.GetAsync(storage.ID);
+				storageContract = await storageRepository.GetAsync(storage.ID);
+				storageContract = this.mapper.Map(storage, storageContract);
 
-			this.dataContextScope.Commit();
+				if (storageContract.IsChanged)
+				{
+					storageContract = await storageRepository.SaveAsync(storageContract);
+				}
+
+				ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
+				catalogContract = await catalogRepository.GetAsync(storage.ID);
+			});
 
 			storage = this.mapper.Map(storageContract, storage);
 			storage = this.mapper.Map(catalogContract, storage);
@@ -160,7 +159,7 @@
 		/// <returns>The list of instances of <see cref="Storage"/> type.</returns>
 		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
+			IStorageRepository storageRepository = this.repositoryFactory.GetService<IStorageRepository>();
 
 			if (limit == 0)
 			{
@@ -174,7 +173,7 @@
 				});
 			}
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 
 			IPaginable<StorageContract> data = await storageRepository.FindAsync(offset, limit);
 			IEnumerable<Storage> storages = this.mapper.MapNew<StorageContract, Storage>(data);
@@ -203,10 +202,10 @@
 			StorageContract storageContract = null;
 			CatalogContract catalogContract = null;
 
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
+			IStorageRepository storageRepository = this.repositoryFactory.GetService<IStorageRepository>();
 			storageContract = await storageRepository.GetAsync(storage.ID);
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 			catalogContract = await catalogRepository.GetAsync(storage.ID);
 
 			storage = this.mapper.Map(storageContract, storage);
@@ -224,12 +223,11 @@
 		/// </returns>
 		public async Task<Storage> DeleteStorage(Storage storage)
 		{
-			this.dataContextScope.Begin();
-
-			IStorageRepository storageRepository = this.dataContextScope.GetRepository<IStorageRepository>();
-			await storageRepository.DeleteAsync(storage.ID);
-
-			this.dataContextScope.Commit();
+			await this.ExecuteTransactionAsync(async () =>
+			{
+				IStorageRepository storageRepository = this.repositoryFactory.GetService<IStorageRepository>();
+				await storageRepository.DeleteAsync(storage.ID);
+			});
 
 			return storage;
 		}
@@ -252,7 +250,7 @@
 				return false;
 			}
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 
 			if (!string.IsNullOrWhiteSpace(contract.Name))
 			{
@@ -274,17 +272,16 @@
 			CatalogContract catalogContract = this.mapper.MapNew<Catalog, CatalogContract>(catalog);
 			CatalogContract parentCatalogContract = null;
 
-			this.dataContextScope.Begin();
-
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
-
-			catalogContract = await catalogRepository.SaveAsync(catalogContract);
-			if (catalogContract.ParentID.HasValue)
+			await this.ExecuteTransactionAsync(async () =>
 			{
-				parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
-			}
+				ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 
-			this.dataContextScope.Commit();
+				catalogContract = await catalogRepository.SaveAsync(catalogContract);
+				if (catalogContract.ParentID.HasValue)
+				{
+					parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
+				}
+			});
 
 			catalog = this.mapper.Map(catalogContract, catalog);
 			catalog.Parent = this.mapper.Map(parentCatalogContract, catalog.Parent);
@@ -302,24 +299,23 @@
 			CatalogContract catalogContract = null;
 			CatalogContract parentCatalogContract = null;
 
-			this.dataContextScope.Begin();
-
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
-
-			catalogContract = await catalogRepository.GetAsync(catalog.ID);
-			catalogContract = this.mapper.Map(catalog, catalogContract);
-
-			if (catalogContract.IsChanged)
+			await this.ExecuteTransactionAsync(async () =>
 			{
-				catalogContract = await catalogRepository.SaveAsync(catalogContract);
-			}
+				ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 
-			if ((catalogContract?.ParentID).HasValue)
-			{
-				parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
-			}
+				catalogContract = await catalogRepository.GetAsync(catalog.ID);
+				catalogContract = this.mapper.Map(catalog, catalogContract);
 
-			this.dataContextScope.Commit();
+				if (catalogContract.IsChanged)
+				{
+					catalogContract = await catalogRepository.SaveAsync(catalogContract);
+				}
+
+				if ((catalogContract?.ParentID).HasValue)
+				{
+					parentCatalogContract = await catalogRepository.GetAsync(catalogContract.ParentID.Value);
+				}
+			});
 
 			catalog = this.mapper.Map(catalogContract, catalog);
 			catalog.Parent = this.mapper.Map(parentCatalogContract, catalog.Parent);
@@ -338,7 +334,7 @@
 		/// </returns>
 		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 			CatalogContract contract = new CatalogContract()
 			{
 				ParentID = parent?.ID
@@ -383,7 +379,7 @@
 			CatalogContract catalogContract = null;
 			CatalogContract parentCatalogContract = null;
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 
 			catalogContract = await catalogRepository.GetAsync(catalog.ID);
 			if ((catalogContract?.ParentID).HasValue)
@@ -406,12 +402,11 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
-			this.dataContextScope.Begin();
-
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
-			await catalogRepository.DeleteAsync(catalog.ID);
-
-			this.dataContextScope.Commit();
+			await this.ExecuteTransactionAsync(async () =>
+			{
+				ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
+				await catalogRepository.DeleteAsync(catalog.ID);
+			});
 
 			return catalog;
 		}
@@ -444,7 +439,7 @@
 				return false;
 			}
 
-			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
+			IFileRepository fileRepository = this.repositoryFactory.GetService<IFileRepository>();
 
 			if (!string.IsNullOrWhiteSpace(contract.Name))
 			{
@@ -468,15 +463,14 @@
 			FileContract fileContract = this.mapper.MapNew<CatalogEntry, FileContract>(entry);
 			CatalogContract catalogContract = null;
 
-			this.dataContextScope.Begin();
+			await this.ExecuteTransactionAsync(async () =>
+			{
+				IFileRepository fileRepository = this.repositoryFactory.GetService<IFileRepository>();
+				fileContract = await fileRepository.SaveAsync(fileContract);
 
-			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
-			fileContract = await fileRepository.SaveAsync(fileContract);
-
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
-			catalogContract = await catalogRepository.GetAsync(fileContract.DirectoryID);
-
-			this.dataContextScope.Commit();
+				ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
+				catalogContract = await catalogRepository.GetAsync(fileContract.DirectoryID);
+			});
 
 			entry = this.mapper.Map(fileContract, entry);
 			entry.Catalog = this.mapper.Map(catalogContract, entry.Catalog);
@@ -495,7 +489,7 @@
 		/// </returns>
 		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
-			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
+			IFileRepository fileRepository = this.repositoryFactory.GetService<IFileRepository>();
 			FileContract contract = new FileContract()
 			{
 				DirectoryID = catalog.ID
@@ -540,10 +534,10 @@
 			FileContract fileContract = null;
 			CatalogContract catalogContract = null;
 
-			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
+			IFileRepository fileRepository = this.repositoryFactory.GetService<IFileRepository>();
 			fileContract = await fileRepository.GetAsync(entry.ID);
 
-			ICatalogRepository catalogRepository = this.dataContextScope.GetRepository<ICatalogRepository>();
+			ICatalogRepository catalogRepository = this.repositoryFactory.GetService<ICatalogRepository>();
 			catalogContract = await catalogRepository.GetAsync(fileContract.DirectoryID);
 
 			entry = this.mapper.Map(fileContract, entry);
@@ -575,17 +569,35 @@
 		/// </returns>
 		public async Task<CatalogEntry> DeleteCatalogEntry(CatalogEntry entry)
 		{
-			this.dataContextScope.Begin();
-
-			IFileRepository fileRepository = this.dataContextScope.GetRepository<IFileRepository>();
-			await fileRepository.DeleteAsync(entry.ID);
-
-			this.dataContextScope.Commit();
+			await this.ExecuteTransactionAsync(async () =>
+			{
+				IFileRepository fileRepository = this.repositoryFactory.GetService<IFileRepository>();
+				await fileRepository.DeleteAsync(entry.ID);
+			});
 
 			return entry;
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Executes the specified action as a single transaction asynchronously.
+		/// </summary>
+		/// <param name="action">The action to execute.</param>
+		/// <returns>The asynchronous operation.</returns>
+		private async Task ExecuteTransactionAsync(Func<Task> action)
+		{
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+			{
+				await action();
+
+				scope.Complete();
+			}
+		}
 
 		#endregion
 	}

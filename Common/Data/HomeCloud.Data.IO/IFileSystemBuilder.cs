@@ -14,14 +14,6 @@
 		IFileSystemBuilder AddContext();
 
 		/// <summary>
-		/// Adds default <see cref="IFileSystemContextScope" /> file context scope to the service collection.
-		/// </summary>
-		/// <returns>
-		/// The instance of <see cref="IFileSystemBuilder" />.
-		/// </returns>
-		IFileSystemBuilder AddContextScope();
-
-		/// <summary>
 		/// Adds specified <see cref="IFileSystemContext" /> file context to the service collection.
 		/// </summary>
 		/// <typeparam name="TContext">The type of the file context derived from <see cref="IFileSystemContext" />.</typeparam>

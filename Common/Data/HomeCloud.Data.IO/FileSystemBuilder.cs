@@ -50,19 +50,6 @@
 		}
 
 		/// <summary>
-		/// Adds default <see cref="IFileSystemContextScope" /> file context scope to the service collection.
-		/// </summary>
-		/// <returns>
-		/// The instance of <see cref="IFileSystemBuilder" />.
-		/// </returns>
-		public IFileSystemBuilder AddContextScope()
-		{
-			this.services.AddScoped<IFileSystemContextScope, FileSystemContextScope>();
-
-			return this;
-		}
-
-		/// <summary>
 		/// Adds specified <see cref="IFileSystemContext" /> file context to the service collection.
 		/// </summary>
 		/// <typeparam name="TContext">The type of the file context derived from <see cref="IFileSystemContext" />.</typeparam>
@@ -75,23 +62,6 @@
 			where TImplementation : FileSystemContext, TContext
 		{
 			this.services.AddScoped<TContext, TImplementation>();
-
-			return this;
-		}
-
-		/// <summary>
-		/// Adds specified <see cref="IFileSystemContextScope" /> file context to the service collection.
-		/// </summary>
-		/// <typeparam name="TContextScope">The type of the file context scope derived from <see cref="IFileSystemContextScope" />.</typeparam>
-		/// <typeparam name="TImplementation">The type of <see cref="IFileSystemContextScope" /> implementation.</typeparam>
-		/// <returns>
-		/// The instance of <see cref="IFileSystemBuilder" />.
-		/// </returns>
-		public IFileSystemBuilder AddContextScope<TContextScope, TImplementation>()
-			where TContextScope : class, IFileSystemContextScope
-			where TImplementation : FileSystemContextScope, TContextScope
-		{
-			this.services.AddScoped<TContextScope, TImplementation>();
 
 			return this;
 		}
