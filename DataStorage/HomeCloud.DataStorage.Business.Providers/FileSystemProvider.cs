@@ -161,7 +161,7 @@
 			DirectoryInfo directory = !string.IsNullOrWhiteSpace(storage.Path) ? new DirectoryInfo(storage.Path) : this.operation.GetDirectory(storage.Name);
 			if (directory.Exists)
 			{
-				storage.Size = this.operation.GetFiles(directory, true).Sum(file => file.Length);
+				storage.Size = this.operation.GetFiles(directory, true).Sum(file => file.Exists ? file.Length : 0);
 			}
 
 			return await Task.FromResult(storage);
@@ -316,7 +316,7 @@
 			DirectoryInfo directory = !string.IsNullOrWhiteSpace(catalog.Path) ? new DirectoryInfo(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
 			if (directory.Exists)
 			{
-				catalog.Size = this.operation.GetFiles(directory, true).Sum(file => file.Length);
+				catalog.Size = this.operation.GetFiles(directory, true).Sum(file => file.Exists ? file.Length : 0);
 			}
 
 			catalog.Exists = directory.Exists;
@@ -411,7 +411,7 @@
 
 				stream.Entry.Path = file.FullName;
 				stream.Entry.Exists = file.Exists;
-				stream.Entry.Size = file.Length;
+				stream.Entry.Size = file.Exists ? file.Length : 0;
 			});
 
 			return await Task.FromResult(stream.Entry);
@@ -459,7 +459,7 @@
 
 			entry.Path = file.FullName;
 			entry.Exists = file.Exists;
-			entry.Size = file.Length;
+			entry.Size = file.Exists ? file.Length : 0;
 
 			return await Task.FromResult(entry);
 		}
@@ -490,7 +490,7 @@
 
 			entry.Path = file.FullName;
 			entry.Exists = file.Exists;
-			entry.Size = file.Length;
+			entry.Size = file.Exists ? file.Length : 0;
 
 			CatalogEntryStream stream = new CatalogEntryStream(entry, buffer.Length);
 			stream.Write(buffer, 0, buffer.Length);

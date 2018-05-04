@@ -7,6 +7,10 @@
         <div class="title">Name</div>
         <div class="description">{{catalog.name}}</div>
       </div>
+      <div class="catalog-details-item" *ngIf="!catalog.exists">
+          <div class="title">Status</div>
+          <div class="description">deleted</div>
+        </div>
       <div class="catalog-details-item">
         <div class="title">Size</div>
         <div class="description">{{catalog.size.text}}</div>
