@@ -139,9 +139,11 @@
 		/// </returns>
 		public async Task<Storage> DeleteStorage(Storage storage)
 		{
-			ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
-
-			await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(storage.Path));
+			if (!string.IsNullOrWhiteSpace(storage.Path))
+			{
+				ICatalogDocumentRepository repository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
+				await repository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(storage.Path));
+			}
 
 			return storage;
 		}
@@ -258,7 +260,9 @@
 		/// </returns>
 		public async Task<Catalog> DeleteCatalog(Catalog catalog)
 		{
-			ParallelExtensions.InvokeAsync(
+			if (!string.IsNullOrWhiteSpace(catalog.Path))
+			{
+				ParallelExtensions.InvokeAsync(
 				async () =>
 				{
 					ICatalogDocumentRepository catalogRepository = this.repositoryFactory.GetService<ICatalogDocumentRepository>();
@@ -269,6 +273,7 @@
 					IFileDocumentRepository fileRepository = this.repositoryFactory.GetService<IFileDocumentRepository>();
 					await fileRepository.DeleteAsync(data => data.Path != null && data.Path.StartsWith(catalog.Path));
 				});
+			}
 
 			return await Task.FromResult(catalog);
 		}

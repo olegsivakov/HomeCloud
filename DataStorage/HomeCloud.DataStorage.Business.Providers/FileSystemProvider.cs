@@ -178,7 +178,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
-				throw new ArgumentException("Storage path or name is empty.");
+				return storage;
 			}
 
 			this.ExecuteTransaction(() =>
@@ -335,7 +335,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(catalog.Path) && (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path)))
 			{
-				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+				return catalog;
 			}
 
 			this.ExecuteTransaction(() =>
@@ -509,7 +509,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				throw new ArgumentException("File path, name or catalog are empty.");
+				return entry;
 			}
 
 			this.ExecuteTransaction(() =>
