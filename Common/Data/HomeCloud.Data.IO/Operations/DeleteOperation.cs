@@ -36,7 +36,7 @@
 
 			if (FileHelper.IsDirectory(this.Path))
 			{
-				Directory.Delete(this.Path);
+				Directory.Delete(this.Path, true);
 			}
 			else
 			{
