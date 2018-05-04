@@ -45,6 +45,16 @@
 
 		#region IDataProviderFactory Implementations
 
+		/// <summary>
+		/// Gets the instance of <see cref="T"/> derived from <see cref="IDataProvider"/>.
+		/// </summary>
+		/// <typeparam name="T">The type of provider.</typeparam>
+		/// <returns>The instance of <see cref="T"/>.</returns>
+		public IDataProvider GetProvider<T>() where T : IDataProvider
+		{
+			return this.providerFactory.Get<T>();
+		}
+
 		#region Storage Methods
 
 		/// <summary>

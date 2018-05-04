@@ -104,6 +104,7 @@
 						.AddRoute<StorageViewModel>("self", nameof(StorageController.GetStorageByID), model => new { id = model.ID })
 						.AddRoute<StorageViewModel>("update", nameof(StorageController.UpdateStorage), model => new { id = model.ID })
 						.AddRoute<StorageViewModel>("delete", nameof(StorageController.DeleteStorage), model => new { id = model.ID })
+						.AddRoute<StorageViewModel>("index", nameof(StorageController.IndexStorage), model => new { id = model.ID })
 						.AddRoute<StorageViewModel>("catalog", nameof(CatalogController.GetCatalogByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(StorageController.CreateStorage))

@@ -39,6 +39,11 @@
 		/// </summary>
 		private readonly IStorageService storageService = null;
 
+		/// <summary>
+		/// The indexing service
+		/// </summary>
+		private readonly IIndexingService indexingService = null;
+
 		#endregion
 
 		#region Constructors
@@ -48,10 +53,15 @@
 		/// </summary>
 		/// <param name="mapper">The model type mapper.</param>
 		/// <param name="storageService">The <see cref="IStorageService" /> service.</param>
-		public StorageController(IMapper mapper, IStorageService storageService)
+		/// <param name="indexingService">The indexing service.</param>
+		public StorageController(
+			IMapper mapper,
+			IStorageService storageService,
+			IIndexingService indexingService)
 			: base(mapper)
 		{
 			this.storageService = storageService;
+			this.indexingService = indexingService;
 		}
 
 		#endregion
@@ -150,6 +160,14 @@
 			ServiceResult result = await this.storageService.DeleteStorageAsync(id);
 
 			return this.HttpResult(null, result.Errors);
+		}
+
+		[HttpPost("v1/[controller]s/{id}/index", Name = nameof(StorageController.IndexStorage))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> IndexStorage(
+			[RequireNonDefault(ErrorMessage = "The storage unique identifier is empty")] Guid id)
+		{
+			return this.HttpResult(null, null);
 		}
 	}
 }
