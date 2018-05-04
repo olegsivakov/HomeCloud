@@ -28,6 +28,7 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
+			target.Exists = source.Exists;
 
 			return target;
 		}
@@ -48,6 +49,7 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
+			target.Exists = source.Exists;
 
 			target.IsCatalog = true;
 

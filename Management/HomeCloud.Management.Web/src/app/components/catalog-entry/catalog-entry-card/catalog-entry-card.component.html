@@ -1,4 +1,5 @@
 <div class="storage-item card" (click)="onSelect()" [class.enabled]="canSelect" on-mouseover="onLoad()" title="{{entry.name}}">
+  <clr-icon *ngIf="!entry.exists" shape="times" size="48" class="removed"></clr-icon>
   <div class="card-img">
       <div class="file {{entry.type}}"></div>
   </div>

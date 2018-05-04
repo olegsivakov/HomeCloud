@@ -77,7 +77,7 @@
 
 				chunks = selector(offset, limit);
 
-				chunks.AsParallel().ForAll(async chunk => await action(chunk));
+				chunks.AsParallel().ForAll(chunk => action(chunk).Wait());
 			}
 			while (chunks.Offset < chunks.TotalCount);
 		}
@@ -102,7 +102,7 @@
 
 				chunks = await selector(offset, limit);
 
-				chunks.AsParallel().ForAll(async chunk => await action(chunk));
+				chunks.AsParallel().ForAll(chunk => action(chunk).Wait());
 			}
 			while (chunks.Offset < chunks.TotalCount);
 		}

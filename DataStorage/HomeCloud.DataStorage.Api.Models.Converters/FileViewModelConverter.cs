@@ -54,8 +54,9 @@
 			target.ID = source.ID;
 			target.Name = source.Name;
 			target.Size = new SizeViewModel(source.Size.GetValueOrDefault());
+			target.Exists = source.Exists;
 			target.CreationDate = source.CreationDate;
-			target.Type = string.IsNullOrWhiteSpace(source.Path) ? string.Empty : Path.GetExtension(source.Path)?.Replace(".", string.Empty);
+			target.Type = Path.GetExtension(string.IsNullOrWhiteSpace(source.Path) ? (string.IsNullOrWhiteSpace(source.Name) ? null : source.Name) : source.Path)?.Replace(".", string.Empty);
 
 			return target;
 		}

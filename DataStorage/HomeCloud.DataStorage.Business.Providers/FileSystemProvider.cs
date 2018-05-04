@@ -57,7 +57,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
-				throw new ArgumentException("Storage path or name is empty.");
+				return false;
 			}
 
 			bool result = !string.IsNullOrWhiteSpace(storage.Path) ? this.operation.DirectoryExists(storage.Path) : this.operation.GetDirectory(storage.Name).Exists;
@@ -155,7 +155,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(storage.Path) && string.IsNullOrWhiteSpace(storage.Name))
 			{
-				throw new ArgumentException("Storage path or name is empty.");
+				return storage;
 			}
 
 			DirectoryInfo directory = !string.IsNullOrWhiteSpace(storage.Path) ? new DirectoryInfo(storage.Path) : this.operation.GetDirectory(storage.Name);
@@ -206,7 +206,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(catalog.Path) && (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path)))
 			{
-				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+				return false;
 			}
 
 			bool result = !string.IsNullOrWhiteSpace(catalog.Path) ? this.operation.DirectoryExists(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent?.Path)).Exists;
@@ -235,6 +235,7 @@
 				}
 
 				catalog.Path = directory.FullName;
+				catalog.Exists = directory.Exists;
 			});
 
 			return await Task.FromResult(catalog);
@@ -268,6 +269,7 @@
 				}
 
 				catalog.Path = directory.FullName;
+				catalog.Exists = directory.Exists;
 			});
 
 			return await Task.FromResult(catalog);
@@ -289,7 +291,8 @@
 			return await Task.FromResult(new PagedList<Catalog>(result.Skip(offset).Take(limit).Select(directory => new Catalog()
 			{
 				Path = directory.FullName,
-				Name = directory.Name
+				Name = directory.Name,
+				Exists = directory.Exists
 			}))
 			{
 				Offset = offset,
@@ -307,7 +310,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(catalog.Path) && (string.IsNullOrWhiteSpace(catalog.Name) || string.IsNullOrWhiteSpace(catalog.Parent?.Path)))
 			{
-				throw new ArgumentException("Catalog path, name or parent catalog are empty.");
+				return catalog;
 			}
 
 			DirectoryInfo directory = !string.IsNullOrWhiteSpace(catalog.Path) ? new DirectoryInfo(catalog.Path) : this.operation.GetDirectory(catalog.Name, new DirectoryInfo(catalog.Parent.Path));
@@ -315,6 +318,8 @@
 			{
 				catalog.Size = this.operation.GetFiles(directory, true).Sum(file => file.Length);
 			}
+
+			catalog.Exists = directory.Exists;
 
 			return await Task.FromResult(catalog);
 		}
@@ -340,6 +345,8 @@
 				{
 					this.operation.Delete(directory.FullName);
 				}
+
+				catalog.Exists = directory.Exists;
 			});
 
 			return await Task.FromResult(catalog);
@@ -368,7 +375,7 @@
 		{
 			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				throw new ArgumentException("File path, name or catalog is empty.");
+				return false;
 			}
 
 			bool result = !string.IsNullOrWhiteSpace(entry.Path) ? this.operation.FileExists(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog?.Path)).Exists;
@@ -403,6 +410,7 @@
 				}
 
 				stream.Entry.Path = file.FullName;
+				stream.Entry.Exists = file.Exists;
 				stream.Entry.Size = file.Length;
 			});
 
@@ -425,7 +433,8 @@
 			return await Task.FromResult(new PagedList<CatalogEntry>(result.Skip(offset).Take(limit).Select(file => new CatalogEntry()
 			{
 				Name = file.Name,
-				Path = file.FullName
+				Path = file.FullName,
+				Exists = file.Exists
 			}))
 			{
 				Offset = offset,
@@ -443,12 +452,13 @@
 		{
 			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				throw new ArgumentException("File path, name or catalog are empty.");
+				return entry;
 			}
 
 			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
 
 			entry.Path = file.FullName;
+			entry.Exists = file.Exists;
 			entry.Size = file.Length;
 
 			return await Task.FromResult(entry);
@@ -467,16 +477,20 @@
 		{
 			if (string.IsNullOrWhiteSpace(entry.Path) && (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Catalog?.Path)))
 			{
-				throw new ArgumentException("File path, name or catalog are empty.");
+				return new CatalogEntryStream(entry, 0);
 			}
 
 			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
 			if (!file.Exists)
 			{
-				return await Task.FromResult(new CatalogEntryStream(entry, 0));
+				return new CatalogEntryStream(entry, 0);
 			}
 
 			byte[] buffer = this.operation.ReadBytes(entry.Path, offset, length);
+
+			entry.Path = file.FullName;
+			entry.Exists = file.Exists;
+			entry.Size = file.Length;
 
 			CatalogEntryStream stream = new CatalogEntryStream(entry, buffer.Length);
 			stream.Write(buffer, 0, buffer.Length);

@@ -20,14 +20,6 @@
 		public DateTime CreationDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the data exists in file system.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if the data exists; otherwise, it returns <c>false</c>.
-		/// </value>
-		public virtual bool IsExists { get; set; }
-
-		/// <summary>
 		/// Gets or sets the size.
 		/// </summary>
 		/// <value>

@@ -26,6 +26,7 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
+			target.Exists = source.Exists;
 			target.CreationDate = source.CreationDate;
 			target.Size = new SizeViewModel(source.Size.GetValueOrDefault());
 
@@ -48,6 +49,7 @@
 		{
 			target.ID = source.ID;
 			target.Name = source.Name;
+			target.Exists = source.Exists;
 			target.CreationDate = source.CreationDate;
 			target.Parent = target.Parent ?? new Catalog();
 

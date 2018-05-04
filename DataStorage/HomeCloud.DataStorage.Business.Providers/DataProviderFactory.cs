@@ -116,7 +116,7 @@
 		public async Task<IPaginable<Storage>> GetStorages(int offset = 0, int limit = 20)
 		{
 			IPaginable<Storage> result = await this.providerFactory.Get<IDataStoreProvider>().GetStorages(offset, limit);
-			result.AsParallel().ForAll(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetStorage(item));
+			result.ForEachAsync(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetStorage(item), result.Count());
 
 			return result;
 		}
@@ -194,7 +194,11 @@
 		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
 		{
 			IPaginable<Catalog> result = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogs(parent, offset, limit);
-			result.AsParallel().ForAll(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(item));
+			result.ForEachAsync(async item =>
+			{
+				item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(item);
+				item = await this.providerFactory.Get<IFileSystemProvider>().GetCatalog(item);
+			}, result.Count());
 
 			return result;
 		}
@@ -215,7 +219,7 @@
 					async () => catalog = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalog(catalog),
 					async () => catalog = await this.providerFactory.Get<IDataStoreProvider>().GetCatalog(catalog));
 
-			return await Task.FromResult(catalog);
+			return await this.providerFactory.Get<IFileSystemProvider>().GetCatalog(catalog);
 		}
 
 		/// <summary>
@@ -319,7 +323,11 @@
 		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
 		{
 			IPaginable<CatalogEntry> result = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogEntries(catalog, offset, limit);
-			result.AsParallel().ForAll(async item => item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalogEntry(item));
+			result.ForEachAsync(async item =>
+			{
+				item = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalogEntry(item);
+				item = await this.providerFactory.Get<IFileSystemProvider>().GetCatalogEntry(item);
+			}, result.Count());
 
 			return result;
 		}
@@ -340,7 +348,7 @@
 					async () => entry = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalogEntry(entry),
 					async () => entry = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogEntry(entry));
 
-			return await Task.FromResult(entry);
+			return await this.providerFactory.Get<IFileSystemProvider>().GetCatalogEntry(entry);
 		}
 
 		/// <summary>
@@ -354,14 +362,11 @@
 		/// </returns>
 		public async Task<CatalogEntryStream> GetCatalogEntryStream(CatalogEntry entry, int offset = 0, int length = 0)
 		{
-			CatalogEntryStream result = null;
-
 			ParallelExtensions.InvokeAsync(
 					async () => entry = await this.providerFactory.Get<IAggregationDataProvider>().GetCatalogEntry(entry),
-					async () => entry = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogEntry(entry),
-					async () => result = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogEntryStream(entry));
+					async () => entry = await this.providerFactory.Get<IDataStoreProvider>().GetCatalogEntry(entry));
 
-			return await Task.FromResult(result);
+			return await this.providerFactory.Get<IFileSystemProvider>().GetCatalogEntryStream(entry, offset, length);
 		}
 
 		#endregion

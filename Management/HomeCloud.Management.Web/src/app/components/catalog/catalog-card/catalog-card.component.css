@@ -3,3 +3,10 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.removed {
+    color: crimson;
+    position: relative;
+    top: 130px;
+    left: 80px;
+}
