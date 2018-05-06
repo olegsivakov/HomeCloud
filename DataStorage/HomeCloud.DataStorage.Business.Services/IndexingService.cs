@@ -49,26 +49,9 @@
 		/// </returns>
 		public async Task<Storage> Index(Storage storage)
 		{
-			int limit = 20;
-			int offset = 0;
-			int count = 0;
+			await this.Index((Catalog)storage);
 
-			CatalogRoot root = await this.providerFactory.GetStorage(storage);
-
-			do
-			{
-				IPaginable<Catalog> catalogs = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogs(root, offset, limit);
-				catalogs.ForEachAsync(async item =>
-				{
-					await this.Index(item);
-				},catalogs.Count());
-
-				offset = catalogs.Offset + catalogs.Limit;
-				count = catalogs.TotalCount;
-			}
-			while (count >= offset);
-			
-			throw new System.NotImplementedException();
+			return storage;
 		}
 
 		/// <summary>
@@ -80,6 +63,51 @@
 		/// </returns>
 		public async Task<Catalog> Index(Catalog catalog)
 		{
+			IDataProvider dataStoreProvider = this.providerFactory.GetProvider<IDataStoreProvider>();
+			if (!await dataStoreProvider.CatalogExists(catalog))
+			{
+				catalog = await this.providerFactory.CreateCatalog(catalog);
+			}
+
+			int limit = 20;
+			int offset = 0;
+			int count = 0;
+
+			do
+			{
+				IPaginable<Catalog> catalogs = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogs(catalog, null, offset, limit);
+				catalogs.ForEachAsync(async item =>
+				{
+					item.Parent = catalog;
+
+					await this.Index(item);
+				}, catalogs.Count());
+
+				offset = catalogs.Offset + catalogs.Limit;
+				count = catalogs.TotalCount;
+			}
+			while (count >= offset);
+
+			limit = 20;
+			offset = 0;
+			count = 0;
+
+			do
+			{
+				IPaginable<CatalogEntry> entries = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogEntries(catalog, null, offset, limit);
+				entries.ForEachAsync(async item =>
+				{
+					item.Catalog = catalog;
+
+					await this.Index(item);
+				}, entries.Count());
+
+				offset = entries.Offset + entries.Limit;
+				count = entries.TotalCount;
+			}
+			while (count >= offset);
+
+			return catalog;
 		}
 
 		/// <summary>
@@ -91,7 +119,17 @@
 		/// </returns>
 		public async Task<CatalogEntry> Index(CatalogEntry entry)
 		{
-			throw new System.NotImplementedException();
+			IDataProvider dataStoreProvider = this.providerFactory.GetProvider<IDataStoreProvider>();
+			if (!await dataStoreProvider.CatalogEntryExists(entry))
+			{
+				using (CatalogEntryStream stream = new CatalogEntryStream(entry, 0))
+				{
+					entry = await dataStoreProvider.CreateCatalogEntry(stream);
+					entry = await this.providerFactory.GetProvider<IAggregationDataProvider>().CreateCatalogEntry(stream);
+				}
+			}
+
+			return entry;
 		}
 
 		#endregion

@@ -94,15 +94,16 @@
 		Task<Catalog> RecalculateSize(Catalog catalog);
 
 		/// <summary>
-		/// Gets the list of catalogs located in specified parent catalog.
+		/// Gets the list of catalogs located in specified parent catalog and met specified catalog criteria.
 		/// </summary>
-		/// <param name="parent">The parent catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="parent">The parent catalog of <see cref="CatalogRoot" /> type.</param>
 		/// <param name="offset">The offset index.</param>
-		/// <param name="limit">The number of records to return.</param>
+		/// <param name="limit">The number of records to return. If set to 0 the empty collection with total count set up is returned.</param>
+		/// <param name="criteria">The catalog criteria.</param>
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20);
+		Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20, Catalog criteria = null);
 
 		/// <summary>
 		/// Gets the catalog by the initial instance set.
@@ -139,15 +140,16 @@
 		Task<CatalogEntry> CreateCatalogEntry(CatalogEntryStream stream);
 
 		/// <summary>
-		/// Gets the list of catalog entries located in specified catalog.
+		/// Gets the list of catalog entries located in specified catalog and met specified catalog entry criteria.
 		/// </summary>
-		/// <param name="catalog">The catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="catalog">The catalog of <see cref="CatalogRoot" /> type.</param>
 		/// <param name="offset">The offset index.</param>
-		/// <param name="limit">The number of records to return.</param>
+		/// <param name="limit">The number of records to return. If set to 0 the empty collection with total count set up is returned.</param>
+		/// <param name="criteria">The catalog entry criteria.</param>
 		/// <returns>
 		/// The list of instances of <see cref="CatalogEntry" /> type.
 		/// </returns>
-		Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20);
+		Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20, CatalogEntry criteria = null);
 
 		/// <summary>
 		/// Gets the catalog entry by the initial instance set.

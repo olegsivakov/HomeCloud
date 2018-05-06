@@ -276,19 +276,30 @@
 		}
 
 		/// <summary>
-		/// Gets the list of catalogs located in specified parent catalog.
+		/// Gets the list of catalogs located in specified parent catalog and met specified catalog criteria.
 		/// </summary>
-		/// <param name="parent">The parent catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="parent">The parent catalog of <see cref="CatalogRoot" /> type.</param>
+		/// <param name="criteria">The catalog criteria.</param>
 		/// <param name="offset">The offset index.</param>
-		/// <param name="limit">The number of records to return.</param>
+		/// <param name="limit">The number of records to return. If set to 0 the empty collection with total count set up is returned.</param>
 		/// <returns>
 		/// The list of instances of <see cref="Catalog" /> type.
 		/// </returns>
-		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, int offset = 0, int limit = 20)
+		public async Task<IPaginable<Catalog>> GetCatalogs(CatalogRoot parent, Catalog criteria = null, int offset = 0, int limit = 20)
 		{
-			IEnumerable<DirectoryInfo> result = this.operation.GetDirectories(new DirectoryInfo(parent.Path));
+			IList<DirectoryInfo> result = this.operation.GetDirectories(new DirectoryInfo(parent.Path)).ToList();
 
-			return await Task.FromResult(new PagedList<Catalog>(result.Skip(offset).Take(limit).Select(directory => new Catalog()
+			if (limit == 0)
+			{
+				return await Task.FromResult(new PagedList<Catalog>()
+				{
+					Offset = offset,
+					Limit = limit,
+					TotalCount = result.Count
+				});
+			}
+
+			return await Task.FromResult(new PagedList<Catalog>(result.Skip(offset).Take(limit).Where(directory => string.IsNullOrWhiteSpace(criteria?.Name) || directory.Name == criteria.Name).Select(directory => new Catalog()
 			{
 				Path = directory.FullName,
 				Name = directory.Name,
@@ -297,7 +308,7 @@
 			{
 				Offset = offset,
 				Limit = limit,
-				TotalCount = result.Count()
+				TotalCount = result.Count
 			});
 		}
 
@@ -418,19 +429,30 @@
 		}
 
 		/// <summary>
-		/// Gets the list of catalog entries located in specified catalog.
+		/// Gets the list of catalog entries located in specified catalog and met specified catalog entry criteria.
 		/// </summary>
-		/// <param name="catalog">The catalog of <see cref="CatalogRoot"/> type.</param>
+		/// <param name="catalog">The catalog of <see cref="CatalogRoot" /> type.</param>
+		/// <param name="criteria">The catalog entry criteria.</param>
 		/// <param name="offset">The offset index.</param>
-		/// <param name="limit">The number of records to return.</param>
+		/// <param name="limit">The number of records to return. If set to 0 the empty collection with total count set up is returned.</param>
 		/// <returns>
 		/// The list of instances of <see cref="CatalogEntry" /> type.
 		/// </returns>
-		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, int offset = 0, int limit = 20)
+		public async Task<IPaginable<CatalogEntry>> GetCatalogEntries(CatalogRoot catalog, CatalogEntry criteria = null, int offset = 0, int limit = 20)
 		{
-			IEnumerable<FileInfo> result = this.operation.GetFiles(new DirectoryInfo(catalog.Path));
+			IList<FileInfo> result = this.operation.GetFiles(new DirectoryInfo(catalog.Path)).ToList();
 
-			return await Task.FromResult(new PagedList<CatalogEntry>(result.Skip(offset).Take(limit).Select(file => new CatalogEntry()
+			if (limit == 0)
+			{
+				return await Task.FromResult(new PagedList<CatalogEntry>()
+				{
+					Offset = offset,
+					Limit = limit,
+					TotalCount = result.Count
+				});
+			}
+
+			return await Task.FromResult(new PagedList<CatalogEntry>(result.Skip(offset).Take(limit).Where(file => string.IsNullOrWhiteSpace(criteria?.Name) || file.Name == criteria.Name).Select(file => new CatalogEntry()
 			{
 				Name = file.Name,
 				Path = file.FullName,

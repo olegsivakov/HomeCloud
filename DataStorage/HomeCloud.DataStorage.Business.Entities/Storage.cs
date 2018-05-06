@@ -33,7 +33,7 @@
 
 		#endregion
 
-		#region ICloneable Impolementations
+		#region ICloneable Implementations
 
 		/// <summary>
 		/// Creates a new object that is a copy of the current instance.
