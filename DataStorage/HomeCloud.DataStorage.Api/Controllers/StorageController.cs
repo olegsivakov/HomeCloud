@@ -167,7 +167,9 @@
 		public async Task<IActionResult> IndexStorage(
 			[RequireNonDefault(ErrorMessage = "The storage unique identifier is empty")] Guid id)
 		{
-			return this.HttpResult(null, null);
+			this.indexingService.Index(new Storage() { ID = id });
+
+			return await Task.FromResult(this.HttpResult(null, null));
 		}
 	}
 }

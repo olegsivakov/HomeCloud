@@ -17,27 +17,6 @@
 	[MongoDBCollection("catalogs")]
 	public class CatalogDocument
 	{
-		#region Private Members
-
-		/// <summary>
-		/// The unique identifier member.
-		/// </summary>
-		private Guid id = Guid.Empty;
-
-		/// <summary>
-		/// The path member.
-		/// </summary>
-		private string path = null;
-
-		/// <summary>
-		/// The size member.
-		/// </summary>
-		private long size = 0;
-
-		#endregion
-
-		#region Public Properties
-
 		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
@@ -67,7 +46,5 @@
 		/// </value>
 		[BsonElement("size")]
 		public long Size { get; set; }
-
-		#endregion
 	}
 }

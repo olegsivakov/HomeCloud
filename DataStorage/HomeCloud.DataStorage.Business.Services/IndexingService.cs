@@ -1,11 +1,13 @@
 ﻿namespace HomeCloud.DataStorage.Business.Services
 {
-	using System.Linq;
 	#region Usings
 
+	using System.Linq;
 	using System.Threading.Tasks;
+
 	using HomeCloud.Core;
 	using HomeCloud.Core.Extensions;
+
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Providers;
 
@@ -49,6 +51,8 @@
 		/// </returns>
 		public async Task<Storage> Index(Storage storage)
 		{
+			storage = await this.providerFactory.GetStorage(storage);
+
 			await this.Index((Catalog)storage);
 
 			return storage;
@@ -75,7 +79,7 @@
 
 			do
 			{
-				IPaginable<Catalog> catalogs = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogs(catalog, null, offset, limit);
+				IPaginable<Catalog> catalogs = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogs(catalog, offset, limit);
 				catalogs.ForEachAsync(async item =>
 				{
 					item.Parent = catalog;
@@ -94,7 +98,7 @@
 
 			do
 			{
-				IPaginable<CatalogEntry> entries = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogEntries(catalog, null, offset, limit);
+				IPaginable<CatalogEntry> entries = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogEntries(catalog, offset, limit);
 				entries.ForEachAsync(async item =>
 				{
 					item.Catalog = catalog;
