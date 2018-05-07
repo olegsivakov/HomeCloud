@@ -137,7 +137,8 @@
 
 			return await Task.FromResult(new PagedList<Storage>(result.Skip(offset).Take(limit).Select(directory => new Storage()
 			{
-				Path = directory.FullName, Name = directory.Name
+				Path = directory.FullName,
+				Name = directory.Name
 			}))
 			{
 				Offset = offset,
@@ -234,7 +235,7 @@
 					directory = Directory.CreateDirectory(directory.FullName);
 				}
 
-				catalog.Name = directory.Name;
+				catalog.Name = string.IsNullOrWhiteSpace(catalog.Name) ? directory.Name : catalog.Name;
 				catalog.Path = directory.FullName;
 				catalog.Exists = directory.Exists;
 			});
@@ -269,7 +270,7 @@
 					}
 				}
 
-				catalog.Name = directory.Name;
+				catalog.Name = string.IsNullOrWhiteSpace(catalog.Name) ? directory.Name : catalog.Name;
 				catalog.Path = directory.FullName;
 				catalog.Exists = directory.Exists;
 			});
@@ -333,7 +334,7 @@
 			}
 
 			catalog.Path = directory.FullName;
-			catalog.Name = directory.Name;
+			catalog.Name = string.IsNullOrWhiteSpace(catalog.Name) ? directory.Name : catalog.Name;
 			catalog.Exists = directory.Exists;
 
 			return await Task.FromResult(catalog);
