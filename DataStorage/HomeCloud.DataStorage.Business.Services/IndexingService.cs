@@ -10,6 +10,10 @@
 
 	using HomeCloud.DataStorage.Business.Entities;
 	using HomeCloud.DataStorage.Business.Providers;
+	using HomeCloud.DataStorage.Business.Validation;
+
+	using HomeCloud.Validation;
+	using System;
 
 	#endregion
 
@@ -25,6 +29,11 @@
 		/// </summary>
 		private readonly IDataProviderFactory providerFactory = null;
 
+		/// <summary>
+		/// The validation service factory
+		/// </summary>
+		private readonly IValidationServiceFactory validationServiceFactory = null;
+
 		#endregion
 
 		#region Constructors
@@ -33,9 +42,13 @@
 		/// Initializes a new instance of the <see cref="IndexingService" /> class.
 		/// </summary>
 		/// <param name="providerFactory">The data provider factory.</param>
-		public IndexingService(IDataProviderFactory providerFactory)
+		/// <param name="validationServiceFactory">The validation service factory.</param>
+		public IndexingService(
+			IDataProviderFactory providerFactory,
+			IValidationServiceFactory validationServiceFactory)
 		{
 			this.providerFactory = providerFactory;
+			this.validationServiceFactory = validationServiceFactory;
 		}
 
 		#endregion
@@ -49,13 +62,23 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.Business.Entities.Storage" />.
 		/// </returns>
-		public async Task<Storage> Index(Storage storage)
+		public async Task<ServiceResult<Storage>> Index(Storage storage)
 		{
-			storage = await this.providerFactory.GetStorage(storage);
+			IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(storage);
 
+			if (!result.IsValid)
+			{
+				return new ServiceResult<Storage>(storage)
+				{
+					Errors = result.Errors
+				};
+			}
+
+			storage = await this.providerFactory.GetStorage(storage);
 			await this.Index((Catalog)storage);
 
-			return storage;
+			return new ServiceResult<Storage>(storage);
 		}
 
 		/// <summary>
@@ -65,21 +88,27 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.Business.Entities.Catalog" />.
 		/// </returns>
-		public async Task<Catalog> Index(Catalog catalog)
+		public async Task<ServiceResult<Catalog>> Index(Catalog catalog)
 		{
 			IDataProvider dataStoreProvider = this.providerFactory.GetProvider<IDataStoreProvider>();
-			if (!await dataStoreProvider.CatalogExists(catalog))
+
+			bool exists = await dataStoreProvider.CatalogExists(new Catalog()
 			{
-				catalog = await this.providerFactory.CreateCatalog(catalog);
-			}
+				Name = catalog.Name,
+				Parent = catalog.Parent
+			});
+
+			catalog = !exists ? await this.providerFactory.CreateCatalog(catalog) : (await this.providerFactory.GetCatalogs(catalog.Parent, 0, 1, catalog)).FirstOrDefault();
 
 			int limit = 20;
 			int offset = 0;
 			int count = 0;
 
+			IDataProvider fileSystemProvider = this.providerFactory.GetProvider<IFileSystemProvider>();
+
 			do
 			{
-				IPaginable<Catalog> catalogs = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogs(catalog, offset, limit);
+				IPaginable<Catalog> catalogs = await fileSystemProvider.GetCatalogs(catalog, offset, limit);
 				catalogs.ForEachAsync(async item =>
 				{
 					item.Parent = catalog;
@@ -98,7 +127,7 @@
 
 			do
 			{
-				IPaginable<CatalogEntry> entries = await this.providerFactory.GetProvider<IFileSystemProvider>().GetCatalogEntries(catalog, offset, limit);
+				IPaginable<CatalogEntry> entries = await fileSystemProvider.GetCatalogEntries(catalog, offset, limit);
 				entries.ForEachAsync(async item =>
 				{
 					item.Catalog = catalog;
@@ -111,7 +140,7 @@
 			}
 			while (count >= offset);
 
-			return catalog;
+			return new ServiceResult<Catalog>(catalog);
 		}
 
 		/// <summary>
@@ -121,7 +150,7 @@
 		/// <returns>
 		/// The instance of <see cref="T:HomeCloud.DataStorage.Business.Entities.CatalogEntry" />.
 		/// </returns>
-		public async Task<CatalogEntry> Index(CatalogEntry entry)
+		public async Task<ServiceResult<CatalogEntry>> Index(CatalogEntry entry)
 		{
 			IDataProvider dataStoreProvider = this.providerFactory.GetProvider<IDataStoreProvider>();
 			if (!await dataStoreProvider.CatalogEntryExists(entry))
@@ -133,7 +162,7 @@
 				}
 			}
 
-			return entry;
+			return new ServiceResult<CatalogEntry>(entry);
 		}
 
 		#endregion

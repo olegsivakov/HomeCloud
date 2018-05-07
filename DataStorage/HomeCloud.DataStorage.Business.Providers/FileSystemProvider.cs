@@ -234,6 +234,7 @@
 					directory = Directory.CreateDirectory(directory.FullName);
 				}
 
+				catalog.Name = directory.Name;
 				catalog.Path = directory.FullName;
 				catalog.Exists = directory.Exists;
 			});
@@ -268,6 +269,7 @@
 					}
 				}
 
+				catalog.Name = directory.Name;
 				catalog.Path = directory.FullName;
 				catalog.Exists = directory.Exists;
 			});
@@ -330,6 +332,8 @@
 				catalog.Size = this.operation.GetFiles(directory, true).Sum(file => file.Exists ? file.Length : 0);
 			}
 
+			catalog.Path = directory.FullName;
+			catalog.Name = directory.Name;
 			catalog.Exists = directory.Exists;
 
 			return await Task.FromResult(catalog);
@@ -420,6 +424,7 @@
 					file = this.operation.CreateFile(file.FullName, stream);
 				}
 
+				stream.Entry.Name = file.Name;
 				stream.Entry.Path = file.FullName;
 				stream.Entry.Exists = file.Exists;
 				stream.Entry.Size = file.Exists ? file.Length : 0;
@@ -456,8 +461,9 @@
 			{
 				Name = file.Name,
 				Path = file.FullName,
-				Exists = file.Exists
-			}))
+				Exists = file.Exists,
+				Size = file.Exists ? file.Length : 0
+		}))
 			{
 				Offset = offset,
 				Limit = limit,
@@ -479,6 +485,7 @@
 
 			FileInfo file = !string.IsNullOrWhiteSpace(entry.Path) ? new FileInfo(entry.Path) : this.operation.GetFile(entry.Name, new DirectoryInfo(entry.Catalog.Path));
 
+			entry.Name = file.Name;
 			entry.Path = file.FullName;
 			entry.Exists = file.Exists;
 			entry.Size = file.Exists ? file.Length : 0;
@@ -510,6 +517,7 @@
 
 			byte[] buffer = this.operation.ReadBytes(entry.Path, offset, length);
 
+			entry.Name = file.Name;
 			entry.Path = file.FullName;
 			entry.Exists = file.Exists;
 			entry.Size = file.Exists ? file.Length : 0;

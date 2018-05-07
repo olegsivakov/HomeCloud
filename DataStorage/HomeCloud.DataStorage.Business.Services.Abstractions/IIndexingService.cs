@@ -4,6 +4,7 @@
 
 	using System.Threading.Tasks;
 
+	using HomeCloud.Core;
 	using HomeCloud.DataStorage.Business.Entities;
 
 	#endregion
@@ -18,20 +19,20 @@
 		/// </summary>
 		/// <param name="storage">The storage to index.</param>
 		/// <returns>The instance of <see cref="Storage"/>.</returns>
-		Task<Storage> Index(Storage storage);
+		Task<ServiceResult<Storage>> Index(Storage storage);
 
 		/// <summary>
 		/// Indexes the specified catalog and its content.
 		/// </summary>
 		/// <param name="catalog">The catalog to index.</param>
 		/// <returns>The instance of <see cref="Catalog"/>.</returns>
-		Task<Catalog> Index(Catalog catalog);
+		Task<ServiceResult<Catalog>> Index(Catalog catalog);
 
 		/// <summary>
 		/// Indexes the specified catalog entry.
 		/// </summary>
 		/// <param name="entry">The catalog entry to index.</param>
 		/// <returns>The instance of <see cref="CatalogEntry"/>.</returns>
-		Task<CatalogEntry> Index(CatalogEntry entry);
+		Task<ServiceResult<CatalogEntry>> Index(CatalogEntry entry);
 	}
 }

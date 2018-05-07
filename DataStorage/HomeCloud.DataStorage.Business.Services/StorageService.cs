@@ -68,7 +68,7 @@
 			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
 				storage.ID = Guid.Empty;
-				storage.Name = Guid.NewGuid().ToString();
+				storage.Name = storage.DisplayName;
 
 				IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
 
