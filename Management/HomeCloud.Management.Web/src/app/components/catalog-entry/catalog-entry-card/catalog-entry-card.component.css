@@ -6,7 +6,7 @@
 
 .removed {
     color: crimson;
-    position: relative;
-    top: 135px;
+    position: absolute;
+    top: 85px;
     left: 75px;
 }
