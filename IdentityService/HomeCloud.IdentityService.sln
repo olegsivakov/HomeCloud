@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2043
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Api", "IdentityService.Api\IdentityService.Api.csproj", "{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService.Api.DependencyInjection", "IdentityService.Api.DependencyInjection\IdentityService.Api.DependencyInjection.csproj", "{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1BF0BFA-F2D3-4408-A875-9C702A554864}
+	EndGlobalSection
+EndGlobal
