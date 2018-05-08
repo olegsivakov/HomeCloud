@@ -152,7 +152,7 @@
 
 			application.UseCors(policyBuilder =>
 			{
-				policyBuilder.WithOrigins("http://localhost:8080").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
+				policyBuilder.WithOrigins("https://homecloudweb.azurewebsites.net", "http://localhost:8080").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
 			});
 
 			application.UseMvc();
