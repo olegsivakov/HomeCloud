@@ -109,12 +109,12 @@
 			do
 			{
 				IPaginable<Catalog> catalogs = await fileSystemProvider.GetCatalogs(catalog, offset, limit);
-				catalogs.ForEachAsync(async item =>
+				foreach (Catalog item in catalogs)
 				{
 					item.Parent = catalog;
 
 					await this.Index(item);
-				}, catalogs.Count());
+				}
 
 				offset = catalogs.Offset + catalogs.Limit;
 				count = catalogs.TotalCount;
@@ -128,12 +128,12 @@
 			do
 			{
 				IPaginable<CatalogEntry> entries = await fileSystemProvider.GetCatalogEntries(catalog, offset, limit);
-				entries.ForEachAsync(async item =>
+				foreach (CatalogEntry item in entries)
 				{
 					item.Catalog = catalog;
 
 					await this.Index(item);
-				}, entries.Count());
+				}
 
 				offset = entries.Offset + entries.Limit;
 				count = entries.TotalCount;
