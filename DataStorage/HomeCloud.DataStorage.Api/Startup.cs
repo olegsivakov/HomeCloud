@@ -152,7 +152,7 @@
 
 			application.UseCors(policyBuilder =>
 			{
-				policyBuilder.WithOrigins("http://localhost:4200").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
+				policyBuilder.WithOrigins("http://localhost:8080").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
 			});
 
 			application.UseMvc();

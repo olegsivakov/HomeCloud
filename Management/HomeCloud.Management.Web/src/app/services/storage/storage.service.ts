@@ -11,7 +11,7 @@ import { HttpService } from '../http/http.service';
 import { ResourceService } from '../resource/resource.service';
 import { CatalogStateService } from '../catalog-state/catalog-state.service';
 
-const storageUrl: string = "http://localhost:54832/v1/storages";
+const storageUrl: string = "http://localhost:8081/v1/storages";
 
 @Injectable()
 export class StorageService extends HttpService<Storage> {

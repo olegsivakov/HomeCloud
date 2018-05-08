@@ -1,0 +1,1 @@
+type StoredProcedures\*.sql > data_storage_db.sql
