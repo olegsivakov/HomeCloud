@@ -9,4 +9,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.DataAccess.Abstractions\HomeCloud.IdentityService.DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.DataAccess\HomeCloud.IdentityService.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

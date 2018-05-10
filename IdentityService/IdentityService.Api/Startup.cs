@@ -53,7 +53,10 @@
 		{
 			services
 				.AddIdentityServer()
-				.AddDeveloperSigningCredential();
+				.AddDeveloperSigningCredential()
+				.AddInMemoryResources()
+				.AddInMemoryClients()
+				.AddInMemoryIdentityResources();
 
 			return services.BuildServiceProvider();
 		}

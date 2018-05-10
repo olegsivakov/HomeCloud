@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Api", "IdentityService.Api\IdentityService.Api.csproj", "{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}"
 EndProject
@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{704798
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessComponents", "DataAccessComponents", "{01B0114E-484B-4A77-88F3-FED16E08995C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.DataAccess.Abstractions", "HomeCloud.IdentityService.DataAccess.Abstractions\HomeCloud.IdentityService.DataAccess.Abstractions.csproj", "{AF619C3B-4405-4DD0-9FBA-500070614EEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.DataAccess.Abstractions", "HomeCloud.IdentityService.DataAccess.Abstractions\HomeCloud.IdentityService.DataAccess.Abstractions.csproj", "{AF619C3B-4405-4DD0-9FBA-500070614EEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.DataAccess", "HomeCloud.IdentityService.DataAccess\HomeCloud.IdentityService.DataAccess.csproj", "{EA9821C8-0994-4AE5-851B-4D650170C72B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.DataAccess", "HomeCloud.IdentityService.DataAccess\HomeCloud.IdentityService.DataAccess.csproj", "{EA9821C8-0994-4AE5-851B-4D650170C72B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.DataAccess.Objects", "HomeCloud.IdentityService.DataAccess.Objects\HomeCloud.IdentityService.DataAccess.Objects.csproj", "{811E86FB-3DB2-4147-87B1-C981E48B09EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.DataAccess.Objects", "HomeCloud.IdentityService.DataAccess.Objects\HomeCloud.IdentityService.DataAccess.Objects.csproj", "{811E86FB-3DB2-4147-87B1-C981E48B09EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Core", "..\Common\HomeCloud.Core\HomeCloud.Core.csproj", "{96041581-A52E-4E72-A238-D07F9E974E6A}"
 EndProject
@@ -24,6 +24,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Data.Abstractions", "..\Common\Data\HomeCloud.Data.Abstractions\HomeCloud.Data.Abstractions.csproj", "{D1C0837C-EBFE-442A-A05E-07084CD0F9FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DependencyInjection", "..\Common\HomeCloud.DependencyInjection\HomeCloud.DependencyInjection.csproj", "{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessComponents", "BusinessComponents", "{88E5BA03-4275-4ED1-8CCF-1E23DABB228F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Stores", "HomeCloud.IdentityService.Stores\HomeCloud.IdentityService.Stores.csproj", "{671D0B93-2797-49F4-99C3-FEAC50F77D65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Stores.Converters", "HomeCloud.IdentityService.Stores.Converters\HomeCloud.IdentityService.Stores.Converters.csproj", "{367CB1B6-BF72-4D56-B789-04CEC1412CE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +73,14 @@ Global
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +93,8 @@ Global
 		{338250D5-8A3F-47F4-B905-E74622805B40} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{D1C0837C-EBFE-442A-A05E-07084CD0F9FF} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
+		{671D0B93-2797-49F4-99C3-FEAC50F77D65} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
+		{367CB1B6-BF72-4D56-B789-04CEC1412CE1} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1BF0BFA-F2D3-4408-A875-9C702A554864}

@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.DataAccess.Abstractions\HomeCloud.IdentityService.DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.DataAccess.Objects\HomeCloud.IdentityService.DataAccess.Objects.csproj" />
+  </ItemGroup>
+
 </Project>
