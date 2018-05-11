@@ -13,8 +13,10 @@
 	#endregion
 
 	/// <summary>
-	/// Provides methods to handle data of <see cref="UserDocument"/> in <see cref="MongoDB"/> database.
+	/// Provides methods to handle data of <see cref="UserDocument" /> in <see cref="MongoDB" /> database.
 	/// </summary>
+	/// <seealso cref="HomeCloud.Data.MongoDB.MongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.UserDocument}" />
+	/// <seealso cref="HomeCloud.IdentityService.DataAccess.IUserDocumentRepository" />
 	/// <seealso cref="HomeCloud.Data.MongoDB.IMongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.UserDocument}" />
 	public class UserDocumentRepository : MongoDBRepository<UserDocument>, IUserDocumentRepository
 	{
@@ -78,9 +80,9 @@
 		/// <returns>
 		/// The instance of <see cref="T:MongoDB.Driver.FilterDefinition`1" />.
 		/// </returns>
-		protected override FilterDefinition<UserDocument> GetUniqueFilterDefinition(Guid id)
+		protected override FilterDefinition<UserDocument> GetUniqueFilterDefinition(object id)
 		{
-			return Builders<UserDocument>.Filter.Where(entity => entity.ID == id);
+			return Builders<UserDocument>.Filter.Where(entity => entity.ID == (Guid)id);
 		}
 
 		#endregion

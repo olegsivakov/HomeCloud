@@ -15,8 +15,8 @@
 	/// <summary>
 	/// Represents <see cref="api"/> resource application document.
 	/// </summary>
-	[MongoDBCollection("clients")]
-	public class ResourceDocument
+	[MongoDBCollection("api_resource")]
+	public class ApiResourceDocument
 	{
 		/// <summary>
 		/// Gets or sets the name.
@@ -26,6 +26,7 @@
 		/// </value>
 		[BsonId(IdGenerator = typeof(NullIdChecker))]
 		[BsonIgnoreIfDefault]
+		[BsonRequired]
 		public Guid ID { get; set; }
 
 		/// <summary>
@@ -37,6 +38,15 @@
 		[BsonElement("name")]
 		[BsonRequired]
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of claims.
+		/// </summary>
+		/// <value>
+		/// The claims.
+		/// </value>
+		[BsonElement("claims")]
+		public IEnumerable<string> Claims { get; set; }
 
 		/// <summary>
 		/// Gets or sets the secrets.

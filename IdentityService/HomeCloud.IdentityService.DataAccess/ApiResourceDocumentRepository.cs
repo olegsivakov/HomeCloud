@@ -12,18 +12,20 @@
 	#endregion
 
 	/// <summary>
-	/// Provides methods to handle data of <see cref="ResourceDocument"/> in <see cref="MongoDB"/> database.
+	/// Provides methods to handle data of <see cref="ApiResourceDocument" /> in <see cref="MongoDB" /> database.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Data.MongoDB.IMongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.ResourceDocument}" />
-	public class ResourceDocumentRepository : MongoDBRepository<ResourceDocument>, IResourceDocumentRepository
+	/// <seealso cref="HomeCloud.Data.MongoDB.MongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.ApiResourceDocument}" />
+	/// <seealso cref="HomeCloud.IdentityService.DataAccess.IApiResourceDocumentRepository" />
+	/// <seealso cref="HomeCloud.Data.MongoDB.IMongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.ApiResourceDocument}" />
+	public class ApiResourceDocumentRepository : MongoDBRepository<ApiResourceDocument>, IApiResourceDocumentRepository
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ResourceDocumentRepository"/> class.
+		/// Initializes a new instance of the <see cref="ApiResourceDocumentRepository"/> class.
 		/// </summary>
 		/// <param name="context">The data context.</param>
-		public ResourceDocumentRepository(IMongoDBContext context)
+		public ApiResourceDocumentRepository(IMongoDBContext context)
 			: base(context)
 		{
 		}
@@ -39,7 +41,7 @@
 		/// <returns>
 		/// The instance of <see cref="T:MongoDB.Driver.FilterDefinition`1" />.
 		/// </returns>
-		protected override FilterDefinition<ResourceDocument> GetUniqueFilterDefinition(ResourceDocument entity)
+		protected override FilterDefinition<ApiResourceDocument> GetUniqueFilterDefinition(ApiResourceDocument entity)
 		{
 			return this.GetUniqueFilterDefinition(entity.ID);
 		}
@@ -47,13 +49,13 @@
 		/// <summary>
 		/// Gets the <see cref="T:System.Linq.Expressions.Expression" />-based <see cref="N:HomeCloud.Data.MongoDB" /> filter definition based on <see cref="T:System.Guid" /> identifier.
 		/// </summary>
-		/// <param name="id">The <see cref="T:System.Guid" /> identifier.</param>
+		/// <param name="id">The object identifier.</param>
 		/// <returns>
 		/// The instance of <see cref="T:MongoDB.Driver.FilterDefinition`1" />.
 		/// </returns>
-		protected override FilterDefinition<ResourceDocument> GetUniqueFilterDefinition(Guid id)
+		protected override FilterDefinition<ApiResourceDocument> GetUniqueFilterDefinition(object id)
 		{
-			return Builders<ResourceDocument>.Filter.Where(entity => entity.ID == id);
+			return Builders<ApiResourceDocument>.Filter.Where(entity => entity.ID == (Guid)id);
 		}
 
 		#endregion

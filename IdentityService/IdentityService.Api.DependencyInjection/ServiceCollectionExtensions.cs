@@ -2,19 +2,19 @@
 {
 	#region Usings
 
-	using System.Linq;
-
 	using HomeCloud.Core;
 
 	using HomeCloud.Data.MongoDB;
 
 	using HomeCloud.IdentityService.DataAccess;
 	using HomeCloud.IdentityService.DataAccess.Objects;
+	using HomeCloud.IdentityService.Stores;
 	using HomeCloud.IdentityService.Stores.Converters;
 
 	using HomeCloud.Mapping;
 
 	using IdentityServer4.Models;
+	using IdentityServer4.Stores;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
@@ -43,17 +43,34 @@
 			.AddContext()
 			.AddRepository<IUserDocumentRepository, UserDocumentRepository>()
 			.AddRepository<IClientDocumentRepository, ClientDocumentRepository>()
-			.AddRepository<IResourceDocumentRepository, ResourceDocumentRepository>();
+			.AddRepository<IApiResourceDocumentRepository, ApiResourceDocumentRepository>()
+			.AddRepository<IIdentityResourceDocumentRepository, IdentityResourceDocumentRepository>()
+			.AddRepository<IGrantDocumentRepository, GrantDocumentRepository>();
 
 			return services;
 		}
 
-		public static IServiceCollection AddIdentityServerFramework(this IServiceCollection services)
+		/// <summary>
+		/// Adds the identity configuration storage to the service collection.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		/// <returns></returns>
+		public static IServiceCollection AddResourceStore(this IServiceCollection services)
 		{
-			var descriptor = services.First(item => item.ServiceType == typeof(IResourceDocumentRepository));
-			services
-				.AddIdentityServer()
-				.AddDeveloperSigningCredential();
+			services.AddScoped<IResourceStore, ResourceStore>();
+			services.AddScoped<IClientStore, ClientStore>();
+
+			return services;
+		}
+
+		/// <summary>
+		/// Adds the identity grant storage to the service collection.
+		/// </summary>
+		/// <param name="services">The services.</param>
+		/// <returns></returns>
+		public static IServiceCollection AddGrantStore(this IServiceCollection services)
+		{
+			services.AddScoped<IPersistedGrantStore, PersistedGrantStore>();
 
 			return services;
 		}
@@ -68,6 +85,10 @@
 			services.AddMapper();
 
 			services.AddTypeConverter<ITypeConverter<ClientDocument, Client>, ClientConverter>();
+			services.AddTypeConverter<ITypeConverter<ApiResourceDocument, ApiResource>, ApiResourceConverter>();
+			services.AddTypeConverter<ITypeConverter<IdentityResourceDocument, IdentityResource>, IdentityResourceConverter>();
+			services.AddTypeConverter<ITypeConverter<GrantDocument, PersistedGrant>, PersistedGrantConverter>();
+			services.AddTypeConverter<ITypeConverter<PersistedGrant, GrantDocument>, PersistedGrantConverter>();
 
 			return services;
 		}

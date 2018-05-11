@@ -2,8 +2,6 @@
 {
 	#region Usings
 
-	using System;
-
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.IdentityService.DataAccess.Objects;
 
@@ -12,27 +10,26 @@
 	#endregion
 
 	/// <summary>
-	/// Provides methods to handle data of <see cref="ClientDocument" /> in <see cref="MongoDB" /> database.
+	/// Provides methods to handle data of <see cref="GrantDocument" /> in <see cref="MongoDB" /> database.
 	/// </summary>
-	/// <seealso cref="HomeCloud.Data.MongoDB.MongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.ClientDocument}" />
-	/// <seealso cref="HomeCloud.IdentityService.DataAccess.IClientDocumentRepository" />
-	/// <seealso cref="HomeCloud.Data.MongoDB.IMongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.ClientDocument}" />
-	public class ClientDocumentRepository : MongoDBRepository<ClientDocument>, IClientDocumentRepository
+	/// <seealso cref="HomeCloud.Data.MongoDB.MongoDBRepository{HomeCloud.IdentityService.DataAccess.Objects.GrantDocument}" />
+	/// <seealso cref="HomeCloud.IdentityService.DataAccess.IGrantDocumentRepository" />
+	public class GrantDocumentRepository : MongoDBRepository<GrantDocument>, IGrantDocumentRepository
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ClientDocumentRepository"/> class.
+		/// Initializes a new instance of the <see cref="GrantDocumentRepository"/> class.
 		/// </summary>
 		/// <param name="context">The data context.</param>
-		public ClientDocumentRepository(IMongoDBContext context)
+		public GrantDocumentRepository(IMongoDBContext context)
 			: base(context)
 		{
 		}
 
 		#endregion
 
-		#region MongoDBRepository<ClientDocument> Implementations
+		#region MongoDBRepository<GrantDocument> Implementations
 
 		/// <summary>
 		/// Gets the <see cref="T:System.Linq.Expressions.Expression" />-based <see cref="N:HomeCloud.Data.MongoDB" /> filter definition for <see cref="!:T" /> entity that have unique identifier attribute.
@@ -41,7 +38,7 @@
 		/// <returns>
 		/// The instance of <see cref="T:MongoDB.Driver.FilterDefinition`1" />.
 		/// </returns>
-		protected override FilterDefinition<ClientDocument> GetUniqueFilterDefinition(ClientDocument entity)
+		protected override FilterDefinition<GrantDocument> GetUniqueFilterDefinition(GrantDocument entity)
 		{
 			return this.GetUniqueFilterDefinition(entity.ID);
 		}
@@ -53,9 +50,9 @@
 		/// <returns>
 		/// The instance of <see cref="T:MongoDB.Driver.FilterDefinition`1" />.
 		/// </returns>
-		protected override FilterDefinition<ClientDocument> GetUniqueFilterDefinition(object id)
+		protected override FilterDefinition<GrantDocument> GetUniqueFilterDefinition(object id)
 		{
-			return Builders<ClientDocument>.Filter.Where(entity => entity.ID == (Guid)id);
+			return Builders<GrantDocument>.Filter.Where(entity => entity.ID == (string)id);
 		}
 
 		#endregion

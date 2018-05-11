@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HomeCloud.IdentityService.Business.Entities\HomeCloud.IdentityService.Business.Entities.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.Business.Services.Abstractions\HomeCloud.IdentityService.Business.Services.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

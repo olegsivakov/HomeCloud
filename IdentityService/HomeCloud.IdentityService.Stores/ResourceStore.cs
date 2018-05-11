@@ -6,6 +6,7 @@ namespace HomeCloud.IdentityService.Stores
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using IdentityServer4.Models;
@@ -19,7 +20,6 @@ namespace HomeCloud.IdentityService.Stores
 
 	using HomeCloud.Mapping;
 	using HomeCloud.Mapping.Extensions;
-	using System.Linq;
 
 	#endregion
 
@@ -73,11 +73,11 @@ namespace HomeCloud.IdentityService.Stores
 
 			if (Guid.TryParse(name, out id))
 			{
-				IResourceDocumentRepository repository = this.repositoryFactory.GetService<IResourceDocumentRepository>();
-				ResourceDocument document = await repository.GetAsync(id);
+				IApiResourceDocumentRepository repository = this.repositoryFactory.GetService<IApiResourceDocumentRepository>();
+				ApiResourceDocument document = await repository.GetAsync(id);
 				if (document != null)
 				{
-					return this.mapper.MapNew<ResourceDocument, ApiResource>(document);
+					return this.mapper.MapNew<ApiResourceDocument, ApiResource>(document);
 				}
 			}
 
@@ -96,34 +96,43 @@ namespace HomeCloud.IdentityService.Stores
 				return Enumerable.Empty<ApiResource>();
 			}
 
-			int offset = 0;
-			int limit = 20;
-			int count = 0;
+			IApiResourceDocumentRepository repository = this.repositoryFactory.GetService<IApiResourceDocumentRepository>();
+			IEnumerable<ApiResourceDocument> documents = await repository.FindAllAsync(item => scopeNames.Any(name => item.Name.ToLower() == name.ToLower()));
 
-			List<ResourceDocument> result = new List<ResourceDocument>();
-			IResourceDocumentRepository repository = this.repositoryFactory.GetService<IResourceDocumentRepository>();
-
-			do
-			{
-				IPaginable<ResourceDocument> documents = await repository.FindAsync(item => item.Scopes != null && item.Scopes.Any(scope => scopeNames.Any(name => name == scope)), offset, limit);
-				result.AddRange(documents);
-
-				offset += documents.Offset + limit;
-				count = documents.TotalCount;
-			}
-			while(count >= offset);
-
-			return this.mapper.MapNew<ResourceDocument, ApiResource>(result);
+			return this.mapper.MapNew<ApiResourceDocument, ApiResource>(documents);
 		}
 
+		/// <summary>
+		/// Gets identity resources by scope name.
+		/// </summary>
+		/// <param name="scopeNames"></param>
+		/// <returns></returns>
 		public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
 		{
-			throw new System.NotImplementedException();
+			if (!(scopeNames?.Any()).GetValueOrDefault())
+			{
+				return Enumerable.Empty<IdentityResource>();
+			}
+
+			IIdentityResourceDocumentRepository repository = this.repositoryFactory.GetService<IIdentityResourceDocumentRepository>();
+			IEnumerable<IdentityResourceDocument> documents = await repository.FindAllAsync(item => scopeNames.Any(name => item.Name.ToLower() == name.ToLower()));
+
+			return this.mapper.MapNew<IdentityResourceDocument, IdentityResource>(documents);
 		}
 
+		/// <summary>
+		/// Gets all resources.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<Resources> GetAllResourcesAsync()
 		{
-			throw new System.NotImplementedException();
+			IEnumerable<ApiResourceDocument> apiResourceDocuments = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindAllAsync(null);
+			IEnumerable<IdentityResourceDocument> identityResourceDocuments = await this.repositoryFactory.GetService<IIdentityResourceDocumentRepository>().FindAllAsync(null);
+
+			IEnumerable<ApiResource> apiResources = this.mapper.MapNew<ApiResourceDocument, ApiResource>(apiResourceDocuments);
+			IEnumerable<IdentityResource> identityResources = this.mapper.MapNew<IdentityResourceDocument, IdentityResource>(identityResourceDocuments);
+
+			return new Resources(identityResources, apiResources);
 		}
 
 		#endregion

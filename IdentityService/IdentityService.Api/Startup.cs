@@ -4,6 +4,8 @@
 
 	using System;
 
+	using IdentityService.Api.DependencyInjection;
+
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
 
@@ -53,10 +55,12 @@
 		{
 			services
 				.AddIdentityServer()
-				.AddDeveloperSigningCredential()
-				.AddInMemoryResources()
-				.AddInMemoryClients()
-				.AddInMemoryIdentityResources();
+				.AddDeveloperSigningCredential();
+
+			services.AddDatabases(this.Configuration)
+				.AddMappings()
+				.AddResourceStore()
+				.AddGrantStore();
 
 			return services.BuildServiceProvider();
 		}
