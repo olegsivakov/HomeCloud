@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.Http\HomeCloud.Data.Http.csproj" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.Http\HomeCloud.Data.Http.csproj" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj" />
+    <ProjectReference Include="..\HomeCloud.SecurityService.DataAccess.Abstractions\HomeCloud.SecurityService.DataAccess.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

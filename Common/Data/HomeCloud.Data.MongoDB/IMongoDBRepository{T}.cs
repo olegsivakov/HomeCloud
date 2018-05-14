@@ -1,11 +1,13 @@
 ﻿namespace HomeCloud.Data.MongoDB
 {
-	using HomeCloud.Core;
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Linq.Expressions;
 	using System.Threading.Tasks;
+
+	using HomeCloud.Core;
 
 	#endregion
 
@@ -34,5 +36,14 @@
 		/// The <see cref="IPaginable"/> list of instances of <see cref="!:T" /> type.
 		/// </returns>
 		Task<IPaginable<T>> FindAsync(Expression<Func<T, bool>> selector, int offset = 0, int limit = 20);
+
+		/// <summary>
+		/// Gets all records of <see cref="!:T" /> type by specified expression asynchronously.
+		/// </summary>
+		/// <param name="selector">The selector.</param>
+		/// <returns>
+		/// The <see cref="IEnumerable{T}"/> list of instances of <see cref="!:T" /> type.
+		/// </returns>
+		Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> selector);
 	}
 }

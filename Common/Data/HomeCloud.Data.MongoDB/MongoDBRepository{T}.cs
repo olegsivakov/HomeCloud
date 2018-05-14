@@ -98,6 +98,18 @@
 		}
 
 		/// <summary>
+		/// Gets all records of <see cref="!:T" /> type by specified expression asynchronously.
+		/// </summary>
+		/// <param name="selector">The selector.</param>
+		/// <returns>
+		/// The <see cref="IEnumerable{T}"/> list of instances of <see cref="!:T" /> type.
+		/// </returns>
+		public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> selector)
+		{
+			return await this.CurrentCollection.Find(selector is null ? _ => true : selector).ToListAsync();
+		}
+
+		/// <summary>
 		/// Gets the records of <see cref="!:T" /> type by specified expression asynchronously.
 		/// </summary>
 		/// <param name="offset">The offset index.</param>
@@ -105,7 +117,7 @@
 		/// <returns>
 		/// The <see cref="T:HomeCloud.Core.IPaginable" /> list of instances of <see cref="!:T" /> type.
 		/// </returns>
-		public async Task<IPaginable<T>> FindAsync(int offset = 0, int limit = 20)
+		public virtual async Task<IPaginable<T>> FindAsync(int offset = 0, int limit = 20)
 		{
 			return await this.FindAsync(null, offset, limit);
 		}
@@ -179,9 +191,9 @@
 		/// <summary>
 		/// Gets the <see cref="System.Linq.Expressions.Expression"/>-based <see cref="MongoDB"/> filter definition based on <see cref="Guid"/> identifier.
 		/// </summary>
-		/// <param name="id">The <see cref="Guid"/> identifier.</param>
+		/// <param name="id">The object identifier.</param>
 		/// <returns>The instance of <see cref="FilterDefinition{T}"/>.</returns>
-		protected abstract FilterDefinition<T> GetUniqueFilterDefinition(Guid id);
+		protected abstract FilterDefinition<T> GetUniqueFilterDefinition(object id);
 
 		#endregion
 

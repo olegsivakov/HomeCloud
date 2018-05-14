@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.Http\HomeCloud.Data.Http.csproj" />
+    <ProjectReference Include="..\..\Common\Extensions\HomeCloud.Http.Extensions\HomeCloud.Http.Extensions.csproj" />
+    <ProjectReference Include="..\HomeCloud.SecurityService.DataAccess.Abstractions\HomeCloud.SecurityService.DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeCloud.SecurityService.DataAccess.Objects\HomeCloud.SecurityService.DataAccess.Objects.csproj" />
+  </ItemGroup>
+
+</Project>
