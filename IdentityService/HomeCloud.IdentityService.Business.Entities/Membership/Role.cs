@@ -1,4 +1,4 @@
-﻿namespace HomeCloud.IdentityService.Business.Entities
+﻿namespace HomeCloud.IdentityService.Business.Entities.Membership
 {
 	/// <summary>
 	/// Represents enumeration of user roles.

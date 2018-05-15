@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Entities\HomeCloud.IdentityService.Business.Entities.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Services.Abstractions\HomeCloud.IdentityService.Business.Services.Abstractions.csproj" />
   </ItemGroup>

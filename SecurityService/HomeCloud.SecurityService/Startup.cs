@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using IdentityServer4.Models;
 
 namespace HomeCloud.SecurityService
 {
@@ -24,8 +25,9 @@ namespace HomeCloud.SecurityService
             {
                 app.UseDeveloperExceptionPage();
             }
+			GrantTypes.HybridAndClientCredentials
 
-            app.Run(async (context) =>
+			app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello World!");
             });

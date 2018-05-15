@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\HomeCloud.Core\HomeCloud.Core.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Entities\HomeCloud.IdentityService.Business.Entities.csproj" />
   </ItemGroup>
 

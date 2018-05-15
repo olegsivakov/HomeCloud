@@ -27,25 +27,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.DependencyInjecti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessComponents", "BusinessComponents", "{88E5BA03-4275-4ED1-8CCF-1E23DABB228F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Stores", "HomeCloud.IdentityService.Stores\HomeCloud.IdentityService.Stores.csproj", "{671D0B93-2797-49F4-99C3-FEAC50F77D65}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Stores.Converters", "HomeCloud.IdentityService.Stores.Converters\HomeCloud.IdentityService.Stores.Converters.csproj", "{367CB1B6-BF72-4D56-B789-04CEC1412CE1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mapping", "..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj", "{87FE39AA-148A-4C65-9E93-3C56E04B2F03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Core.Extensions", "..\Common\Extensions\HomeCloud.Core.Extensions\HomeCloud.Core.Extensions.csproj", "{911F802D-A6D8-43D3-9717-8C792BA88935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Providers.Abstractions", "HomeCloud.IdentityService.Business.Providers.Abstractions\HomeCloud.IdentityService.Business.Providers.Abstractions.csproj", "{E58F1A24-ED01-4D45-B878-4993EDA979C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Providers.Abstractions", "HomeCloud.IdentityService.Business.Providers.Abstractions\HomeCloud.IdentityService.Business.Providers.Abstractions.csproj", "{E58F1A24-ED01-4D45-B878-4993EDA979C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Providers", "HomeCloud.IdentityService.Business.Providers\HomeCloud.IdentityService.Business.Providers.csproj", "{98B8D2F9-BF66-4060-B70A-4EFECD988FC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Providers", "HomeCloud.IdentityService.Business.Providers\HomeCloud.IdentityService.Business.Providers.csproj", "{98B8D2F9-BF66-4060-B70A-4EFECD988FC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Services.Abstractions", "HomeCloud.IdentityService.Business.Services.Abstractions\HomeCloud.IdentityService.Business.Services.Abstractions.csproj", "{4C4CEBEF-57E0-40BF-9122-18DE1E37DB20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Services.Abstractions", "HomeCloud.IdentityService.Business.Services.Abstractions\HomeCloud.IdentityService.Business.Services.Abstractions.csproj", "{4C4CEBEF-57E0-40BF-9122-18DE1E37DB20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Services", "HomeCloud.IdentityService.Business.Services\HomeCloud.IdentityService.Business.Services.csproj", "{4C28FB81-5DC6-4E26-9C4B-92E7087F2D4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Services", "HomeCloud.IdentityService.Business.Services\HomeCloud.IdentityService.Business.Services.csproj", "{4C28FB81-5DC6-4E26-9C4B-92E7087F2D4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Entities", "HomeCloud.IdentityService.Business.Entities\HomeCloud.IdentityService.Business.Entities.csproj", "{0C3840A5-22CF-4C3D-9CCA-FC557F410D7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Entities", "HomeCloud.IdentityService.Business.Entities\HomeCloud.IdentityService.Business.Entities.csproj", "{0C3840A5-22CF-4C3D-9CCA-FC557F410D7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Entities.Converters", "HomeCloud.IdentityService.Business.Entities.Converters\HomeCloud.IdentityService.Business.Entities.Converters.csproj", "{0003F967-5A13-4064-9813-941DC23F803A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Entities.Converters", "HomeCloud.IdentityService.Business.Entities.Converters\HomeCloud.IdentityService.Business.Entities.Converters.csproj", "{0003F967-5A13-4064-9813-941DC23F803A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Validation", "..\Common\HomeCloud.Validation\HomeCloud.Validation.csproj", "{023139B1-BC8B-48C3-AAAC-DDB1E4417CDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Api.Models", "HomeCloud.IdentityService.Api.Models\HomeCloud.IdentityService.Api.Models.csproj", "{7B336D4C-CEC9-4549-8FAA-4C77B8D1ACA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Api.Models.Converters", "HomeCloud.IdentityService.Api.Models.Converters\HomeCloud.IdentityService.Api.Models.Converters.csproj", "{BEBF0F19-4A29-43EA-8166-9BF626288A41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Models", "..\Common\Mvc\HomeCloud.Mvc.Models\HomeCloud.Mvc.Models.csproj", "{FFC78DA8-22C4-43CE-9BD0-3F097B267992}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,14 +93,6 @@ Global
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{671D0B93-2797-49F4-99C3-FEAC50F77D65}.Release|Any CPU.Build.0 = Release|Any CPU
-		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{367CB1B6-BF72-4D56-B789-04CEC1412CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87FE39AA-148A-4C65-9E93-3C56E04B2F03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87FE39AA-148A-4C65-9E93-3C56E04B2F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87FE39AA-148A-4C65-9E93-3C56E04B2F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -129,6 +125,22 @@ Global
 		{0003F967-5A13-4064-9813-941DC23F803A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0003F967-5A13-4064-9813-941DC23F803A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0003F967-5A13-4064-9813-941DC23F803A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{023139B1-BC8B-48C3-AAAC-DDB1E4417CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{023139B1-BC8B-48C3-AAAC-DDB1E4417CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{023139B1-BC8B-48C3-AAAC-DDB1E4417CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{023139B1-BC8B-48C3-AAAC-DDB1E4417CDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B336D4C-CEC9-4549-8FAA-4C77B8D1ACA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B336D4C-CEC9-4549-8FAA-4C77B8D1ACA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B336D4C-CEC9-4549-8FAA-4C77B8D1ACA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B336D4C-CEC9-4549-8FAA-4C77B8D1ACA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEBF0F19-4A29-43EA-8166-9BF626288A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEBF0F19-4A29-43EA-8166-9BF626288A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEBF0F19-4A29-43EA-8166-9BF626288A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEBF0F19-4A29-43EA-8166-9BF626288A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC78DA8-22C4-43CE-9BD0-3F097B267992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC78DA8-22C4-43CE-9BD0-3F097B267992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC78DA8-22C4-43CE-9BD0-3F097B267992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC78DA8-22C4-43CE-9BD0-3F097B267992}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,8 +153,6 @@ Global
 		{338250D5-8A3F-47F4-B905-E74622805B40} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{D1C0837C-EBFE-442A-A05E-07084CD0F9FF} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{5F469DC0-C928-4DBA-BF8D-8D2F63A3F09F} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
-		{671D0B93-2797-49F4-99C3-FEAC50F77D65} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
-		{367CB1B6-BF72-4D56-B789-04CEC1412CE1} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
 		{87FE39AA-148A-4C65-9E93-3C56E04B2F03} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{911F802D-A6D8-43D3-9717-8C792BA88935} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{E58F1A24-ED01-4D45-B878-4993EDA979C0} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
@@ -151,6 +161,8 @@ Global
 		{4C28FB81-5DC6-4E26-9C4B-92E7087F2D4A} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
 		{0C3840A5-22CF-4C3D-9CCA-FC557F410D7D} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
 		{0003F967-5A13-4064-9813-941DC23F803A} = {88E5BA03-4275-4ED1-8CCF-1E23DABB228F}
+		{023139B1-BC8B-48C3-AAAC-DDB1E4417CDE} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
+		{FFC78DA8-22C4-43CE-9BD0-3F097B267992} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1BF0BFA-F2D3-4408-A875-9C702A554864}

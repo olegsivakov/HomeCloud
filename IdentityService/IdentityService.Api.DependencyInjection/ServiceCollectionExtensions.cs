@@ -8,13 +8,8 @@
 
 	using HomeCloud.IdentityService.DataAccess;
 	using HomeCloud.IdentityService.DataAccess.Objects;
-	using HomeCloud.IdentityService.Stores;
-	using HomeCloud.IdentityService.Stores.Converters;
 
 	using HomeCloud.Mapping;
-
-	using IdentityServer4.Models;
-	using IdentityServer4.Stores;
 
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
@@ -46,31 +41,6 @@
 			.AddRepository<IApiResourceDocumentRepository, ApiResourceDocumentRepository>()
 			.AddRepository<IIdentityResourceDocumentRepository, IdentityResourceDocumentRepository>()
 			.AddRepository<IGrantDocumentRepository, GrantDocumentRepository>();
-
-			return services;
-		}
-
-		/// <summary>
-		/// Adds the identity configuration storage to the service collection.
-		/// </summary>
-		/// <param name="services">The services.</param>
-		/// <returns></returns>
-		public static IServiceCollection AddResourceStore(this IServiceCollection services)
-		{
-			services.AddScoped<IResourceStore, ResourceStore>();
-			services.AddScoped<IClientStore, ClientStore>();
-
-			return services;
-		}
-
-		/// <summary>
-		/// Adds the identity grant storage to the service collection.
-		/// </summary>
-		/// <param name="services">The services.</param>
-		/// <returns></returns>
-		public static IServiceCollection AddGrantStore(this IServiceCollection services)
-		{
-			services.AddScoped<IPersistedGrantStore, PersistedGrantStore>();
 
 			return services;
 		}

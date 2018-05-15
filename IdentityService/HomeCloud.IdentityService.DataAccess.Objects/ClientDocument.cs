@@ -40,14 +40,14 @@
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the grant types.
+		/// Gets or sets the grant type enumeration value.
 		/// </summary>
 		/// <value>
-		/// The grant types.
+		/// The grant type enumeration value.
 		/// </value>
-		[BsonElement("grant_types")]
+		[BsonElement("grant_type")]
 		[BsonRequired]
-		public IEnumerable<string> GrantTypes { get; set; }
+		public int GrantType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the scopes.
@@ -79,13 +79,22 @@
 		public IEnumerable<string> Origins { get; set; }
 
 		/// <summary>
+		/// Gets or sets the grants.
+		/// </summary>
+		/// <value>
+		/// The grants.
+		/// </value>
+		[BsonElement("grants")]
+		public IEnumerable<GrantDocument> Grants { get; set; }
+
+		/// <summary>
 		/// Gets or sets the redirect uris.
 		/// </summary>
 		/// <value>
 		/// The redirect uris.
 		/// </value>
-		[BsonElement("redirect_urls")]
-		public IEnumerable<string> RedirectUris { get; set; }
+		[BsonElement("redirect_url")]
+		public string RedirectUrl { get; set; }
 
 		/// <summary>
 		/// Gets or sets the post logout redirect uris.
@@ -93,8 +102,8 @@
 		/// <value>
 		/// The post logout redirect uris.
 		/// </value>
-		[BsonElement("post_logout_redirect_urls")]
-		public IEnumerable<string> PostLogoutRedirectUris { get; set; }
+		[BsonElement("post_logout_redirect_url")]
+		public string PostLogoutRedirectUrl { get; set; }
 
 		/// <summary>
 		/// Gets or sets the identity token lifetime.
