@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IdentityService.Api.DependencyInjection\IdentityService.Api.DependencyInjection.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.Api.DependencyInjection\HomeCloud.IdentityService.Api.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

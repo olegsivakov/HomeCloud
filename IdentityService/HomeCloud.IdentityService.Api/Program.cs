@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Api
+﻿namespace HomeCloud.IdentityService.Api
 {
 	#region Usings
 

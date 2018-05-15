@@ -1,10 +1,10 @@
-﻿namespace IdentityService.Api
+﻿namespace HomeCloud.IdentityService.Api
 {
 	#region Usings
 
 	using System;
 
-	using IdentityService.Api.DependencyInjection;
+	using HomeCloud.IdentityService.Api.DependencyInjection;
 
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;

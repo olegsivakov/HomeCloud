@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Api.DependencyInjection
+﻿namespace HomeCloud.IdentityService.Api.DependencyInjection
 {
 	#region Usings
 

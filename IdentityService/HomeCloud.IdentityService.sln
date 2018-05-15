@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Api", "IdentityService.Api\IdentityService.Api.csproj", "{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Api", "HomeCloud.IdentityService.Api\HomeCloud.IdentityService.Api.csproj", "{AEE2F8AC-89DC-4423-B0CC-B5E0B0D1AD3B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService.Api.DependencyInjection", "IdentityService.Api.DependencyInjection\IdentityService.Api.DependencyInjection.csproj", "{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Api.DependencyInjection", "HomeCloud.IdentityService.Api.DependencyInjection\HomeCloud.IdentityService.Api.DependencyInjection.csproj", "{89E1E046-63C5-4D98-8FF1-41F9EE7445CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{704798B5-6532-4657-B12D-C9CDB6D26B87}"
 EndProject
