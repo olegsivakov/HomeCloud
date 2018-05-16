@@ -1,5 +1,7 @@
 ﻿namespace HomeCloud.IdentityService.DataAccess
 {
+	using System;
+	using System.Threading.Tasks;
 	#region Usings
 
 	using HomeCloud.Data.MongoDB;
@@ -29,7 +31,68 @@
 
 		#endregion
 
+		#region IGrantDocumentRepository Implementations
+
+		public async Task<GrantDocument> GetAsync(string id)
+		{
+			FilterDefinition<GrantDocument> filter = this.GetUniqueFilterDefinition(id);
+
+			IAsyncCursor<GrantDocument> cursor = await this.CurrentCollection.FindAsync(
+				filter,
+				new FindOptions<GrantDocument>()
+				{
+					Skip = 0,
+					Limit = 1
+				});
+
+			return await cursor.FirstOrDefaultAsync();
+		}
+
+		/// <summary>
+		/// Deletes the record by specified unique identifier.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		public async Task DeleteAsync(string id)
+		{
+			FilterDefinition<GrantDocument> filter = this.GetUniqueFilterDefinition(id);
+
+			await this.CurrentCollection.DeleteOneAsync(filter);
+		}
+
+		#endregion
+
 		#region MongoDBRepository<GrantDocument> Implementations
+
+		/// <summary>
+		/// Gets the entity of <see cref="!:T" /> by specified unique identifier asynchronously.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>
+		/// The instance of <see cref="!:T" /> type.
+		/// </returns>
+		/// <exception cref="System.NotSupportedException">The method is not supported due to a type of identifier.</exception>
+		public override async Task<GrantDocument> GetAsync(Guid id)
+		{
+			await Task.FromException(new NotSupportedException("The method is not supported due to a type of identifier."));
+
+			return null;
+		}
+
+		/// <summary>
+		/// Deletes the record by specified unique identifier.
+		/// </summary>
+		/// <param name="id">The unique identifier.</param>
+		/// <returns>
+		/// The asynchronous operation.
+		/// </returns>
+		/// <exception cref="System.NotSupportedException">The method is not supported due to a type of identifier.</exception>
+		public override async Task DeleteAsync(Guid id)
+		{
+			await Task.FromException(new NotSupportedException("The method is not supported due to a type of identifier."));
+		}
 
 		/// <summary>
 		/// Gets the <see cref="T:System.Linq.Expressions.Expression" />-based <see cref="N:HomeCloud.Data.MongoDB" /> filter definition for <see cref="!:T" /> entity that have unique identifier attribute.

@@ -5,7 +5,11 @@
 	using HomeCloud.Core;
 
 	using HomeCloud.Data.MongoDB;
-
+	using HomeCloud.DependencyInjection;
+	using HomeCloud.IdentityService.Business.Entities;
+	using HomeCloud.IdentityService.Business.Entities.Applications;
+	using HomeCloud.IdentityService.Business.Entities.Membership;
+	using HomeCloud.IdentityService.Business.Validation;
 	using HomeCloud.IdentityService.DataAccess;
 	using HomeCloud.IdentityService.DataAccess.Objects;
 
@@ -55,10 +59,14 @@
 			services.AddMapper();
 
 			services.AddTypeConverter<ITypeConverter<ClientDocument, Client>, ClientConverter>();
+			services.AddTypeConverter<ITypeConverter<Client, ClientDocument>, ClientConverter>();
 			services.AddTypeConverter<ITypeConverter<ApiResourceDocument, ApiResource>, ApiResourceConverter>();
-			services.AddTypeConverter<ITypeConverter<IdentityResourceDocument, IdentityResource>, IdentityResourceConverter>();
-			services.AddTypeConverter<ITypeConverter<GrantDocument, PersistedGrant>, PersistedGrantConverter>();
-			services.AddTypeConverter<ITypeConverter<PersistedGrant, GrantDocument>, PersistedGrantConverter>();
+			services.AddTypeConverter<ITypeConverter<ApiResource, ApiResourceDocument>, ApiResourceConverter>();
+			services.AddTypeConverter<ITypeConverter<ApiResource, ApiResourceDocument>, ApiResourceConverter>();
+			services.AddTypeConverter<ITypeConverter<GrantDocument, Grant>, PersistedGrantConverter>();
+			services.AddTypeConverter<ITypeConverter<Grant, GrantDocument>, PersistedGrantConverter>();
+			services.AddTypeConverter<ITypeConverter<UserDocument, User>, PersistedGrantConverter>();
+			services.AddTypeConverter<ITypeConverter<User, UserDocument>, PersistedGrantConverter>();
 
 			return services;
 		}
@@ -70,6 +78,17 @@
 		/// <returns>The instance of <see cref="IServiceCollection"/>.</returns>
 		public static IServiceCollection AddIdentityServices(this IServiceCollection services)
 		{
+			services.AddTransient<IPresenceValidator, PresenceValidator>();
+			services.AddTransient<IUniqueValidator, UniqueValidator>();
+			services.AddTransient<IRequiredValidator, RequiredValidator>();
+
+			services.AddFactory<IClientValidator>();
+			services.AddFactory<IApiResourceValidator>();
+			services.AddFactory<IGrantValidator>();
+			services.AddFactory<IUserValidator>();
+
+			services.AddScoped<IValidationServiceFactory, ValidationServiceFactory>();
+
 			return services;
 		}
 

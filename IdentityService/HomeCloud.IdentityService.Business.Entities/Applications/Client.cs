@@ -7,6 +7,14 @@
 	public class Client : Application
 	{
 		/// <summary>
+		/// Gets or sets the type of the grant.
+		/// </summary>
+		/// <value>
+		/// The type of the grant.
+		/// </value>
+		public GrantType GrantType { get; set; }
+
+		/// <summary>
 		/// Gets or sets the redirect uris.
 		/// </summary>
 		/// <value>

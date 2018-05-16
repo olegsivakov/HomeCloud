@@ -25,7 +25,7 @@
 		/// <value>
 		/// The type.
 		/// </value>
-		public GrantType Type { get; set; }
+		public string Type { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user identifier.
@@ -33,7 +33,7 @@
 		/// <value>
 		/// The user identifier.
 		/// </value>
-		public string UserID { get; set; }
+		public Guid UserID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the client application identifier.
@@ -41,7 +41,7 @@
 		/// <value>
 		/// The client application identifier.
 		/// </value>
-		public string ClientID { get; set; }
+		public Guid ClientID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation time.

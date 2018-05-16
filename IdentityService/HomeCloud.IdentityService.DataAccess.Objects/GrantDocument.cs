@@ -46,7 +46,7 @@
 		/// </value>
 		[BsonElement("subjectId")]
 		[BsonRequired]
-		public string SubjectID { get; set; }
+		public Guid? SubjectID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the client identifier.
@@ -56,7 +56,7 @@
 		/// </value>
 		[BsonElement("clientId")]
 		[BsonRequired]
-		public string ClientID { get; set; }
+		public Guid ClientID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation time.

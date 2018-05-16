@@ -13,6 +13,11 @@
 	public enum GrantType
 	{
 		/// <summary>
+		/// The unknown grant type.
+		/// </summary>
+		Unknown = 0,
+
+		/// <summary>
 		/// The authorization code grant.
 		/// </summary>
 		Code = 1,
