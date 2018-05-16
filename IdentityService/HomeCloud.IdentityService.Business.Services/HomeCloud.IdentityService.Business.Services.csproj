@@ -9,6 +9,8 @@
     <ProjectReference Include="..\..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Entities\HomeCloud.IdentityService.Business.Entities.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Services.Abstractions\HomeCloud.IdentityService.Business.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.Business.Validation.Abstractions\HomeCloud.IdentityService.Business.Validation.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.DataAccess.Abstractions\HomeCloud.IdentityService.DataAccess.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

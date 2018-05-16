@@ -68,8 +68,8 @@
 		public async Task<ValidationResult> ValidateAsync(Grant instance)
 		{
 			this.If(obj => instance.ClientID == Guid.Empty).AddError("The client application identifier of the specified grant is empty.");
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Type)).AddError("The type of the specified grant is empty.");
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Data)).AddError("The data of the specified grant is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Type)).AddError("The grant type is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Data)).AddError("The grant data is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}
@@ -81,8 +81,8 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(User instance)
 		{
-			this.If(obj => string.IsNullOrWhiteSpace(instance.Username)).AddError("The specified username is empty.");
-			this.If(obj => instance.Role == Role.Anonymous).AddError("The user is anonymous.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Username)).AddError("The username is empty.");
+			this.If(obj => string.IsNullOrWhiteSpace(instance.Password)).AddError("The password is empty.");
 
 			return await this.ValidateAsync((object)instance);
 		}

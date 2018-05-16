@@ -94,7 +94,15 @@
 		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
 		public async Task<ValidationResult> ValidateAsync(User instance)
 		{
-			this.If(async id => (await this.repositoryFactory.GetService<IUserDocumentRepository>().GetAsync(id)) is null).AddError(new NotFoundException("Specified user does not exist."));
+			if (instance.ID != Guid.Empty)
+			{
+				this.If(async id => (await this.repositoryFactory.GetService<IUserDocumentRepository>().GetAsync(id)) is null).AddError(new NotFoundException("Specified user does not exist."));
+			}
+
+			if (!string.IsNullOrWhiteSpace(instance.Username))
+			{
+				this.If(async id => (await this.repositoryFactory.GetService<IUserDocumentRepository>().GetAsync(instance.Username)) is null).AddError(new NotFoundException("Specified user does not exist."));
+			}
 
 			return await this.ValidateAsync(Guid.Empty);
 		}
