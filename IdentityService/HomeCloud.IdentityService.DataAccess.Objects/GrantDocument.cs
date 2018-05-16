@@ -44,9 +44,9 @@
 		/// <value>
 		/// The subject identifier.
 		/// </value>
-		[BsonElement("subjectId")]
+		[BsonElement("userId")]
 		[BsonRequired]
-		public Guid? SubjectID { get; set; }
+		public Guid? UserID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the client identifier.

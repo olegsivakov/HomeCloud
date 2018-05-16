@@ -131,6 +131,7 @@
 		}
 
 		#endregion
+
 		#region ITypeConverter<CatalogEntry, CatalogEntry> Implementations
 
 		/// <summary>

@@ -33,7 +33,7 @@
 		/// <value>
 		/// The user identifier.
 		/// </value>
-		public Guid UserID { get; set; }
+		public Guid? UserID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the client application identifier.

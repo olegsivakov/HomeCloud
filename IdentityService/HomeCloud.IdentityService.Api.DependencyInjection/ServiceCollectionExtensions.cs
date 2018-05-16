@@ -8,6 +8,7 @@
 	using HomeCloud.DependencyInjection;
 	using HomeCloud.IdentityService.Business.Entities;
 	using HomeCloud.IdentityService.Business.Entities.Applications;
+	using HomeCloud.IdentityService.Business.Entities.Converters;
 	using HomeCloud.IdentityService.Business.Entities.Membership;
 	using HomeCloud.IdentityService.Business.Validation;
 	using HomeCloud.IdentityService.DataAccess;
@@ -60,13 +61,16 @@
 
 			services.AddTypeConverter<ITypeConverter<ClientDocument, Client>, ClientConverter>();
 			services.AddTypeConverter<ITypeConverter<Client, ClientDocument>, ClientConverter>();
+			services.AddTypeConverter<ITypeConverter<Client, Client>, ClientConverter>();
 			services.AddTypeConverter<ITypeConverter<ApiResourceDocument, ApiResource>, ApiResourceConverter>();
 			services.AddTypeConverter<ITypeConverter<ApiResource, ApiResourceDocument>, ApiResourceConverter>();
-			services.AddTypeConverter<ITypeConverter<ApiResource, ApiResourceDocument>, ApiResourceConverter>();
-			services.AddTypeConverter<ITypeConverter<GrantDocument, Grant>, PersistedGrantConverter>();
-			services.AddTypeConverter<ITypeConverter<Grant, GrantDocument>, PersistedGrantConverter>();
-			services.AddTypeConverter<ITypeConverter<UserDocument, User>, PersistedGrantConverter>();
-			services.AddTypeConverter<ITypeConverter<User, UserDocument>, PersistedGrantConverter>();
+			services.AddTypeConverter<ITypeConverter<ApiResource, ApiResource>, ApiResourceConverter>();
+			services.AddTypeConverter<ITypeConverter<GrantDocument, Grant>, GrantConverter>();
+			services.AddTypeConverter<ITypeConverter<Grant, GrantDocument>, GrantConverter>();
+			services.AddTypeConverter<ITypeConverter<Grant, Grant>, GrantConverter>();
+			services.AddTypeConverter<ITypeConverter<UserDocument, User>, UserConverter>();
+			services.AddTypeConverter<ITypeConverter<User, UserDocument>, UserConverter>();
+			services.AddTypeConverter<ITypeConverter<User, User>, UserConverter>();
 
 			return services;
 		}

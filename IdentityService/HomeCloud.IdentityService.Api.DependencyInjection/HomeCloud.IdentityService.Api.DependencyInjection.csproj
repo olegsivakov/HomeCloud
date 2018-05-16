@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Data\HomeCloud.Data.MongoDB\HomeCloud.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\Common\HomeCloud.Mapping\HomeCloud.Mapping.csproj" />
+    <ProjectReference Include="..\HomeCloud.IdentityService.Business.Entities.Converters\HomeCloud.IdentityService.Business.Entities.Converters.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Validation.Abstractions\HomeCloud.IdentityService.Business.Validation.Abstractions.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Business.Validation\HomeCloud.IdentityService.Business.Validation.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.DataAccess.Abstractions\HomeCloud.IdentityService.DataAccess.Abstractions.csproj" />

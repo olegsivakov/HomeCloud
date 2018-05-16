@@ -12,6 +12,8 @@
 	using HomeCloud.DataStorage.Business.Providers;
 	using HomeCloud.DataStorage.Business.Validation;
 
+	using HomeCloud.Mapping;
+	using HomeCloud.Mapping.Extensions;
 	using HomeCloud.Validation;
 
 	#endregion
@@ -23,6 +25,11 @@
 	public class StorageService : IStorageService
 	{
 		#region Private Members
+
+		/// <summary>
+		/// The mapper
+		/// </summary>
+		private readonly IMapper mapper = null;
 
 		/// <summary>
 		/// The data factory
@@ -44,9 +51,11 @@
 		/// <param name="dataFactory">The data factory.</param>
 		/// <param name="validationServiceFactory">The service factory of validators.</param>
 		public StorageService(
+			IMapper mapper,
 			IDataProviderFactory dataFactory,
 			IValidationServiceFactory validationServiceFactory)
 		{
+			this.mapper = mapper;
 			this.dataFactory = dataFactory;
 			this.validationServiceFactory = validationServiceFactory;
 		}
@@ -102,17 +111,21 @@
 		{
 			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
+				ServiceResult<Storage> serviceResult = await this.GetStorageAsync(storage.ID);
+				if (!serviceResult.IsSuccess)
+				{
+					return serviceResult;
+				}
+
+				this.mapper.Merge(serviceResult.Data, storage);
+
 				IServiceFactory<IStorageValidator> validator = this.validationServiceFactory.GetFactory<IStorageValidator>();
-
-				ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(storage);
-				result += await validator.Get<IUniqueValidator>().ValidateAsync(storage);
-
+				ValidationResult result = await validator.Get<IUniqueValidator>().ValidateAsync(storage);
 				if (!result.IsValid)
 				{
-					return new ServiceResult<Storage>(storage)
-					{
-						Errors = result.Errors
-					};
+					serviceResult.Errors = result.Errors;
+
+					return serviceResult;
 				}
 
 				storage = await this.dataFactory.UpdateStorage(storage);
