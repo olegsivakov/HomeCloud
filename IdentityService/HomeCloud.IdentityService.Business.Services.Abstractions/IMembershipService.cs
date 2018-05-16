@@ -43,9 +43,9 @@
 		/// <summary>
 		/// Deletes the <paramref name="user"/>.
 		/// </summary>
-		/// <param name="user">The user to delete.</param>
+		/// <param name="user">The user identifier.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<User>> DeleteUserAsync(User user);
+		Task<ServiceResult<User>> DeleteUserAsync(Guid id);
 
 		/// <summary>
 		/// Gets the user by specified user identifier.

@@ -105,14 +105,63 @@
 			return new ServiceResult<User>(user);
 		}
 
-		public Task<ServiceResult<User>> DeleteUserAsync(User user)
+		/// <summary>
+		/// Deletes the user.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns>The result of execution of service operation.</returns>
+		public async Task<ServiceResult<User>> DeleteUserAsync(Guid id)
 		{
-			throw new NotImplementedException();
+			User user = new User()
+			{
+				ID = id
+			};
+
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+			{
+				ServiceResult<User> serviceResult = await this.GetUserAsync(id);
+				if (!serviceResult.IsSuccess)
+				{
+					return serviceResult;
+				}
+
+				user = serviceResult.Data;
+
+				await this.repositoryFactory.Get<IUserDocumentRepository>().DeleteAsync(user.ID);
+
+				scope.Complete();
+			}
+
+			return new ServiceResult<User>(user);
 		}
 
-		public Task<ServiceResult<IPaginable<User>>> FindUsersAsync(User criteria, int offset = 0, int limit = 20)
+		/// <summary>
+		/// Searches for the list of users by specified search <paramref name="criteria" />.
+		/// </summary>
+		/// <param name="criteria"></param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		public async Task<ServiceResult<IPaginable<User>>> FindUsersAsync(User criteria, int offset = 0, int limit = 20)
 		{
-			throw new NotImplementedException();
+			IPaginable<UserDocument> documents = await this.repositoryFactory.GetService<IUserDocumentRepository>().FindAsync(item =>
+				string.IsNullOrWhiteSpace(criteria.Username) | item.Username.Trim().Contains(criteria.Username.Trim().ToLower())
+				&&
+				string.IsNullOrWhiteSpace(criteria.FirstName) | item.FirstName.Trim().Contains(criteria.FirstName.Trim().ToLower())
+				&&
+				string.IsNullOrWhiteSpace(criteria.LastName) | item.LastName.Trim().Contains(criteria.LastName.Trim().ToLower()), offset, limit);
+
+			IEnumerable<User> users = this.mapper.MapNew<UserDocument, User>(documents);
+			IPaginable<User> result = new PagedList<User>(users)
+			{
+				Offset = documents.Offset,
+				Limit = documents.Limit,
+				TotalCount = documents.TotalCount,
+			};
+
+			return new ServiceResult<IPaginable<User>>(result);
 		}
 
 		/// <summary>
@@ -128,6 +177,13 @@
 			return await Task.FromResult(new ServiceResult<IDictionary<int, string>>(result));
 		}
 
+		/// <summary>
+		/// Gets the user by specified user identifier.
+		/// </summary>
+		/// <param name="id">The user identifier.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
 		public async Task<ServiceResult<User>> GetUserAsync(Guid id)
 		{
 			User user = new User()
@@ -152,6 +208,13 @@
 			return new ServiceResult<User>(user);
 		}
 
+		/// <summary>
+		/// Gets the user by specified <paramref name="username" />.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
 		public async Task<ServiceResult<User>> GetUserAsync(string username)
 		{
 			User user = new User()
