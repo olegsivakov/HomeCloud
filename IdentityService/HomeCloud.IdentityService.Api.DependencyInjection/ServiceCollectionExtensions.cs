@@ -44,8 +44,7 @@
 			.AddRepository<IUserDocumentRepository, UserDocumentRepository>()
 			.AddRepository<IClientDocumentRepository, ClientDocumentRepository>()
 			.AddRepository<IApiResourceDocumentRepository, ApiResourceDocumentRepository>()
-			.AddRepository<IIdentityResourceDocumentRepository, IdentityResourceDocumentRepository>()
-			.AddRepository<IGrantDocumentRepository, GrantDocumentRepository>();
+			.AddRepository<IIdentityResourceDocumentRepository, IdentityResourceDocumentRepository>();
 
 			return services;
 		}

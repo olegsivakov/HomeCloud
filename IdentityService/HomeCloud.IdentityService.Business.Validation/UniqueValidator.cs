@@ -11,7 +11,6 @@
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.Exceptions;
 
-	using HomeCloud.IdentityService.Business.Entities;
 	using HomeCloud.IdentityService.Business.Entities.Applications;
 	using HomeCloud.IdentityService.Business.Entities.Membership;
 
@@ -92,26 +91,6 @@
 			}
 
 			return await this.ValidateAsync(instance.ID);
-		}
-
-		/// <summary>
-		/// Validates the specified instance of <see cref="Grant"/> type.
-		/// </summary>
-		/// <param name="instance">The instance to validate.</param>
-		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		public async Task<ValidationResult> ValidateAsync(Grant instance)
-		{
-			if (instance.ClientID != Guid.Empty && !string.IsNullOrWhiteSpace(instance.Type) && !string.IsNullOrWhiteSpace(instance.Data))
-			{
-				this.If(async id =>
-				{
-					IEnumerable<GrantDocument> documents = await this.repositoryFactory.GetService<IGrantDocumentRepository>().FindAsync(item => item.ClientID == instance.ClientID && item.Type == instance.Type && item.Data == instance.Data, 0, 1);
-
-					return documents.Any();
-				}).AddError(new AlreadyExistsException("Grant for specified ClientID with specified type and data already exists."));
-			}
-
-			return await this.ValidateAsync(Guid.Empty);
 		}
 
 		/// <summary>

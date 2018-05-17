@@ -39,10 +39,10 @@
 		public string Type { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subject identifier.
+		/// Gets or sets the user identifier.
 		/// </summary>
 		/// <value>
-		/// The subject identifier.
+		/// The user identifier.
 		/// </value>
 		[BsonElement("userId")]
 		[BsonRequired]
@@ -54,8 +54,7 @@
 		/// <value>
 		/// The client identifier.
 		/// </value>
-		[BsonElement("clientId")]
-		[BsonRequired]
+		[BsonIgnore]
 		public Guid ClientID { get; set; }
 
 		/// <summary>

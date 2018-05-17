@@ -9,7 +9,6 @@
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.Exceptions;
 
-	using HomeCloud.IdentityService.Business.Entities;
 	using HomeCloud.IdentityService.Business.Entities.Applications;
 	using HomeCloud.IdentityService.Business.Entities.Membership;
 
@@ -73,18 +72,6 @@
 			this.If(async id => (await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().GetAsync(id)) is null).AddError(new NotFoundException("Specified api resource does not exist."));
 
 			return await this.ValidateAsync(instance.ID);
-		}
-
-		/// <summary>
-		/// Validates the specified instance of <see cref="Grant"/> type.
-		/// </summary>
-		/// <param name="instance">The instance to validate.</param>
-		/// <returns>The instance of <see cref="ValidationResult"/> indicating whether the specified instance is valid and containing the detailed message about the validation result.</returns>
-		public async Task<ValidationResult> ValidateAsync(Grant instance)
-		{
-			this.If(async id => (await this.repositoryFactory.GetService<IGrantDocumentRepository>().GetAsync(instance.ID)) is null).AddError(new NotFoundException("Specified grant does not exist."));
-
-			return await this.ValidateAsync(Guid.Empty);
 		}
 
 		/// <summary>

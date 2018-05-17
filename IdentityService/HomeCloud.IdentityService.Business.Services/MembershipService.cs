@@ -4,22 +4,23 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
+	using System.Transactions;
 
 	using HomeCloud.Core;
 	using HomeCloud.Data.MongoDB;
 
-	using HomeCloud.IdentityService.Business.Entities;
 	using HomeCloud.IdentityService.Business.Entities.Membership;
-
-	using HomeCloud.Mapping;
-	using System.Transactions;
 	using HomeCloud.IdentityService.Business.Validation;
-	using HomeCloud.Validation;
+
 	using HomeCloud.IdentityService.DataAccess;
 	using HomeCloud.IdentityService.DataAccess.Objects;
+
+	using HomeCloud.Mapping;
 	using HomeCloud.Mapping.Extensions;
-	using System.Linq;
+
+	using HomeCloud.Validation;
 
 	#endregion
 
@@ -248,8 +249,6 @@
 		/// </returns>
 		public async Task<ServiceResult<User>> UpdateUserAsync(User user)
 		{
-			user.Username = null;
-
 			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
 				ServiceResult<User> serviceResult = await this.GetUserAsync(user.ID);
@@ -258,6 +257,7 @@
 					return serviceResult;
 				}
 
+				user.Username = null;
 				this.mapper.Merge(serviceResult.Data, user);
 
 				UserDocument document = this.mapper.MapNew<User, UserDocument>(user);

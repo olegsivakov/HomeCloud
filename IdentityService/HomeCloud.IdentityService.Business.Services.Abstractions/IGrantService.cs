@@ -23,11 +23,15 @@
 		Task<ServiceResult<IDictionary<int, string>>> GetGrantTypes();
 
 		/// <summary>
-		/// Gets the list of client application grants by specified search <paramref name="criteria"/>.
+		/// Gets the list of client application grants by specified search <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">The <see cref="Grant"/> search criteria.</param>
-		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<IPaginable<Grant>>> FindGrants(Grant criteria);
+		/// <param name="criteria">The <see cref="Grant" /> search criteria.</param>
+		/// <param name="offset">The offset index.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		Task<ServiceResult<IPaginable<Grant>>> FindGrants(Grant criteria, int offset = 0, int limit = 20);
 
 		/// <summary>
 		/// Gets the grant by specified grant identifier.
@@ -44,10 +48,10 @@
 		Task<ServiceResult<Grant>> SaveGrant(Grant grant);
 
 		/// <summary>
-		/// Deletes the <paramref name="grants"/> of client application specified by client application identifier.
+		/// Deletes the list of <paramref name="grants"/>.
 		/// </summary>
 		/// <param name="grant">The grant collection to delete.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<IPaginable<Grant>>> DeleteGrants(Guid clientID, IEnumerable<Grant> grants);
+		Task<ServiceResult<IEnumerable<Grant>>> DeleteGrants(IEnumerable<Grant> grants);
 	}
 }

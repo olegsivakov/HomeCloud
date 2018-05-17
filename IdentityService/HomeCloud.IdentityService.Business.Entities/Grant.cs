@@ -36,10 +36,10 @@
 		public Guid? UserID { get; set; }
 
 		/// <summary>
-		/// Gets or sets the client application identifier.
+		/// Gets or sets the client identifier.
 		/// </summary>
 		/// <value>
-		/// The client application identifier.
+		/// The client identifier.
 		/// </value>
 		public Guid ClientID { get; set; }
 
