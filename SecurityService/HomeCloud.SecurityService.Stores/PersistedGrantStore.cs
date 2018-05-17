@@ -66,6 +66,7 @@
 		/// <returns></returns>
 		public async Task<IEnumerable<PersistedGrant>> GetAllAsync(string subjectId)
 		{
+			//identity.localhost/users/{id}/grants GET
 			IGrantDocumentRepository repository = this.repositoryFactory.GetService<IGrantDocumentRepository>();
 			IEnumerable<GrantDocument> documents = await repository.FindAllAsync(item => item.SubjectID == subjectId);
 
@@ -79,6 +80,7 @@
 		/// <returns></returns>
 		public async Task<PersistedGrant> GetAsync(string key)
 		{
+			//identity.localhost/grants/{id} GET
 			GrantDocument document = (await this.repositoryFactory.GetService<IGrantDocumentRepository>().FindAsync(item => item.ID == key)).FirstOrDefault();
 
 			return this.mapper.MapNew<GrantDocument, PersistedGrant>(document);
@@ -92,6 +94,7 @@
 		/// <returns></returns>
 		public async Task RemoveAllAsync(string subjectId, string clientId)
 		{
+			//identity.localhost/grants/clientId=<value>&userId=<value> DELETE
 			await this.repositoryFactory.GetService<IGrantDocumentRepository>().DeleteAsync(item => item.SubjectID == subjectId && item.ClientID == clientId);
 		}
 
@@ -104,6 +107,7 @@
 		/// <returns></returns>
 		public async Task RemoveAllAsync(string subjectId, string clientId, string type)
 		{
+			//identity.localhost/grants/clientId=<value>&userId=<value>&type=<value> DELETE
 			await this.repositoryFactory.GetService<IGrantDocumentRepository>().DeleteAsync(item => item.SubjectID == subjectId && item.ClientID == clientId && item.Type == type);
 		}
 
@@ -114,6 +118,7 @@
 		/// <returns></returns>
 		public async Task RemoveAsync(string key)
 		{
+			//identity.localhost/grants/{id} DELETE
 			await this.repositoryFactory.GetService<IGrantDocumentRepository>().DeleteAsync(item => item.ID == key);
 		}
 
@@ -124,6 +129,7 @@
 		/// <returns></returns>
 		public async Task StoreAsync(PersistedGrant grant)
 		{
+			//identity.localhost/grants/ POST
 			GrantDocument document = this.mapper.MapNew<PersistedGrant, GrantDocument>(grant);
 
 			await this.repositoryFactory.GetService<IGrantDocumentRepository>().SaveAsync(document);

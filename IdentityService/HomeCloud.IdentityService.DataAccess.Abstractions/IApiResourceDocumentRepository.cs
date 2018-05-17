@@ -3,9 +3,9 @@
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	using HomeCloud.Core;
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.IdentityService.DataAccess.Objects;
 
@@ -21,28 +21,22 @@
 		/// Searches for the <see cref="ApiResourceDocument"/> claims by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <param name="offset">The start index to search from.</param>
-		/// <param name="limit">The number of records tor eturn.</param>
 		/// <returns>The list of claim strings.</returns>
-		Task<IPaginable<string>> FindClaims(Func<ApiResourceDocument, string, bool> selector, int offset, int limit = 20);
+		Task<IEnumerable<string>> FindClaims(Func<ApiResourceDocument, string, bool> selector);
 
 		/// <summary>
 		/// Searches for the <see cref="ApiResourceDocument"/> secrets by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <param name="offset">The start index to search from.</param>
-		/// <param name="limit">The number of records tor eturn.</param>
-		/// <returns>The list of secret strings.</returns>
-		Task<IPaginable<string>> FindSecrets(Func<ApiResourceDocument, string, bool> selector, int offset, int limit = 20);
+		/// <returns>The list of secrets.</returns>
+		Task<IEnumerable<SecretDocument>> FindSecrets(Func<ApiResourceDocument, SecretDocument, bool> selector);
 
 		/// <summary>
 		/// Searches for the <see cref="ApiResourceDocument"/> scopes by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <param name="offset">The start index to search from.</param>
-		/// <param name="limit">The number of records tor eturn.</param>
 		/// <returns>The list of scope strings.</returns>
-		Task<IPaginable<string>> FindScopes(Func<ApiResourceDocument, string, bool> selector, int offset, int limit = 20);
+		Task<IEnumerable<string>> FindScopes(Func<ApiResourceDocument, string, bool> selector);
 
 		/// <summary>
 		/// Saves the claims of the specified <paramref name="document"/> of <see cref="ApiResourceDocument"/> type.

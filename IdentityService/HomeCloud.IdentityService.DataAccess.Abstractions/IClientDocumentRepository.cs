@@ -1,12 +1,13 @@
 ﻿namespace HomeCloud.IdentityService.DataAccess
 {
-	using HomeCloud.Core;
 	#region Usings
+
+	using System;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.IdentityService.DataAccess.Objects;
-	using System;
-	using System.Threading.Tasks;
 
 	#endregion
 
@@ -21,28 +22,28 @@
 		/// </summary>
 		/// <param name="selector">The selector.</param>
 		/// <returns>The list of origin strings.</returns>
-		Task<IPaginable<string>> FindOrigins(Func<ClientDocument, string, bool> selector);
+		Task<IEnumerable<string>> FindOrigins(Func<ClientDocument, string, bool> selector);
 
 		/// <summary>
 		/// Searches for the <see cref="ClientDocument"/> secrets by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <returns>The list of secret strings.</returns>
-		Task<IPaginable<string>> FindSecrets(Func<ClientDocument, string, bool> selector);
+		/// <returns>The list of secrets.</returns>
+		Task<IEnumerable<SecretDocument>> FindSecrets(Func<ClientDocument, SecretDocument, bool> selector);
 
 		/// <summary>
 		/// Searches for the <see cref="ClientDocument"/> scopes by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
 		/// <returns>The list of scope strings.</returns>
-		Task<IPaginable<string>> FindScopes(Func<ClientDocument, string, bool> selector);
+		Task<IEnumerable<string>> FindScopes(Func<ClientDocument, string, bool> selector);
 
 		/// <summary>
 		/// Searches for the <see cref="ClientDocument"/> grants by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
 		/// <returns>The list of instances of <see cref="GrantDocument"/>.</returns>
-		Task<IPaginable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector);
+		Task<IEnumerable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector);
 
 		/// <summary>
 		/// Saves the origins of the specified <paramref name="document"/> of <see cref="ClientDocument"/> type.

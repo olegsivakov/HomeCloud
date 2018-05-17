@@ -57,7 +57,7 @@
 			target.ID = source.ID;
 			target.Type = source.Type;
 			target.ClientID = source.ClientID;
-			target.UserID = source.UserID;
+			target.UserID = source.UserID.GetValueOrDefault();
 			target.CreationTime = source.CreationTime;
 			target.Expiration = source.Expiration;
 			target.Data = source.Data;
@@ -82,7 +82,7 @@
 			target.ID = target.ID is null ? source.ID : target.ID;
 			target.Type = target.Type is null ? source.Type : target.Type;
 			target.ClientID = target.ClientID == Guid.Empty ? source.ClientID : target.ClientID;
-			target.UserID = target.UserID == Guid.Empty ? source.UserID : target.UserID;
+			target.UserID = target.UserID.GetValueOrDefault() == Guid.Empty ? source.UserID : target.UserID;
 			target.CreationTime = target.CreationTime == DateTime.MinValue ? source.CreationTime : target.CreationTime;
 			target.Expiration = !target.Expiration.HasValue ? source.Expiration : target.Expiration;
 			target.Data = target.Data is null ? source.Data : target.Data;

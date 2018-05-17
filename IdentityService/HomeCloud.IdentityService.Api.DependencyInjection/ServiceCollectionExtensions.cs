@@ -67,6 +67,8 @@
 			services.AddTypeConverter<ITypeConverter<GrantDocument, Grant>, GrantConverter>();
 			services.AddTypeConverter<ITypeConverter<Grant, GrantDocument>, GrantConverter>();
 			services.AddTypeConverter<ITypeConverter<Grant, Grant>, GrantConverter>();
+			services.AddTypeConverter<ITypeConverter<SecretDocument, Secret>, SecretConverter>();
+			services.AddTypeConverter<ITypeConverter<Secret, SecretDocument>, SecretConverter>();
 			services.AddTypeConverter<ITypeConverter<UserDocument, User>, UserConverter>();
 			services.AddTypeConverter<ITypeConverter<User, UserDocument>, UserConverter>();
 			services.AddTypeConverter<ITypeConverter<User, User>, UserConverter>();

@@ -75,46 +75,56 @@
 		#region IGrantService Implementations
 
 		/// <summary>
-		/// Deletes the list of <paramref name="grants" />.
+		/// Searches for the list of <paramref name="grants"/> and deletes them by specified <paramref name="criteria"/>. If <paramref name="criteria"/> is not set or empty no grants will be deleted.
 		/// </summary>
-		/// <param name="grants"></param>
-		/// <returns>
-		/// The result of execution of service operation.
-		/// </returns>
-		public async Task<ServiceResult<IEnumerable<Grant>>> DeleteGrants(IEnumerable<Grant> grants)
+		/// <param name="grant">The search criteria.</param>
+		/// <returns>The result of execution of service operation.</returns>
+		public async Task<ServiceResult<IEnumerable<Grant>>> DeleteGrantsAsync(GrantSearchCriteria criteria)
 		{
-			if (!grants.Any())
-			{
-				return new ServiceResult<IEnumerable<Grant>>(grants);
-			}
-
 			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				IServiceFactory<IClientValidator> validator = this.validationServiceFactory.GetFactory<IClientValidator>();
-				ValidationResult validationResult = null;
-				List<Grant> result = new List<Grant>();
-
-				IEnumerable<IGrouping<Guid, Grant>> groups = grants.GroupBy(grant => grant.ClientID);
-			
-				groups.ForEachAsync(async group =>
+				ServiceResult<IEnumerable<Grant>> result = await this.FindGrantsAsync(criteria);
+				if (!result.IsSuccess)
 				{
-					Client client = new Client() { ID = group.Key };
+					return result;
+				}
 
-					ValidationResult clientResult = await validator.Get<IPresenceValidator>().ValidateAsync(client);
-					if (clientResult.IsValid)
-					{
-						result.AddRange(await this.DeleteClientGrants(client, grants));
-					}
-
-					validationResult += clientResult;
-				}, groups.Count());
+				result = await this.DeleteGrants(result.Data);
 
 				scope.Complete();
 
-				return await Task.FromResult(new ServiceResult<IEnumerable<Grant>>(result)
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// Deletes the grant by specified grant identifier.
+		/// </summary>
+		/// <param name="id">The grant identifier.</param>
+		/// <returns>The result of execution of service operation.</returns>
+		public async Task<ServiceResult<Grant>> DeleteGrantAsync(string id)
+		{
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+			{
+				ServiceResult<Grant> result = await this.GetGrantAsync(id);
+				if (!result.IsSuccess)
 				{
-					Errors = validationResult.Errors
-				});
+					return result;
+				}
+
+				ClientDocument client = new ClientDocument()
+				{
+					ID = result.Data.ClientID
+				};
+
+				IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
+
+				client.Grants = await repository.FindGrants((clientDocument, grantDocument) => (clientDocument?.ID).GetValueOrDefault() == client.ID && grantDocument?.ID != result.Data.ID);
+				client = await repository.SaveGrants(client);
+
+				scope.Complete();
+
+				return result;
 			}
 		}
 
@@ -122,34 +132,31 @@
 		/// Gets the list of client application grants by specified search <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="criteria">The <see cref="T:HomeCloud.IdentityService.Business.Entities.Grant" /> search criteria.</param>
-		/// <param name="offset">The offset index.</param>
-		/// <param name="limit">The number of records to return.</param>
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		public async Task<ServiceResult<IPaginable<Grant>>> FindGrants(Grant criteria, int offset = 0, int limit = 20)
+		public async Task<ServiceResult<IEnumerable<Grant>>> FindGrantsAsync(GrantSearchCriteria criteria)
 		{
+			if (criteria is null)
+			{
+				return new ServiceResult<IEnumerable<Grant>>(Enumerable.Empty<Grant>());
+			}
+
 			IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
 			IEnumerable<GrantDocument> documents = await repository.FindGrants((client, grant) =>
 			{
 				bool result = true;
 
-				result &= string.IsNullOrWhiteSpace(criteria.ID) || grant.ID == criteria.ID;
-				result &= criteria.ClientID == Guid.Empty || (client?.ID).GetValueOrDefault() == criteria.ClientID;
-				result &= !criteria.UserID.HasValue || grant.UserID.GetValueOrDefault() == criteria.UserID.GetValueOrDefault();
+				result &= !criteria.ClientID.HasValue || (client?.ID).GetValueOrDefault() == criteria.ClientID.Value;
+				result &= !criteria.UserID.HasValue || grant.UserID == criteria.UserID.GetValueOrDefault();
 				result &= string.IsNullOrWhiteSpace(criteria.Type) || grant.Type == criteria.Type;
-				result &= string.IsNullOrWhiteSpace(criteria.Data) || grant.Data == criteria.Data;
 
 				return result;
 			});
 
-			IEnumerable<Grant> grants = this.mapper.MapNew<GrantDocument, Grant>(documents.Skip(offset).Take(limit));
-			return new ServiceResult<IPaginable<Grant>>(new PagedList<Grant>(grants)
-			{
-				Offset = offset,
-				Limit = limit,
-				TotalCount = documents.Count()
-			});
+			IEnumerable<Grant> grants = this.mapper.MapNew<GrantDocument, Grant>(documents);
+
+			return new ServiceResult<IEnumerable<Grant>>(grants);
 		}
 
 		/// <summary>
@@ -159,7 +166,7 @@
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		public async Task<ServiceResult<Grant>> GetGrant(string id)
+		public async Task<ServiceResult<Grant>> GetGrantAsync(string id)
 		{
 			if (string.IsNullOrWhiteSpace(id))
 			{
@@ -180,7 +187,7 @@
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		public async Task<ServiceResult<IDictionary<int, string>>> GetGrantTypes()
+		public async Task<ServiceResult<IDictionary<int, string>>> GetGrantTypesAsync()
 		{
 			IDictionary<int, string> result = Enum.GetValues(typeof(GrantType)).Cast<int>().ToDictionary(value => value, value => ((GrantType)value).ToString());
 
@@ -194,7 +201,7 @@
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		public async Task<ServiceResult<Grant>> SaveGrant(Grant grant)
+		public async Task<ServiceResult<Grant>> SaveGrantAsync(Grant grant)
 		{
 			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
@@ -216,13 +223,7 @@
 				IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
 				client.Grants = await repository.FindGrants((clientDocument, grantDocument) => clientDocument.ID == client.ID);
 
-				GrantDocument document = client.Grants.FirstOrDefault(item =>
-				{
-					bool result = string.IsNullOrWhiteSpace(grant.ID) || item.ID == grant.ID;
-
-					return result |= item.ClientID == grant.ClientID && item.Type == grant.Type && item.UserID.GetValueOrDefault() == grant.UserID.GetValueOrDefault();
-				});
-
+				GrantDocument document = client.Grants.FirstOrDefault(item => item.ID == grant.ID);
 				if (document is null)
 				{
 					document = this.mapper.MapNew<Grant, GrantDocument>(grant);
@@ -250,6 +251,45 @@
 		#endregion
 
 		#region Private Methods
+
+		/// <summary>
+		/// Deletes the list of <paramref name="grants" />.
+		/// </summary>
+		/// <param name="grants"></param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		private async Task<ServiceResult<IEnumerable<Grant>>> DeleteGrants(IEnumerable<Grant> grants)
+		{
+			if (!grants.Any())
+			{
+				return new ServiceResult<IEnumerable<Grant>>(grants);
+			}
+
+			IServiceFactory<IClientValidator> validator = this.validationServiceFactory.GetFactory<IClientValidator>();
+			ValidationResult validationResult = null;
+			List<Grant> result = new List<Grant>();
+
+			IEnumerable<IGrouping<Guid, Grant>> groups = grants.GroupBy(grant => grant.ClientID);
+
+			groups.ForEachAsync(async group =>
+			{
+				Client client = new Client() { ID = group.Key };
+
+				ValidationResult clientResult = await validator.Get<IPresenceValidator>().ValidateAsync(client);
+				if (clientResult.IsValid)
+				{
+					result.AddRange(await this.DeleteClientGrants(client, grants));
+				}
+
+				validationResult += clientResult;
+			}, groups.Count());
+
+			return await Task.FromResult(new ServiceResult<IEnumerable<Grant>>(result)
+			{
+				Errors = validationResult.Errors
+			});
+		}
 
 		/// <summary>
 		/// Deletes the list of grants of the specified client.

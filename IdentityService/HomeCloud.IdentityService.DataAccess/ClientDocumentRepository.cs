@@ -43,7 +43,7 @@
 		/// </summary>
 		/// <param name="selector">The selector.</param>
 		/// <returns>The list of origin strings.</returns>
-		public async Task<IPaginable<string>> FindOrigins(Func<ClientDocument, string, bool> selector)
+		public async Task<IEnumerable<string>> FindOrigins(Func<ClientDocument, string, bool> selector)
 		{
 			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Origins, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
@@ -54,6 +54,7 @@
 			});
 
 			IList<string> result = await cursor.ToListAsync();
+
 			return new PagedList<string>(result)
 			{
 				Offset = 0,
@@ -66,19 +67,20 @@
 		/// Searches for the <see cref="ClientDocument"/> secrets by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <returns>The list of secret strings.</returns>
-		public async Task<IPaginable<string>> FindSecrets(Func<ClientDocument, string, bool> selector)
+		/// <returns>The list of secrets.</returns>
+		public async Task<IEnumerable<SecretDocument>> FindSecrets(Func<ClientDocument, SecretDocument, bool> selector)
 		{
 			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Secrets, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
 
-			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, string>()
+			IAsyncCursor<SecretDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, SecretDocument>()
 			{
 				Projection = projection
 			});
 
-			IList<string> result = await cursor.ToListAsync();
-			return new PagedList<string>(result)
+			IList<SecretDocument> result = await cursor.ToListAsync();
+
+			return new PagedList<SecretDocument>(result)
 			{
 				Offset = 0,
 				Limit = result.Count,
@@ -91,7 +93,7 @@
 		/// </summary>
 		/// <param name="selector">The selector.</param>
 		/// <returns>The list of scope strings.</returns>
-		public async Task<IPaginable<string>> FindScopes(Func<ClientDocument, string, bool> selector)
+		public async Task<IEnumerable<string>> FindScopes(Func<ClientDocument, string, bool> selector)
 		{
 			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Scopes, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
@@ -102,6 +104,7 @@
 			});
 
 			IList<string> result = await cursor.ToListAsync();
+
 			return new PagedList<string>(result)
 			{
 				Offset = 0,
@@ -115,7 +118,7 @@
 		/// </summary>
 		/// <param name="selector">The selector.</param>
 		/// <returns>The list of instances of <see cref="GrantDocument"/>.</returns>
-		public async Task<IPaginable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector)
+		public async Task<IEnumerable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector)
 		{
 			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => this.SetGrantClient(contract, contract.Grants), projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
@@ -126,6 +129,7 @@
 			});
 
 			IList<GrantDocument> result = await cursor.ToListAsync();
+
 			return new PagedList<GrantDocument>(result)
 			{
 				Offset = 0,

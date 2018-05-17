@@ -4,17 +4,13 @@
 
 	using System;
 
-	using HomeCloud.Data.MongoDB;
-
 	using MongoDB.Bson.Serialization.Attributes;
-	using MongoDB.Bson.Serialization.IdGenerators;
 
 	#endregion
 
 	/// <summary>
 	/// Represents grant document.
 	/// </summary>
-	[MongoDBCollection("grants")]
 	public class GrantDocument
 	{
 		/// <summary>
@@ -23,8 +19,7 @@
 		/// <value>
 		/// The identifier.
 		/// </value>
-		[BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
-		[BsonIgnoreIfDefault]
+		[BsonElement("id")]
 		[BsonRequired]
 		public string ID { get; set; }
 
@@ -45,8 +40,8 @@
 		/// The user identifier.
 		/// </value>
 		[BsonElement("userId")]
-		[BsonRequired]
-		public Guid? UserID { get; set; }
+		[BsonIgnoreIfDefault]
+		public Guid UserID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the client identifier.
@@ -55,6 +50,7 @@
 		/// The client identifier.
 		/// </value>
 		[BsonIgnore]
+		[BsonRequired]
 		public Guid ClientID { get; set; }
 
 		/// <summary>
@@ -64,6 +60,7 @@
 		/// The creation time.
 		/// </value>
 		[BsonElement("creation_time")]
+		[BsonRequired]
 		public DateTime CreationTime { get; set; }
 
 		/// <summary>
@@ -82,6 +79,7 @@
 		/// The data.
 		/// </value>
 		[BsonElement("data")]
+		[BsonRequired]
 		public string Data { get; set; }
 	}
 }

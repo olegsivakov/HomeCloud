@@ -67,7 +67,7 @@
 		/// </value>
 		[BsonElement("secrets")]
 		[BsonRequired]
-		public IEnumerable<string> Secrets { get; set; }
+		public IEnumerable<SecretDocument> Secrets { get; set; }
 
 		/// <summary>
 		/// Gets or sets the origins.

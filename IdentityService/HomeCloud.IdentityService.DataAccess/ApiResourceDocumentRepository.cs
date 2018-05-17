@@ -42,10 +42,8 @@
 		/// Searches for the <see cref="ApiResourceDocument"/> claims by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <param name="offset">The start index to search from.</param>
-		/// <param name="limit">The number of records tor eturn.</param>
 		/// <returns>The list of claim strings.</returns>
-		public async Task<IPaginable<string>> FindClaims(Func<ApiResourceDocument, string, bool> selector, int offset, int limit = 20)
+		public async Task<IEnumerable<string>> FindClaims(Func<ApiResourceDocument, string, bool> selector)
 		{
 			ProjectionDefinition<ApiResourceDocument> projection = Builders<ApiResourceDocument>.Projection.ElemMatch(contract => contract.Claims, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(document => selector(document, null));
@@ -55,13 +53,13 @@
 				Projection = projection
 			});
 
-			IEnumerable<string> result = await cursor.ToListAsync();
+			IList<string> result = await cursor.ToListAsync();
 
-			return new PagedList<string>(result.Skip(offset).Take(limit))
+			return new PagedList<string>(result)
 			{
-				Offset = offset,
-				Limit = limit,
-				TotalCount = result.Count()
+				Offset = 0,
+				Limit = result.Count,
+				TotalCount = result.Count
 			};
 		}
 
@@ -69,26 +67,24 @@
 		/// Searches for the <see cref="ApiResourceDocument"/> secrets by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <param name="offset">The start index to search from.</param>
-		/// <param name="limit">The number of records tor eturn.</param>
-		/// <returns>The list of secret strings.</returns>
-		public async Task<IPaginable<string>> FindSecrets(Func<ApiResourceDocument, string, bool> selector, int offset, int limit = 20)
+		/// <returns>The list of secrets.</returns>
+		public async Task<IEnumerable<SecretDocument>> FindSecrets(Func<ApiResourceDocument, SecretDocument, bool> selector)
 		{
 			ProjectionDefinition<ApiResourceDocument> projection = Builders<ApiResourceDocument>.Projection.ElemMatch(contract => contract.Secrets, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(document => selector(document, null));
 
-			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, string>()
+			IAsyncCursor<SecretDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, SecretDocument>()
 			{
 				Projection = projection
 			});
 
-			IEnumerable<string> result = await cursor.ToListAsync();
+			IList<SecretDocument> result = await cursor.ToListAsync();
 
-			return new PagedList<string>(result.Skip(offset).Take(limit))
+			return new PagedList<SecretDocument>(result)
 			{
-				Offset = offset,
-				Limit = limit,
-				TotalCount = result.Count()
+				Offset = 0,
+				Limit = result.Count,
+				TotalCount = result.Count
 			};
 		}
 
@@ -96,10 +92,8 @@
 		/// Searches for the <see cref="ApiResourceDocument"/> scopes by specified <paramref name="selector"/>.
 		/// </summary>
 		/// <param name="selector">The selector.</param>
-		/// <param name="offset">The start index to search from.</param>
-		/// <param name="limit">The number of records tor eturn.</param>
 		/// <returns>The list of scope strings.</returns>
-		public async Task<IPaginable<string>> FindScopes(Func<ApiResourceDocument, string, bool> selector, int offset, int limit = 20)
+		public async Task<IEnumerable<string>> FindScopes(Func<ApiResourceDocument, string, bool> selector)
 		{
 			ProjectionDefinition<ApiResourceDocument> projection = Builders<ApiResourceDocument>.Projection.ElemMatch(contract => contract.Scopes, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
 			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(document => selector(document, null));
@@ -109,13 +103,13 @@
 				Projection = projection
 			});
 
-			IEnumerable<string> result = await cursor.ToListAsync();
+			IList<string> result = await cursor.ToListAsync();
 
-			return new PagedList<string>(result.Skip(offset).Take(limit))
+			return new PagedList<string>(result)
 			{
-				Offset = offset,
-				Limit = limit,
-				TotalCount = result.Count()
+				Offset = 0,
+				Limit = result.Count,
+				TotalCount = result.Count
 			};
 		}
 
