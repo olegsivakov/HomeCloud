@@ -226,6 +226,51 @@
 				});
 		}
 
+		/// <summary>
+		/// Deletes the <paramref name="client" /> grant by specified grant identifier.
+		/// </summary>
+		/// <param name="client">The client.</param>
+		/// <param name="grantID">The grant identifier.</param>
+		/// <returns>
+		/// The deleted grant.
+		/// </returns>
+		public async Task<GrantDocument> DeleteGrant(ClientDocument client, string grantID)
+		{
+			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => this.SetGrantClient(contract, contract.Grants), projectionDocument => projectionDocument != null && projectionDocument.ID == grantID);
+			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => document.ID == client.ID);
+
+			return await this.CurrentCollection.FindOneAndDeleteAsync(filter, new FindOneAndDeleteOptions<ClientDocument, GrantDocument>());
+		}
+
+		/// <summary>
+		/// Deletes the client application grants specified by <paramref name="selector"/>.
+		/// </summary>
+		/// <param name="selector">The selector.</param>
+		/// <returns>The list of grants left undeleted after operation execution.</returns>
+		public async Task<IEnumerable<GrantDocument>> DeleteGrants(Func<ClientDocument, GrantDocument, bool> selector)
+		{
+			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => this.SetGrantClient(contract, contract.Grants), projectionDocument => projectionDocument != null && !selector(null, projectionDocument));
+			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
+
+			IAsyncCursor<GrantDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, GrantDocument>()
+			{
+				Projection = projection
+			});
+
+			IEnumerable<ClientDocument> clients = cursor.ToEnumerable().GroupBy(document => document.ClientID).Select(group => new ClientDocument()
+			{
+				ID = group.Key,
+				Grants = group.AsEnumerable()
+			});
+
+			foreach (ClientDocument client in clients)
+			{
+				await this.SaveGrants(client);
+			}
+
+			return clients.SelectMany(client => client.Grants);
+		}
+
 		#endregion
 
 		#region MongoDBRepository<ClientDocument> Implementations

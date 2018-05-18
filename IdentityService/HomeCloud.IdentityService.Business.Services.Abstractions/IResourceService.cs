@@ -17,89 +17,86 @@
 	public interface IResourceService
 	{
 		/// <summary>
-		/// Creates new <see cref="Api"/> resource <paramref name="application"/>.
+		/// Creates new api resource <paramref name="application"/>.
 		/// </summary>
-		/// <param name="application">The resource application.</param>
+		/// <param name="application">The api resource application.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<ApiResource>> CreateApplication(ApiResource application);
+		Task<ServiceResult<ApiResource>> CreateApplicationAsync(ApiResource application);
 
 		/// <summary>
-		/// Updates existing <see cref="Api"/> resource <paramref name="application"/>.
+		/// Updates existing api resource <paramref name="application"/>.
 		/// </summary>
-		/// <param name="application">The resource application.</param>
+		/// <param name="application">The api resource application.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<ApiResource>> UpdateApplication(ApiResource application);
+		Task<ServiceResult<ApiResource>> UpdateApplicationAsync(ApiResource application);
 
 		/// <summary>
-		/// Gets the <see cref="Api"/> resource application by specified resource identifier.
+		/// Gets api resource application by specified api resource application identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="id">The api resource identifier.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<ApiResource>> GetApplication(Guid id);
+		Task<ServiceResult<ApiResource>> GetApplicationAsync(Guid id);
 
 		/// <summary>
-		/// Searches for the list of <see cref="Api"/> resource applications by specified search <paramref name="criteria"/>.
+		/// Searches for the list of api resource applications by specified search <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">The <see cref="ApiResource"/> search criteria.</param>
-		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<IPaginable<ApiResource>>> FindApplications(ApiResource criteria);
+		/// <param name="criteria">The search criteria.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="limit">The number of records to return.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		Task<ServiceResult<IPaginable<ApiResource>>> FindApplicationsAsync(ApiResource criteria, int offset = 0, int limit = 20);
 
 		/// <summary>
-		/// Deletes existing <see cref="Api"/> resource application by specified <paramref name="resource"/> identifier.
+		/// Gets the list of application claims by specified api resource application identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="applicationID">The api resource application identifier.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<ApiResource>> DeleteApplication(Guid id);
+		Task<ServiceResult<IEnumerable<string>>> GetClaimsAsync(Guid applicationID);
 
 		/// <summary>
-		/// Gets the list of application claims by specified resource application identifier.
+		/// Gets the list of application secrets by specified api resource application identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="applicationID">The api resource application identifier.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<IPaginable<string>>> GetClaims(Guid id);
+		Task<ServiceResult<IEnumerable<Secret>>> GetSecretsAsync(Guid applicationID);
 
 		/// <summary>
-		/// Gets the list of application secrets by specified resource application identifier.
+		/// Gets the list of application scopes by specified api resource application identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="applicationID">The api resource application identifier.</param>
 		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<IPaginable<string>>> GetSecrets(Guid id);
+		Task<ServiceResult<IEnumerable<string>>> GetScopesAsync(Guid applicationID);
 
 		/// <summary>
-		/// Gets the list of application scopes by specified resource application identifier.
+		/// Saves the list of application clames for the api resource application specified by identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
-		/// <returns>The result of execution of service operation.</returns>
-		Task<ServiceResult<IPaginable<string>>> GetScopes(Guid id);
-
-		/// <summary>
-		/// Saves the list of application claims for resource application specified by identifier.
-		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="applicationID">The api resource application identifier.</param>
 		/// <param name="claims">The list of claims.</param>
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		Task<ServiceResult<IPaginable<string>>> SaveClaims(Guid id, IEnumerable<string> claims);
+		Task<ServiceResult<IEnumerable<string>>> SaveClaimsAsync(Guid applicationID, IEnumerable<string> claims);
 
 		/// <summary>
-		/// Saves the list of application secrets for resource application specified by identifier.
+		/// Saves the list of application secrets for the api resource application specified by identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="applicationID">The api resource application identifier.</param>
 		/// <param name="secrets">The list of secrets.</param>
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		Task<ServiceResult<IPaginable<string>>> SaveSecrets(Guid id, IEnumerable<string> secrets);
+		Task<ServiceResult<IEnumerable<Secret>>> SaveSecretsAsync(Guid applicationID, IEnumerable<Secret> secrets);
 
 		/// <summary>
-		/// Saves the list of application scopes for resource application specified by identifier.
+		/// Saves the list of application scopes for the api resource application specified by identifier.
 		/// </summary>
-		/// <param name="id">The resource application identifier.</param>
+		/// <param name="applicationID">The api resource application identifier.</param>
 		/// <param name="scopes">The list of scopes.</param>
 		/// <returns>
 		/// The result of execution of service operation.
 		/// </returns>
-		Task<ServiceResult<IPaginable<string>>> SaveScopes(Guid id, IEnumerable<string> scopes);
+		Task<ServiceResult<IEnumerable<string>>> SaveScopesAsync(Guid applicationID, IEnumerable<string> scopes);
 	}
 }

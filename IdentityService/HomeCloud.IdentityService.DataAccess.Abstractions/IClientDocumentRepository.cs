@@ -72,5 +72,22 @@
 		/// <param name="document">The document.</param>
 		/// <returns>The updated instance of <see cref="ClientDocument"/>.</returns>
 		Task<ClientDocument> SaveGrants(ClientDocument document);
+
+		/// <summary>
+		/// Deletes the client application grants specified by <paramref name="selector"/>.
+		/// </summary>
+		/// <param name="selector">The selector.</param>
+		/// <returns>The list of grants left undeleted after operation execution.</returns>
+		Task<IEnumerable<GrantDocument>> DeleteGrants(Func<ClientDocument, GrantDocument, bool> selector);
+
+		/// <summary>
+		/// Deletes the <paramref name="client"/> grant by specified grant identifier.
+		/// </summary>
+		/// <param name="client">The client.</param>
+		/// <param name="grantID">The grant identifier.</param>
+		/// <returns>
+		/// The deleted grant.
+		/// </returns>
+		Task<GrantDocument> DeleteGrant(ClientDocument client, string grantID);
 	}
 }

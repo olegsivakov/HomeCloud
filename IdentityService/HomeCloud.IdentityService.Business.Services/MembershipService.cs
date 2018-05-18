@@ -147,12 +147,17 @@
 		/// </returns>
 		public async Task<ServiceResult<IPaginable<User>>> FindUsersAsync(User criteria, int offset = 0, int limit = 20)
 		{
-			IPaginable<UserDocument> documents = await this.repositoryFactory.GetService<IUserDocumentRepository>().FindAsync(item =>
-				string.IsNullOrWhiteSpace(criteria.Username) | item.Username.Trim().Contains(criteria.Username.Trim().ToLower())
-				&&
-				string.IsNullOrWhiteSpace(criteria.FirstName) | item.FirstName.Trim().Contains(criteria.FirstName.Trim().ToLower())
-				&&
-				string.IsNullOrWhiteSpace(criteria.LastName) | item.LastName.Trim().Contains(criteria.LastName.Trim().ToLower()), offset, limit);
+			IPaginable<UserDocument> documents = await this.repositoryFactory.GetService<IUserDocumentRepository>().FindAsync(
+				item =>
+					criteria == null
+					||
+					(string.IsNullOrWhiteSpace(criteria.Username) | item.Username.Trim().Contains(criteria.Username.Trim().ToLower())
+					&&
+					string.IsNullOrWhiteSpace(criteria.FirstName) | item.FirstName.Trim().Contains(criteria.FirstName.Trim().ToLower())
+					&&
+					string.IsNullOrWhiteSpace(criteria.LastName) | item.LastName.Trim().Contains(criteria.LastName.Trim().ToLower())),
+				offset,
+				limit);
 
 			IEnumerable<User> users = this.mapper.MapNew<UserDocument, User>(documents);
 			IPaginable<User> result = new PagedList<User>(users)
