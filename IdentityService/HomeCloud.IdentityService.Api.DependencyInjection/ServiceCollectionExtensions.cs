@@ -6,10 +6,13 @@
 
 	using HomeCloud.Data.MongoDB;
 	using HomeCloud.DependencyInjection;
+	using HomeCloud.IdentityService.Api.Models;
+	using HomeCloud.IdentityService.Api.Models.Converters;
 	using HomeCloud.IdentityService.Business.Entities;
 	using HomeCloud.IdentityService.Business.Entities.Applications;
 	using HomeCloud.IdentityService.Business.Entities.Converters;
 	using HomeCloud.IdentityService.Business.Entities.Membership;
+	using HomeCloud.IdentityService.Business.Services;
 	using HomeCloud.IdentityService.Business.Validation;
 	using HomeCloud.IdentityService.DataAccess;
 	using HomeCloud.IdentityService.DataAccess.Objects;
@@ -73,6 +76,9 @@
 			services.AddTypeConverter<ITypeConverter<User, UserDocument>, UserConverter>();
 			services.AddTypeConverter<ITypeConverter<User, User>, UserConverter>();
 
+			services.AddTypeConverter<ITypeConverter<Grant, GrantViewModel>, GrantViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<GrantViewModel, Grant>, GrantViewModelConverter>();
+
 			return services;
 		}
 
@@ -93,6 +99,11 @@
 			services.AddFactory<IUserValidator>();
 
 			services.AddScoped<IValidationServiceFactory, ValidationServiceFactory>();
+
+			services.AddScoped<IMembershipService, MembershipService>();
+			services.AddScoped<IGrantService, GrantService>();
+			services.AddScoped<IClientService, ClientService>();
+			services.AddScoped<IResourceService, ResourceService>();
 
 			return services;
 		}

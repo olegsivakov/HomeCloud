@@ -28,6 +28,22 @@
 		public string Type { get; set; }
 
 		/// <summary>
+		/// Gets or sets the client identifier.
+		/// </summary>
+		/// <value>
+		/// The client identifier.
+		/// </value>
+		public Guid ClientID { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user identifier.
+		/// </summary>
+		/// <value>
+		/// The user identifier.
+		/// </value>
+		public Guid? UserID { get; set; }
+
+		/// <summary>
 		/// Gets or sets the creation time.
 		/// </summary>
 		/// <value>
