@@ -119,20 +119,20 @@
 		/// </returns>
 		public async Task<ServiceResult<IPaginable<ApiResource>>> FindApplicationsAsync(ApiResource criteria, int offset = 0, int limit = 20)
 		{
-			IEnumerable<ApiResourceDocument> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindAllAsync(document =>
+			IPaginable<ApiResourceDocument> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindAsync(document =>
 				criteria == null
 				||
 				(
 					(string.IsNullOrWhiteSpace(criteria.Name) || document.Name.Trim().ToLower().Contains(criteria.Name.Trim().ToLower()))
-				));
+				), offset, limit);
 
-			IEnumerable<ApiResource> result = this.mapper.MapNew<ApiResourceDocument, ApiResource>(documents.Skip(offset).Take(limit));
+			IEnumerable<ApiResource> result = this.mapper.MapNew<ApiResourceDocument, ApiResource>(documents);
 
 			return new ServiceResult<IPaginable<ApiResource>>(new PagedList<ApiResource>(result)
 			{
-				Offset = offset,
-				Limit = limit,
-				TotalCount = documents.Count()
+				Offset = documents.Offset,
+				Limit = documents.Limit,
+				TotalCount = documents.TotalCount
 			});
 		}
 

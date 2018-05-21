@@ -119,22 +119,21 @@
 		/// </returns>
 		public async Task<ServiceResult<IPaginable<Client>>> FindApplicationsAsync(Client criteria, int offset = 0, int limit = 20)
 		{
-			IEnumerable<ClientDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindAllAsync(document =>
-				criteria == null
-				||
+			IPaginable<ClientDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindAsync(document =>
+				criteria == null ? true : 
 				(
 					(string.IsNullOrWhiteSpace(criteria.Name) || document.Name.Trim().ToLower().Contains(criteria.Name.Trim().ToLower()))
 					&&
 					(criteria.GrantType == GrantType.Unknown || document.GrantType == (int)criteria.GrantType)
-				));
+				), offset, limit);
 
-			IEnumerable<Client> result = this.mapper.MapNew<ClientDocument, Client>(documents.Skip(offset).Take(limit));
+			IEnumerable<Client> result = this.mapper.MapNew<ClientDocument, Client>(documents);
 
 			return new ServiceResult<IPaginable<Client>>(new PagedList<Client>(result)
 			{
-				Offset = offset,
-				Limit = limit,
-				TotalCount = documents.Count()
+				Offset = documents.Offset,
+				Limit = documents.Limit,
+				TotalCount = documents.TotalCount
 			});
 		}
 

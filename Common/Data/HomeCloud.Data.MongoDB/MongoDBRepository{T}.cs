@@ -82,19 +82,14 @@
 		/// </returns>
 		public virtual async Task<IPaginable<T>> FindAsync(Expression<Func<T, bool>> selector, int offset = 0, int limit = 20)
 		{
-			return await Task.Run(() =>
+			IEnumerable<T> data = await this.FindAllAsync(selector);
+
+			return new PagedList<T>(data.Skip(offset).Take(limit))
 			{
-				IMongoQueryable<T> query = this.CurrentCollection.AsQueryable();
-
-				IEnumerable<T> data = selector is null ? query : query.Where(selector.Compile());
-
-				return new PagedList<T>(data.Skip(offset).Take(limit))
-				{
-					Offset = offset,
-					Limit = limit,
-					TotalCount = data.Count()
-				};
-			});
+				Offset = offset,
+				Limit = limit,
+				TotalCount = data.Count()
+			};
 		}
 
 		/// <summary>
@@ -106,7 +101,11 @@
 		/// </returns>
 		public virtual async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> selector)
 		{
-			return await this.CurrentCollection.Find(selector is null ? _ => true : selector).ToListAsync();
+			IMongoQueryable<T> query = this.CurrentCollection.AsQueryable();
+
+			IEnumerable<T> result = selector is null ? query : query.Where(selector.Compile());
+
+			return await Task.FromResult(result);
 		}
 
 		/// <summary>
