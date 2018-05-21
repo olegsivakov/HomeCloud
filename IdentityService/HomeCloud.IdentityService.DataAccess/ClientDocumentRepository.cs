@@ -45,7 +45,7 @@
 		/// <returns>The list of origin strings.</returns>
 		public async Task<IEnumerable<string>> FindOrigins(Func<ClientDocument, string, bool> selector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Origins, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
+			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Origins, projectionDocument => projectionDocument != null && selector(null, projectionDocument));
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
 
 			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, string>()
@@ -70,7 +70,7 @@
 		/// <returns>The list of secrets.</returns>
 		public async Task<IEnumerable<SecretDocument>> FindSecrets(Func<ClientDocument, SecretDocument, bool> selector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Secrets, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
+			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Secrets, projectionDocument => projectionDocument != null && selector(null, projectionDocument));
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
 
 			IAsyncCursor<SecretDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, SecretDocument>()
@@ -95,7 +95,7 @@
 		/// <returns>The list of scope strings.</returns>
 		public async Task<IEnumerable<string>> FindScopes(Func<ClientDocument, string, bool> selector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Scopes, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
+			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Scopes, projectionDocument => projectionDocument != null && selector(null, projectionDocument));
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
 
 			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, string>()
@@ -120,7 +120,7 @@
 		/// <returns>The list of instances of <see cref="GrantDocument"/>.</returns>
 		public async Task<IEnumerable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => this.SetGrantClient(contract, contract.Grants), projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
+			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => this.SetGrantClient(contract, contract.Grants), projectionDocument => projectionDocument != null && selector(null, projectionDocument));
 			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
 
 			IAsyncCursor<GrantDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, GrantDocument>()
@@ -290,6 +290,7 @@
 				this.GetUniqueFilterDefinition(entity),
 				Builders<ClientDocument>.Update
 											.Set(contract => contract.Name, entity.Name)
+											.Set(contract => contract.GrantType, entity.GrantType)
 											.Set(contract => contract.RedirectUrl, entity.RedirectUrl)
 											.Set(contract => contract.PostLogoutRedirectUrl, entity.PostLogoutRedirectUrl)
 											.Set(contract => contract.IdentityTokenLifetime, entity.IdentityTokenLifetime)

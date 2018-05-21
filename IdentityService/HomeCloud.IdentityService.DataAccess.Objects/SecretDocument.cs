@@ -20,6 +20,7 @@
 		/// The value.
 		/// </value>
 		[BsonElement("value")]
+		[BsonRequired]
 		public string Value { get; set; }
 
 		/// <summary>
@@ -28,7 +29,7 @@
 		/// <value>
 		/// The expiration time.
 		/// </value>
-		[BsonElement("value")]
+		[BsonElement("expiraton")]
 		public DateTime? Expiration { get; set; }
 	}
 }

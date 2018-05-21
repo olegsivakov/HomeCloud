@@ -56,7 +56,7 @@
 		/// The scopes.
 		/// </value>
 		[BsonElement("scopes")]
-		[BsonRequired]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<string> Scopes { get; set; }
 
 		/// <summary>
@@ -66,7 +66,7 @@
 		/// The secrets.
 		/// </value>
 		[BsonElement("secrets")]
-		[BsonRequired]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<SecretDocument> Secrets { get; set; }
 
 		/// <summary>
@@ -76,6 +76,7 @@
 		/// The origins.
 		/// </value>
 		[BsonElement("origins")]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<string> Origins { get; set; }
 
 		/// <summary>
