@@ -12,6 +12,9 @@
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
+	using HomeCloud.Mvc.Exceptions;
+	using HomeCloud.Mvc;
+
 	#endregion
 
 	/// <summary>
@@ -54,15 +57,20 @@
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services
-				.AddIdentityServer()
-				.AddDeveloperSigningCredential();
-
-			services.AddDatabases(this.Configuration)
+				.AddDatabases(this.Configuration)
 				.AddMappings()
-				.AddResourceStore()
-				.AddGrantStore();
+				.AddIdentityServices();
+
+			services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
+			services.AddCors();
+
+			services.AddMvc()
+				.Extend()
+				.AddInputValidation();
 
 			return services.BuildServiceProvider();
+
 		}
 
 		/// <summary>
@@ -77,7 +85,16 @@
 				application.UseDeveloperExceptionPage();
 			}
 
-			application.UseIdentityServer();
+			application.UseExceptionHandling();
+
+			application.UseCors(policyBuilder =>
+			{
+				policyBuilder.WithOrigins("https://homecloudweb.azurewebsites.net", "http://localhost:8080").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
+			});
+
+			application.UseMvc();
+
+
 		}
 
 		#endregion

@@ -12,26 +12,26 @@
 	/// <summary>
 	/// Represents a string collection of application related data such as secrets, scopes, claims etc.
 	/// </summary>
-	public class StringListViewModel : PagedListViewModel<string>
+	public class ApplicationDataListViewModel<T> : PagedListViewModel<T>
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StringListViewModel"/> class.
+		/// Initializes a new instance of the <see cref="ApplicationDataListViewModel"/> class.
 		/// </summary>
 		/// <param name="applicationID">The application identifier.</param>
-		public StringListViewModel(Guid applicationID)
+		public ApplicationDataListViewModel(Guid applicationID)
 			: base()
 		{
 			this.ApplicationID = applicationID;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StringListViewModel"/> class.
+		/// Initializes a new instance of the <see cref="ApplicationDataListViewModel"/> class.
 		/// </summary>
-		/// <param name="items">The <see cref="StringListViewModel"/> item collection.</param>
+		/// <param name="items">The <see cref="ApplicationDataListViewModel"/> item collection.</param>
 		/// <param name="applicationID">The application identifier.</param>
-		public StringListViewModel(IEnumerable<string> items, Guid applicationID)
+		public ApplicationDataListViewModel(IEnumerable<T> items, Guid applicationID)
 			: base(items)
 		{
 			this.ApplicationID = applicationID;

@@ -7,6 +7,14 @@
 	public class ClientViewModel : ApplicationViewModel
 	{
 		/// <summary>
+		/// Gets or sets the type of the grant.
+		/// </summary>
+		/// <value>
+		/// The type of the grant.
+		/// </value>
+		public int GrantType { get; set; }
+
+		/// <summary>
 		/// Gets or sets the redirect URL.
 		/// </summary>
 		/// <value>

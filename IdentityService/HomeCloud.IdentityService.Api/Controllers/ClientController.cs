@@ -1,23 +1,30 @@
 ﻿namespace HomeCloud.IdentityService.Api.Controllers
 {
-	using HomeCloud.Core;
-	using HomeCloud.Http;
 	#region Usings
 
-	using HomeCloud.IdentityService.Api.Models;
-	using HomeCloud.IdentityService.Business.Entities.Applications;
-	using HomeCloud.IdentityService.Business.Services;
-	using HomeCloud.Mapping;
-	using HomeCloud.Mapping.Extensions;
-	using HomeCloud.Mvc.ActionConstraints;
-	using HomeCloud.Mvc.DataAnnotations;
-	using HomeCloud.Mvc.Models;
-	using Microsoft.AspNetCore.Mvc;
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.Linq;
 	using System.Threading.Tasks;
+
+	using HomeCloud.Core;
+	using HomeCloud.Http;
+
+	using HomeCloud.IdentityService.Api.Models;
+
+	using HomeCloud.IdentityService.Business.Entities;
+	using HomeCloud.IdentityService.Business.Entities.Applications;
+	using HomeCloud.IdentityService.Business.Services;
+
+	using HomeCloud.Mapping;
+	using HomeCloud.Mapping.Extensions;
+
+	using HomeCloud.Mvc.ActionConstraints;
+	using HomeCloud.Mvc.DataAnnotations;
+	using HomeCloud.Mvc.Models;
+
+	using Microsoft.AspNetCore.Mvc;
 
 	#endregion
 
@@ -79,6 +86,14 @@
 		public async Task<IActionResult> GetClientGrantList(
 			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
 		{
+			ServiceResult<IEnumerable<Grant>> result = await this.clientService.GetGrantsAsync(id);
+			IEnumerable<GrantViewModel> data = result.Data != null ? this.Mapper.MapNew<Grant, GrantViewModel>(result.Data) : null;
+
+			return this.HttpResult(new ApplicationDataListViewModel<GrantViewModel>(data, id)
+			{
+				Size = result.Data.Count(),
+				TotalCount = result.Data.Count()
+			}, result.Errors);
 		}
 
 		/// <summary>
@@ -91,6 +106,14 @@
 		public async Task<IActionResult> GetClientSecretList(
 			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
 		{
+			ServiceResult<IEnumerable<Secret>> result = await this.clientService.GetSecretsAsync(id);
+			IEnumerable<SecretViewModel> data = result.Data != null ? this.Mapper.MapNew<Secret, SecretViewModel>(result.Data) : null;
+
+			return this.HttpResult(new ApplicationDataListViewModel<SecretViewModel>(data, id)
+			{
+				Size = result.Data.Count(),
+				TotalCount = result.Data.Count()
+			}, result.Errors);
 		}
 
 		/// <summary>
@@ -98,11 +121,18 @@
 		/// </summary>
 		/// <param name="id">The client application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
-		[HttpGet("v1/[controller]s/{id}/secrets", Name = nameof(ClientController.GetClientScopeList))]
+		[HttpGet("v1/[controller]s/{id}/scopes", Name = nameof(ClientController.GetClientScopeList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetClientScopeList(
 			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
 		{
+			ServiceResult<IEnumerable<string>> result = await this.clientService.GetScopesAsync(id);
+
+			return this.HttpResult(new ApplicationDataListViewModel<string>(result.Data, id)
+			{
+				Size = result.Data.Count(),
+				TotalCount = result.Data.Count()
+			}, result.Errors);
 		}
 
 		/// <summary>
@@ -115,54 +145,13 @@
 		public async Task<IActionResult> GetClientOriginList(
 			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
 		{
-		}
+			ServiceResult<IEnumerable<string>> result = await this.clientService.GetOriginsAsync(id);
 
-		/// <summary>
-		/// Gets the grant list of the client application.
-		/// </summary>
-		/// <param name="id">The client application identifier.</param>
-		/// <returns>The instance of <see cref="IEnumerable{GrantViewModel}"/>.</returns>
-		[HttpPost("v1/[controller]s/{id}/grants", Name = nameof(ClientController.SaveClientGrantList))]
-		[ContentType(MimeTypes.Application.Json)]
-		public async Task<IActionResult> SaveClientGrantList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
-		{
-		}
-
-		/// <summary>
-		/// Gets the secret list of the client application.
-		/// </summary>
-		/// <param name="id">The client application identifier.</param>
-		/// <returns>The instance of <see cref="IEnumerable{SecretViewModel}"/>.</returns>
-		[HttpPost("v1/[controller]s/{id}/secrets", Name = nameof(ClientController.SavetClientSecretList))]
-		[ContentType(MimeTypes.Application.Json)]
-		public async Task<IActionResult> SavetClientSecretList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
-		{
-		}
-
-		/// <summary>
-		/// Gets the scope list of the client application.
-		/// </summary>
-		/// <param name="id">The client application identifier.</param>
-		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
-		[HttpPost("v1/[controller]s/{id}/secrets", Name = nameof(ClientController.SaveClientScopeList))]
-		[ContentType(MimeTypes.Application.Json)]
-		public async Task<IActionResult> SaveClientScopeList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
-		{
-		}
-
-		/// <summary>
-		/// Gets the origin list of the client application.
-		/// </summary>
-		/// <param name="id">The client application identifier.</param>
-		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
-		[HttpPost("v1/[controller]s/{id}/origins", Name = nameof(ClientController.SaveClientOriginList))]
-		[ContentType(MimeTypes.Application.Json)]
-		public async Task<IActionResult> SaveClientOriginList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id)
-		{
+			return this.HttpResult(new ApplicationDataListViewModel<string>(result.Data, id)
+			{
+				Size = result.Data.Count(),
+				TotalCount = result.Data.Count()
+			}, result.Errors);
 		}
 
 		/// <summary>
@@ -180,7 +169,7 @@
 			[Range(1, int.MaxValue, ErrorMessage = "The limit parameter cannot be less or equal zero.")] int limit)
 		{
 			ServiceResult<IPaginable<Client>> result = await this.clientService.FindApplicationsAsync(null, offset, limit);
-			IEnumerable<ApplicationViewModel> data = result.Data != null ? this.Mapper.MapNew<Client, ApplicationViewModel>(result.Data) : null;
+			IEnumerable<ApplicationViewModel> data = result.Data != null ? this.Mapper.MapNew<Application, ApplicationViewModel>(result.Data.Cast<Application>()) : null;
 
 			return this.HttpResult(new PagedListViewModel<ApplicationViewModel>(data?.OrderBy(item => item.Name))
 			{
@@ -206,7 +195,7 @@
 		}
 
 		/// <summary>
-		/// Creates the specified storage model.
+		/// Creates the specified client application model.
 		/// </summary>
 		/// <param name="model">The model of <see cref="ClientViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="ClientViewModel"/>.</returns>
@@ -245,6 +234,86 @@
 			return this.HttpResult(data, result.Errors);
 		}
 
+		/// <summary>
+		/// Gets the grant list of the client application.
+		/// </summary>
+		/// <param name="id">The client application identifier.</param>
+		/// <returns>The instance of <see cref="IEnumerable{GrantViewModel}"/>.</returns>
+		[HttpPut("v1/[controller]s/{id}/grants", Name = nameof(ClientController.SaveClientGrantList))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> SaveClientGrantList(
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<GrantViewModel> model)
+		{
+			IEnumerable<Grant> entities = this.Mapper.MapNew<GrantViewModel, Grant>(model ?? Enumerable.Empty<GrantViewModel>());
 
+			ServiceResult<IEnumerable<Grant>> result = await this.clientService.SaveGrantsAsync(id, entities);
+			IEnumerable<GrantViewModel> data = result.Data != null ? this.Mapper.MapNew<Grant, GrantViewModel>(result.Data) : null;
+
+			return this.HttpResult(new ApplicationDataListViewModel<GrantViewModel>(data, id)
+			{
+				Size = data.Count(),
+				TotalCount = data.Count()
+			}, result.Errors);
+		}
+
+		/// <summary>
+		/// Gets the secret list of the client application.
+		/// </summary>
+		/// <param name="id">The client application identifier.</param>
+		/// <returns>The instance of <see cref="IEnumerable{SecretViewModel}"/>.</returns>
+		[HttpPut("v1/[controller]s/{id}/secrets", Name = nameof(ClientController.SaveClientSecretList))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> SaveClientSecretList(
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<SecretViewModel> model)
+		{
+			IEnumerable<Secret> entities = this.Mapper.MapNew<SecretViewModel, Secret>(model ?? Enumerable.Empty<SecretViewModel>());
+
+			ServiceResult<IEnumerable<Secret>> result = await this.clientService.SaveSecretsAsync(id, entities);
+			IEnumerable<SecretViewModel> data = result.Data != null ? this.Mapper.MapNew<Secret, SecretViewModel>(result.Data) : null;
+
+			return this.HttpResult(new ApplicationDataListViewModel<SecretViewModel>(data, id)
+			{
+				Size = data.Count(),
+				TotalCount = data.Count()
+			}, result.Errors);
+		}
+
+		/// <summary>
+		/// Gets the scope list of the client application.
+		/// </summary>
+		/// <param name="id">The client application identifier.</param>
+		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
+		[HttpPut("v1/[controller]s/{id}/scopes", Name = nameof(ClientController.SaveClientScopeList))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> SaveClientScopeList(
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<string> model)
+		{
+			ServiceResult<IEnumerable<string>> result = await this.clientService.SaveScopesAsync(id, model);
+
+			return this.HttpResult(new ApplicationDataListViewModel<string>(result.Data, id)
+			{
+				Size = result.Data.Count(),
+				TotalCount = result.Data.Count()
+			}, result.Errors);
+		}
+
+		/// <summary>
+		/// Gets the origin list of the client application.
+		/// </summary>
+		/// <param name="id">The client application identifier.</param>
+		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
+		[HttpPut("v1/[controller]s/{id}/origins", Name = nameof(ClientController.SaveClientOriginList))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> SaveClientOriginList(
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<string> model)
+		{
+			ServiceResult<IEnumerable<string>> result = await this.clientService.SaveOriginsAsync(id, model);
+
+			return this.HttpResult(new ApplicationDataListViewModel<string>(result.Data, id)
+			{
+				Size = result.Data.Count(),
+				TotalCount = result.Data.Count()
+			}, result.Errors);
+		}
 	}
 }

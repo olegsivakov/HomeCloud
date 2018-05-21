@@ -87,7 +87,7 @@
 				UserID = userID
 			});
 
-			IEnumerable<GrantViewModel> data = result.Data != null ? this.Mapper.MapNew<Grant, GrantViewModel>(result.Data) : Enumerable.Empty<GrantViewModel>();
+			IEnumerable<GrantViewModel> data = result.Data != null ? this.Mapper.MapNew<Grant, GrantViewModel>(result.Data) : null;
 
 			return this.HttpResult(data, result.Errors);
 		}

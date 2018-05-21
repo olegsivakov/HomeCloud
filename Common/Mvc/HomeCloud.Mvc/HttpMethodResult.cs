@@ -12,9 +12,9 @@
 	using HomeCloud.Exceptions;
 	using HomeCloud.Http;
 	using HomeCloud.Mvc.Exceptions;
+	using HomeCloud.Mvc.Models;
 
 	using Controller = HomeCloud.Mvc.ControllerBase;
-	using HomeCloud.Mvc.Models;
 
 	#endregion
 

@@ -395,7 +395,7 @@
 				IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
 
 				ClientDocument document = this.mapper.MapNew<Client, ClientDocument>(application);
-				document.Origins = origins ?? Enumerable.Empty<string>();
+				document.Origins = origins?.Distinct() ?? Enumerable.Empty<string>();
 
 				document = await repository.SaveOrigins(document);
 
@@ -424,6 +424,16 @@
 			{
 				IServiceFactory<IClientValidator> validator = this.validationServiceFactory.GetFactory<IClientValidator>();
 				ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(application);
+
+				IServiceFactory<IApiResourceValidator> apiResourceValidator = this.validationServiceFactory.GetFactory<IApiResourceValidator>();
+				foreach (string resourceID in scopes)
+				{
+					Guid id = Guid.Empty;
+					if (Guid.TryParse(resourceID, out id))
+					{
+						result = await apiResourceValidator.Get<IPresenceValidator>().ValidateAsync(new ApiResource() { ID = id });
+					}
+				}
 
 				if (!result.IsValid)
 				{

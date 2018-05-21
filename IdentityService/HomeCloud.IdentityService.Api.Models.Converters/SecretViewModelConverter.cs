@@ -3,16 +3,16 @@
 	#region Usings
 
 	using HomeCloud.Core;
-	using HomeCloud.IdentityService.Business.Entities;
+	using HomeCloud.IdentityService.Business.Entities.Applications;
 
 	#endregion
 
 	/// <summary>
-	/// Provides convertion methods for <see cref="GrantViewModel" /> entity.
+	/// Provides convertion methods for <see cref="SecretViewModel" /> entity.
 	/// </summary>
-	public class GrantViewModelConverter : ITypeConverter<Grant, GrantViewModel>, ITypeConverter<GrantViewModel, Grant>
+	public class SecretViewModelConverter : ITypeConverter<Secret, SecretViewModel>, ITypeConverter<SecretViewModel, Secret>
 	{
-		#region ITypeConverter<Grant, GrantViewModel> Implementations
+		#region ITypeConverter<Secret, SecretViewModel> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -22,22 +22,17 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public GrantViewModel Convert(Grant source, GrantViewModel target)
+		public SecretViewModel Convert(Secret source, SecretViewModel target)
 		{
-			target.ID = source.ID;
-			target.Type = source.Type;
-			target.ClientID = source.ClientID;
-			target.UserID = source.UserID;
-			target.CreationTime = source.CreationTime;
-			target.ExpirationTime = source.Expiration;
-			target.Data = source.Data;
+			target.Value = source.Value;
+			target.Expiration = source.Expiration;
 
 			return target;
 		}
 
 		#endregion
 
-		#region ITypeConverter<GrantViewModel, Grant> Implementations
+		#region ITypeConverter<SecretViewModel, Secret> Implementations
 
 		/// <summary>
 		/// Converts the instance of <see cref="!:TSource" /> type to the instance of <see cref="!:TTarget" />.
@@ -47,15 +42,11 @@
 		/// <returns>
 		/// The converted instance of <see cref="!:TTarget" />.
 		/// </returns>
-		public Grant Convert(GrantViewModel source, Grant target)
+		public Secret Convert(SecretViewModel source, Secret target)
 		{
-			target.ID = source.ID;
-			target.Type = source.Type;
-			target.ClientID = source.ClientID;
-			target.UserID = source.UserID;
-			target.CreationTime = source.CreationTime;
-			target.Expiration = source.ExpirationTime;
-			target.Data = source.Data;
+
+			target.Value = source.Value;
+			target.Expiration = source.Expiration;
 
 			return target;
 		}

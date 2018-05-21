@@ -79,6 +79,21 @@
 			services.AddTypeConverter<ITypeConverter<Grant, GrantViewModel>, GrantViewModelConverter>();
 			services.AddTypeConverter<ITypeConverter<GrantViewModel, Grant>, GrantViewModelConverter>();
 
+			services.AddTypeConverter<ITypeConverter<Secret, SecretViewModel>, SecretViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<SecretViewModel, Secret>, SecretViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<Application, ApplicationViewModel>, ApplicationViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<ApplicationViewModel, Application>, ApplicationViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<Client, ClientViewModel>, ClientViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<ClientViewModel, Client>, ClientViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<Client, ClientViewModel>, ClientViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<ClientViewModel, Client>, ClientViewModelConverter>();
+
+			services.AddTypeConverter<ITypeConverter<ApiResource, ApiResourceViewModel>, ApiResourceViewModelConverter>();
+			services.AddTypeConverter<ITypeConverter<ApiResourceViewModel, ApiResource>, ApiResourceViewModelConverter>();
+
 			return services;
 		}
 

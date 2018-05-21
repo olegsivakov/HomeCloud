@@ -65,6 +65,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.ActionConstra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.DataAnnotations", "..\Common\Mvc\HomeCloud.Mvc.DataAnnotations\HomeCloud.Mvc.DataAnnotations.csproj", "{F91BD309-D285-4BFC-AB30-D42D3C49750C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Exceptions", "..\Common\Mvc\HomeCloud.Mvc.Exceptions\HomeCloud.Mvc.Exceptions.csproj", "{7AD9C28E-AE84-428E-8684-3B10E903B537}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Http", "..\Common\HomeCloud.Http\HomeCloud.Http.csproj", "{23806A42-0EEB-404C-94EC-3D04F800A2F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +187,14 @@ Global
 		{F91BD309-D285-4BFC-AB30-D42D3C49750C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F91BD309-D285-4BFC-AB30-D42D3C49750C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F91BD309-D285-4BFC-AB30-D42D3C49750C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AD9C28E-AE84-428E-8684-3B10E903B537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AD9C28E-AE84-428E-8684-3B10E903B537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AD9C28E-AE84-428E-8684-3B10E903B537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AD9C28E-AE84-428E-8684-3B10E903B537}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +224,8 @@ Global
 		{E2FF774F-389A-4AF7-A880-2220A9EFE5C5} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{AB8227CF-2408-43B3-B09E-20DFB95B7DB8} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{F91BD309-D285-4BFC-AB30-D42D3C49750C} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
+		{7AD9C28E-AE84-428E-8684-3B10E903B537} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
+		{23806A42-0EEB-404C-94EC-3D04F800A2F1} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1BF0BFA-F2D3-4408-A875-9C702A554864}

@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj" />
     <ProjectReference Include="..\HomeCloud.Mvc.Formatters\HomeCloud.Mvc.Formatters.csproj" />
     <ProjectReference Include="..\HomeCloud.Mvc.Models\HomeCloud.Mvc.Models.csproj" />
     <ProjectReference Include="..\HomeCloud.Mvc.Providers\HomeCloud.Mvc.Providers.csproj" />
