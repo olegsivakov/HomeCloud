@@ -117,5 +117,14 @@
 		/// The result of execution of service operation.
 		/// </returns>
 		Task<ServiceResult<IEnumerable<string>>> SaveScopesAsync(Guid applicationID, IEnumerable<string> scopes);
+
+		/// <summary>
+		/// Deletes the client application by specified client application identifier.
+		/// </summary>
+		/// <param name="id">The client application identifier.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		Task<ServiceResult<Client>> DeleteApplicationAsync(Guid id);
 	}
 }

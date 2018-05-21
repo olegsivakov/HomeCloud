@@ -411,6 +411,31 @@
 			return new ServiceResult<ApiResource>(application);
 		}
 
+		/// <summary>
+		/// Deletes the resource application by specified resource application identifier.
+		/// </summary>
+		/// <param name="id">The resource application identifier.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		public async Task<ServiceResult<ApiResource>> DeleteApplicationAsync(Guid id)
+		{
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+			{
+				ServiceResult<ApiResource> result = await this.GetApplicationAsync(id);
+				if (!result.IsSuccess)
+				{
+					return result;
+				}
+
+				await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().DeleteAsync(result.Data.ID);
+
+				scope.Complete();
+
+				return result;
+			}
+		}
+
 		#endregion
 	}
 }

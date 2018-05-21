@@ -488,6 +488,31 @@
 			}
 		}
 
+		/// <summary>
+		/// Deletes the client application by specified client application identifier.
+		/// </summary>
+		/// <param name="id">The client application identifier.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		public async Task<ServiceResult<Client>> DeleteApplicationAsync(Guid id)
+		{
+			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+			{
+				ServiceResult<Client> result = await this.GetApplicationAsync(id);
+				if (!result.IsSuccess)
+				{
+					return result;
+				}
+
+				await this.repositoryFactory.GetService<IClientDocumentRepository>().DeleteAsync(result.Data.ID);
+
+				scope.Complete();
+
+				return result;
+			}
+		}
+
 		#endregion
 	}
 }

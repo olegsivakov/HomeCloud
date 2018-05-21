@@ -98,5 +98,14 @@
 		/// The result of execution of service operation.
 		/// </returns>
 		Task<ServiceResult<IEnumerable<string>>> SaveScopesAsync(Guid applicationID, IEnumerable<string> scopes);
+
+		/// <summary>
+		/// Deletes the resource application by specified resource application identifier.
+		/// </summary>
+		/// <param name="id">The resource application identifier.</param>
+		/// <returns>
+		/// The result of execution of service operation.
+		/// </returns>
+		Task<ServiceResult<ApiResource>> DeleteApplicationAsync(Guid id);
 	}
 }
