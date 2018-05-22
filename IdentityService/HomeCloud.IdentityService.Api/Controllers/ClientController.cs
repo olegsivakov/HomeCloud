@@ -242,7 +242,8 @@
 		[HttpPut("v1/[controller]s/{id}/grants", Name = nameof(ClientController.SaveClientGrantList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveClientGrantList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<GrantViewModel> model)
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<GrantViewModel> model)
 		{
 			IEnumerable<Grant> entities = this.Mapper.MapNew<GrantViewModel, Grant>(model ?? Enumerable.Empty<GrantViewModel>());
 
@@ -264,7 +265,8 @@
 		[HttpPut("v1/[controller]s/{id}/secrets", Name = nameof(ClientController.SaveClientSecretList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveClientSecretList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<SecretViewModel> model)
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<SecretViewModel> model)
 		{
 			IEnumerable<Secret> entities = this.Mapper.MapNew<SecretViewModel, Secret>(model ?? Enumerable.Empty<SecretViewModel>());
 
@@ -286,7 +288,8 @@
 		[HttpPut("v1/[controller]s/{id}/scopes", Name = nameof(ClientController.SaveClientScopeList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveClientScopeList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<string> model)
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<string> model)
 		{
 			ServiceResult<IEnumerable<string>> result = await this.clientService.SaveScopesAsync(id, model);
 
@@ -305,7 +308,8 @@
 		[HttpPut("v1/[controller]s/{id}/origins", Name = nameof(ClientController.SaveClientOriginList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveClientOriginList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id, IEnumerable<string> model)
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<string> model)
 		{
 			ServiceResult<IEnumerable<string>> result = await this.clientService.SaveOriginsAsync(id, model);
 

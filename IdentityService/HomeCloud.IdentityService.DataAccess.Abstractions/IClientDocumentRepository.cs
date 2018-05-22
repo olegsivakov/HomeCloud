@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Data.MongoDB;
@@ -18,32 +19,36 @@
 	public interface IClientDocumentRepository : IMongoDBRepository<ClientDocument>
 	{
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> origins by specified <paramref name="selector"/>.
+		/// Searches for the origins by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of origin strings.</returns>
-		Task<IEnumerable<string>> FindOrigins(Func<ClientDocument, string, bool> selector);
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The origins selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		Task<IEnumerable<string>> FindOrigins(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<string, bool>> projectionSelector);
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> secrets by specified <paramref name="selector"/>.
+		/// Searches for the secrets by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of secrets.</returns>
-		Task<IEnumerable<SecretDocument>> FindSecrets(Func<ClientDocument, SecretDocument, bool> selector);
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The secret selector.</param>
+		/// <returns> The list of of instances of <see cref="SecretDocument"/>.</returns>
+		Task<IEnumerable<SecretDocument>> FindSecrets(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<SecretDocument, bool>> projectionSelector);
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> scopes by specified <paramref name="selector"/>.
+		/// Searches for the scopes by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of scope strings.</returns>
-		Task<IEnumerable<string>> FindScopes(Func<ClientDocument, string, bool> selector);
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The scope selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		Task<IEnumerable<string>> FindScopes(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<string, bool>> projectionSelector);
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> grants by specified <paramref name="selector"/>.
+		/// Searches for the grants by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of instances of <see cref="GrantDocument"/>.</returns>
-		Task<IEnumerable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector);
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The grant selector.</param>
+		/// <returns> The list of of instances of <see cref="GrantDocument"/>.</returns>
+		Task<IEnumerable<GrantDocument>> FindGrants(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<GrantDocument, bool>> projectionSelector);
 
 		/// <summary>
 		/// Saves the origins of the specified <paramref name="document"/> of <see cref="ClientDocument"/> type.

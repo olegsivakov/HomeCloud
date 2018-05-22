@@ -5,6 +5,7 @@
 	using System;
 
 	using MongoDB.Bson.Serialization.Attributes;
+	using MongoDB.Bson.Serialization.IdGenerators;
 
 	#endregion
 
@@ -20,7 +21,6 @@
 		/// The value.
 		/// </value>
 		[BsonElement("value")]
-		[BsonRequired]
 		public string Value { get; set; }
 
 		/// <summary>

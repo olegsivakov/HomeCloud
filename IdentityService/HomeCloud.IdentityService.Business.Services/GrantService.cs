@@ -152,16 +152,12 @@
 			}
 
 			IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
-			IEnumerable<GrantDocument> documents = await repository.FindGrants((client, grant) =>
-			{
-				bool result = true;
-
-				result &= !criteria.ClientID.HasValue || (client?.ID).GetValueOrDefault() == criteria.ClientID.Value;
-				result &= !criteria.UserID.HasValue || grant.UserID == criteria.UserID.GetValueOrDefault();
-				result &= string.IsNullOrWhiteSpace(criteria.Type) || grant.Type == criteria.Type;
-
-				return result;
-			});
+			IEnumerable<GrantDocument> documents = await repository.FindGrants(
+				client => !criteria.ClientID.HasValue || client.ID == criteria.ClientID.Value,
+				grant =>
+				!criteria.UserID.HasValue || grant.UserID == criteria.UserID.GetValueOrDefault()
+				&&
+				string.IsNullOrWhiteSpace(criteria.Type) || grant.Type == criteria.Type);
 
 			IEnumerable<Grant> grants = this.mapper.MapNew<GrantDocument, Grant>(documents);
 
@@ -183,7 +179,7 @@
 			}
 
 			IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
-			IEnumerable<GrantDocument> documents = await repository.FindGrants((client, grant) => grant.ID == id);
+			IEnumerable<GrantDocument> documents = await repository.FindGrants(null, grant => grant.ID == id);
 
 			Grant result = this.mapper.MapNew<GrantDocument, Grant>(documents.FirstOrDefault());
 
@@ -230,7 +226,7 @@
 				};
 
 				IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
-				client.Grants = await repository.FindGrants((clientDocument, grantDocument) => clientDocument.ID == client.ID);
+				client.Grants = await repository.FindGrants(clientDocument => clientDocument.ID == client.ID, null);
 
 				GrantDocument document = client.Grants.FirstOrDefault(item => item.ID == grant.ID);
 				if (document is null)

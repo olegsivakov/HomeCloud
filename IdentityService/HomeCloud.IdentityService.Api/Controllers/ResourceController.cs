@@ -221,7 +221,8 @@
 		[HttpPut("v1/[controller]s/{id}/claims", Name = nameof(ResourceController.SaveApiResourceClaimList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveApiResourceClaimList(
-			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id, IEnumerable<string> model)
+			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<string> model)
 		{
 			ServiceResult<IEnumerable<string>> result = await this.resourceService.SaveClaimsAsync(id, model);
 
@@ -240,7 +241,8 @@
 		[HttpPut("v1/[controller]s/{id}/secrets", Name = nameof(ResourceController.SaveApiResourceSecretList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveApiResourceSecretList(
-			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id, IEnumerable<SecretViewModel> model)
+			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<SecretViewModel> model)
 		{
 			IEnumerable<Secret> entities = this.Mapper.MapNew<SecretViewModel, Secret>(model ?? Enumerable.Empty<SecretViewModel>());
 
@@ -262,7 +264,8 @@
 		[HttpPut("v1/[controller]s/{id}/scopes", Name = nameof(ResourceController.SaveApiResourceScopeList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveApiResourceScopeList(
-			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id, IEnumerable<string> model)
+			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,
+			[FromBody] IEnumerable<string> model)
 		{
 			ServiceResult<IEnumerable<string>> result = await this.resourceService.SaveScopesAsync(id, model);
 

@@ -86,6 +86,7 @@
 		/// The grants.
 		/// </value>
 		[BsonElement("grants")]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<GrantDocument> Grants { get; set; }
 
 		/// <summary>

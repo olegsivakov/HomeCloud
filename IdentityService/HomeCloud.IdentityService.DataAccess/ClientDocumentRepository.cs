@@ -12,6 +12,7 @@
 	using HomeCloud.IdentityService.DataAccess.Objects;
 
 	using MongoDB.Driver;
+	using System.Linq.Expressions;
 
 	#endregion
 
@@ -39,102 +40,124 @@
 		#region IClientDocumentRepository Implementations
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> origins by specified <paramref name="selector"/>.
+		/// Searches for the origins by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of origin strings.</returns>
-		public async Task<IEnumerable<string>> FindOrigins(Func<ClientDocument, string, bool> selector)
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The origins selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		public async Task<IEnumerable<string>> FindOrigins(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<string, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Origins, projectionDocument => projectionDocument != null && selector(null, projectionDocument));
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ClientDocument, IEnumerable<string>> projection =
+				projectionSelector is null ?
+				Builders<ClientDocument>.Projection.Expression(client => client.Origins ?? Enumerable.Empty<string>()) :
+				Builders<ClientDocument>.Projection.Expression(client => client.Origins == null ? Enumerable.Empty<string>() : client.Origins.Where(projectionSelector.Compile()));
 
-			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, string>()
+			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
 
-			IList<string> result = await cursor.ToListAsync();
+			IEnumerable<string> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<string>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> secrets by specified <paramref name="selector"/>.
+		/// Searches for the secrets by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of secrets.</returns>
-		public async Task<IEnumerable<SecretDocument>> FindSecrets(Func<ClientDocument, SecretDocument, bool> selector)
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The secret selector.</param>
+		/// <returns>
+		/// The list of of instances of <see cref="SecretDocument"/>.
+		/// </returns>
+		public async Task<IEnumerable<SecretDocument>> FindSecrets(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<SecretDocument, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Secrets, projectionDocument => projectionDocument != null && selector(null, projectionDocument));
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ClientDocument, IEnumerable<SecretDocument>> projection = 
+				projectionSelector is null ?
+				Builders<ClientDocument>.Projection.Expression(client => client.Secrets ?? Enumerable.Empty<SecretDocument>()) :
+				Builders<ClientDocument>.Projection.Expression(client => client.Secrets == null ? Enumerable.Empty<SecretDocument>() : client.Secrets.Where(projectionSelector.Compile()));
 
-			IAsyncCursor<SecretDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, SecretDocument>()
+			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<SecretDocument>>()
 			{
 				Projection = projection
 			});
 
-			IList<SecretDocument> result = await cursor.ToListAsync();
+			IEnumerable<SecretDocument> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<SecretDocument>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> scopes by specified <paramref name="selector"/>.
+		/// Searches for the scopes by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of scope strings.</returns>
-		public async Task<IEnumerable<string>> FindScopes(Func<ClientDocument, string, bool> selector)
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The scope selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		public async Task<IEnumerable<string>> FindScopes(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<string, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => contract.Scopes, projectionDocument => projectionDocument != null && selector(null, projectionDocument));
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ClientDocument, IEnumerable<string>> projection =
+				projectionSelector is null ?
+				Builders<ClientDocument>.Projection.Expression(client => client.Scopes ?? Enumerable.Empty<string>()) :
+				Builders<ClientDocument>.Projection.Expression(client => client.Scopes == null ? Enumerable.Empty<string>() : client.Scopes.Where(projectionSelector.Compile()));
 
-			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, string>()
+			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
 
-			IList<string> result = await cursor.ToListAsync();
+			IEnumerable<string> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<string>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 
 		/// <summary>
-		/// Searches for the <see cref="ClientDocument"/> grants by specified <paramref name="selector"/>.
+		/// Searches for the grants by specified <paramref name="projectionSelector" /> that belong to the clients specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of instances of <see cref="GrantDocument"/>.</returns>
-		public async Task<IEnumerable<GrantDocument>> FindGrants(Func<ClientDocument, GrantDocument, bool> selector)
+		/// <param name="clientSelector">The client selector.</param>
+		/// <param name="projectionSelector">The grant selector.</param>
+		/// <returns> The list of of instances of <see cref="GrantDocument"/>.</returns>
+		public async Task<IEnumerable<GrantDocument>> FindGrants(Expression<Func<ClientDocument, bool>> clientSelector, Expression<Func<GrantDocument, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ClientDocument> projection = Builders<ClientDocument>.Projection.ElemMatch(contract => this.SetGrantClient(contract, contract.Grants), projectionDocument => projectionDocument != null && selector(null, projectionDocument));
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ClientDocument, IEnumerable<GrantDocument>> projection =
+				projectionSelector is null ?
+				Builders<ClientDocument>.Projection.Expression(client => client.Grants == null ? Enumerable.Empty<GrantDocument>() : this.SetGrantClient(client, client.Grants)) :
+				Builders<ClientDocument>.Projection.Expression(client => client.Grants == null ? Enumerable.Empty<GrantDocument>() : this.SetGrantClient(client, client.Grants).Where(projectionSelector.Compile()));
 
-			IAsyncCursor<GrantDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, GrantDocument>()
+			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<GrantDocument>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<GrantDocument>>()
 			{
 				Projection = projection
 			});
 
-			IList<GrantDocument> result = await cursor.ToListAsync();
+			IEnumerable<GrantDocument> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<GrantDocument>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 
@@ -216,7 +239,7 @@
 				document = await this.SaveAsync(document);
 			}
 
-			return await this.CurrentCollection.FindOneAndUpdateAsync(
+			document = await this.CurrentCollection.FindOneAndUpdateAsync(
 				this.GetUniqueFilterDefinition(document),
 				Builders<ClientDocument>.Update.Set(contract => contract.Grants, document.Grants),
 				new FindOneAndUpdateOptions<ClientDocument>()
@@ -224,6 +247,13 @@
 					IsUpsert = true,
 					ReturnDocument = ReturnDocument.After
 				});
+
+			if (document.Grants != null)
+			{
+				this.SetGrantClient(document, document.Grants);
+			}
+
+			return document;
 		}
 
 		/// <summary>
@@ -268,7 +298,7 @@
 				await this.SaveGrants(client);
 			}
 
-			return clients.SelectMany(client => client.Grants);
+			return clients.SelectMany(client => this.SetGrantClient(client, client.Grants ?? Enumerable.Empty<GrantDocument>()));
 		}
 
 		#endregion

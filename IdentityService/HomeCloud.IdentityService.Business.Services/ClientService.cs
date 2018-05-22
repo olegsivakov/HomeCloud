@@ -222,7 +222,7 @@
 				};
 			}
 
-			IEnumerable<GrantDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindGrants((client, grant) => client.ID == application.ID);
+			IEnumerable<GrantDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindGrants(client => client.ID == application.ID, null);
 			IEnumerable<Grant> grants = this.mapper.MapNew<GrantDocument, Grant>(documents);
 
 			return new ServiceResult<IEnumerable<Grant>>(grants);
@@ -254,7 +254,7 @@
 				};
 			}
 
-			IEnumerable<string> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindOrigins((client, origin) => client.ID == application.ID);
+			IEnumerable<string> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindOrigins(client => client.ID == application.ID, null);
 
 			return new ServiceResult<IEnumerable<string>>(documents);
 		}
@@ -284,7 +284,7 @@
 				};
 			}
 
-			IEnumerable<string> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindScopes((client, scope) => client.ID == application.ID);
+			IEnumerable<string> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindScopes(client => client.ID == application.ID, null);
 
 			return new ServiceResult<IEnumerable<string>>(documents);
 		}
@@ -314,7 +314,7 @@
 				};
 			}
 
-			IEnumerable<SecretDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindSecrets((client, secret) => client.ID == application.ID);
+			IEnumerable<SecretDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().FindSecrets(client => client.ID == application.ID, null);
 			IEnumerable<Secret> secrets = this.mapper.MapNew<SecretDocument, Secret>(documents);
 
 			return new ServiceResult<IEnumerable<Secret>>(secrets);
@@ -428,10 +428,9 @@
 				foreach (string resourceID in scopes)
 				{
 					Guid id = Guid.Empty;
-					if (Guid.TryParse(resourceID, out id))
-					{
-						result = await apiResourceValidator.Get<IPresenceValidator>().ValidateAsync(new ApiResource() { ID = id });
-					}
+					Guid.TryParse(resourceID, out id);
+
+					result += await apiResourceValidator.Get<IPresenceValidator>().ValidateAsync(new ApiResource() { ID = id });
 				}
 
 				if (!result.IsValid)
