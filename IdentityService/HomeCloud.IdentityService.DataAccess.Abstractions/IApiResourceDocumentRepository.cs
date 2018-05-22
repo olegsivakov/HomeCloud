@@ -4,6 +4,7 @@
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Data.MongoDB;
@@ -18,25 +19,30 @@
 	public interface IApiResourceDocumentRepository : IMongoDBRepository<ApiResourceDocument>
 	{
 		/// <summary>
-		/// Searches for the <see cref="ApiResourceDocument"/> claims by specified <paramref name="selector"/>.
+		/// Searches for the claims by specified <paramref name="projectionSelector" /> that belong to the api resource specified by <paramref name="resourceSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of claim strings.</returns>
-		Task<IEnumerable<string>> FindClaims(Func<ApiResourceDocument, string, bool> selector);
+		/// <param name="resourceSelector">The api resource selector.</param>
+		/// <param name="projectionSelector">The claim selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		Task<IEnumerable<string>> FindClaims(Expression<Func<ApiResourceDocument, bool>> resourceSelector, Expression<Func<string, bool>> projectionSelector);
 
 		/// <summary>
-		/// Searches for the <see cref="ApiResourceDocument"/> secrets by specified <paramref name="selector"/>.
+		/// Searches for the secrets by specified <paramref name="projectionSelector" /> that belong to the api resource specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of secrets.</returns>
-		Task<IEnumerable<SecretDocument>> FindSecrets(Func<ApiResourceDocument, SecretDocument, bool> selector);
+		/// <param name="resourceSelector">The api resource selector.</param>
+		/// <param name="projectionSelector">The secret selector.</param>
+		/// <returns>
+		/// The list of of instances of <see cref="SecretDocument"/>.
+		/// </returns>
+		Task<IEnumerable<SecretDocument>> FindSecrets(Expression<Func<ApiResourceDocument, bool>> resourceSelector, Expression<Func<SecretDocument, bool>> projectionSelector);
 
 		/// <summary>
-		/// Searches for the <see cref="ApiResourceDocument"/> scopes by specified <paramref name="selector"/>.
+		/// Searches for the scopes by specified <paramref name="projectionSelector" /> that belong to the api resource specified by <paramref name="resourceSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of scope strings.</returns>
-		Task<IEnumerable<string>> FindScopes(Func<ApiResourceDocument, string, bool> selector);
+		/// <param name="resourceSelector">The api resource selector.</param>
+		/// <param name="projectionSelector">The scope selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		Task<IEnumerable<string>> FindScopes(Expression<Func<ApiResourceDocument, bool>> resourceSelector, Expression<Func<string, bool>> projectionSelector);
 
 		/// <summary>
 		/// Saves the claims of the specified <paramref name="document"/> of <see cref="ApiResourceDocument"/> type.

@@ -192,7 +192,7 @@
 				};
 			}
 
-			IEnumerable<string> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindClaims((client, claim) => client.ID == application.ID);
+			IEnumerable<string> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindClaims(resource => resource.ID == application.ID, null);
 
 			return new ServiceResult<IEnumerable<string>>(documents);
 		}
@@ -222,7 +222,7 @@
 				};
 			}
 
-			IEnumerable<string> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindScopes((client, scope) => client.ID == application.ID);
+			IEnumerable<string> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindScopes(resource => resource.ID == application.ID, null);
 
 			return new ServiceResult<IEnumerable<string>>(documents);
 		}
@@ -252,7 +252,7 @@
 				};
 			}
 
-			IEnumerable<SecretDocument> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindSecrets((client, secret) => client.ID == application.ID);
+			IEnumerable<SecretDocument> documents = await this.repositoryFactory.GetService<IApiResourceDocumentRepository>().FindSecrets(resource => resource.ID == application.ID, null);
 			IEnumerable<Secret> secrets = this.mapper.MapNew<SecretDocument, Secret>(documents);
 
 			return new ServiceResult<IEnumerable<Secret>>(secrets);

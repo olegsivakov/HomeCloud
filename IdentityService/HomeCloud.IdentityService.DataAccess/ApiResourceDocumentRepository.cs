@@ -5,6 +5,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Linq.Expressions;
 	using System.Threading.Tasks;
 
 	using HomeCloud.Core;
@@ -39,77 +40,94 @@
 		#region IApiResourceDocumentRepository Implementations
 
 		/// <summary>
-		/// Searches for the <see cref="ApiResourceDocument"/> claims by specified <paramref name="selector"/>.
+		/// Searches for the claims by specified <paramref name="projectionSelector" /> that belong to the api resource specified by <paramref name="resourceSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of claim strings.</returns>
-		public async Task<IEnumerable<string>> FindClaims(Func<ApiResourceDocument, string, bool> selector)
+		/// <param name="resourceSelector">The api resource selector.</param>
+		/// <param name="projectionSelector">The claim selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		public async Task<IEnumerable<string>> FindClaims(Expression<Func<ApiResourceDocument, bool>> resourceSelector, Expression<Func<string, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ApiResourceDocument> projection = Builders<ApiResourceDocument>.Projection.ElemMatch(contract => contract.Claims, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ApiResourceDocument, IEnumerable<string>> projection =
+				projectionSelector is null ?
+				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Claims ?? Enumerable.Empty<string>()) :
+				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Claims == null ? Enumerable.Empty<string>() : resource.Claims.Where(projectionSelector.Compile()));
 
-			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, string>()
+			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? resourceSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
 
-			IList<string> result = await cursor.ToListAsync();
+			IEnumerable<string> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<string>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 
 		/// <summary>
-		/// Searches for the <see cref="ApiResourceDocument"/> secrets by specified <paramref name="selector"/>.
+		/// Searches for the secrets by specified <paramref name="projectionSelector" /> that belong to the api resource specified by <paramref name="clientSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of secrets.</returns>
-		public async Task<IEnumerable<SecretDocument>> FindSecrets(Func<ApiResourceDocument, SecretDocument, bool> selector)
+		/// <param name="resourceSelector">The api resource selector.</param>
+		/// <param name="projectionSelector">The secret selector.</param>
+		/// <returns>
+		/// The list of of instances of <see cref="SecretDocument"/>.
+		/// </returns>
+		public async Task<IEnumerable<SecretDocument>> FindSecrets(Expression<Func<ApiResourceDocument, bool>> resourceSelector, Expression<Func<SecretDocument, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ApiResourceDocument> projection = Builders<ApiResourceDocument>.Projection.ElemMatch(contract => contract.Secrets, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ApiResourceDocument, IEnumerable<SecretDocument>> projection =
+				projectionSelector is null ?
+				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Secrets ?? Enumerable.Empty<SecretDocument>()) :
+				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Secrets == null ? Enumerable.Empty<SecretDocument>() : resource.Secrets.Where(projectionSelector.Compile()));
 
-			IAsyncCursor<SecretDocument> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, SecretDocument>()
+			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? resourceSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, IEnumerable<SecretDocument>>()
 			{
 				Projection = projection
 			});
 
-			IList<SecretDocument> result = await cursor.ToListAsync();
+			IEnumerable<SecretDocument> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<SecretDocument>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 
 		/// <summary>
-		/// Searches for the <see cref="ApiResourceDocument"/> scopes by specified <paramref name="selector"/>.
+		/// Searches for the scopes by specified <paramref name="projectionSelector" /> that belong to the api resource specified by <paramref name="resourceSelector"/>.
 		/// </summary>
-		/// <param name="selector">The selector.</param>
-		/// <returns>The list of scope strings.</returns>
-		public async Task<IEnumerable<string>> FindScopes(Func<ApiResourceDocument, string, bool> selector)
+		/// <param name="resourceSelector">The api resource selector.</param>
+		/// <param name="projectionSelector">The scope selector.</param>
+		/// <returns> The list of of instances of <see cref="string"/>.</returns>
+		public async Task<IEnumerable<string>> FindScopes(Expression<Func<ApiResourceDocument, bool>> resourceSelector, Expression<Func<string, bool>> projectionSelector)
 		{
-			ProjectionDefinition<ApiResourceDocument> projection = Builders<ApiResourceDocument>.Projection.ElemMatch(contract => contract.Scopes, projectionDocument => projectionDocument != null ? selector(null, projectionDocument) : false);
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(document => selector(document, null));
+			ProjectionDefinition<ApiResourceDocument, IEnumerable<string>> projection =
+				projectionSelector is null ?
+				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Scopes ?? Enumerable.Empty<string>()) :
+				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Scopes == null ? Enumerable.Empty<string>() : resource.Scopes.Where(projectionSelector.Compile()));
 
-			IAsyncCursor<string> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, string>()
+			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? resourceSelector : (_ => true));
+
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
 
-			IList<string> result = await cursor.ToListAsync();
+			IEnumerable<string> result = (await cursor.ToListAsync()).SelectMany(item => item);
 
 			return new PagedList<string>(result)
 			{
 				Offset = 0,
-				Limit = result.Count,
-				TotalCount = result.Count
+				Limit = result.Count(),
+				TotalCount = result.Count()
 			};
 		}
 

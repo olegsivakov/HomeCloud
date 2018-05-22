@@ -83,27 +83,29 @@
 		{
 			using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
 			{
-				IEnumerable<GrantDocument> documents = await this.repositoryFactory.GetService<IClientDocumentRepository>().DeleteGrants((client, grant) =>
+				ServiceResult<IEnumerable<Grant>> searchResult = await this.FindGrantsAsync(criteria);
+				if (!searchResult.IsSuccess)
 				{
-					if (criteria is null)
+					return searchResult;
+				}
+
+				IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
+
+				IEnumerable<IGrouping<Guid, Grant>> groups = searchResult.Data.GroupBy(item => item.ClientID);
+				foreach (IGrouping<Guid, Grant> group in groups)
+				{
+					ClientDocument client = new ClientDocument()
 					{
-						return false;
+						ID = group.Key,
+						Grants = await repository.FindGrants(document => document.ID == group.Key, document => group.Any(item => item.ID == document.ID))
 					};
 
-					bool result = true;
-
-					result &= !criteria.ClientID.HasValue || (client?.ID).GetValueOrDefault() == criteria.ClientID.Value;
-					result &= !criteria.UserID.HasValue || (grant?.UserID).GetValueOrDefault() == criteria.UserID.Value;
-					result &= string.IsNullOrWhiteSpace(criteria.Type) || grant?.Type?.Trim().ToLower() == criteria.Type.Trim().ToLower();
-
-					return result;
-				});
+					client = await repository.SaveGrants(client);
+				}
 
 				scope.Complete();
 
-				IEnumerable<Grant> grants = this.mapper.MapNew<GrantDocument, Grant>(documents);
-
-				return new ServiceResult<IEnumerable<Grant>>(grants);
+				return searchResult;
 			}
 		}
 
