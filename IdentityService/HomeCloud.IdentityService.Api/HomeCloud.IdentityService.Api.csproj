@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.ActionConstraints\HomeCloud.Mvc.ActionConstraints.csproj" />
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.DataAnnotations\HomeCloud.Mvc.DataAnnotations.csproj" />
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Exceptions\HomeCloud.Mvc.Exceptions.csproj" />
+    <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc.Hypermedia\HomeCloud.Mvc.Hypermedia.csproj" />
     <ProjectReference Include="..\..\Common\Mvc\HomeCloud.Mvc\HomeCloud.Mvc.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Api.DependencyInjection\HomeCloud.IdentityService.Api.DependencyInjection.csproj" />
     <ProjectReference Include="..\HomeCloud.IdentityService.Api.Models\HomeCloud.IdentityService.Api.Models.csproj" />

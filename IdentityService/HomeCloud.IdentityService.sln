@@ -47,9 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Models", "..\Common\Mvc\HomeCloud.Mvc.Models\HomeCloud.Mvc.Models.csproj", "{FFC78DA8-22C4-43CE-9BD0-3F097B267992}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Validation.Abstractions", "HomeCloud.IdentityService.Business.Validation.Abstractions\HomeCloud.IdentityService.Business.Validation.Abstractions.csproj", "{7C1F43CB-018E-48AA-840D-C680C7B518A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Validation.Abstractions", "HomeCloud.IdentityService.Business.Validation.Abstractions\HomeCloud.IdentityService.Business.Validation.Abstractions.csproj", "{7C1F43CB-018E-48AA-840D-C680C7B518A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCloud.IdentityService.Business.Validation", "HomeCloud.IdentityService.Business.Validation\HomeCloud.IdentityService.Business.Validation.csproj", "{569CA982-7AA1-445A-AC7D-4EB36CA0BF85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.IdentityService.Business.Validation", "HomeCloud.IdentityService.Business.Validation\HomeCloud.IdentityService.Business.Validation.csproj", "{569CA982-7AA1-445A-AC7D-4EB36CA0BF85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Exceptions", "..\Common\HomeCloud.Exceptions\HomeCloud.Exceptions.csproj", "{F3B7D318-63EA-434A-B995-0DD9529D9CE9}"
 EndProject
@@ -68,6 +68,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Exceptions", "..\Common\Mvc\HomeCloud.Mvc.Exceptions\HomeCloud.Mvc.Exceptions.csproj", "{7AD9C28E-AE84-428E-8684-3B10E903B537}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Http", "..\Common\HomeCloud.Http\HomeCloud.Http.csproj", "{23806A42-0EEB-404C-94EC-3D04F800A2F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCloud.Mvc.Hypermedia", "..\Common\Mvc\HomeCloud.Mvc.Hypermedia\HomeCloud.Mvc.Hypermedia.csproj", "{A00FBC7F-9BB7-4AB5-A5E1-FD1D67A05E52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -195,6 +197,10 @@ Global
 		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23806A42-0EEB-404C-94EC-3D04F800A2F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A00FBC7F-9BB7-4AB5-A5E1-FD1D67A05E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00FBC7F-9BB7-4AB5-A5E1-FD1D67A05E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00FBC7F-9BB7-4AB5-A5E1-FD1D67A05E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00FBC7F-9BB7-4AB5-A5E1-FD1D67A05E52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,6 +232,7 @@ Global
 		{F91BD309-D285-4BFC-AB30-D42D3C49750C} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{7AD9C28E-AE84-428E-8684-3B10E903B537} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 		{23806A42-0EEB-404C-94EC-3D04F800A2F1} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
+		{A00FBC7F-9BB7-4AB5-A5E1-FD1D67A05E52} = {704798B5-6532-4657-B12D-C9CDB6D26B87}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1BF0BFA-F2D3-4408-A875-9C702A554864}

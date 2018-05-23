@@ -12,8 +12,12 @@
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
-	using HomeCloud.Mvc.Exceptions;
 	using HomeCloud.Mvc;
+	using HomeCloud.Mvc.Exceptions;
+	using HomeCloud.Mvc.Hypermedia;
+	using HomeCloud.IdentityService.Api.Controllers;
+	using HomeCloud.IdentityService.Api.Models;
+	using HomeCloud.Mvc.Models;
 
 	#endregion
 
@@ -67,7 +71,8 @@
 
 			services.AddMvc()
 				.Extend()
-				.AddInputValidation();
+				.AddInputValidation()
+				.AddHypermedia();
 
 			return services.BuildServiceProvider();
 
@@ -86,6 +91,108 @@
 			}
 
 			application.UseExceptionHandling();
+			application.UseHypermedia(routes =>
+			{
+				routes.AddRoute(nameof(ClientController.GetClientList))
+						.AddRoute<PagedListViewModel<ClientViewModel>>("self", nameof(ClientController.GetClientList), model => new { offset = model.Offset, limit = model.Size })
+						.AddRoute<PagedListViewModel<ClientViewModel>>("previous", nameof(ClientController.GetClientList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<PagedListViewModel<ClientViewModel>>("next", nameof(ClientController.GetClientList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<PagedListViewModel<ClientViewModel>>("create", nameof(ClientController.CreateClient), null)
+						.AddRoute<PagedListViewModel<ClientViewModel>, ClientViewModel>("items", nameof(ClientController.GetClientByID), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(ClientController.GetClientByID))
+						.AddRoute<ClientViewModel>("self", nameof(ClientController.GetClientByID), model => new { id = model.ID })
+						.AddRoute<ClientViewModel>("update", nameof(ClientController.UpdateClient), model => new { id = model.ID })
+						.AddRoute<ClientViewModel>("delete", nameof(ClientController.DeleteClientByID), model => new { id = model.ID })
+						.AddRoute<ClientViewModel>("scopes", nameof(ClientController.GetClientScopeList), model => new { id = model.ID })
+						.AddRoute<ClientViewModel>("origins", nameof(ClientController.GetClientOriginList), model => new { id = model.ID })
+						.AddRoute<ClientViewModel>("secrets", nameof(ClientController.GetClientSecretList), model => new { id = model.ID })
+						.AddRoute<ClientViewModel>("grants", nameof(ClientController.GetClientGrantList), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(ClientController.CreateClient))
+						.AddRoute<ClientViewModel>("self", nameof(ClientController.CreateClient), null)
+						.AddRoute<ClientViewModel>("get", nameof(ClientController.GetClientByID), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(ClientController.GetClientScopeList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ClientController.GetClientScopeList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("save", nameof(ClientController.SaveClientScopeList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ClientController.SaveClientScopeList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ClientController.SaveClientScopeList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("get", nameof(ClientController.GetClientScopeList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ClientController.GetClientOriginList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ClientController.GetClientOriginList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("save", nameof(ClientController.SaveClientOriginList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ClientController.SaveClientOriginList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ClientController.SaveClientOriginList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("get", nameof(ClientController.GetClientOriginList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ClientController.GetClientSecretList))
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("self", nameof(ClientController.GetClientSecretList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("save", nameof(ClientController.SaveClientSecretList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ClientController.SaveClientOriginList))
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("self", nameof(ClientController.SaveClientOriginList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("get", nameof(ClientController.GetClientOriginList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ClientController.GetClientGrantList))
+						.AddRoute<ApplicationDataListViewModel<GrantViewModel>>("self", nameof(ClientController.GetClientGrantList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ResourceController.GetApiResourceList))
+						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("self", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset, limit = model.Size })
+						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("previous", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("next", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("create", nameof(ResourceController.CreateApiResource), null)
+						.AddRoute<PagedListViewModel<ApiResourceViewModel>, ApiResourceViewModel>("items", nameof(ResourceController.GetApiResourceByID), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(ResourceController.CreateApiResource))
+						.AddRoute<ApiResourceViewModel>("self", nameof(ResourceController.CreateApiResource), null)
+						.AddRoute<ApiResourceViewModel>("get", nameof(ResourceController.GetApiResourceByID), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(ResourceController.GetApiResourceByID))
+						.AddRoute<ApiResourceViewModel>("self", nameof(ResourceController.GetApiResourceByID), model => new { id = model.ID })
+						.AddRoute<ApiResourceViewModel>("update", nameof(ResourceController.UpdateApiResource), model => new { id = model.ID })
+						.AddRoute<ApiResourceViewModel>("delete", nameof(ResourceController.DeleteApiResourceByID), model => new { id = model.ID })
+						.AddRoute<ApiResourceViewModel>("scopes", nameof(ResourceController.GetApiResourceScopeList), model => new { id = model.ID })
+						.AddRoute<ApiResourceViewModel>("claims", nameof(ResourceController.GetApiResourceClaimList), model => new { id = model.ID })
+						.AddRoute<ApiResourceViewModel>("secrets", nameof(ResourceController.GetApiResourceSecretList), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(ResourceController.GetApiResourceScopeList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ResourceController.GetApiResourceScopeList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("save", nameof(ResourceController.SaveApiResourceScopeList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ResourceController.SaveApiResourceScopeList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ResourceController.SaveApiResourceScopeList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("get", nameof(ResourceController.GetApiResourceScopeList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ResourceController.GetApiResourceClaimList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ResourceController.GetApiResourceClaimList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("save", nameof(ResourceController.SaveApiResourceClaimList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ResourceController.SaveApiResourceClaimList))
+						.AddRoute<ApplicationDataListViewModel<string>>("self", nameof(ResourceController.SaveApiResourceClaimList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<string>>("get", nameof(ResourceController.GetApiResourceClaimList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ResourceController.GetApiResourceSecretList))
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("self", nameof(ResourceController.GetApiResourceSecretList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("save", nameof(ResourceController.SaveApiResourceSecretList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(ResourceController.SaveApiResourceSecretList))
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("self", nameof(ResourceController.SaveApiResourceSecretList), model => new { id = model.ApplicationID })
+						.AddRoute<ApplicationDataListViewModel<SecretViewModel>>("get", nameof(ResourceController.GetApiResourceSecretList), model => new { id = model.ApplicationID });
+
+				routes.AddRoute(nameof(GrantController.GetGrantList))
+						.AddRoute<PagedListViewModel<GrantViewModel>>("self", nameof(GrantController.GetGrantList), model => new { offset = model.Offset, limit = model.Size })
+						.AddRoute<PagedListViewModel<GrantViewModel>>("previous", nameof(GrantController.GetGrantList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<PagedListViewModel<GrantViewModel>>("next", nameof(GrantController.GetGrantList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<PagedListViewModel<GrantViewModel>, GrantViewModel>("items", nameof(GrantController.GetGrantByID), model => new { id = model.ID });
+
+				routes.AddRoute(nameof(GrantController.GetGrantByID))
+						.AddRoute<GrantViewModel>("self", nameof(GrantController.GetGrantByID), model => new { id = model.ID })
+						.AddRoute<GrantViewModel>("delete", nameof(GrantController.DeleteGrantByID), model => new { id = model.ID });
+			});
 
 			application.UseCors(policyBuilder =>
 			{
