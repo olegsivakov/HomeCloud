@@ -15,7 +15,7 @@
 	/// <summary>
 	/// Represents <see cref="api"/> resource application document.
 	/// </summary>
-	[MongoDBCollection("api_resource")]
+	[MongoDBCollection("api_resources")]
 	public class ApiResourceDocument
 	{
 		/// <summary>
@@ -46,6 +46,7 @@
 		/// The claims.
 		/// </value>
 		[BsonElement("claims")]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<string> Claims { get; set; }
 
 		/// <summary>
@@ -55,7 +56,7 @@
 		/// The secrets.
 		/// </value>
 		[BsonElement("secrets")]
-		[BsonRequired]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<SecretDocument> Secrets { get; set; }
 
 		/// <summary>
@@ -65,7 +66,7 @@
 		/// The scopes.
 		/// </value>
 		[BsonElement("scopes")]
-		[BsonRequired]
+		[BsonIgnoreIfDefault]
 		public IEnumerable<string> Scopes { get; set; }
 	}
 }

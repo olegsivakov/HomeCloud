@@ -64,7 +64,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="ApiResourceViewModel"/>.</returns>
-		[HttpGet("v1/[controller]s/{id}", Name = nameof(ResourceController.GetApiResourceByID))]
+		[HttpGet("v1/[controller]s/api/{id}", Name = nameof(ResourceController.GetApiResourceByID))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetApiResourceByID(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id)
@@ -80,7 +80,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{GrantViewModel}"/>.</returns>
-		[HttpGet("v1/[controller]s/{id}/claims", Name = nameof(ResourceController.GetApiResourceClaimList))]
+		[HttpGet("v1/[controller]s/api/{id}/claims", Name = nameof(ResourceController.GetApiResourceClaimList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetApiResourceClaimList(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id)
@@ -99,7 +99,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{SecretViewModel}"/>.</returns>
-		[HttpGet("v1/[controller]s/{id}/secrets", Name = nameof(ResourceController.GetApiResourceSecretList))]
+		[HttpGet("v1/[controller]s/api/{id}/secrets", Name = nameof(ResourceController.GetApiResourceSecretList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetApiResourceSecretList(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id)
@@ -119,7 +119,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
-		[HttpGet("v1/[controller]s/{id}/scopes", Name = nameof(ResourceController.GetApiResourceScopeList))]
+		[HttpGet("v1/[controller]s/api/{id}/scopes", Name = nameof(ResourceController.GetApiResourceScopeList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetApiResourceScopeList(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id)
@@ -141,7 +141,7 @@
 		/// <returns>
 		/// The list of instance of <see cref="GrantViewModel" />.
 		/// </returns>
-		[HttpGet("v1/[controller]s", Name = nameof(ResourceController.GetApiResourceList))]
+		[HttpGet("v1/[controller]s/api", Name = nameof(ResourceController.GetApiResourceList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> GetApiResourceList(
 			[Range(0, int.MaxValue, ErrorMessage = "The offset parameter should be positive number.")] int offset,
@@ -163,7 +163,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The result of the operation.</returns>
-		[HttpDelete("v1/[controller]s/{id}", Name = nameof(ResourceController.DeleteApiResourceByID))]
+		[HttpDelete("v1/[controller]s/api/{id}", Name = nameof(ResourceController.DeleteApiResourceByID))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> DeleteApiResourceByID(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id)
@@ -178,7 +178,7 @@
 		/// </summary>
 		/// <param name="model">The model of <see cref="ClientViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="ClientViewModel"/>.</returns>
-		[HttpPost("v1/[controller]s", Name = nameof(ResourceController.CreateApiResource))]
+		[HttpPost("v1/[controller]s/api", Name = nameof(ResourceController.CreateApiResource))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> CreateApiResource(
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] ApiResourceViewModel model)
@@ -197,7 +197,7 @@
 		/// <param name="id">The unique identifier.</param>
 		/// <param name="model">The model of <see cref="ApiResourceViewModel"/>.</param>
 		/// <returns>The asynchronous result of <see cref="IActionResult"/> containing the instance of <see cref="ClientViewModel"/>.</returns>
-		[HttpPut("v1/[controller]s/{id}", Name = nameof(ResourceController.UpdateApiResource))]
+		[HttpPut("v1/[controller]s/api/{id}", Name = nameof(ResourceController.UpdateApiResource))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> UpdateApiResource(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,
@@ -218,7 +218,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
-		[HttpPut("v1/[controller]s/{id}/claims", Name = nameof(ResourceController.SaveApiResourceClaimList))]
+		[HttpPut("v1/[controller]s/api/{id}/claims", Name = nameof(ResourceController.SaveApiResourceClaimList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveApiResourceClaimList(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,
@@ -238,7 +238,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{SecretViewModel}"/>.</returns>
-		[HttpPut("v1/[controller]s/{id}/secrets", Name = nameof(ResourceController.SaveApiResourceSecretList))]
+		[HttpPut("v1/[controller]s/api/{id}/secrets", Name = nameof(ResourceController.SaveApiResourceSecretList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveApiResourceSecretList(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,
@@ -261,7 +261,7 @@
 		/// </summary>
 		/// <param name="id">The api resource application identifier.</param>
 		/// <returns>The instance of <see cref="IEnumerable{string}"/>.</returns>
-		[HttpPut("v1/[controller]s/{id}/scopes", Name = nameof(ResourceController.SaveApiResourceScopeList))]
+		[HttpPut("v1/[controller]s/api/{id}/scopes", Name = nameof(ResourceController.SaveApiResourceScopeList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveApiResourceScopeList(
 			[RequireNonDefault(ErrorMessage = "The api resource application identifier is empty")] Guid id,

@@ -82,8 +82,6 @@
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Secrets ?? Enumerable.Empty<SecretDocument>()) :
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Secrets == null ? Enumerable.Empty<SecretDocument>() : resource.Secrets.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? (_ => true) : resourceSelector);
-
 			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(resourceSelector ?? (_ => true), new FindOptions<ApiResourceDocument, IEnumerable<SecretDocument>>()
 			{
 				Projection = projection
@@ -111,8 +109,6 @@
 				projectionSelector is null ?
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Scopes ?? Enumerable.Empty<string>()) :
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Scopes == null ? Enumerable.Empty<string>() : resource.Scopes.Where(projectionSelector.Compile()));
-
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? (_ => true) : resourceSelector);
 
 			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(resourceSelector ?? (_ => true), new FindOptions<ApiResourceDocument, IEnumerable<string>>()
 			{
