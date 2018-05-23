@@ -44,10 +44,8 @@
 		/// </returns>
 		public async Task<UserDocument> GetAsync(string username)
 		{
-			FilterDefinition<UserDocument> filter = Builders<UserDocument>.Filter.Where(entity => entity.Username.ToLower() == username.ToLower());
-
 			IAsyncCursor<UserDocument> cursor = await this.CurrentCollection.FindAsync(
-				filter,
+				entity => entity.Username.ToLower() == username.ToLower(),
 				new FindOptions<UserDocument>()
 				{
 					Skip = 0,

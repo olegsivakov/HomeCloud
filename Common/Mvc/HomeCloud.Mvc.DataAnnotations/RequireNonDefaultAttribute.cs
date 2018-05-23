@@ -31,6 +31,11 @@
 		/// </returns>
 		public override bool IsValid(object value)
 		{
+			if (value is string)
+			{
+				return !string.IsNullOrWhiteSpace((string)value);
+			}
+
 			return value != null && !Equals(value, Activator.CreateInstance(value.GetType()));
 		}
 	}

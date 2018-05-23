@@ -52,9 +52,7 @@
 				Builders<ClientDocument>.Projection.Expression(client => client.Origins ?? Enumerable.Empty<string>()) :
 				Builders<ClientDocument>.Projection.Expression(client => client.Origins == null ? Enumerable.Empty<string>() : client.Origins.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
-
-			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<string>>()
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(clientSelector ?? (_ => true), new FindOptions<ClientDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
@@ -84,9 +82,7 @@
 				Builders<ClientDocument>.Projection.Expression(client => client.Secrets ?? Enumerable.Empty<SecretDocument>()) :
 				Builders<ClientDocument>.Projection.Expression(client => client.Secrets == null ? Enumerable.Empty<SecretDocument>() : client.Secrets.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
-
-			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<SecretDocument>>()
+			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(clientSelector ?? (_ => true), new FindOptions<ClientDocument, IEnumerable<SecretDocument>>()
 			{
 				Projection = projection
 			});
@@ -114,9 +110,7 @@
 				Builders<ClientDocument>.Projection.Expression(client => client.Scopes ?? Enumerable.Empty<string>()) :
 				Builders<ClientDocument>.Projection.Expression(client => client.Scopes == null ? Enumerable.Empty<string>() : client.Scopes.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
-
-			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<string>>()
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(clientSelector ?? (_ => true), new FindOptions<ClientDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
@@ -144,9 +138,7 @@
 				Builders<ClientDocument>.Projection.Expression(client => client.Grants == null ? Enumerable.Empty<GrantDocument>() : this.SetGrantClient(client, client.Grants)) :
 				Builders<ClientDocument>.Projection.Expression(client => client.Grants == null ? Enumerable.Empty<GrantDocument>() : this.SetGrantClient(client, client.Grants).Where(projectionSelector.Compile()));
 
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(clientSelector is null ? clientSelector : (_ => true));
-
-			IAsyncCursor<IEnumerable<GrantDocument>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ClientDocument, IEnumerable<GrantDocument>>()
+			IAsyncCursor<IEnumerable<GrantDocument>> cursor = await this.CurrentCollection.FindAsync(clientSelector ?? (_ => true), new FindOptions<ClientDocument, IEnumerable<GrantDocument>>()
 			{
 				Projection = projection
 			});
@@ -266,13 +258,13 @@
 		/// </returns>
 		public async Task<GrantDocument> DeleteGrant(ClientDocument client, string grantID)
 		{
-			ProjectionDefinition<ClientDocument, IEnumerable<GrantDocument>> projection = Builders<ClientDocument>.Projection.Expression(document => document.Grants == null ? Enumerable.Empty<GrantDocument>() : client.Grants.Where(grant => grant.ID == grantID));
-			FilterDefinition<ClientDocument> filter = Builders<ClientDocument>.Filter.Where(document => document.ID == client.ID);
+			client.Grants = await this.FindGrants(document => document.ID == client.ID, item => item.ID != grantID);
+			client = await this.SaveGrants(client);
 
-			return (await this.CurrentCollection.FindOneAndDeleteAsync(filter, new FindOneAndDeleteOptions<ClientDocument, IEnumerable<GrantDocument>>()
+			return new GrantDocument()
 			{
-				Projection = projection
-			}))?.FirstOrDefault();
+				ID = grantID
+			};
 		}
 
 		#endregion

@@ -235,29 +235,6 @@
 		}
 
 		/// <summary>
-		/// Gets the grant list of the client application.
-		/// </summary>
-		/// <param name="id">The client application identifier.</param>
-		/// <returns>The instance of <see cref="IEnumerable{GrantViewModel}"/>.</returns>
-		[HttpPut("v1/[controller]s/{id}/grants", Name = nameof(ClientController.SaveClientGrantList))]
-		[ContentType(MimeTypes.Application.Json)]
-		public async Task<IActionResult> SaveClientGrantList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] Guid id,
-			[FromBody] IEnumerable<GrantViewModel> model)
-		{
-			IEnumerable<Grant> entities = this.Mapper.MapNew<GrantViewModel, Grant>(model ?? Enumerable.Empty<GrantViewModel>());
-
-			ServiceResult<IEnumerable<Grant>> result = await this.clientService.SaveGrantsAsync(id, entities);
-			IEnumerable<GrantViewModel> data = result.Data != null ? this.Mapper.MapNew<Grant, GrantViewModel>(result.Data) : null;
-
-			return this.HttpResult(new ApplicationDataListViewModel<GrantViewModel>(data, id)
-			{
-				Size = data.Count(),
-				TotalCount = data.Count()
-			}, result.Errors);
-		}
-
-		/// <summary>
 		/// Gets the secret list of the client application.
 		/// </summary>
 		/// <param name="id">The client application identifier.</param>

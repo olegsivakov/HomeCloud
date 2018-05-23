@@ -28,9 +28,11 @@
 
 			return type.IsPrimitive
 						|| type.IsEnum
+						|| type.Equals(typeof(object))
 						|| type.Equals(typeof(string))
 						|| type.Equals(typeof(decimal))
-						|| type.Equals(typeof(DateTime));
+						|| type.Equals(typeof(DateTime))
+						|| type.Equals(typeof(DateTime?));
 		}
 	}
 }

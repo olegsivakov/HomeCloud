@@ -19,8 +19,10 @@
 
 	using HomeCloud.Mvc.ActionConstraints;
 	using HomeCloud.Mvc.DataAnnotations;
+	using HomeCloud.Mvc.Models;
 
 	using Microsoft.AspNetCore.Mvc;
+	using System.Linq;
 
 	#endregion
 
@@ -102,7 +104,7 @@
 		{
 			ServiceResult<IDictionary<int, string>> result = await this.grantService.GetGrantTypesAsync();
 
-			return this.HttpResult(result.Data, result.Errors);
+			return this.HttpResult(result.Data.Select(pair => new DictionaryViewModel(pair)), result.Errors);
 		}
 
 		/// <summary>
@@ -115,14 +117,14 @@
 		[HttpDelete("v1/[controller]s/", Name = nameof(GrantController.DeleteGrantList))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> DeleteGrantList(
-			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] [FromQuery] Guid applicationID,
+			[RequireNonDefault(ErrorMessage = "The client application identifier is empty")] [FromQuery] Guid clientId,
 			[RequireNonDefault(ErrorMessage = "The user identifier is empty")] [FromQuery] Guid userID,
 			[FromQuery] string type)
 		{
 			ServiceResult result = await this.grantService.DeleteGrantsAsync(new GrantSearchCriteria()
 			{
 				UserID = userID,
-				ClientID = applicationID,
+				ClientID = clientId,
 				Type = type
 			});
 
@@ -149,7 +151,7 @@
 		/// </summary>
 		/// <param name="model">The grant model.</param>
 		/// <returns>The updated instanc of <see cref="GrantViewModel"/>.</returns>
-		[HttpPost("v1/[controller]s", Name = nameof(GrantController.SaveGrant))]
+		[HttpPut("v1/[controller]s", Name = nameof(GrantController.SaveGrant))]
 		[ContentType(MimeTypes.Application.Json)]
 		public async Task<IActionResult> SaveGrant(
 			[Required(ErrorMessage = "The model is undefined")] [FromBody] GrantViewModel model)

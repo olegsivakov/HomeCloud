@@ -52,9 +52,7 @@
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Claims ?? Enumerable.Empty<string>()) :
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Claims == null ? Enumerable.Empty<string>() : resource.Claims.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? resourceSelector : (_ => true));
-
-			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, IEnumerable<string>>()
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(resourceSelector ?? (_ => true), new FindOptions<ApiResourceDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});
@@ -84,9 +82,9 @@
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Secrets ?? Enumerable.Empty<SecretDocument>()) :
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Secrets == null ? Enumerable.Empty<SecretDocument>() : resource.Secrets.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? resourceSelector : (_ => true));
+			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? (_ => true) : resourceSelector);
 
-			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, IEnumerable<SecretDocument>>()
+			IAsyncCursor<IEnumerable<SecretDocument>> cursor = await this.CurrentCollection.FindAsync(resourceSelector ?? (_ => true), new FindOptions<ApiResourceDocument, IEnumerable<SecretDocument>>()
 			{
 				Projection = projection
 			});
@@ -114,9 +112,9 @@
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Scopes ?? Enumerable.Empty<string>()) :
 				Builders<ApiResourceDocument>.Projection.Expression(resource => resource.Scopes == null ? Enumerable.Empty<string>() : resource.Scopes.Where(projectionSelector.Compile()));
 
-			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? resourceSelector : (_ => true));
+			FilterDefinition<ApiResourceDocument> filter = Builders<ApiResourceDocument>.Filter.Where(resourceSelector is null ? (_ => true) : resourceSelector);
 
-			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(filter, new FindOptions<ApiResourceDocument, IEnumerable<string>>()
+			IAsyncCursor<IEnumerable<string>> cursor = await this.CurrentCollection.FindAsync(resourceSelector ?? (_ => true), new FindOptions<ApiResourceDocument, IEnumerable<string>>()
 			{
 				Projection = projection
 			});

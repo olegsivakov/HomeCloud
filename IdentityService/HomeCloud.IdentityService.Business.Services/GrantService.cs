@@ -97,7 +97,7 @@
 					ClientDocument client = new ClientDocument()
 					{
 						ID = group.Key,
-						Grants = await repository.FindGrants(document => document.ID == group.Key, document => group.Any(item => item.ID == document.ID))
+						Grants = await repository.FindGrants(document => document.ID == group.Key, document => !group.Any(item => item.ID == document.ID))
 					};
 
 					client = await repository.SaveGrants(client);
@@ -153,9 +153,11 @@
 				return new ServiceResult<IEnumerable<Grant>>(Enumerable.Empty<Grant>());
 			}
 
+			Guid clientID = criteria.ClientID.GetValueOrDefault();
+
 			IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
 			IEnumerable<GrantDocument> documents = await repository.FindGrants(
-				client => !criteria.ClientID.HasValue || client.ID == criteria.ClientID.Value,
+				client => clientID == Guid.Empty || client.ID == clientID,
 				grant =>
 				!criteria.UserID.HasValue || grant.UserID == criteria.UserID.GetValueOrDefault()
 				&&
@@ -175,17 +177,27 @@
 		/// </returns>
 		public async Task<ServiceResult<Grant>> GetGrantAsync(string id)
 		{
-			if (string.IsNullOrWhiteSpace(id))
+			Grant grant = new Grant()
 			{
-				return new ServiceResult<Grant>(null);
+				ID = id
+			};
+
+			IServiceFactory<IGrantValidator> validator = this.validationServiceFactory.GetFactory<IGrantValidator>();
+			ValidationResult result = await validator.Get<IPresenceValidator>().ValidateAsync(grant);
+			if (!result.IsValid)
+			{
+				return new ServiceResult<Grant>(grant)
+				{
+					Errors = result.Errors
+				};
 			}
 
 			IClientDocumentRepository repository = this.repositoryFactory.GetService<IClientDocumentRepository>();
-			IEnumerable<GrantDocument> documents = await repository.FindGrants(null, grant => grant.ID == id);
+			IEnumerable<GrantDocument> documents = await repository.FindGrants(null, item => item.ID == grant.ID);
 
-			Grant result = this.mapper.MapNew<GrantDocument, Grant>(documents.FirstOrDefault());
+			grant = this.mapper.MapNew<GrantDocument, Grant>(documents.FirstOrDefault());
 
-			return new ServiceResult<Grant>(result);
+			return new ServiceResult<Grant>(grant);
 		}
 
 		/// <summary>
@@ -196,7 +208,7 @@
 		/// </returns>
 		public async Task<ServiceResult<IDictionary<int, string>>> GetGrantTypesAsync()
 		{
-			IDictionary<int, string> result = Enum.GetValues(typeof(GrantType)).Cast<int>().ToDictionary(value => value, value => ((GrantType)value).ToString());
+			IDictionary<int, string> result = Enum.GetValues(typeof(GrantType)).Cast<int>().Where(value => value != (int)GrantType.Unknown).ToDictionary(value => value, value => ((GrantType)value).ToString());
 
 			return await Task.FromResult(new ServiceResult<IDictionary<int, string>>(result));
 		}
@@ -234,7 +246,7 @@
 				if (document is null)
 				{
 					document = this.mapper.MapNew<Grant, GrantDocument>(grant);
-					client.Grants.Union(new List<GrantDocument>() { document });
+					client.Grants = client.Grants.Union(new List<GrantDocument>() { document });
 				}
 				else
 				{
