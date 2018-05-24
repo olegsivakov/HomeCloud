@@ -15,8 +15,15 @@ import { DetailViewComponent } from './components/shared/detail-view/detail-view
 import { NavigationComponent } from './components/navigation/navigation.component';
 
 // -------------------- Route Components --------------------
+import { ApplicationContainerComponent } from './components/applications/application-container/application-container.component';
 import { CatalogContainerComponent } from './components/catalog-container/catalog-container.component';
 import { CatalogBreadcrumbComponent } from './components/catalog/catalog-breadcrumb/catalog-breadcrumb.component';
+
+// -------------------- Client App Components --------------------
+import { ClientAppDetailsComponent } from './components/applications/client-app-details/client-app-details.component';
+
+// -------------------- Api App Components --------------------
+import { ApiAppDetailsComponent } from './components/applications/api-app-details/api-app-details.component';
 
 // -------------------- Catalog Components --------------------
 import { CatalogCardComponent } from './components//catalog/catalog-card/catalog-card.component';
@@ -55,6 +62,8 @@ import { CatalogEntryService } from './services/catalog-entry/catalog-entry.serv
 
     DetailViewComponent,
 
+    ApplicationContainerComponent,
+
     CatalogContainerComponent,
     CatalogBreadcrumbComponent,
 
@@ -70,6 +79,9 @@ import { CatalogEntryService } from './services/catalog-entry/catalog-entry.serv
     NotificationComponent,
     AlertComponent,
     ProgressComponent,
+    ApplicationContainerComponent,
+    ClientAppDetailsComponent,
+    ApiAppDetailsComponent,
   ],
   imports: [
     FormsModule,

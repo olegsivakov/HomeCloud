@@ -2,6 +2,7 @@ import {ModuleWithProviders} from "@angular/core/src/metadata/ng_module";
 import {Routes, RouterModule}from '@angular/router';
 
 import { CatalogContainerComponent } from "./components/catalog-container/catalog-container.component";
+import { ApplicationContainerComponent } from "./components/applications/application-container/application-container.component";
 
 
 export const APP_ROUTES: Routes = [
@@ -13,6 +14,10 @@ export const APP_ROUTES: Routes = [
   {
     path: 'catalogs/:id',
     component: CatalogContainerComponent,
+  },
+  {
+    path: 'apps',
+    component: ApplicationContainerComponent,
   }
 ];
 

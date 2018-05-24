@@ -94,11 +94,11 @@
 			application.UseHypermedia(routes =>
 			{
 				routes.AddRoute(nameof(ClientController.GetClientList))
-						.AddRoute<PagedListViewModel<ClientViewModel>>("self", nameof(ClientController.GetClientList), model => new { offset = model.Offset, limit = model.Size })
-						.AddRoute<PagedListViewModel<ClientViewModel>>("previous", nameof(ClientController.GetClientList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRoute<PagedListViewModel<ClientViewModel>>("next", nameof(ClientController.GetClientList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRoute<PagedListViewModel<ClientViewModel>>("create", nameof(ClientController.CreateClient), null)
-						.AddRoute<PagedListViewModel<ClientViewModel>, ClientViewModel>("items", nameof(ClientController.GetClientByID), model => new { id = model.ID });
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("self", nameof(ClientController.GetClientList), model => new { offset = model.Offset, limit = model.Size })
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("previous", nameof(ClientController.GetClientList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("next", nameof(ClientController.GetClientList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("create", nameof(ClientController.CreateClient), null)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>, ApplicationViewModel>("items", nameof(ClientController.GetClientByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(ClientController.GetClientByID))
 						.AddRoute<ClientViewModel>("self", nameof(ClientController.GetClientByID), model => new { id = model.ID })
@@ -141,11 +141,11 @@
 						.AddRoute<ApplicationDataListViewModel<GrantViewModel>>("self", nameof(ClientController.GetClientGrantList), model => new { id = model.ApplicationID });
 
 				routes.AddRoute(nameof(ResourceController.GetApiResourceList))
-						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("self", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset, limit = model.Size })
-						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("previous", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
-						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("next", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
-						.AddRoute<PagedListViewModel<ApiResourceViewModel>>("create", nameof(ResourceController.CreateApiResource), null)
-						.AddRoute<PagedListViewModel<ApiResourceViewModel>, ApiResourceViewModel>("items", nameof(ResourceController.GetApiResourceByID), model => new { id = model.ID });
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("self", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset, limit = model.Size })
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("previous", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("next", nameof(ResourceController.GetApiResourceList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("create", nameof(ResourceController.CreateApiResource), null)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>, ApplicationViewModel>("items", nameof(ResourceController.GetApiResourceByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(ResourceController.CreateApiResource))
 						.AddRoute<ApiResourceViewModel>("self", nameof(ResourceController.CreateApiResource), null)

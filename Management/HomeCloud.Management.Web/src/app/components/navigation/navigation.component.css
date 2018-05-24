@@ -10,5 +10,5 @@
 .nav-link:hover .nav-icon, .nav-link.active .nav-icon,
 .nav-group-content:hover  .nav-icon {
     fill: #fafafa !important;
-    color: #fafafa !important;
+    color: #fafafa;
 }

@@ -1,12 +1,35 @@
-<a clrVerticalNavLink routerLink="/catalogs" routerLinkActive="active" title="Storage">
+<a clrVerticalNavLink
+        title="Cloud Drive"
+        (click)="selectStorage(storages[0])"
+        [class.disabled]="!canSelectStorage"
+        [routerLink]="['/catalogs']"
+        routerLinkActive="active">
     <clr-icon shape="cloud-network" clrVerticalNavIcon></clr-icon>
-    Storage
+    Cloud Drive
 </a>
-<clr-vertical-nav-group>
-    <a hidden aria-hidden="true"></a>
-    <clr-icon shape="cloud-network" clrVerticalNavIcon></clr-icon>
-    Storages
-    <clr-vertical-nav-group-children>
-        <a clrVerticalNavLink *ngFor="let storage of storages" (click)="selectStorage(storage)" [class.disabled]="!canSelectStorage" [routerLink]="['/catalogs', storage.id]" routerLinkActive="active">{{storage.name}}</a>
-    </clr-vertical-nav-group-children>
+<clr-vertical-nav-group title="Security">
+        <a hidden aria-hidden="true"></a>
+        <clr-icon shape="shield" clrVerticalNavIcon></clr-icon>
+        Security
+        <clr-vertical-nav-group-children>
+            <a clrVerticalNavLink
+                title="Applications"
+                [routerLink]="['/apps']"
+                routerLinkActive="active">
+                <clr-icon shape="applications" clrVerticalNavIcon></clr-icon>
+                Applications</a>
+            <a clrVerticalNavLink
+                title="Users"
+                [routerLink]="['/users']"
+                routerLinkActive="active">
+                <clr-icon shape="users" clrVerticalNavIcon></clr-icon>
+                Users</a>
+            <a clrVerticalNavLink
+                title="Grants"
+                [routerLink]="['/grants']" routerLinkActive="active">
+                <clr-icon shape="key" clrVerticalNavIcon></clr-icon>
+                Grants</a>
+        </clr-vertical-nav-group-children>
 </clr-vertical-nav-group>
+
+
