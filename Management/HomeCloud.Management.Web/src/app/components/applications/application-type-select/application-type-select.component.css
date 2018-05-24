@@ -1,0 +1,9 @@
+.select-header {
+    font-size: 16px;
+    color: #565656 !important;
+}
+
+.dropdown-item.active {    
+    background-color: #0058ad;
+    color: #fafafa;
+}

@@ -53,6 +53,8 @@ import { StorageService } from './services/storage/storage.service';
 import { CatalogStateService } from './services/catalog-state/catalog-state.service';
 import { CatalogService } from './services/catalog/catalog.service';
 import { CatalogEntryService } from './services/catalog-entry/catalog-entry.service';
+import { ApplicationCardComponent } from './components/applications/application-card/application-card.component';
+import { ApplicationTypeSelectComponent } from './components/applications/application-type-select/application-type-select.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +84,8 @@ import { CatalogEntryService } from './services/catalog-entry/catalog-entry.serv
     ApplicationContainerComponent,
     ClientAppDetailsComponent,
     ApiAppDetailsComponent,
+    ApplicationCardComponent,
+    ApplicationTypeSelectComponent,
   ],
   imports: [
     FormsModule,

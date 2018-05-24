@@ -1,0 +1,12 @@
+<clr-dropdown>
+    <span clrDropdownTrigger class="select-header">
+        {{selected}}
+        <clr-icon shape="caret down"></clr-icon>
+    </span>
+    <clr-dropdown-menu *clrIfOpen clrPosition="bottom-left">
+        <a clrDropdownItem [ngClass]="{'active': type.value == selected}" *ngFor="let type of types" (click)="select(type.value)">
+            <clr-icon attr.shape="{{type.shape}}" class="is-solid"></clr-icon>
+            {{type.value}}
+        </a>
+    </clr-dropdown-menu>
+</clr-dropdown>

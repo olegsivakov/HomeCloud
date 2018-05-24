@@ -1,43 +1,10 @@
-<!-- <div class="row">
-    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-        <span class="title">Applications</span>
-      </div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 command-container">
-      <a>
-        <clr-icon shape="plus-circle" size="24"></clr-icon>
-        <span>Add application</span>
-      </a>
-    </div>
-  </div>
-<div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-3 col-xl-3">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="left">Application Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="left">Client App name goes here</td>
-                </tr>
-                <tr>
-                    <td class="left">Client App name goes here</td>
-                </tr>
-                <tr>
-                    <td class="left">Api Resource name goes here</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-xs-12 col-md-12 col-lg-9 col-xl-9">
-        <app-client-app-details></app-client-app-details>
-    </div>
-</div> -->
-
 <div class="row">
   <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-      <span class="app-header">Applications</span>
+      <span class="app-header">
+          Applications
+          <clr-icon shape="angle" dir="right"></clr-icon>
+          <app-application-type-select [default]="defaultType" (changed)="onAppTypeChanged($event)"></app-application-type-select>
+        </span>      
   </div>
 </div>
 <div class="row">
@@ -47,68 +14,21 @@
             <nav class="sidenav">
               <div class="command-container">
                 <a>
-                  <clr-icon shape="plus-circle"></clr-icon>
-                  <span>Add application</span>
+                    <clr-icon shape="plus-circle"></clr-icon>
+                    <span>Add application</span>
                 </a>
               </div>
-                <table class="table table-noborder">
-                    <tbody>
-                        <tr>
-                            <td class="application left">
-                                <div class="title">
-                                    <clr-icon shape="world" class="is-solid"></clr-icon>
-                                    Client Application
-                                </div>
-                                <div class="commands" (click)="$event.stopPropagation()">
-                                  <clr-dropdown>
-                                      <button class="nav-icon" clrDropdownTrigger>
-                                          <clr-icon shape="ellipsis-horizontal"></clr-icon>
-                                      </button>
-                                      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                                        <a clrDropdownItem (click)="onRemove()" [class.disabled]="!canRemove">Remove</a>
-                                      </clr-dropdown-menu>
-                                  </clr-dropdown>
-                                </div>
-                              </td>
-                        </tr>
-                        <tr>
-                            <td class="application left">
-                                <div class="title">
-                                    <clr-icon shape="world" class="is-solid"></clr-icon>
-                                    Dashboard Management Application
-                                </div>
-                                <div class="commands" (click)="$event.stopPropagation()">
-                                  <clr-dropdown>
-                                      <button class="nav-icon" clrDropdownTrigger>
-                                          <clr-icon shape="ellipsis-horizontal"></clr-icon>
-                                      </button>
-                                      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                                        <a clrDropdownItem (click)="onRemove()" [class.disabled]="!canRemove">Remove</a>
-                                      </clr-dropdown-menu>
-                                  </clr-dropdown>
-                                </div>
-                              </td>
-                        </tr>
-                        <tr>
-                            <td class="application left">
-                                <div class="title">
-                                    <clr-icon shape="application" class="is-solid"></clr-icon>
-                                    Data Storage Api App
-                                </div>
-                                <div class="commands" (click)="$event.stopPropagation()">
-                                  <clr-dropdown>
-                                      <button class="nav-icon" clrDropdownTrigger>
-                                          <clr-icon shape="ellipsis-horizontal"></clr-icon>
-                                      </button>
-                                      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-                                        <a clrDropdownItem (click)="onRemove()" [class.disabled]="!canRemove">Remove</a>
-                                      </clr-dropdown-menu>
-                                  </clr-dropdown>
-                                </div>
-                              </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <app-application-card></app-application-card>
+                    </div>
+                    <div class="col-lg-12">
+                        <app-application-card></app-application-card>
+                    </div>
+                    <div class="col-lg-12">
+                        <app-application-card></app-application-card>
+                    </div>
+                </div>
             </nav>
         </div>
     </div>

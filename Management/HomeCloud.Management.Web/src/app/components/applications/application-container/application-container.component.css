@@ -3,6 +3,7 @@
     padding: 0px 5px;
     padding-top: 10px;
     padding-bottom: 1px;
+    margin-right: 15px;
 }
 
 .command-container a,
@@ -22,35 +23,13 @@
 
 .app-header {
     font-size: 16px;
+    color: #565656 !important;
 }
 
 .sidenav {
     min-width: 100%;
 }
 
-.sidenav table {
-    padding-right: 5px;
-    margin-top: 0.5rem;
-}
-
-.sidenav .application {
-    cursor: pointer;
-    padding: 15px 12px;
-}
-
-.sidenav .application:hover {
-    background-color: #0058ad;;
-    color: #fafafa;
-}
-
-.application .title {
-    float: left;
-}
-
-.application .commands {
-    float: right;
-}
-
-.application:hover .commands button {
-    color: #fafafa;
+.tab-title {
+    color: #000000 !important;
 }

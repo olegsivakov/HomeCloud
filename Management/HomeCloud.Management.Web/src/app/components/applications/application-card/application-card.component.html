@@ -1,0 +1,15 @@
+<div class="application">
+    <div class="title">
+        Client Application
+    </div>
+    <div class="commands" (click)="$event.stopPropagation()">
+        <clr-dropdown>
+            <button class="nav-icon" clrDropdownTrigger>
+                <clr-icon shape="ellipsis-horizontal"></clr-icon>
+            </button>
+            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                <a clrDropdownItem (click)="onRemove()" [class.disabled]="!canRemove">Remove</a>
+            </clr-dropdown-menu>
+        </clr-dropdown>
+    </div>
+</div>
