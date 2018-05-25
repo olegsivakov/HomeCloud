@@ -40,6 +40,13 @@
 		Task<ServiceResult<Client>> GetApplicationAsync(Guid id);
 
 		/// <summary>
+		/// Validates client asynchronously.
+		/// </summary>
+		/// <param name="catalog">The client.</param>
+		/// <returns>The operation result.</returns>
+		Task<ServiceResult> ValidateAsync(Client client);
+
+		/// <summary>
 		/// Searches for the list of client applications by specified search <paramref name="criteria" />.
 		/// </summary>
 		/// <param name="criteria">The search criteria.</param>

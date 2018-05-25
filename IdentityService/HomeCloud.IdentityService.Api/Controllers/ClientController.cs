@@ -180,6 +180,22 @@
 		}
 
 		/// <summary>
+		/// Validates the client application model being created.
+		/// </summary>
+		/// <returns>The result of validation operation.</returns>
+		[HttpPut("v1/[controller]s/validate", Name = nameof(ClientController.ValidateClient))]
+		[ContentType(MimeTypes.Application.Json)]
+		public async Task<IActionResult> ValidateClient(
+			[Required(ErrorMessage = "The model is undefined")] [FromBody] ClientViewModel model)
+		{
+			Client entity = this.Mapper.MapNew<ClientViewModel, Client>(model);
+			ServiceResult result = await this.clientService.ValidateAsync(entity);
+
+			return this.HttpResult(null, result.Errors);
+		}
+
+
+		/// <summary>
 		/// Deletes the client application by specified client application identifier.
 		/// </summary>
 		/// <param name="id">The client application identifier.</param>

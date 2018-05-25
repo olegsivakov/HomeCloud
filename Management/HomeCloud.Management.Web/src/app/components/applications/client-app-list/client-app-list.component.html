@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-xl-3 col-lg-4 col-md-5 col-sm-12 col-xs-12">
+    <div class="main-container">
+        <div class="content-container">
+            <nav class="sidenav">
+              <div class="command-container">
+                <a (click)="onSave()" [class.disabled]="!canSave">
+                    <clr-icon shape="plus-circle"></clr-icon>
+                    <span>Add application</span>
+                </a>
+              </div>
+                <div class="row">
+                    <div class="col-lg-12" *ngFor="let item of data" (click)="select(item)">
+                        <app-application-card [application]="item" [selected]="item === selected"></app-application-card>
+                    </div>
+                </div>
+                <div class="row flex-items-xs-center more" *ngIf="canNext">
+                  <div class="col-lg-1">
+                    <a title="more" (click)="next($event)">
+                      <clr-icon shape="circle-arrow down" class="is-solid" size="28"></clr-icon>
+                    </a>
+                  </div>
+              </div>
+            </nav>
+        </div>
+    </div>
+  </div>
+  <div class="col-xl-9 col-lg-8 col-md-7 col-sm-12 col-xs-12">
+      <app-client-app-details *ngIf="selected" [application]="selected" (close)="cancel($event)"></app-client-app-details>
+  </div>
+</div>
+
+<app-application-create
+      *ngIf="isSaveMode"
+      header="Create Client App"
+      grantTypes="grantTypes"
+      [errors]="errors"
+      [visible]="isSaveMode"
+      (change)="validate($event)"
+      (save)="save($event)"
+      (cancel)="cancel($event)"></app-application-create>

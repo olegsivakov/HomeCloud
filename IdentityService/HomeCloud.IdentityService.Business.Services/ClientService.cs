@@ -138,6 +138,24 @@
 		}
 
 		/// <summary>
+		/// Validates client asynchronously.
+		/// </summary>
+		/// <param name="catalog">The client.</param>
+		/// <returns>The operation result.</returns>
+		public async Task<ServiceResult> ValidateAsync(Client client)
+		{
+			IServiceFactory<IClientValidator> validator = this.validationServiceFactory.GetFactory<IClientValidator>();
+
+			ValidationResult result = await validator.Get<IRequiredValidator>().ValidateAsync(client);
+			result += await validator.Get<IUniqueValidator>().ValidateAsync(client);
+
+			return new ServiceResult()
+			{
+				Errors = result.Errors
+			};
+		}
+
+		/// <summary>
 		/// Gets client application by specified client application identifier.
 		/// </summary>
 		/// <param name="id">The client identifier.</param>

@@ -1,6 +1,6 @@
-<div class="application">
+<div [ngClass]="{'application': true, 'active': isSelected}">
     <div class="title">
-        Client Application
+        {{application.name}}
     </div>
     <div class="commands" (click)="$event.stopPropagation()">
         <clr-dropdown>

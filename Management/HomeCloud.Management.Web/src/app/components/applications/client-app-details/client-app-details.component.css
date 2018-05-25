@@ -1,3 +1,9 @@
 .tab-title {
     color: #000000 !important;
 }
+
+.close {
+    position: relative;
+    float: right;
+    top: -30px;
+}

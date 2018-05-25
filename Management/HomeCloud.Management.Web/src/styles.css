@@ -73,3 +73,8 @@ a.disabled, a:hover.disabled * {
     fill: #fafafa !important;
     color: #fafafa !important;
 }
+
+.clickable {
+	cursor: pointer;
+    text-decoration: none;
+}

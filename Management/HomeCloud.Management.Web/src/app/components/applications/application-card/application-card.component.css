@@ -6,8 +6,15 @@
     margin-top: 2px;
 }
 
-.application:hover {
+.application:hover,
+.application:hover .commands button {
     background-color: #0058ad;
+    color: #fafafa;
+}
+
+.application.active,
+.application.active .commands button {
+    background-color: #2e73b3;
     color: #fafafa;
 }
 

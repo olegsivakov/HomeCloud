@@ -53,8 +53,13 @@ import { StorageService } from './services/storage/storage.service';
 import { CatalogStateService } from './services/catalog-state/catalog-state.service';
 import { CatalogService } from './services/catalog/catalog.service';
 import { CatalogEntryService } from './services/catalog-entry/catalog-entry.service';
+
 import { ApplicationCardComponent } from './components/applications/application-card/application-card.component';
-import { ApplicationTypeSelectComponent } from './components/applications/application-type-select/application-type-select.component';
+import { ClientAppListComponent } from './components/applications/client-app-list/client-app-list.component';
+import { ApiAppListComponent } from './components/applications/api-app-list/api-app-list.component';
+
+import { ClientApplicationService } from './services/client-application/client-application.service';
+import { ApplicationCreateComponent } from './components/applications/application-create/application-create.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +90,9 @@ import { ApplicationTypeSelectComponent } from './components/applications/applic
     ClientAppDetailsComponent,
     ApiAppDetailsComponent,
     ApplicationCardComponent,
-    ApplicationTypeSelectComponent,
+    ClientAppListComponent,
+    ApiAppListComponent,
+    ApplicationCreateComponent,
   ],
   imports: [
     FormsModule,
@@ -107,7 +114,9 @@ import { ApplicationTypeSelectComponent } from './components/applications/applic
     StorageService,
     CatalogStateService,
     CatalogService,    
-    CatalogEntryService
+    CatalogEntryService,
+
+    ClientApplicationService
   ],
   bootstrap: [AppComponent]
 })

@@ -98,6 +98,8 @@
 						.AddRoute<PagedListViewModel<ApplicationViewModel>>("previous", nameof(ClientController.GetClientList), model => new { offset = model.Offset - model.Size, limit = model.Size }, model => model.Offset > 0)
 						.AddRoute<PagedListViewModel<ApplicationViewModel>>("next", nameof(ClientController.GetClientList), model => new { offset = model.Offset + model.Size, limit = model.Size }, model => model.Offset + model.Size < model.TotalCount)
 						.AddRoute<PagedListViewModel<ApplicationViewModel>>("create", nameof(ClientController.CreateClient), null)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("validate", nameof(ClientController.ValidateClient), null)
+						.AddRoute<PagedListViewModel<ApplicationViewModel>>("grantTypes", nameof(GrantController.GetGrantTypeList), null)
 						.AddRoute<PagedListViewModel<ApplicationViewModel>, ApplicationViewModel>("items", nameof(ClientController.GetClientByID), model => new { id = model.ID });
 
 				routes.AddRoute(nameof(ClientController.GetClientByID))
@@ -196,7 +198,7 @@
 
 			application.UseCors(policyBuilder =>
 			{
-				policyBuilder.WithOrigins("https://homecloudweb.azurewebsites.net", "http://localhost:8080").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
+				policyBuilder.WithOrigins("http://localhost:4200", "http://localhost:8080").AllowAnyHeader().WithExposedHeaders("X-Total-Count").AllowAnyMethod();
 			});
 
 			application.UseMvc();

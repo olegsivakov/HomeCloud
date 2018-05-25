@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ClientApplication } from '../../../models/applications/client-application';
 
 @Component({
   selector: 'app-client-app-details',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientAppDetailsComponent implements OnInit {
 
+  @Input('application')
+  public application: ClientApplication = null;
+
+  @Output('close')
+  closeEmiiter = new EventEmitter<ClientApplication>();
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  public close() {
+    this.closeEmiiter.emit(this.application);
+    this.application = null;
+  }
 }
