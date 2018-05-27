@@ -8,6 +8,7 @@ import { HttpMethod } from '../../models/http/http-method';
 import { PagedArray } from '../../models/paged-array';
 
 import { ResourceService } from '../resource/resource.service';
+import { RelationArray } from '../../models/http/relation-array';
 
 @Injectable()
 export class HttpService<T extends IResource> {
@@ -15,10 +16,26 @@ export class HttpService<T extends IResource> {
   protected resources: ResourceArray<T> = new ResourceArray<T>();
 
   constructor(
+    type: new() => T,
+    resourceService: ResourceService,
+    resourceUrl: string);
+  constructor(
+    type: new() => T,
+    resourceService: ResourceService,
+    resourceUrl: string,
+    relationType: new() => RelationArray);
+  constructor(
     protected type: new() => T,
     protected resourceService: ResourceService,
-    protected resourceUrl?: string) {
-    }
+    protected resourceUrl: string,
+    protected relationType?: new() => RelationArray) {
+      if (relationType) {
+        this.resources = new ResourceArray(relationType);
+      }
+      else {
+        this.resources = new ResourceArray();
+      }
+  }
 
   public load(resources: ResourceArray<T>): void {
     this.resources = resources;

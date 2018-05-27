@@ -8,6 +8,12 @@ export class ResourceArray<T> implements IResource {
     public items: PagedArray<T> = new PagedArray<T>();
     public _links: RelationArray = new RelationArray();
 
+    constructor()
+    constructor(relationType: new() => RelationArray);
+    constructor(relationType?: new() => RelationArray) {
+        this._links = relationType ? new relationType() : new RelationArray();
+    }
+
     public hasSelf(): boolean {
         return this._links.self != null && !this._links.self.isEmpty();
     }

@@ -17,7 +17,7 @@ export class ClientApplicationService extends HttpService<ClientApplication> {
 
   constructor(
     protected resourceService: ResourceService) {
-    super(ClientApplication, resourceService, clientApplicationUrl);
+    super(ClientApplication, resourceService, clientApplicationUrl, ClientApplicationRelation);
   }
 
   public hasValidate() {
@@ -31,12 +31,12 @@ export class ClientApplicationService extends HttpService<ClientApplication> {
   }
 
   public hasGrantTypes(): boolean {
-    let relation: Relation = this.resources._links["grantTypes"] as Relation;
+    let relation: Relation = (this.resources._links as ClientApplicationRelation).grantTypes;
     return relation != null && !relation.isEmpty();
   }
 
   public grantTypes(): Observable<PagedArray<GrantType>> {
-    let relation = this.resources._links["grantTypes"];
+    let relation: Relation = (this.resources._links as ClientApplicationRelation).grantTypes;
     if (relation) {
       return this.relation<GrantType>(GrantType, relation).map(data => this.map(data));
     }
