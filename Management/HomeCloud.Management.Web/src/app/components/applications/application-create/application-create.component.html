@@ -4,7 +4,7 @@
       <app-alert *ngIf="applicationForm.invalid && errors.length == 0" message="The application name is required"></app-alert>
       <app-alert *ngFor="let error of errors" message="{{error}}"></app-alert>
       <form class="form-group" #applicationForm="ngForm">
-          <div class="textbox">
+          <div class="textbox" style="float: left">
               <br/>
               <input
                   id="applicationName"

@@ -23,7 +23,7 @@ export class CatalogService extends HttpService<Catalog> {
   constructor(
     protected resourceService: ResourceService,
     private catalogStateService: CatalogStateService) {
-      super(Catalog, resourceService, null);
+      super(Catalog, resourceService);
 
       this.subscription = this.catalogStateService.catalogChanged$.subscribe(catalog => {
         if (this.catalog && catalog && this.catalog.id != catalog.id) {

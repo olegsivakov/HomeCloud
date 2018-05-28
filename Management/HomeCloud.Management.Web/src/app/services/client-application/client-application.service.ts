@@ -6,8 +6,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { ClientApplication } from '../../models/applications/client-application';
 import { Relation } from '../../models/http/relation';
-import { ClientApplicationRelation } from '../../models/applications/client-application-relation';
-import { GrantType } from '../../models/grants/grant-type';
 import { PagedArray } from '../../models/paged-array';
 
 const clientApplicationUrl: string = "http://localhost:57713/v1/clients";
@@ -17,7 +15,7 @@ export class ClientApplicationService extends HttpService<ClientApplication> {
 
   constructor(
     protected resourceService: ResourceService) {
-    super(ClientApplication, resourceService, clientApplicationUrl, ClientApplicationRelation);
+    super(ClientApplication, resourceService, clientApplicationUrl);
   }
 
   public hasValidate() {
@@ -28,19 +26,5 @@ export class ClientApplicationService extends HttpService<ClientApplication> {
     entity._links.validate = this.resources._links.validate;
 
     return super.validate(entity);
-  }
-
-  public hasGrantTypes(): boolean {
-    let relation: Relation = (this.resources._links as ClientApplicationRelation).grantTypes;
-    return relation != null && !relation.isEmpty();
-  }
-
-  public grantTypes(): Observable<PagedArray<GrantType>> {
-    let relation: Relation = (this.resources._links as ClientApplicationRelation).grantTypes;
-    if (relation) {
-      return this.relation<GrantType>(GrantType, relation).map(data => this.map(data));
-    }
-
-    return Observable.throw("No resource found to list data.");
   }
 }

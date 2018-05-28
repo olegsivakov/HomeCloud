@@ -16,9 +16,6 @@ export class ApplicationCreateComponent implements OnInit {
   @Input('header')
   public header: string = "";
 
-  @Input('grantTypes')
-  public grantTypes: Array<GrantType> = new Array<GrantType>();
-
   @Input('errors')
   public errors: Array<string> = new Array<string>();
 

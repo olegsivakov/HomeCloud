@@ -60,6 +60,11 @@ import { ApiAppListComponent } from './components/applications/api-app-list/api-
 
 import { ClientApplicationService } from './services/client-application/client-application.service';
 import { ApplicationCreateComponent } from './components/applications/application-create/application-create.component';
+import { GrantService } from './services/grant/grant.service';
+import { ClientAppDetailsEssentialsComponent } from './components/applications/client-app-details-essentials/client-app-details-essentials.component';
+import { ClientAppDetailsOriginsComponent } from './components/applications/client-app-details-origins/client-app-details-origins.component';
+import { ClientAppDetailsSecretsComponent } from './components/applications/client-app-details-secrets/client-app-details-secrets.component';
+import { ClientAppDetailsScopesComponent } from './components/applications/client-app-details-scopes/client-app-details-scopes.component';
 
 @NgModule({
   declarations: [
@@ -93,6 +98,10 @@ import { ApplicationCreateComponent } from './components/applications/applicatio
     ClientAppListComponent,
     ApiAppListComponent,
     ApplicationCreateComponent,
+    ClientAppDetailsEssentialsComponent,
+    ClientAppDetailsOriginsComponent,
+    ClientAppDetailsSecretsComponent,
+    ClientAppDetailsScopesComponent,
   ],
   imports: [
     FormsModule,
@@ -116,7 +125,8 @@ import { ApplicationCreateComponent } from './components/applications/applicatio
     CatalogService,    
     CatalogEntryService,
 
-    ClientApplicationService
+    ClientApplicationService,
+    GrantService
   ],
   bootstrap: [AppComponent]
 })

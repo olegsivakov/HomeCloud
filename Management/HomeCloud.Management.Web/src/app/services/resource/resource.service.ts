@@ -151,7 +151,7 @@ export class ResourceService {
 
   private getResourceArray<T>(typeInitializer: new () => T, source: any): ResourceArray<T> {
     let result: ResourceArray<T> = new ResourceArray<T>();
-    result.items = source._links ? this.cloneableService.cloneArray<T, PagedArray<T>>(PagedArray, typeInitializer, source.items) : result.items;
+    result.items = source.items ? this.cloneableService.cloneArray<T, PagedArray<T>>(PagedArray, typeInitializer, source.items) : result.items;
     result._links = source._links ? this.cloneableService.clone<RelationArray>(RelationArray, source._links) : result._links;
     result._links.items = result._links.items ? this.cloneableService.cloneArray<Relation, Array<Relation>>(Array, Relation, result._links.items) : result._links.items;
 

@@ -1,8 +1,8 @@
-<div [ngClass]="{'application': true, 'active': isSelected}">
+<div [ngClass]="{'application': true, 'active': isSelected}" (click)="onSelect()">
     <div class="title">
         {{application.name}}
     </div>
-    <div class="commands" (click)="$event.stopPropagation()">
+    <div class="commands" (click)="onLoad();$event.stopPropagation();">
         <clr-dropdown>
             <button class="nav-icon" clrDropdownTrigger>
                 <clr-icon shape="ellipsis-horizontal"></clr-icon>

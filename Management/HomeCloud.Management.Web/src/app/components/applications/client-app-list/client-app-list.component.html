@@ -10,8 +10,13 @@
                 </a>
               </div>
                 <div class="row">
-                    <div class="col-lg-12" *ngFor="let item of data" (click)="select(item)">
-                        <app-application-card [application]="item" [selected]="item === selected"></app-application-card>
+                    <div class="col-lg-12" *ngFor="let item of data">
+                        <app-application-card
+                          [application]="item"
+                          [selected]="selected && selected.id == item.id"
+                          (load)="load($event)"
+                          (select)="select($event)"
+                          (remove)="remove($event)"></app-application-card>
                     </div>
                 </div>
                 <div class="row flex-items-xs-center more" *ngIf="canNext">
@@ -26,14 +31,17 @@
     </div>
   </div>
   <div class="col-xl-9 col-lg-8 col-md-7 col-sm-12 col-xs-12">
-      <app-client-app-details *ngIf="selected" [application]="selected" (close)="cancel($event)"></app-client-app-details>
+      <app-client-app-details
+        *ngIf="selected"
+        [application]="selected"
+        (tabChanged)="loadResources($event)"
+        (close)="cancel($event)"></app-client-app-details>
   </div>
 </div>
 
 <app-application-create
       *ngIf="isSaveMode"
       header="Create Client App"
-      grantTypes="grantTypes"
       [errors]="errors"
       [visible]="isSaveMode"
       (change)="validate($event)"

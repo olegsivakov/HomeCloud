@@ -1,22 +1,28 @@
 <clr-tabs>
     <clr-tab>
-        <button clrTabLink class="tab-title">Essentials</button>
-        <clr-tab-content *clrIfActive="true">
+        <button clrTabLink class="tab-title" (click)="isEsentialsTabActive = true">Essentials</button>
+        <clr-tab-content *clrIfActive="isEsentialsTabActive">
+            <app-client-app-details-essentials
+                *ngIf="isEsentialsTabActive"
+                [application]="application"></app-client-app-details-essentials>
         </clr-tab-content>
     </clr-tab>
-    <clr-tab>
-        <button clrTabLink class="tab-title">Origins</button>
-        <clr-tab-content *clrIfActive>
+     <clr-tab>
+        <button clrTabLink class="tab-title" (click)="isOriginsTabActive = true">Origins</button>
+        <clr-tab-content *clrIfActive="isOriginsTabActive">
+            <app-client-app-details-origins *ngIf="isOriginsTabActive"></app-client-app-details-origins>
         </clr-tab-content>
     </clr-tab>
-    <clr-tab>
-        <button clrTabLink class="tab-title">Keys</button>
-        <clr-tab-content *clrIfActive>
+     <clr-tab>
+        <button clrTabLink class="tab-title" (click)="isSecretsTabActive = true">Keys</button>
+        <clr-tab-content *clrIfActive="isSecretsTabActive">
+            <app-client-app-details-secrets *ngIf="isSecretsTabActive"></app-client-app-details-secrets>
         </clr-tab-content>
     </clr-tab>
-    <clr-tab>
-        <button clrTabLink class="tab-title">Resource Access</button>
-        <clr-tab-content *clrIfActive>
+     <clr-tab>
+        <button clrTabLink class="tab-title" (click)="isScopesTabActive = true">Resource Access</button>
+        <clr-tab-content *clrIfActive="isScopesTabActive">
+            <app-client-app-details-scopes *ngIf="isScopesTabActive"></app-client-app-details-scopes>
         </clr-tab-content>
     </clr-tab>
 </clr-tabs>

@@ -13,28 +13,19 @@ import { RelationArray } from '../../models/http/relation-array';
 @Injectable()
 export class HttpService<T extends IResource> {
 
-  protected resources: ResourceArray<T> = new ResourceArray<T>();
+  protected resources: ResourceArray<T> = new ResourceArray();
 
+  constructor(
+    type: new() => T,
+    resourceService: ResourceService);
   constructor(
     type: new() => T,
     resourceService: ResourceService,
     resourceUrl: string);
   constructor(
-    type: new() => T,
-    resourceService: ResourceService,
-    resourceUrl: string,
-    relationType: new() => RelationArray);
-  constructor(
     protected type: new() => T,
     protected resourceService: ResourceService,
-    protected resourceUrl: string,
-    protected relationType?: new() => RelationArray) {
-      if (relationType) {
-        this.resources = new ResourceArray(relationType);
-      }
-      else {
-        this.resources = new ResourceArray();
-      }
+    protected resourceUrl?: string) {
   }
 
   public load(resources: ResourceArray<T>): void {

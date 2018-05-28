@@ -7,8 +7,18 @@ import { RelationArray } from '../../models/http/relation-array';
 import { Relation } from '../../models/http/relation';
 import { StorageRelation } from '../../models/storage-relation';
 import { CatalogRelation } from '../../models/catalog-relation';
+import { ClientApplicationRelation } from '../../models/applications/client-application-relation';
+import { ApiApplicationRelation } from '../../models/applications/api-application-relation';
 
-const KnownTypes: Array<{ new(): any }> = [Resource, ResourceArray, RelationArray, Relation, StorageRelation, CatalogRelation];
+const KnownTypes: Array<{ new(): any }> = [
+    Resource,
+    ResourceArray,
+    RelationArray,
+    Relation,
+    StorageRelation,
+    CatalogRelation,
+    ClientApplicationRelation,
+    ApiApplicationRelation];
 
 @Injectable()
 export class CloneableService {

@@ -104,7 +104,7 @@
 		{
 			ServiceResult<IDictionary<int, string>> result = await this.grantService.GetGrantTypesAsync();
 
-			return this.HttpResult(result.Data.Select(pair => new DictionaryViewModel(pair)), result.Errors);
+			return this.HttpResult(result.Data?.Select(pair => new DictionaryViewModel(pair))?.ToList() ?? Enumerable.Empty<DictionaryViewModel>(), result.Errors);
 		}
 
 		/// <summary>
