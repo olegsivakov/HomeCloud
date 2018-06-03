@@ -16,5 +16,4 @@ export class Storage extends Resource {
         let relation: Relation = (this._links as StorageRelation).catalog;
         return relation != null && !relation.isEmpty();
     }
-
 }

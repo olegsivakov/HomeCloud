@@ -40,6 +40,7 @@ export class ClientAppListComponent implements OnInit, OnDestroy {
   private createApplicationSubscription: ISubscription = null;
   private getClientSubscription: ISubscription = null;
   private selfClientSubscription: ISubscription = null;
+  private getClientScopesSubscription: ISubscription = null;
   private grantTypesSubscription: ISubscription = null;
 
   constructor(
@@ -100,6 +101,11 @@ export class ClientAppListComponent implements OnInit, OnDestroy {
     if (this.selfClientSubscription) {
       this.selfClientSubscription.unsubscribe();
       this.selfClientSubscription = null;
+    }
+
+    if (this.getClientScopesSubscription) {
+      this.getClientScopesSubscription.unsubscribe();
+      this.getClientScopesSubscription = null;
     }
   }
 
@@ -212,6 +218,57 @@ export class ClientAppListComponent implements OnInit, OnDestroy {
 
           this.selfClientSubscription = this.clientApplicationService.self(this.selected).subscribe(item => {
             this.selected = item;
+
+            this.progressService.hide();
+          }, error => {
+            this.progressService.hide();
+          });
+        }
+
+        break;
+      }
+
+      case ClientAppDetailsTab.scopes: {
+
+        if (this.selected.hasScopes && this.selected.hasScopes()) {
+          this.progressService.show();
+
+          this.getClientScopesSubscription = this.clientApplicationService.scopes(this.selected).subscribe(item => {
+            this.selected.scopes = item;
+
+            this.progressService.hide();
+          }, error => {
+            this.progressService.hide();
+          });
+        }
+
+        break;
+      }
+
+      case ClientAppDetailsTab.origins: {
+
+        if (this.selected.hasOrigins && this.selected.hasOrigins()) {
+          this.progressService.show();
+
+          this.getClientScopesSubscription = this.clientApplicationService.origins(this.selected).subscribe(item => {
+            this.selected.scopes = item;
+
+            this.progressService.hide();
+          }, error => {
+            this.progressService.hide();
+          });
+        }
+
+        break;
+      }
+
+      case ClientAppDetailsTab.secrets: {
+
+        if (this.selected.hasSecrets && this.selected.hasSecrets()) {
+          this.progressService.show();
+
+          this.getClientScopesSubscription = this.clientApplicationService.secrets(this.selected).subscribe(item => {
+            this.selected.secrets = item;
 
             this.progressService.hide();
           }, error => {

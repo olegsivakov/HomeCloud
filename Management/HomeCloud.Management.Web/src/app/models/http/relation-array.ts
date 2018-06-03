@@ -11,6 +11,8 @@ export class RelationArray {
 
     public update: Relation = new Relation();
 
+    public save: Relation = new Relation();
+
     public delete: Relation = new Relation();
 
     public list: Relation = new Relation();

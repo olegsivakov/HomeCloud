@@ -1,0 +1,15 @@
+.edit-container {
+    padding-top: 0px;
+}
+
+.edit-container .edit.edit-header,
+.edit-container .edit.edit-title .placeholder {
+    padding-top: 10px;
+    line-height: 16px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.edit-container .edit.edit-title.select {
+    width: 50%;
+}

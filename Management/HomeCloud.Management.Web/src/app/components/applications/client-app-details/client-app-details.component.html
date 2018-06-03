@@ -1,31 +1,47 @@
+<a (click)="onClose($event)" class="commands clickable">
+    <clr-icon shape="window-close" size="24"></clr-icon>
+</a>
+<a (click)="onEdit($event)" class="commands clickable" *ngIf="!isEditable">
+    <clr-icon shape="pencil" class="is-solid" size="16"></clr-icon>
+</a>
 <clr-tabs>
     <clr-tab>
         <button clrTabLink class="tab-title" (click)="isEsentialsTabActive = true">Essentials</button>
         <clr-tab-content *clrIfActive="isEsentialsTabActive">
             <app-client-app-details-essentials
-                *ngIf="isEsentialsTabActive"
-                [application]="application"></app-client-app-details-essentials>
+                *ngIf="isEsentialsTabActive && !isEditable"
+                [application]="application"
+                [grantTypes]="grantTypes"></app-client-app-details-essentials>
+            <app-client-app-edit-essentials
+                *ngIf="isEsentialsTabActive && isEditable"
+                [application]="application"
+                [grantTypes]="grantTypes"
+                (save)="onSave($event)"
+                (cancel)="onCancel($event)"></app-client-app-edit-essentials>
         </clr-tab-content>
     </clr-tab>
      <clr-tab>
         <button clrTabLink class="tab-title" (click)="isOriginsTabActive = true">Origins</button>
         <clr-tab-content *clrIfActive="isOriginsTabActive">
-            <app-client-app-details-origins *ngIf="isOriginsTabActive"></app-client-app-details-origins>
+            <app-client-app-details-origins
+                *ngIf="isOriginsTabActive"
+                [origins]="application.origins.items"></app-client-app-details-origins>
         </clr-tab-content>
     </clr-tab>
      <clr-tab>
         <button clrTabLink class="tab-title" (click)="isSecretsTabActive = true">Keys</button>
         <clr-tab-content *clrIfActive="isSecretsTabActive">
-            <app-client-app-details-secrets *ngIf="isSecretsTabActive"></app-client-app-details-secrets>
+            <app-client-app-details-secrets
+                *ngIf="isSecretsTabActive"
+                [secrets]="application.secrets.items"></app-client-app-details-secrets>
         </clr-tab-content>
     </clr-tab>
      <clr-tab>
         <button clrTabLink class="tab-title" (click)="isScopesTabActive = true">Resource Access</button>
         <clr-tab-content *clrIfActive="isScopesTabActive">
-            <app-client-app-details-scopes *ngIf="isScopesTabActive"></app-client-app-details-scopes>
+            <app-client-app-details-scopes
+                *ngIf="isScopesTabActive"
+                [scopes]="application.scopes.items"></app-client-app-details-scopes>
         </clr-tab-content>
     </clr-tab>
 </clr-tabs>
-<a (click)="close($event)" class="close clickable">
-    <clr-icon shape="window-close" size="24"></clr-icon>
-</a>

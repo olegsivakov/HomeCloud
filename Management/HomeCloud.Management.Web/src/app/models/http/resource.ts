@@ -38,6 +38,10 @@ export class Resource implements IResource {
         return this._links.update != null && !this._links.update.isEmpty();
     }
 
+    public hasSave(): boolean {
+        return this._links.save != null && !this._links.save.isEmpty();
+    }
+
     public hasDelete(): boolean {
         return this._links.delete != null && !this._links.delete.isEmpty();
     }

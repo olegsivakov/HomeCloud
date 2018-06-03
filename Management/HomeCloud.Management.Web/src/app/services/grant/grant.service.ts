@@ -8,10 +8,10 @@ import { Relation } from '../../models/http/relation';
 import { HttpMethod } from '../../models/http/http-method';
 import { Observable } from 'rxjs/Observable';
 import { ResourceArray } from '../../models/http/resource-array';
+import { environment } from '../../../environments/environment';
 
-const grantUrl: string = "http://localhost:57713/v1/grants";
 const grantTypeRelation: Relation = new Relation();
-grantTypeRelation.href = grantUrl + "/types";
+grantTypeRelation.href = environment.identityServiceUrl + "/grants/types";
 grantTypeRelation.method = HttpMethod.get;
 grantTypeRelation.type = "application/json";
 
@@ -21,7 +21,7 @@ export class GrantService extends HttpService<Grant> {
   constructor(
     protected resourceService: ResourceService
   ) {
-    super(Grant, resourceService, );
+    super(Grant, resourceService, environment.identityServiceUrl + "/grants");
 
   }
 

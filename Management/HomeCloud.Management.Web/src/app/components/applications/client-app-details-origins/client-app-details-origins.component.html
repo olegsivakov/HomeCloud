@@ -1,3 +1,6 @@
-<p>
-  client-app-details-origins works!
-</p>
+<div class="details-container row" *ngIf="origins">
+  <div class="details col-lg-12 left">
+    <div class="details details-header">URL</div>
+    <div class="details details-title" *ngFor="let origin of origins">{{origin}}</div>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+<form class="form-group" #applicationForm="ngForm">
+  <div class="row">
+    <div class="col-xl-12">
+        <app-alert *ngIf="applicationForm.invalid && errors && errors.length == 0" message="The application name is required"></app-alert>
+    </div>
+  </div>
+  <div class="edit-container row" *ngIf="application">
+    <div class="col-xl-6">
+      <div class="edit edit-header">Application ID</div>
+      <div class="edit edit-title">{{application.id}}</div>
+      <div class="edit edit-title">
+          <div class="textbox">
+              <br/>
+              <input
+                  id="applicationName"
+                  name="applicationName"
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="application.name"
+                  #name="ngModel"
+                  required />
+              <span class="placeholder">Application Name</span>
+          </div>
+      </div>
+      <div class="edit edit-header">Grant Type</div>
+      <div class="select edit edit-title">
+        <select
+          id="applicationGrantType"
+          name="applicationGrantType"
+          class="form-control"
+          [(ngModel)]="application.grantType">
+            <option *ngFor="let type of grantTypes" [ngValue]="type.id">{{type.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="edit edit-title">
+        <div class="textbox">
+              <br/>
+              <input
+                id="redirectUrl"
+                name="redirectUrl"
+                type="text"
+                class="form-control"
+                [(ngModel)]="application.redirectUrl"
+                #name="ngModel"
+                required />
+            <span class="placeholder">Redirect URL</span>
+        </div>
+      </div>
+      <div class="edit edit-title">
+        <div class="textbox">
+            <br/>
+            <input
+                id="postLogoutRedirectUrl"
+                name="postLogoutRedirectUrl"
+                type="text"
+                class="form-control"
+                [(ngModel)]="application.postLogoutRedirectUrl"
+                #name="ngModel"
+                required />
+            <span class="placeholder">Post Logout Redirect URL</span>
+        </div>
+      </div>
+      <div class="edit edit-title">
+        <div class="textbox">
+            <br/>
+            <input
+                id="identityTokenLifetime"
+                name="identityTokenLifetime"
+                type="text"
+                class="form-control"
+                [(ngModel)]="application.identityTokenLifetime"
+                #name="ngModel"
+                required />
+            <span class="placeholder">Identity Token Lifetime</span>
+        </div>
+      </div>
+      <div class="edit edit-title">
+        <div class="textbox">
+            <br/>
+            <input
+                id="accessTokenLifetime"
+                name="accessTokenLifetime"
+                type="text"
+                class="form-control"
+                [(ngModel)]="application.accessTokenLifetime"
+                #name="ngModel"
+                required />
+            <span class="placeholder">Access Token Lifetime</span>
+        </div>
+      </div>
+      <div class="edit edit-title">
+        <div class="textbox">
+            <br/>
+            <input
+                id="absoluteRefreshTokenLifetime"
+                name="absoluteRefreshTokenLifetime"
+                type="text"
+                class="form-control"
+                [(ngModel)]="application.absoluteRefreshTokenLifetime"
+                #name="ngModel"
+                required />
+            <span class="placeholder">Absolute Refresh Token Lifetime</span>
+        </div>
+      </div>
+      <div class="edit edit-title">
+        <div class="textbox">
+            <br/>
+            <input
+                id="slidingRefreshTokenLifetime"
+                name="slidingRefreshTokenLifetime"
+                type="text"
+                class="form-control"
+                [(ngModel)]="application.slidingRefreshTokenLifetime"
+                #name="ngModel"
+                required />
+            <span class="placeholder">Sliding Refresh Token Lifetime</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-12 modal-footer">
+        <button type="button" class="btn btn-outline" (click)="onCancel($event)">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSave($event)">Save</button>
+    </div>
+  </div>
+</form>

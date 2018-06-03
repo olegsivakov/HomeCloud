@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { AppSecretArray } from '../../../models/applications/app-secret-array';
 
 @Component({
   selector: 'app-client-app-details-secrets',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./client-app-details-secrets.component.css']
 })
 export class ClientAppDetailsSecretsComponent implements OnInit {
+
+  @Input('secrets')
+  public secrets: AppSecretArray = new AppSecretArray();
 
   constructor() { }
 

@@ -65,6 +65,9 @@ import { ClientAppDetailsEssentialsComponent } from './components/applications/c
 import { ClientAppDetailsOriginsComponent } from './components/applications/client-app-details-origins/client-app-details-origins.component';
 import { ClientAppDetailsSecretsComponent } from './components/applications/client-app-details-secrets/client-app-details-secrets.component';
 import { ClientAppDetailsScopesComponent } from './components/applications/client-app-details-scopes/client-app-details-scopes.component';
+import { GrantTypeExactPipe } from './pipes/grant-type-exact/grant-type-exact.pipe';
+import { EmptyPipe } from './pipes/empty/empty.pipe';
+import { ClientAppEditEssentialsComponent } from './components/applications/client-app-edit-essentials/client-app-edit-essentials.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +105,9 @@ import { ClientAppDetailsScopesComponent } from './components/applications/clien
     ClientAppDetailsOriginsComponent,
     ClientAppDetailsSecretsComponent,
     ClientAppDetailsScopesComponent,
+    GrantTypeExactPipe,
+    EmptyPipe,
+    ClientAppEditEssentialsComponent
   ],
   imports: [
     FormsModule,

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Application } from '../../../models/applications/application';
-import { Event } from '_debugger';
 
 @Component({
   selector: 'app-application-card',

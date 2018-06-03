@@ -27,6 +27,10 @@ export class ResourceArray<T> implements IResource {
         return this._links.create != null && !this._links.create.isEmpty();
     }
 
+    public hasSave(): boolean {
+        return this._links.save != null && !this._links.save.isEmpty();
+    }
+
     public hasItem(index: number): boolean {
         return this._links.items != null && this._links.items.length > index && this._links.items[index] != null && !this._links.items[index].isEmpty();
     }

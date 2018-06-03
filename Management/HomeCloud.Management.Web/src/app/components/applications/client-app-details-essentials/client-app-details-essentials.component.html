@@ -1,8 +1,24 @@
-<div *ngIf="application">
-  <p>
-    {{application.name}}
-  </p>
-  <p>
-    {{application.grantType}}
-  </p>
+<div class="details-container row" *ngIf="application">
+  <div class="col-xl-6">
+    <div class="details details-header">Application ID</div>
+    <div class="details details-title">{{application.id}}</div>
+    <div class="details details-header">Application Name</div>
+    <div class="details details-title">{{application.name}}</div>
+    <div class="details details-header">Grant Type</div>
+    <div class="details details-title">{{application.grantType | grantTypeExact:grantTypes}}</div>
+  </div>
+  <div class="col-xl-6">
+    <div class="details details-header">Redirect URL</div>
+    <div class="details details-title">{{application.redirectUrl | empty}}</div>
+    <div class="details details-header">Post Logout Redirect URL</div>
+    <div class="details details-title">{{application.postLogoutRedirectUrl | empty}}</div>
+    <div class="details details-header">Identity Token Lifetime</div>
+    <div class="details details-title">{{application.identityTokenLifetime | empty}}</div>
+    <div class="details details-header">Access Token Lifetime</div>
+    <div class="details details-title">{{application.accessTokenLifetime | empty}}</div>
+    <div class="details details-header">Absolute Refresh Token Lifetime</div>
+    <div class="details details-title">{{application.absoluteRefreshTokenLifetime | empty}}</div>
+    <div class="details details-header">Sliding Refresh Token Lifetime</div>
+    <div class="details details-title">{{application.slidingRefreshTokenLifetime | empty}}</div>
+  </div>
 </div>

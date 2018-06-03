@@ -10,8 +10,7 @@ import { Catalog } from '../../models/catalog';
 import { HttpService } from '../http/http.service';
 import { ResourceService } from '../resource/resource.service';
 import { CatalogStateService } from '../catalog-state/catalog-state.service';
-
-const storageUrl: string = "http://localhost:8081/v1/storages";
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class StorageService extends HttpService<Storage> {
@@ -21,7 +20,7 @@ export class StorageService extends HttpService<Storage> {
   constructor(
     protected resourceService: ResourceService,
     private catalogStateService: CatalogStateService) {
-    super(Storage, resourceService, storageUrl);
+    super(Storage, resourceService, environment.dataStorageUrl + "/storages");
   }
 
   public catalog(storage: Storage): Observable<Catalog> {

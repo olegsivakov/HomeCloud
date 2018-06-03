@@ -1,3 +1,6 @@
-<p>
-  client-app-details-scopes works!
-</p>
+<div class="details-container row" *ngIf="scopes">
+  <div class="details col-lg-12 left">
+    <div class="details details-header">Application ID</div>
+    <div class="details details-title" *ngFor="let scope of scopes">{{scope}}</div>
+  </div>
+</div>

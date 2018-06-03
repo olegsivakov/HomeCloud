@@ -2,8 +2,8 @@
     color: #000000 !important;
 }
 
-.close {
+.commands {
     position: relative;
     float: right;
-    top: -30px;
+    top: 35px;
 }

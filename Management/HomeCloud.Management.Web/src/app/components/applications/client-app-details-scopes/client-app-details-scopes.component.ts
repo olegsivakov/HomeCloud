@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { AppScopeArray } from '../../../models/applications/app-scope-array';
 
 @Component({
   selector: 'app-client-app-details-scopes',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./client-app-details-scopes.component.css']
 })
 export class ClientAppDetailsScopesComponent implements OnInit {
+
+  @Input('scopes')
+  public scopes: AppScopeArray = new AppScopeArray();
 
   constructor() { }
 
